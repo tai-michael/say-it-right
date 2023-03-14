@@ -4,38 +4,41 @@
     <button @click="handleMicPress">
       {{ isRecording ? 'Stop microphone' : 'Start microphone' }}
     </button>
-    <div>{{ micStateText }}</div>
-    <div>{{ clientStateText }}</div>
-    <!-- <p>{{ segment }}</p> -->
-    <!-- <div>sdf</div> -->
-    <div>{{ debugOutText }}</div>
-    <p>{{ timestamp }}</p>
-    <div>{{ tentativeText }}</div>
-    <div>{{ transcriptText }}</div>
+    <label>What you said:</label>
+    <div>{{ transcript }}</div>
+    <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
+    <!-- <div>Final transcript: {{ transcriptText }}</div> -->
+    <!-- <div>Connection to Speechly API: {{ clientStateText }}</div> -->
+    <!-- <div>Mic status: {{ micStateText }}</div> -->
+    <!-- <p>Duration: {{ timestamp }}</p> -->
+    <!-- <div>{{ debugOutText }}</div> -->
     <!-- <div>{{ intentText }}</div>
     <div>{{ entitiesListText }}</div> -->
-    <button @click="handleClearPress" :disabled="!transcriptText && !transcriptText">Clear</button>
+    <button @click="handleClearPress" :disabled="!transcript">Clear</button>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/browser-client'
-import formatDuration from 'format-duration'
+import { BrowserClient, BrowserMicrophone } from '@speechly/browser-client'
+// import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/browser-client'
+// import formatDuration from 'format-duration'
 
 // let isVadEnabled = false;
 
 const microphone = new BrowserMicrophone()
+
 let isRecording = ref(false)
-let micStateText = ref('Placeholder')
-let clientStateText = ref('Placeholder')
-let tentativeText = ref('')
-let debugOutText = ref('')
-let transcriptText = ref('')
-// NOTE Speechly's intent and entity detection allows the guessing of words from users when it's unclear. This feature is unnecessary, as our app trains pronunciation.
+let transcript = ref('')
+// let micStateText = ref('Not actively recording')
+// let clientStateText = ref('Connecting...')
+// let debugOutText = ref('')
+// let tentativeText = ref('')
+// let transcriptText = ref('')
+// NOTE Speechly's intent and entity detection allows the guessing of words from users when it's unclear. This feature is counterproductive, as our app trains pronunciation.
 // let intentText = ref('')
 // let entitiesListText = ref('')
-let timestamp = ref('')
+// let timestamp = ref('')
 
 const client = new BrowserClient({
   appId: '20b0ff74-506d-4327-8970-73b671c98193',
@@ -76,34 +79,35 @@ const renderTranscript = (segment) => {
 //   entitiesList ? (entitiesListText.value = ` · entities: ${entitiesList}`) : ''
 // }
 
-const renderSegment = (segment) => {
-  timestamp.value = formatDuration(segment.words[segment.words.length - 1].endTimestamp)
-  transcriptText.value = renderTranscript(segment)
-  // renderSegmentDetails(segment.intent, segment.entities)
-}
+// const renderSegment = (segment) => {
+//   timestamp.value = formatDuration(segment.words[segment.words.length - 1].endTimestamp)
+//   // transcriptText.value = renderTranscript(segment)
+//   // renderSegmentDetails(segment.intent, segment.entities)
+// }
 
 const handleClearPress = () => {
-  transcriptText.value = ''
+  transcript.value = ''
 }
 
-microphone.onStateChange((state) => {
-  micStateText.value = state
-})
+// microphone.onStateChange((state) => {
+//   micStateText.value = state
+// })
 
-client.onStateChange((state) => {
-  clientStateText.value = stateToString(state)
-})
+// client.onStateChange((state) => {
+//   clientStateText.value = stateToString(state)
+// })
 
 client.onSegmentChange((segment) => {
   // clearBtn.disabled = false;
-  tentativeText.value = renderTranscript(segment)
-  if (segment.isFinal) {
-    // debugOutText += renderOutput(segment)
-    renderSegment(segment)
-    // NOTE remove below line and transcriptText above if I only want tentativeText to show
-    tentativeText.value = ''
-    console.log(client)
-  }
+  transcript.value = renderTranscript(segment)
+  // if (segment.isFinal) {
+  //   debugOutText += renderOutput(segment)
+  //   renderSegment(segment)
+  // //  NOTE uncomment below line and transcriptText in renderSegment if I want to include both tentative and final transcripts
+  //   tentativeText.value = ''
+
+  //   console.log(client)
+  // }
 })
 </script>
 
@@ -116,5 +120,9 @@ client.onSegmentChange((segment) => {
     justify-content: center;
     align-items: center;
   }
+}
+
+label {
+  font-weight: 800;
 }
 </style>
