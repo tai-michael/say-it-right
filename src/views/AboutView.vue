@@ -9,37 +9,36 @@
     <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
     <!-- <div>Final transcript: {{ transcriptText }}</div> -->
     <!-- <div>Connection to Speechly API: {{ clientStateText }}</div> -->
-    <!-- <div>Mic status: {{ micStateText }}</div> -->
+    <div>Mic status: {{ micStateText }}</div>
     <!-- <p>Duration: {{ timestamp }}</p> -->
     <!-- <div>{{ debugOutText }}</div> -->
     <!-- <div>{{ intentText }}</div>
     <div>{{ entitiesListText }}</div> -->
+    <big-transcript placement="top"> </big-transcript>
+    <push-to-talk-button
+      v-if="clientConnected"
+      :class="{ disabled: !clientFullyInitialized }"
+      placement="bottom"
+      appid="20b0ff74-506d-4327-8970-73b671c98193"
+    >
+    </push-to-talk-button>
+    <intro-popup> </intro-popup>
+    <!-- <intro-popup>
+      <span slot="priming-body">You'll be able to control this web app faster with voice.</span>
+    </intro-popup> -->
     <button @click="handleClearPress" :disabled="!transcript">Clear</button>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { BrowserClient, BrowserMicrophone } from '@speechly/browser-client'
-// import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/browser-client'
-// import formatDuration from 'format-duration'
-
-// let isVadEnabled = false;
+import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/browser-client'
+// NOTE maybe put in App.js instead
+import '@speechly/browser-ui/core/push-to-talk-button'
+import '@speechly/browser-ui/core/big-transcript'
+import '@speechly/browser-ui/core/intro-popup'
 
 const microphone = new BrowserMicrophone()
-
-let isRecording = ref(false)
-let transcript = ref('')
-// let micStateText = ref('Not actively recording')
-// let clientStateText = ref('Connecting...')
-// let debugOutText = ref('')
-// let tentativeText = ref('')
-// let transcriptText = ref('')
-// NOTE Speechly's intent and entity detection allows the guessing of words from users when it's unclear. This feature is counterproductive, as our app trains pronunciation.
-// let intentText = ref('')
-// let entitiesListText = ref('')
-// let timestamp = ref('')
-
 const client = new BrowserClient({
   appId: '20b0ff74-506d-4327-8970-73b671c98193',
   logSegments: true,
@@ -47,6 +46,20 @@ const client = new BrowserClient({
   // NOTE Voice Activity Detection (VAD) reduces the CPU load of the decoder, as it prevents the decoder from processing silent parts of the audio. However, it may also introduce some errors in the resulting transcript. For the purposes of this app, VAD should probably be disabled.
   // vad: { enabled: isVadEnabled },
 })
+
+let isRecording = ref(false)
+let transcript = ref('')
+let micStateText = ref('Not actively recording')
+// let clientStateText = ref('Connecting...')
+let clientConnected = ref(false)
+let clientFullyInitialized = ref(false)
+// let debugOutText = ref('')
+// let tentativeText = ref('')
+// let transcriptText = ref('')
+// NOTE Speechly's intent and entity detection allows the guessing of words from users when it's unclear. This feature is counterproductive, as our app trains pronunciation.
+// let intentText = ref('')
+// let entitiesListText = ref('')
+// let timestamp = ref('')
 
 const initMic = async () => {
   if (!microphone.mediaStream) {
@@ -89,13 +102,21 @@ const handleClearPress = () => {
   transcript.value = ''
 }
 
-// microphone.onStateChange((state) => {
-//   micStateText.value = state
-// })
+microphone.onStateChange((state) => {
+  micStateText.value = state
+})
 
 // client.onStateChange((state) => {
 //   clientStateText.value = stateToString(state)
 // })
+
+client.onStateChange((state) => {
+  if (stateToString(state) === 'Connected') clientConnected.value = true
+
+  setTimeout(() => {
+    clientFullyInitialized.value = true
+  }, 2000)
+})
 
 client.onSegmentChange((segment) => {
   // clearBtn.disabled = false;
@@ -124,5 +145,9 @@ client.onSegmentChange((segment) => {
 
 label {
   font-weight: 800;
+}
+
+.disabled {
+  pointer-events: none;
 }
 </style>
