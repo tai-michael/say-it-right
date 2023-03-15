@@ -1,23 +1,37 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    <button @click="handleMicPress">
+    <!-- <button @click="handleMicPress">
       {{ isRecording ? 'Stop microphone' : 'Start microphone' }}
-    </button>
+    </button> -->
+    <div class="button-container">
+      <button
+        v-if="clientConnected"
+        class="recording-btn"
+        @mousedown="startRecording"
+        @touchstart="startRecording"
+        @mouseup="stopRecording"
+        @touchend="stopRecording"
+      >
+        {{ isRecording ? 'Recording' : 'Hold to talk' }}
+      </button>
+    </div>
+
     <label>What you said:</label>
     <div>{{ transcript }}</div>
     <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
     <!-- <div>Final transcript: {{ transcriptText }}</div> -->
     <!-- <div>Connection to Speechly API: {{ clientStateText }}</div> -->
-    <div>Mic status: {{ micStateText }}</div>
+    <!-- <div>Mic status: {{ micStateText }}</div> -->
     <!-- <p>Duration: {{ timestamp }}</p> -->
     <!-- <div>{{ debugOutText }}</div> -->
     <!-- <div>{{ intentText }}</div>
     <div>{{ entitiesListText }}</div> -->
     <big-transcript placement="top"> </big-transcript>
+
     <push-to-talk-button
-      v-if="clientConnected"
-      :class="{ disabled: !clientFullyInitialized }"
+      v-cloak
+      v-show="showComponent"
       placement="bottom"
       appid="20b0ff74-506d-4327-8970-73b671c98193"
     >
@@ -26,11 +40,12 @@
     <!-- <intro-popup>
       <span slot="priming-body">You'll be able to control this web app faster with voice.</span>
     </intro-popup> -->
-    <button @click="handleClearPress" :disabled="!transcript">Clear</button>
+    <!-- <button @click="handleClearPress" :disabled="!transcript">Clear</button> -->
   </div>
 </template>
 
 <script setup>
+// import LoadingDots from '../components/LoadingDots.vue'
 import { ref } from 'vue'
 import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/browser-client'
 // NOTE maybe put in App.js instead
@@ -47,6 +62,7 @@ const client = new BrowserClient({
   // vad: { enabled: isVadEnabled },
 })
 
+let showComponent = ref(false)
 let isRecording = ref(false)
 let transcript = ref('')
 let micStateText = ref('Not actively recording')
@@ -61,6 +77,17 @@ let clientFullyInitialized = ref(false)
 // let entitiesListText = ref('')
 // let timestamp = ref('')
 
+// onMounted(() => {
+//   // Render the component, but keep it hidden
+//   showComponent.value = true
+//   showComponent.value = false
+//   // Hide the component after 2 seconds, then show it again after an additional delay
+
+//   setTimeout(() => {
+//     showComponent.value = true
+//   }, 1000)
+// })
+
 const initMic = async () => {
   if (!microphone.mediaStream) {
     await microphone.initialize()
@@ -70,15 +97,26 @@ const initMic = async () => {
   }
 }
 
-const handleMicPress = async () => {
-  if (client.isActive()) {
-    await client.stop()
-    isRecording.value = false
-  } else {
-    await initMic()
-    await client.start()
-    isRecording.value = true
-  }
+// const handleMicPress = async () => {
+//   if (client.isActive()) {
+//     await client.stop()
+//     isRecording.value = false
+//   } else {
+//     await initMic()
+//     await client.start()
+//     isRecording.value = true
+//   }
+// }
+
+const startRecording = async () => {
+  await initMic()
+  await client.start()
+  isRecording.value = true
+}
+
+const stopRecording = async () => {
+  await client.stop()
+  isRecording.value = false
 }
 
 const renderTranscript = (segment) => {
@@ -98,9 +136,9 @@ const renderTranscript = (segment) => {
 //   // renderSegmentDetails(segment.intent, segment.entities)
 // }
 
-const handleClearPress = () => {
-  transcript.value = ''
-}
+// const handleClearPress = () => {
+//   transcript.value = ''
+// }
 
 microphone.onStateChange((state) => {
   micStateText.value = state
@@ -112,7 +150,6 @@ microphone.onStateChange((state) => {
 
 client.onStateChange((state) => {
   if (stateToString(state) === 'Connected') clientConnected.value = true
-
   setTimeout(() => {
     clientFullyInitialized.value = true
   }, 2000)
@@ -130,9 +167,27 @@ client.onSegmentChange((segment) => {
   //   console.log(client)
   // }
 })
+// // NOTE Implement a listener for speech segment updates
+// document.getElementsByTagName('push-to-talk-button')[0].addEventListener('speechsegment', (e) => {
+//   const speechSegment = e.detail
+//   console.log(speechSegment.entities)
+
+//   speechSegment.entities.forEach((entity) => {
+//     let select = document.getElementById(entity.type)
+//     let options = Array.from(select.getElementsByTagName('option')).map(
+//       (option) => option.innerHTML
+//     )
+
+//     const found = options.find((option) =>
+//       entity.value.toLowerCase().startsWith(option.toLowerCase())
+//     )
+
+//     if (found) select.value = found
+//   })
+// })
 </script>
 
-<style>
+<style lang="scss" scoped>
 @media (min-width: 1024px) {
   .about {
     min-height: 100vh;
@@ -147,7 +202,35 @@ label {
   font-weight: 800;
 }
 
-.disabled {
-  pointer-events: none;
+.button-container {
+  width: 80px;
+  height: 80px;
+
+  .recording-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+
+    --gradient-stop1: #15e8b5;
+    --gradient-stop2: #4fa1f9;
+    --fx-gradient-stop1: #15e8b5;
+    --fx-gradient-stop2: #4fa1f9;
+    --fx-rotation: 9280.04deg;
+    --fx-opacity: 0;
+    --fx-size: 250%;
+    --icon-opacity: 1;
+    --icon-size: 60%;
+    --icon-color: #000000;
+    --frame-stroke-width: 3.45;
+    --frame-background: #ffffff;
+    transform: scale(1);
+    /* text-align: left; */
+    position: relative;
+    /* pointer-events: auto; */
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+  }
 }
 </style>
