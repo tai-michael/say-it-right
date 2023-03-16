@@ -1,6 +1,9 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
+    <div class="sample-paragraph">
+      <p>{{ sampleParagraph }}</p>
+    </div>
     <!-- <button @click="handleMicPress">
       {{ isRecording ? 'Stop microphone' : 'Start microphone' }}
     </button> -->
@@ -13,12 +16,15 @@
         @mouseup="stopRecording"
         @touchend="stopRecording"
       >
-        {{ isRecording ? 'Recording' : 'Hold to talk' }}
+        <!-- {{ isRecording ? 'Recording' : 'Hold to talk' }} -->
+        <MicIcon />
       </button>
     </div>
 
-    <label>What you said:</label>
-    <div>{{ transcript }}</div>
+    <div class="transcript-container">
+      <label>What you said:</label>
+      <div>{{ transcript }}</div>
+    </div>
     <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
     <!-- <div>Final transcript: {{ transcriptText }}</div> -->
     <!-- <div>Connection to Speechly API: {{ clientStateText }}</div> -->
@@ -52,6 +58,7 @@ import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/brows
 import '@speechly/browser-ui/core/push-to-talk-button'
 import '@speechly/browser-ui/core/big-transcript'
 import '@speechly/browser-ui/core/intro-popup'
+import MicIcon from '@/assets/images/mic.vue'
 
 const microphone = new BrowserMicrophone()
 const client = new BrowserClient({
@@ -76,6 +83,30 @@ let clientFullyInitialized = ref(false)
 // let intentText = ref('')
 // let entitiesListText = ref('')
 // let timestamp = ref('')
+
+const sampleParagraph = ref(
+  'Nelson Mandela was a courageous leader who inspired society with his vivid ideas and successful fight against apartheid in South Africa. He once said, "I think education is the most powerful weapon which you can use to change the world." Mandela\'s plan for a free and democratic South Africa required a variety of strategies, including peaceful protests and civil disobedience. Despite spending 27 years in prison, he remained disciplined and continued to study, eventually becoming the first black president of South Africa. Mandela\'s legacy has comforted millions, reminding us that anything is possible with determination and the power of the human spirit.'
+)
+
+const sampleWords = ref([
+  'vivid',
+  'successful',
+  'inspired',
+  'variety',
+  'think',
+  'said',
+  'comforted',
+  'he',
+  'plan',
+  'study',
+  'courageous',
+  'society',
+  'discipline'
+])
+
+// NOTE might need to put the two variables below inside the 'segment.isFinal' callback
+const correctlyPronouncedWords = ref([])
+const mispronouncedWords = ref([])
 
 // onMounted(() => {
 //   // Render the component, but keep it hidden
@@ -158,14 +189,32 @@ client.onStateChange((state) => {
 client.onSegmentChange((segment) => {
   // clearBtn.disabled = false;
   transcript.value = renderTranscript(segment)
-  // if (segment.isFinal) {
-  //   debugOutText += renderOutput(segment)
-  //   renderSegment(segment)
-  // //  NOTE uncomment below line and transcriptText in renderSegment if I want to include both tentative and final transcripts
-  //   tentativeText.value = ''
+  if (segment.isFinal) {
+    //   debugOutText += renderOutput(segment)
+    //   renderSegment(segment)
+    // //  NOTE uncomment below line and transcriptText in renderSegment if I want to include both tentative and final transcripts
+    //   tentativeText.value = ''
 
-  //   console.log(client)
-  // }
+    //   console.log(client)
+
+    const transcriptWords = transcript.value.split(' ')
+
+    for (const word of sampleWords.value) {
+      if (transcriptWords.includes(word)) {
+        correctlyPronouncedWords.value.push(word)
+      }
+    }
+
+    console.log(correctlyPronouncedWords.value)
+
+    for (const word of sampleWords.value) {
+      if (!correctlyPronouncedWords.value.includes(word)) {
+        mispronouncedWords.value.push(word)
+      }
+    }
+
+    console.log(mispronouncedWords.value)
+  }
 })
 // // NOTE Implement a listener for speech segment updates
 // document.getElementsByTagName('push-to-talk-button')[0].addEventListener('speechsegment', (e) => {
@@ -202,14 +251,41 @@ label {
   font-weight: 800;
 }
 
+.transcript-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-height: 100vh;
+  padding: 3rem 0 0 0;
+  margin: 3rem 2rem 0 2rem;
+  // NOTE Probably needs to be lower, but test this first
+  max-width: 500px;
+  z-index: 10;
+}
+
 .button-container {
-  width: 80px;
-  height: 80px;
+  position: fixed;
+  box-sizing: border-box;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 100vh;
+  padding: 0 0 3rem 0;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  z-index: 50;
 
   .recording-btn {
     width: 80px;
     height: 80px;
     border-radius: 50%;
+    background-color: #fa2222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     --gradient-stop1: #15e8b5;
     --gradient-stop2: #4fa1f9;
@@ -231,6 +307,14 @@ label {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
+
+    &:active {
+      background-color: #27ae60;
+      transition: 0.3s;
+      width: 85px;
+      height: 85px;
+      transition: width 0.3s, height 0.3s;
+    }
   }
 }
 </style>
