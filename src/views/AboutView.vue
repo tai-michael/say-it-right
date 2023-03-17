@@ -2,7 +2,8 @@
   <div class="about">
     <h1>This is an about page</h1>
     <div class="sample-paragraph">
-      <p>{{ sampleParagraph }}</p>
+      <p v-if="!highlightedParagraphShown">{{ sampleParagraph }}</p>
+      <p v-if="highlightedParagraphShown" v-html="highlightedText"></p>
     </div>
     <!-- <button @click="handleMicPress">
       {{ isRecording ? 'Stop microphone' : 'Start microphone' }}
@@ -52,7 +53,7 @@
 
 <script setup>
 // import LoadingDots from '../components/LoadingDots.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/browser-client'
 // NOTE maybe put in App.js instead
 import '@speechly/browser-ui/core/push-to-talk-button'
@@ -76,6 +77,7 @@ let micStateText = ref('Not actively recording')
 // let clientStateText = ref('Connecting...')
 let clientConnected = ref(false)
 let clientFullyInitialized = ref(false)
+let highlightedParagraphShown = ref(false)
 // let debugOutText = ref('')
 // let tentativeText = ref('')
 // let transcriptText = ref('')
@@ -88,7 +90,7 @@ const sampleParagraph = ref(
   'Nelson Mandela was a courageous leader who inspired society with his vivid ideas and successful fight against apartheid in South Africa. He once said, "I think education is the most powerful weapon which you can use to change the world." Mandela\'s plan for a free and democratic South Africa required a variety of strategies, including peaceful protests and civil disobedience. Despite spending 27 years in prison, he remained disciplined and continued to study, eventually becoming the first black president of South Africa. Mandela\'s legacy has comforted millions, reminding us that anything is possible with determination and the power of the human spirit.'
 )
 
-const sampleWords = ref([
+const diagnosticWords = ref([
   'vivid',
   'successful',
   'inspired',
@@ -197,25 +199,34 @@ client.onSegmentChange((segment) => {
 
     //   console.log(client)
 
-    const transcriptWords = transcript.value.split(' ')
+    const recordedWords = [...new Set(transcript.value.split(' '))]
+    correctlyPronouncedWords.value = [
+      ...diagnosticWords.value.filter((word) => recordedWords.includes(word))
+    ]
 
-    for (const word of sampleWords.value) {
-      if (transcriptWords.includes(word)) {
-        correctlyPronouncedWords.value.push(word)
-      }
-    }
-
-    console.log(correctlyPronouncedWords.value)
-
-    for (const word of sampleWords.value) {
+    for (const word of diagnosticWords.value) {
       if (!correctlyPronouncedWords.value.includes(word)) {
         mispronouncedWords.value.push(word)
       }
     }
 
+    highlightedParagraphShown.value = true
+    console.log(correctlyPronouncedWords.value)
     console.log(mispronouncedWords.value)
   }
 })
+
+const highlightedText = computed(() => {
+  let highlightedParagraph = sampleParagraph.value
+  mispronouncedWords.value.forEach((word) => {
+    highlightedParagraph = highlightedParagraph.replace(
+      new RegExp(`\\b${word}\\b`, 'g'),
+      `<span style="color:white; display: inline-block； padding: .25em 0; background: red">${word}</span>`
+    )
+  })
+  return highlightedParagraph
+})
+
 // // NOTE Implement a listener for speech segment updates
 // document.getElementsByTagName('push-to-talk-button')[0].addEventListener('speechsegment', (e) => {
 //   const speechSegment = e.detail
