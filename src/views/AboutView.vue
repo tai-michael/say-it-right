@@ -1,9 +1,8 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    <div class="sample-paragraph">
-      <p v-if="!highlightedParagraphShown">{{ sampleParagraph }}</p>
-      <p v-if="highlightedParagraphShown" v-html="highlightedText"></p>
+    <div class="diagnostic-paragraph">
+      <p v-html="diagnosticParagraph"></p>
     </div>
     <!-- <button @click="handleMicPress">
       {{ isRecording ? 'Stop microphone' : 'Start microphone' }}
@@ -23,7 +22,7 @@
     </div>
 
     <div class="transcript-container">
-      <label>What you said:</label>
+      <label>Recorded words:</label>
       <div>{{ transcript }}</div>
     </div>
     <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
@@ -53,7 +52,7 @@
 
 <script setup>
 // import LoadingDots from '../components/LoadingDots.vue'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/browser-client'
 // NOTE maybe put in App.js instead
 import '@speechly/browser-ui/core/push-to-talk-button'
@@ -77,7 +76,6 @@ let micStateText = ref('Not actively recording')
 // let clientStateText = ref('Connecting...')
 let clientConnected = ref(false)
 let clientFullyInitialized = ref(false)
-let highlightedParagraphShown = ref(false)
 // let debugOutText = ref('')
 // let tentativeText = ref('')
 // let transcriptText = ref('')
@@ -86,11 +84,11 @@ let highlightedParagraphShown = ref(false)
 // let entitiesListText = ref('')
 // let timestamp = ref('')
 
-const sampleParagraph = ref(
+const diagnosticParagraph = ref(
   'Nelson Mandela was a courageous leader who inspired society with his vivid ideas and successful fight against apartheid in South Africa. He once said, "I think education is the most powerful weapon which you can use to change the world." Mandela\'s plan for a free and democratic South Africa required a variety of strategies, including peaceful protests and civil disobedience. Despite spending 27 years in prison, he remained disciplined and continued to study, eventually becoming the first black president of South Africa. Mandela\'s legacy has comforted millions, reminding us that anything is possible with determination and the power of the human spirit.'
 )
 
-const diagnosticWords = ref([
+const diagnosticKeywords = ref([
   'vivid',
   'successful',
   'inspired',
@@ -107,8 +105,8 @@ const diagnosticWords = ref([
 ])
 
 // NOTE might need to put the two variables below inside the 'segment.isFinal' callback
-const correctlyPronouncedWords = ref([])
-const mispronouncedWords = ref([])
+const correctlyPronouncedKeywords = ref([])
+const mispronouncedKeywords = ref([])
 
 // onMounted(() => {
 //   // Render the component, but keep it hidden
@@ -173,6 +171,22 @@ const renderTranscript = (segment) => {
 //   transcript.value = ''
 // }
 
+const highlightWords = (incorrectWords, correctWords, paragraph) => {
+  const paragraphWords = paragraph.split(' ')
+
+  const highlightedWords = paragraphWords.map((word) => {
+    if (incorrectWords.includes(word)) {
+      return `<span class="incorrect">${word}</span>`
+    } else if (correctWords.includes(word)) {
+      return `<span class="correct">${word}</span>`
+    } else {
+      return word
+    }
+  })
+
+  return highlightedWords.join(' ')
+}
+
 microphone.onStateChange((state) => {
   micStateText.value = state
 })
@@ -200,31 +214,44 @@ client.onSegmentChange((segment) => {
     //   console.log(client)
 
     const recordedWords = [...new Set(transcript.value.split(' '))]
-    correctlyPronouncedWords.value = [
-      ...diagnosticWords.value.filter((word) => recordedWords.includes(word))
+    correctlyPronouncedKeywords.value = [
+      ...diagnosticKeywords.value.filter((word) => recordedWords.includes(word))
     ]
+    console.log('Correctly pronounced keywords:', correctlyPronouncedKeywords.value.join(', '))
 
-    for (const word of diagnosticWords.value) {
-      if (!correctlyPronouncedWords.value.includes(word)) {
-        mispronouncedWords.value.push(word)
+    for (const word of diagnosticKeywords.value) {
+      if (!correctlyPronouncedKeywords.value.includes(word)) {
+        mispronouncedKeywords.value.push(word)
       }
     }
+    console.log('Mispronounced keywords:', mispronouncedKeywords.value.join(', '))
 
-    highlightedParagraphShown.value = true
-    console.log(correctlyPronouncedWords.value)
-    console.log(mispronouncedWords.value)
-  }
-})
-
-const highlightedText = computed(() => {
-  let highlightedParagraph = sampleParagraph.value
-  mispronouncedWords.value.forEach((word) => {
-    highlightedParagraph = highlightedParagraph.replace(
-      new RegExp(`\\b${word}\\b`, 'g'),
-      `<span style="color:white; display: inline-block； padding: .25em 0; background: red">${word}</span>`
+    // NOTE highlights mispronounced keywords in red, and correctly pronounced words in green; consider not highlighting correct words
+    diagnosticParagraph.value = highlightWords(
+      mispronouncedKeywords.value,
+      correctlyPronouncedKeywords.value,
+      diagnosticParagraph.value
     )
-  })
-  return highlightedParagraph
+
+    console.log(diagnosticParagraph.value)
+    // mispronouncedKeywords.value.forEach((word) => {
+    //   diagnosticParagraph.value = diagnosticParagraph.value.replace(
+    //     new RegExp(`\\b${word}\\b`, 'g'),
+    //     `<span style="color:white; display: inline-block； padding: .25em 0; background: red">${word}</span>`
+    //   )
+    // })
+
+    // // REVIEW highlights correctly pronounced keywords; consider not including these
+    // correctlyPronouncedKeywords.value.forEach((word) => {
+    //   diagnosticParagraph.value = diagnosticParagraph.value.replace(
+    //     new RegExp(`\\b${word}\\b`, 'g'),
+    //     `<span style="color:white; display: inline-block； padding: .25em 0; background: green">${word}</span>`
+    //   )
+    // })
+
+    // REVIEW Sometimes, Speechly keeps recording even after the recording button has been released. Below 'guard' might prevent this bug.
+    if (client.active) client.stop()
+  }
 })
 
 // // NOTE Implement a listener for speech segment updates
@@ -262,6 +289,42 @@ label {
   font-weight: 800;
 }
 
+.diagnostic-paragraph {
+  &:deep(.incorrect),
+  &:deep(.correct) {
+    color: white;
+  }
+
+  &:deep(.incorrect) {
+    // The fourth 0 sets the highlight to fully transparent. Using rgba, which allows the setting of transparency, keeps the text fully visible.
+    background-color: rgba(255, 0, 0, 0);
+    // the forwards keyword keeps the final animation state
+    animation: fadeInRed 0.5s ease-in-out forwards;
+  }
+
+  &:deep(.correct) {
+    background-color: rgba(0, 128, 0, 0);
+    animation: fadeInGreen 0.5s ease-in-out forwards;
+  }
+
+  @keyframes fadeInRed {
+    0% {
+      background-color: rgba(255, 0, 0, 0);
+    }
+    100% {
+      background-color: rgba(255, 0, 0, 1);
+    }
+  }
+
+  @keyframes fadeInGreen {
+    0% {
+      background-color: rgba(0, 128, 0, 0);
+    }
+    100% {
+      background-color: rgba(0, 128, 0, 1);
+    }
+  }
+}
 .transcript-container {
   position: fixed;
   top: 0;
@@ -317,7 +380,7 @@ label {
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
+    // -webkit-user-select: none !important;
 
     &:active {
       background-color: #27ae60;
