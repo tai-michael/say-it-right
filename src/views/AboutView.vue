@@ -25,6 +25,8 @@
       <label>Recorded words:</label>
       <div>{{ transcript }}</div>
     </div>
+
+    <div class="diagnostic-evaluation" v-html="evaluationText"></div>
     <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
     <!-- <div>Final transcript: {{ transcriptText }}</div> -->
     <!-- <div>Connection to Speechly API: {{ clientStateText }}</div> -->
@@ -76,6 +78,7 @@ let micStateText = ref('Not actively recording')
 // let clientStateText = ref('Connecting...')
 let clientConnected = ref(false)
 let clientFullyInitialized = ref(false)
+let evaluationText = ref('')
 // let debugOutText = ref('')
 // let tentativeText = ref('')
 // let transcriptText = ref('')
@@ -140,6 +143,7 @@ const initMic = async () => {
 // }
 
 const startRecording = async () => {
+  evaluationText.value = ''
   await initMic()
   await client.start()
   isRecording.value = true
@@ -148,10 +152,67 @@ const startRecording = async () => {
 const stopRecording = async () => {
   await client.stop()
   isRecording.value = false
+
+  const recordedWords = [...new Set(transcript.value.split(' '))]
+
+  if (recordedWords.length < 10)
+    return (evaluationText.value =
+      "You didn’t record enough words. Please try again.<br><span style='line-height:2.5em;'> Remember to hold the button while recording!")
+
+  // TODO turn this into a function (maybe renderTranscript or renderFinalTranscript):
+
+  correctlyPronouncedKeywords.value = [
+    ...diagnosticKeywords.value.filter((word) => recordedWords.includes(word))
+  ]
+  console.log('Correctly pronounced keywords:', correctlyPronouncedKeywords.value.join(', '))
+
+  for (const word of diagnosticKeywords.value) {
+    if (!correctlyPronouncedKeywords.value.includes(word)) {
+      mispronouncedKeywords.value.push(word)
+    }
+  }
+  console.log('Mispronounced keywords:', mispronouncedKeywords.value.join(', '))
+
+  // NOTE highlights mispronounced keywords in red and correctly pronounced words in green; consider not highlighting correct words in the final version
+  diagnosticParagraph.value = highlightWords(
+    mispronouncedKeywords.value,
+    correctlyPronouncedKeywords.value,
+    diagnosticParagraph.value
+  )
+
+  createFinalEvaluationText()
+
+  // if (recordedWords.length < 10)
+  //   return (evaluationText.value =
+  //     "You didn’t record enough words. Please try again.<br><span style='line-height:2.5em;'> Remember to hold the button while recording!")
+
+  // if (correctlyPronouncedKeywords.value.length === diagnosticKeywords.value.length) {
+  //   evaluationText.value =
+  //     "You pronounced each word correctly. Very impressive!<br><span style='line-height:2em;'> Now let’s test your pronunciation of other words that are commonly mispronounced.</span>"
+  // } else if (correctlyPronouncedKeywords.value.length >= diagnosticKeywords.value.length * 0.5) {
+  //   evaluationText.value =
+  //     "You did pretty good! But these highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> Let’s test your pronunciation of these words again to make sure.</span>"
+  // } else {
+  //   evaluationText.value =
+  //     "These highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> But let’s test your pronunciation of these words again to make sure.</span>"
+  // }
 }
 
 const renderTranscript = (segment) => {
   return segment.words.map((w) => w.value).join(' ')
+}
+
+const createFinalEvaluationText = () => {
+  if (correctlyPronouncedKeywords.value.length === diagnosticKeywords.value.length) {
+    evaluationText.value =
+      "You pronounced each keyword correctly. Very impressive!<br><span style='line-height:2em;'> Now let’s test your pronunciation of other words that are commonly mispronounced.</span>"
+  } else if (correctlyPronouncedKeywords.value.length >= diagnosticKeywords.value.length * 0.5) {
+    evaluationText.value =
+      "You did pretty good! But these highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> Let’s test your pronunciation of these keywords again to make sure.</span>"
+  } else {
+    evaluationText.value =
+      "These highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> But let’s test your pronunciation of these keywords again to make sure.</span>"
+  }
 }
 
 // const renderSegmentDetails = (intent, entities) => {
@@ -171,7 +232,17 @@ const renderTranscript = (segment) => {
 //   transcript.value = ''
 // }
 
+// diagnosticParagraph.value = highlightWords(
+//   mispronouncedKeywords.value,
+//   correctlyPronouncedKeywords.value,
+//   diagnosticParagraph.value
+// )
+
 const highlightWords = (incorrectWords, correctWords, paragraph) => {
+  console.log(incorrectWords)
+  console.log(correctWords)
+  console.log(paragraph)
+
   const paragraphWords = paragraph.split(' ')
 
   const highlightedWords = paragraphWords.map((word) => {
@@ -183,6 +254,8 @@ const highlightWords = (incorrectWords, correctWords, paragraph) => {
       return word
     }
   })
+
+  console.log(highlightedWords)
 
   return highlightedWords.join(' ')
 }
@@ -213,44 +286,11 @@ client.onSegmentChange((segment) => {
 
     //   console.log(client)
 
-    const recordedWords = [...new Set(transcript.value.split(' '))]
-    correctlyPronouncedKeywords.value = [
-      ...diagnosticKeywords.value.filter((word) => recordedWords.includes(word))
-    ]
-    console.log('Correctly pronounced keywords:', correctlyPronouncedKeywords.value.join(', '))
+    // TODO combine previous transcript.value* with new segment. Or create a 'finalTranscript' (or rename 'transcript' to 'tempTranscript', as well as the method's name) property and add this to it (thereby preventing the live transcript from getting too long, covering half the page)
+    // if (isRecording.value)
 
-    for (const word of diagnosticKeywords.value) {
-      if (!correctlyPronouncedKeywords.value.includes(word)) {
-        mispronouncedKeywords.value.push(word)
-      }
-    }
-    console.log('Mispronounced keywords:', mispronouncedKeywords.value.join(', '))
-
-    // NOTE highlights mispronounced keywords in red, and correctly pronounced words in green; consider not highlighting correct words
-    diagnosticParagraph.value = highlightWords(
-      mispronouncedKeywords.value,
-      correctlyPronouncedKeywords.value,
-      diagnosticParagraph.value
-    )
-
-    console.log(diagnosticParagraph.value)
-    // mispronouncedKeywords.value.forEach((word) => {
-    //   diagnosticParagraph.value = diagnosticParagraph.value.replace(
-    //     new RegExp(`\\b${word}\\b`, 'g'),
-    //     `<span style="color:white; display: inline-block； padding: .25em 0; background: red">${word}</span>`
-    //   )
-    // })
-
-    // // REVIEW highlights correctly pronounced keywords; consider not including these
-    // correctlyPronouncedKeywords.value.forEach((word) => {
-    //   diagnosticParagraph.value = diagnosticParagraph.value.replace(
-    //     new RegExp(`\\b${word}\\b`, 'g'),
-    //     `<span style="color:white; display: inline-block； padding: .25em 0; background: green">${word}</span>`
-    //   )
-    // })
-
-    // REVIEW Sometimes, Speechly keeps recording even after the recording button has been released. Below 'guard' might prevent this bug.
-    if (client.active) client.stop()
+    // REVIEW Sometimes, Speechly keeps recording even after the recording button has been released from hold. Below guard might prevent this bug.
+    if (!isRecording.value && client.active) client.stop()
   }
 })
 
@@ -290,6 +330,7 @@ label {
 }
 
 .diagnostic-paragraph {
+  // 'deep' selector is necessary, as scoped styles don't apply to content inside v-html
   &:deep(.incorrect),
   &:deep(.correct) {
     color: white;
@@ -325,6 +366,11 @@ label {
     }
   }
 }
+
+.diagnostic-evaluation {
+  margin-top: 1rem;
+}
+
 .transcript-container {
   position: fixed;
   top: 0;
@@ -357,9 +403,9 @@ label {
     height: 80px;
     border-radius: 50%;
     background-color: #fa2222;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
 
     --gradient-stop1: #15e8b5;
     --gradient-stop2: #4fa1f9;
@@ -383,7 +429,7 @@ label {
     // -webkit-user-select: none !important;
 
     &:active {
-      background-color: #27ae60;
+      background-color: #fc4343;
       transition: 0.3s;
       width: 85px;
       height: 85px;
