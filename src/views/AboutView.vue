@@ -1,15 +1,15 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    <div class="diagnostic-paragraph">
-      <p v-html="diagnosticParagraph"></p>
+    <div class="tested-paragraph">
+      <p v-html="testedParagraph"></p>
     </div>
     <!-- <button @click="handleMicPress">
       {{ isRecording ? 'Stop microphone' : 'Start microphone' }}
     </button> -->
     <div class="button-container">
       <button
-        v-if="clientConnected"
+        v-if="clientConnected && !testComplete"
         class="recording-btn"
         @mousedown="startRecording"
         @touchstart="startRecording"
@@ -23,10 +23,10 @@
 
     <div class="transcript-container">
       <label>Recorded words:</label>
-      <div>{{ transcript }}</div>
+      <div>{{ temporaryTranscriptDisplay }}</div>
     </div>
 
-    <div class="diagnostic-evaluation" v-html="evaluationText"></div>
+    <div class="tested-evaluation" v-html="evaluationText"></div>
     <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
     <!-- <div>Final transcript: {{ transcriptText }}</div> -->
     <!-- <div>Connection to Speechly API: {{ clientStateText }}</div> -->
@@ -54,7 +54,8 @@
 
 <script setup>
 // import LoadingDots from '../components/LoadingDots.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useFilterCorrectAndIncorrectWords } from '@/common/composables.js'
 import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/browser-client'
 // NOTE maybe put in App.js instead
 import '@speechly/browser-ui/core/push-to-talk-button'
@@ -62,23 +63,16 @@ import '@speechly/browser-ui/core/big-transcript'
 import '@speechly/browser-ui/core/intro-popup'
 import MicIcon from '@/assets/images/mic.vue'
 
-const microphone = new BrowserMicrophone()
-const client = new BrowserClient({
-  appId: '20b0ff74-506d-4327-8970-73b671c98193',
-  logSegments: true,
-  debug: true
-  // NOTE Voice Activity Detection (VAD) reduces the CPU load of the decoder, as it prevents the decoder from processing silent parts of the audio. However, it may also introduce some errors in the resulting transcript. For the purposes of this app, VAD should probably be disabled.
-  // vad: { enabled: isVadEnabled },
-})
-
 let showComponent = ref(false)
 let isRecording = ref(false)
-let transcript = ref('')
+let temporaryTranscript = ref('')
+let finalTranscript = ref('')
+let testComplete = ref(false)
 let micStateText = ref('Not actively recording')
 // let clientStateText = ref('Connecting...')
 let clientConnected = ref(false)
-let clientFullyInitialized = ref(false)
-let evaluationText = ref('')
+// let clientFullyInitialized = ref(false)
+// let evaluationText = ref('')
 // let debugOutText = ref('')
 // let tentativeText = ref('')
 // let transcriptText = ref('')
@@ -87,11 +81,30 @@ let evaluationText = ref('')
 // let entitiesListText = ref('')
 // let timestamp = ref('')
 
-const diagnosticParagraph = ref(
+const microphone = new BrowserMicrophone()
+const client = new BrowserClient({
+  appId: '20b0ff74-506d-4327-8970-73b671c98193',
+  logSegments: false,
+  debug: false
+  // NOTE Voice Activity Detection (VAD) reduces the CPU load of the decoder, as it prevents the decoder from processing silent parts of the audio. However, it may also introduce some errors in the resulting transcript. For the purposes of this app, VAD should probably be disabled.
+  // vad: { enabled: isVadEnabled },
+})
+
+// client.onStateChange((state) => {
+//   clientStateText.value = stateToString(state)
+// })
+client.onStateChange((state) => {
+  if (stateToString(state) === 'Connected') clientConnected.value = true
+  // setTimeout(() => {
+  //   clientFullyInitialized.value = true
+  // }, 2000)
+})
+
+const testedParagraph = ref(
   'Nelson Mandela was a courageous leader who inspired society with his vivid ideas and successful fight against apartheid in South Africa. He once said, "I think education is the most powerful weapon which you can use to change the world." Mandela\'s plan for a free and democratic South Africa required a variety of strategies, including peaceful protests and civil disobedience. Despite spending 27 years in prison, he remained disciplined and continued to study, eventually becoming the first black president of South Africa. Mandela\'s legacy has comforted millions, reminding us that anything is possible with determination and the power of the human spirit.'
 )
 
-const diagnosticKeywords = ref([
+const testedKeywords = ref([
   'vivid',
   'successful',
   'inspired',
@@ -107,20 +120,8 @@ const diagnosticKeywords = ref([
   'discipline'
 ])
 
-// NOTE might need to put the two variables below inside the 'segment.isFinal' callback
 const correctlyPronouncedKeywords = ref([])
 const mispronouncedKeywords = ref([])
-
-// onMounted(() => {
-//   // Render the component, but keep it hidden
-//   showComponent.value = true
-//   showComponent.value = false
-//   // Hide the component after 2 seconds, then show it again after an additional delay
-
-//   setTimeout(() => {
-//     showComponent.value = true
-//   }, 1000)
-// })
 
 const initMic = async () => {
   if (!microphone.mediaStream) {
@@ -131,19 +132,8 @@ const initMic = async () => {
   }
 }
 
-// const handleMicPress = async () => {
-//   if (client.isActive()) {
-//     await client.stop()
-//     isRecording.value = false
-//   } else {
-//     await initMic()
-//     await client.start()
-//     isRecording.value = true
-//   }
-// }
-
 const startRecording = async () => {
-  evaluationText.value = ''
+  // evaluationText.value = ''
   await initMic()
   await client.start()
   isRecording.value = true
@@ -153,67 +143,103 @@ const stopRecording = async () => {
   await client.stop()
   isRecording.value = false
 
-  const recordedWords = [...new Set(transcript.value.split(' '))]
+  if (finalTranscript.value.split(' ').length <= 10) return
 
-  if (recordedWords.length < 10)
-    return (evaluationText.value =
-      "You didn’t record enough words. Please try again.<br><span style='line-height:2.5em;'> Remember to hold the button while recording!")
-
-  // TODO turn this into a function (maybe renderTranscript or renderFinalTranscript):
-
-  correctlyPronouncedKeywords.value = [
-    ...diagnosticKeywords.value.filter((word) => recordedWords.includes(word))
-  ]
-  console.log('Correctly pronounced keywords:', correctlyPronouncedKeywords.value.join(', '))
-
-  for (const word of diagnosticKeywords.value) {
-    if (!correctlyPronouncedKeywords.value.includes(word)) {
-      mispronouncedKeywords.value.push(word)
-    }
-  }
-  console.log('Mispronounced keywords:', mispronouncedKeywords.value.join(', '))
-
-  // NOTE highlights mispronounced keywords in red and correctly pronounced words in green; consider not highlighting correct words in the final version
-  diagnosticParagraph.value = highlightWords(
-    mispronouncedKeywords.value,
-    correctlyPronouncedKeywords.value,
-    diagnosticParagraph.value
+  const { correctWords, incorrectWords } = useFilterCorrectAndIncorrectWords(
+    finalTranscript.value,
+    testedKeywords.value
   )
 
-  createFinalEvaluationText()
+  correctlyPronouncedKeywords.value = correctWords
+  mispronouncedKeywords.value = incorrectWords
 
-  // if (recordedWords.length < 10)
-  //   return (evaluationText.value =
-  //     "You didn’t record enough words. Please try again.<br><span style='line-height:2.5em;'> Remember to hold the button while recording!")
+  // const recordedWords = [...new Set(finalTranscript.value.split(' '))]
+  // correctlyPronouncedKeywords.value = [
+  //   ...testedKeywords.value.filter((word) => recordedWords.includes(word))
+  // ]
 
-  // if (correctlyPronouncedKeywords.value.length === diagnosticKeywords.value.length) {
-  //   evaluationText.value =
-  //     "You pronounced each word correctly. Very impressive!<br><span style='line-height:2em;'> Now let’s test your pronunciation of other words that are commonly mispronounced.</span>"
-  // } else if (correctlyPronouncedKeywords.value.length >= diagnosticKeywords.value.length * 0.5) {
-  //   evaluationText.value =
-  //     "You did pretty good! But these highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> Let’s test your pronunciation of these words again to make sure.</span>"
-  // } else {
-  //   evaluationText.value =
-  //     "These highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> But let’s test your pronunciation of these words again to make sure.</span>"
+  // for (const word of testedKeywords.value) {
+  //   if (!correctlyPronouncedKeywords.value.includes(word)) {
+  //     mispronouncedKeywords.value.push(word)
+  //   }
   // }
+  // console.log('Correctly pronounced keywords:', correctlyPronouncedKeywords.value.join(', '))
+  // console.log('Mispronounced keywords:', mispronouncedKeywords.value.join(', '))
+
+  // NOTE highlights mispronounced keywords in red and correctly pronounced words in green; consider not highlighting correct words in the final version
+  testedParagraph.value = highlightCorrectAndIncorrectWords(
+    correctlyPronouncedKeywords.value,
+    mispronouncedKeywords.value,
+    testedParagraph.value
+  )
+
+  testComplete.value = true
 }
 
-const renderTranscript = (segment) => {
-  return segment.words.map((w) => w.value).join(' ')
-}
+const highlightCorrectAndIncorrectWords = (correctWords, incorrectWords, paragraph) => {
+  // Matches any sequence of characters that are not whitespace or certain punctuation marks, including the punctuation marks themselves
+  const wordRegex = /(?:[^\s.,;:!?"'’“”()[\]{}<>«»]+)|(?:[.,;:!?"'’“”()[\]{}<>«»]+)/g
 
-const createFinalEvaluationText = () => {
-  if (correctlyPronouncedKeywords.value.length === diagnosticKeywords.value.length) {
-    evaluationText.value =
-      "You pronounced each keyword correctly. Very impressive!<br><span style='line-height:2em;'> Now let’s test your pronunciation of other words that are commonly mispronounced.</span>"
-  } else if (correctlyPronouncedKeywords.value.length >= diagnosticKeywords.value.length * 0.5) {
-    evaluationText.value =
-      "You did pretty good! But these highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> Let’s test your pronunciation of these keywords again to make sure.</span>"
-  } else {
-    evaluationText.value =
-      "These highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> But let’s test your pronunciation of these keywords again to make sure.</span>"
+  // Splits the paragraph into an array of words and punctuation marks
+  const paragraphWords = paragraph.match(wordRegex)
+  // console.log(paragraphWords)
+
+  const lowercaseParagraphWords = paragraphWords.map((word) => word.toLowerCase())
+
+  const highlightedWords = lowercaseParagraphWords.map((word, index) => {
+    const originalWord = paragraphWords[index]
+    if (incorrectWords.includes(word)) {
+      return `<span class="incorrect">${originalWord}</span>`
+    } else if (correctWords.includes(word)) {
+      return `<span class="correct">${originalWord}</span>`
+    } else {
+      return originalWord
+    }
+  })
+
+  // console.log(highlightedWords)
+  let highlightedParagraph = highlightedWords.join(' ')
+
+  const fixPunctuation = (paragraph) => {
+    const replacements = [
+      { from: ' .', to: '.' },
+      { from: ' , ', to: ', ' },
+      { from: ' ; ', to: '; ' },
+      { from: ' : ', to: ': ' },
+      { from: " ' ", to: "' " },
+      { from: "' ", to: "'" },
+      { from: '" ', to: '"' },
+      { from: /"([^"]*)"/g, to: '"$1" ' }
+    ]
+
+    for (const { from, to } of replacements) {
+      paragraph = paragraph.replaceAll(from, to)
+    }
+    return paragraph
   }
+
+  return fixPunctuation(highlightedParagraph)
 }
+
+const evaluationText = computed(() => {
+  if (isRecording.value) return ''
+  else if (!finalTranscript.value.length) return 'Hold the recording button to begin recording.'
+  else if (finalTranscript.value.split(' ').length <= 10)
+    return "You didn’t record enough words. Please try again.<br><span style='line-height:2.5em;'> Remember to hold the button while recording!"
+  else if (correctlyPronouncedKeywords.value.length === testedKeywords.value.length) {
+    return "You pronounced each keyword correctly. Very impressive!<br><span style='line-height:2em;'> Now let’s test your pronunciation of other words that are commonly mispronounced.</span>"
+  } else if (correctlyPronouncedKeywords.value.length === testedKeywords.value.length - 1) {
+    return "You pronounced only one word incorrectly. Good job!<br><span style='line-height:2em;'> Let’s test your pronunciation of this word again to make sure.</span>"
+  } else if (correctlyPronouncedKeywords.value.length >= testedKeywords.value.length * 0.5) {
+    return "You did pretty good! But these highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> Let’s test your pronunciation of these keywords again to make sure.</span>"
+  } else {
+    return "These highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> But let’s test your pronunciation of these keywords again to make sure.</span>"
+  }
+})
+
+microphone.onStateChange((state) => {
+  micStateText.value = state
+})
 
 // const renderSegmentDetails = (intent, entities) => {
 //   if (!intent.intent) return (intentText.value = '')
@@ -232,86 +258,26 @@ const createFinalEvaluationText = () => {
 //   transcript.value = ''
 // }
 
-// diagnosticParagraph.value = highlightWords(
-//   mispronouncedKeywords.value,
-//   correctlyPronouncedKeywords.value,
-//   diagnosticParagraph.value
-// )
+const temporaryTranscriptDisplay = computed(() =>
+  testComplete.value ? '' : temporaryTranscript.value.split(' ').slice(-10).join(' ')
+)
 
-const highlightWords = (incorrectWords, correctWords, paragraph) => {
-  console.log(incorrectWords)
-  console.log(correctWords)
-  console.log(paragraph)
-
-  const paragraphWords = paragraph.split(' ')
-
-  const highlightedWords = paragraphWords.map((word) => {
-    if (incorrectWords.includes(word)) {
-      return `<span class="incorrect">${word}</span>`
-    } else if (correctWords.includes(word)) {
-      return `<span class="correct">${word}</span>`
-    } else {
-      return word
-    }
-  })
-
-  console.log(highlightedWords)
-
-  return highlightedWords.join(' ')
+const renderTranscript = (segment) => {
+  return segment.words.map((w) => w.value).join(' ')
 }
-
-microphone.onStateChange((state) => {
-  micStateText.value = state
-})
-
-// client.onStateChange((state) => {
-//   clientStateText.value = stateToString(state)
-// })
-
-client.onStateChange((state) => {
-  if (stateToString(state) === 'Connected') clientConnected.value = true
-  setTimeout(() => {
-    clientFullyInitialized.value = true
-  }, 2000)
-})
 
 client.onSegmentChange((segment) => {
   // clearBtn.disabled = false;
-  transcript.value = renderTranscript(segment)
+  temporaryTranscript.value = renderTranscript(segment)
   if (segment.isFinal) {
+    // console.log(temporaryTranscriptLength)
+    finalTranscript.value = `${finalTranscript.value} ${temporaryTranscript.value}`.trim()
     //   debugOutText += renderOutput(segment)
-    //   renderSegment(segment)
-    // //  NOTE uncomment below line and transcriptText in renderSegment if I want to include both tentative and final transcripts
-    //   tentativeText.value = ''
 
-    //   console.log(client)
-
-    // TODO combine previous transcript.value* with new segment. Or create a 'finalTranscript' (or rename 'transcript' to 'tempTranscript', as well as the method's name) property and add this to it (thereby preventing the live transcript from getting too long, covering half the page)
-    // if (isRecording.value)
-
-    // REVIEW Sometimes, Speechly keeps recording even after the recording button has been released from hold. Below guard might prevent this bug.
-    if (!isRecording.value && client.active) client.stop()
+    // REVIEW Sometimes, Speechly keeps recording even after the recording button has been released from hold. Below guard might prevent this bug. (tested, failed once)
+    if (!isRecording.value) client.stop()
   }
 })
-
-// // NOTE Implement a listener for speech segment updates
-// document.getElementsByTagName('push-to-talk-button')[0].addEventListener('speechsegment', (e) => {
-//   const speechSegment = e.detail
-//   console.log(speechSegment.entities)
-
-//   speechSegment.entities.forEach((entity) => {
-//     let select = document.getElementById(entity.type)
-//     let options = Array.from(select.getElementsByTagName('option')).map(
-//       (option) => option.innerHTML
-//     )
-
-//     const found = options.find((option) =>
-//       entity.value.toLowerCase().startsWith(option.toLowerCase())
-//     )
-
-//     if (found) select.value = found
-//   })
-// })
 </script>
 
 <style lang="scss" scoped>
@@ -329,7 +295,7 @@ label {
   font-weight: 800;
 }
 
-.diagnostic-paragraph {
+.tested-paragraph {
   // 'deep' selector is necessary, as scoped styles don't apply to content inside v-html
   &:deep(.incorrect),
   &:deep(.correct) {
@@ -367,7 +333,7 @@ label {
   }
 }
 
-.diagnostic-evaluation {
+.tested-evaluation {
   margin-top: 1rem;
 }
 
