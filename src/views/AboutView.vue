@@ -26,7 +26,32 @@
       <div>{{ temporaryTranscriptDisplay }}</div>
     </div>
 
-    <div class="tested-evaluation" v-html="evaluationText"></div>
+    <div class="tested-evaluation">
+      <div v-if="evaluationText === 'isCurrentlyRecording'"></div>
+      <div v-else-if="evaluationText === 'noWordsRecorded'">
+        Hold the recording button to begin recording.
+      </div>
+      <div v-else-if="evaluationText === 'fewWordsRecorded'">
+        You didn't record enough words. Please try again.<br />
+        Remember to hold the button while recording!
+      </div>
+      <div v-else-if="evaluationText === 'allWordsCorrect'">
+        You pronounced each keyword correctly. Very impressive!<br />
+        Now let's test your pronunciation of other words that are commonly mispronounced.
+      </div>
+      <div v-else-if="evaluationText === 'oneWordIncorrect'">
+        You pronounced only one word incorrectly. Good job!<br />
+        Let's test your pronunciation of this word again to make sure.
+      </div>
+      <div v-else-if="evaluationText === 'mostWordsCorrect'">
+        You did pretty good! But these highlighted words were not pronounced correctly.<br />
+        Let's test your pronunciation of these keywords again to make sure.
+      </div>
+      <div v-else-if="evaluationText === 'mostWordsIncorrect'">
+        These highlighted words were not pronounced correctly.<br />
+        But let's test your pronunciation of these keywords again to make sure.
+      </div>
+    </div>
     <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
     <!-- <div>Final transcript: {{ transcriptText }}</div> -->
     <!-- <div>Connection to Speechly API: {{ clientStateText }}</div> -->
@@ -182,7 +207,6 @@ const highlightCorrectAndIncorrectWords = (correctWords, incorrectWords, paragra
 
   // Splits the paragraph into an array of words and punctuation marks
   const paragraphWords = paragraph.match(wordRegex)
-  // console.log(paragraphWords)
 
   const lowercaseParagraphWords = paragraphWords.map((word) => word.toLowerCase())
 
@@ -197,44 +221,40 @@ const highlightCorrectAndIncorrectWords = (correctWords, incorrectWords, paragra
     }
   })
 
-  // console.log(highlightedWords)
   let highlightedParagraph = highlightedWords.join(' ')
-
-  const fixPunctuation = (paragraph) => {
-    const replacements = [
-      { from: ' .', to: '.' },
-      { from: ' , ', to: ', ' },
-      { from: ' ; ', to: '; ' },
-      { from: ' : ', to: ': ' },
-      { from: " ' ", to: "' " },
-      { from: "' ", to: "'" },
-      { from: '" ', to: '"' },
-      { from: /"([^"]*)"/g, to: '"$1" ' }
-    ]
-
-    for (const { from, to } of replacements) {
-      paragraph = paragraph.replaceAll(from, to)
-    }
-    return paragraph
-  }
 
   return fixPunctuation(highlightedParagraph)
 }
 
-const evaluationText = computed(() => {
-  if (isRecording.value) return ''
-  else if (!finalTranscript.value.length) return 'Hold the recording button to begin recording.'
-  else if (finalTranscript.value.split(' ').length <= 10)
-    return "You didn’t record enough words. Please try again.<br><span style='line-height:2.5em;'> Remember to hold the button while recording!"
-  else if (correctlyPronouncedKeywords.value.length === testedKeywords.value.length) {
-    return "You pronounced each keyword correctly. Very impressive!<br><span style='line-height:2em;'> Now let’s test your pronunciation of other words that are commonly mispronounced.</span>"
-  } else if (correctlyPronouncedKeywords.value.length === testedKeywords.value.length - 1) {
-    return "You pronounced only one word incorrectly. Good job!<br><span style='line-height:2em;'> Let’s test your pronunciation of this word again to make sure.</span>"
-  } else if (correctlyPronouncedKeywords.value.length >= testedKeywords.value.length * 0.5) {
-    return "You did pretty good! But these highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> Let’s test your pronunciation of these keywords again to make sure.</span>"
-  } else {
-    return "These highlighted words were not pronounced correctly.<br><span style='line-height:2em;'> But let’s test your pronunciation of these keywords again to make sure.</span>"
+const fixPunctuation = (paragraph) => {
+  const replacements = [
+    { from: ' .', to: '.' },
+    { from: ' , ', to: ', ' },
+    { from: ' ; ', to: '; ' },
+    { from: ' : ', to: ': ' },
+    { from: " ' ", to: "' " },
+    { from: "' ", to: "'" },
+    { from: '" ', to: '"' },
+    { from: /"([^"]*)"/g, to: '"$1" ' }
+  ]
+
+  for (const { from, to } of replacements) {
+    paragraph = paragraph.replaceAll(from, to)
   }
+  return paragraph
+}
+
+const evaluationText = computed(() => {
+  if (isRecording.value) return 'isCurrentlyRecording'
+  else if (!finalTranscript.value.length) return 'noWordsRecorded'
+  else if (finalTranscript.value.split(' ').length <= 10) return 'fewWordsRecorded'
+  else if (correctlyPronouncedKeywords.value.length === testedKeywords.value.length)
+    return 'allWordsCorrect'
+  else if (correctlyPronouncedKeywords.value.length === testedKeywords.value.length - 1)
+    return 'oneWordIncorrect'
+  else if (correctlyPronouncedKeywords.value.length > testedKeywords.value.length * 0.5)
+    return 'mostWordsCorrect'
+  else return 'mostWordsIncorrect'
 })
 
 microphone.onStateChange((state) => {
@@ -335,6 +355,7 @@ label {
 
 .tested-evaluation {
   margin-top: 1rem;
+  height: 50px;
 }
 
 .transcript-container {
