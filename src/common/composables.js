@@ -1,4 +1,4 @@
-import { stemmer } from 'stemmer'
+import stem from 'wink-porter2-stemmer'
 
 // REVIEW potential alternative function name: useMatchTestedWordsToWordsInParagraph
 export function useAdjustTestedWords(testedWordsList, testedParagraph) {
@@ -13,7 +13,7 @@ export function useAdjustTestedWords(testedWordsList, testedParagraph) {
 
   const adjustedTestedWords = lowercaseTestedWordsList.map((testedWord) => {
     for (const paragraphWord of paragraphWords) {
-      if (stemmer(testedWord) === stemmer(paragraphWord)) {
+      if (stem(testedWord) === stem(paragraphWord)) {
         return paragraphWord
       }
     }

@@ -87,6 +87,7 @@ import { microphone, client } from '@/speechlyInit.js'
 // import '@speechly/browser-ui/core/big-transcript'
 // import '@speechly/browser-ui/core/intro-popup'
 import MicIcon from '@/assets/images/mic.vue'
+import { openai } from '@/openaiInit.js'
 
 let showComponent = ref(false)
 let isRecording = ref(false)
@@ -178,6 +179,20 @@ const stopRecording = async () => {
     correctlyPronouncedTestedWords.value,
     mispronouncedTestedWords.value
   )
+
+  const completion = await openai.createChatCompletion({
+    model: 'gpt-3.5-turbo',
+    messages: [
+      {
+        role: 'user',
+        content: `Write a short paragraph no more than 80 words total about a random person or subject. Make sure to write the name of the person in the first sentence. Keep the language simple, but include all of the following words in the paragraph:
+        ${testedWordsList.value.join(', ')}
+
+        Use these words exactly as they appear in the list; do not change the word forms. For example, do not change a noun to an adjective, or present tense to past tense. Also, use each word just once in the entire paragraph.`
+      }
+    ]
+  })
+  console.log(completion.data.choices[0].message)
 
   testComplete.value = true
 }
