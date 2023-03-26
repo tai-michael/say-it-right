@@ -36,7 +36,7 @@
         Remember to hold the button while recording!
       </div>
       <div v-else-if="evaluationText === 'allWordsCorrect'">
-        You pronounced each keyword correctly. Very impressive!<br />
+        You pronounced each tested word correctly. Very impressive!<br />
         Now let's test your pronunciation of other words that are commonly mispronounced.
       </div>
       <div v-else-if="evaluationText === 'oneWordIncorrect'">
@@ -45,11 +45,11 @@
       </div>
       <div v-else-if="evaluationText === 'mostWordsCorrect'">
         You did pretty good! But these highlighted words were not pronounced correctly.<br />
-        Let's test your pronunciation of these keywords again to make sure.
+        Let's test your pronunciation of these words again to make sure.
       </div>
       <div v-else-if="evaluationText === 'mostWordsIncorrect'">
         These highlighted words were not pronounced correctly.<br />
-        But let's test your pronunciation of these keywords again to make sure.
+        But let's test your pronunciation of these words again to make sure.
       </div>
     </div>
     <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
@@ -60,7 +60,7 @@
     <!-- <div>{{ debugOutText }}</div> -->
     <!-- <div>{{ intentText }}</div>
     <div>{{ entitiesListText }}</div> -->
-    <big-transcript placement="top"> </big-transcript>
+    <!-- <big-transcript placement="top"> </big-transcript> -->
 
     <push-to-talk-button
       v-cloak
@@ -69,7 +69,7 @@
       appid="20b0ff74-506d-4327-8970-73b671c98193"
     >
     </push-to-talk-button>
-    <intro-popup> </intro-popup>
+    <!-- <intro-popup> </intro-popup> -->
     <!-- <intro-popup>
       <span slot="priming-body">You'll be able to control this web app faster with voice.</span>
     </intro-popup> -->
@@ -80,12 +80,12 @@
 <script setup>
 // import LoadingDots from '../components/LoadingDots.vue'
 import { ref, computed } from 'vue'
-import { useFilterCorrectAndIncorrectWords } from '@/common/composables.js'
-import { BrowserClient, BrowserMicrophone, stateToString } from '@speechly/browser-client'
+import { useAdjustTestedWords, useFilterCorrectAndIncorrectWords } from '@/common/composables.js'
+import { stateToString } from '@speechly/browser-client'
 // NOTE maybe put in App.js instead
-import '@speechly/browser-ui/core/push-to-talk-button'
-import '@speechly/browser-ui/core/big-transcript'
-import '@speechly/browser-ui/core/intro-popup'
+import { microphone, client } from '@/speechlyInit.js'
+// import '@speechly/browser-ui/core/big-transcript'
+// import '@speechly/browser-ui/core/intro-popup'
 import MicIcon from '@/assets/images/mic.vue'
 
 let showComponent = ref(false)
@@ -106,15 +106,6 @@ let clientConnected = ref(false)
 // let entitiesListText = ref('')
 // let timestamp = ref('')
 
-const microphone = new BrowserMicrophone()
-const client = new BrowserClient({
-  appId: '20b0ff74-506d-4327-8970-73b671c98193',
-  logSegments: false,
-  debug: false
-  // NOTE Voice Activity Detection (VAD) reduces the CPU load of the decoder, as it prevents the decoder from processing silent parts of the audio. However, it may also introduce some errors in the resulting transcript. For the purposes of this app, VAD should probably be disabled.
-  // vad: { enabled: isVadEnabled },
-})
-
 // client.onStateChange((state) => {
 //   clientStateText.value = stateToString(state)
 // })
@@ -126,10 +117,10 @@ client.onStateChange((state) => {
 })
 
 const testedParagraph = ref(
-  'Nelson Mandela was a courageous leader who inspired society with his vivid ideas and successful fight against apartheid in South Africa. He once said, "I think education is the most powerful weapon which you can use to change the world." Mandela\'s plan for a free and democratic South Africa required a variety of strategies, including peaceful protests and civil disobedience. Despite spending 27 years in prison, he remained disciplined and continued to study, eventually becoming the first black president of South Africa. Mandela\'s legacy has comforted millions, reminding us that anything is possible with determination and the power of the human spirit.'
+  'Stephen Hawking was a courageous and successful scientist who inspired many people throughout society. He had vivid ideas and a variety of interests, which he pursued with discipline and careful study. He was known for his wise words, and many people were comforted by his advice. He often said that to succeed in life, one must think carefully and have a solid plan.'
 )
 
-const testedKeywords = ref([
+const testedWordsList = ref([
   'vivid',
   'successful',
   'inspired',
@@ -137,7 +128,7 @@ const testedKeywords = ref([
   'think',
   'said',
   'comforted',
-  'he',
+  'he', // replace this word, maybe with world (e.g. 'many people around the world were...')
   'plan',
   'study',
   'courageous',
@@ -145,8 +136,8 @@ const testedKeywords = ref([
   'discipline'
 ])
 
-const correctlyPronouncedKeywords = ref([])
-const mispronouncedKeywords = ref([])
+const correctlyPronouncedTestedWords = ref([])
+const mispronouncedTestedWords = ref([])
 
 const initMic = async () => {
   if (!microphone.mediaStream) {
@@ -170,38 +161,28 @@ const stopRecording = async () => {
 
   if (finalTranscript.value.split(' ').length <= 10) return
 
+  // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
+  testedWordsList.value = useAdjustTestedWords(testedWordsList.value, testedParagraph.value)
+
   const { correctWords, incorrectWords } = useFilterCorrectAndIncorrectWords(
-    finalTranscript.value,
-    testedKeywords.value
+    testedWordsList.value,
+    finalTranscript.value
   )
 
-  correctlyPronouncedKeywords.value = correctWords
-  mispronouncedKeywords.value = incorrectWords
+  correctlyPronouncedTestedWords.value = correctWords
+  mispronouncedTestedWords.value = incorrectWords
 
-  // const recordedWords = [...new Set(finalTranscript.value.split(' '))]
-  // correctlyPronouncedKeywords.value = [
-  //   ...testedKeywords.value.filter((word) => recordedWords.includes(word))
-  // ]
-
-  // for (const word of testedKeywords.value) {
-  //   if (!correctlyPronouncedKeywords.value.includes(word)) {
-  //     mispronouncedKeywords.value.push(word)
-  //   }
-  // }
-  // console.log('Correctly pronounced keywords:', correctlyPronouncedKeywords.value.join(', '))
-  // console.log('Mispronounced keywords:', mispronouncedKeywords.value.join(', '))
-
-  // NOTE highlights mispronounced keywords in red and correctly pronounced words in green; consider not highlighting correct words in the final version
+  // NOTE highlights mispronounced tested words in red and correctly pronounced words in green; consider not highlighting correct words in the final version
   testedParagraph.value = highlightCorrectAndIncorrectWords(
-    correctlyPronouncedKeywords.value,
-    mispronouncedKeywords.value,
-    testedParagraph.value
+    testedParagraph.value,
+    correctlyPronouncedTestedWords.value,
+    mispronouncedTestedWords.value
   )
 
   testComplete.value = true
 }
 
-const highlightCorrectAndIncorrectWords = (correctWords, incorrectWords, paragraph) => {
+const highlightCorrectAndIncorrectWords = (paragraph, correctWords, incorrectWords) => {
   // Matches any sequence of characters that are not whitespace or certain punctuation marks, including the punctuation marks themselves
   const wordRegex = /(?:[^\s.,;:!?"'’“”()[\]{}<>«»]+)|(?:[.,;:!?"'’“”()[\]{}<>«»]+)/g
 
@@ -210,11 +191,17 @@ const highlightCorrectAndIncorrectWords = (correctWords, incorrectWords, paragra
 
   const lowercaseParagraphWords = paragraphWords.map((word) => word.toLowerCase())
 
+  // NOTE keeps track of words that have already been marked as incorrect and correct, so that only the first instance of the word is highlighted
+  const highlightedIncorrectWords = new Set()
+  const highlightedCorrectWords = new Set()
+
   const highlightedWords = lowercaseParagraphWords.map((word, index) => {
     const originalWord = paragraphWords[index]
-    if (incorrectWords.includes(word)) {
+    if (incorrectWords.includes(word) && !highlightedIncorrectWords.has(word)) {
+      highlightedIncorrectWords.add(word)
       return `<span class="incorrect">${originalWord}</span>`
-    } else if (correctWords.includes(word)) {
+    } else if (correctWords.includes(word) && !highlightedCorrectWords.has(word)) {
+      highlightedCorrectWords.add(word)
       return `<span class="correct">${originalWord}</span>`
     } else {
       return originalWord
@@ -248,11 +235,11 @@ const evaluationText = computed(() => {
   if (isRecording.value) return 'isCurrentlyRecording'
   else if (!finalTranscript.value.length) return 'noWordsRecorded'
   else if (finalTranscript.value.split(' ').length <= 10) return 'fewWordsRecorded'
-  else if (correctlyPronouncedKeywords.value.length === testedKeywords.value.length)
+  else if (correctlyPronouncedTestedWords.value.length === testedWordsList.value.length)
     return 'allWordsCorrect'
-  else if (correctlyPronouncedKeywords.value.length === testedKeywords.value.length - 1)
+  else if (correctlyPronouncedTestedWords.value.length === testedWordsList.value.length - 1)
     return 'oneWordIncorrect'
-  else if (correctlyPronouncedKeywords.value.length > testedKeywords.value.length * 0.5)
+  else if (correctlyPronouncedTestedWords.value.length > testedWordsList.value.length * 0.5)
     return 'mostWordsCorrect'
   else return 'mostWordsIncorrect'
 })
@@ -325,7 +312,7 @@ label {
   &:deep(.incorrect) {
     // The fourth 0 sets the highlight to fully transparent. Using rgba, which allows the setting of transparency, keeps the text fully visible.
     background-color: rgba(255, 0, 0, 0);
-    // the forwards keyword keeps the final animation state
+    // the forwards tested word keeps the final animation state
     animation: fadeInRed 0.5s ease-in-out forwards;
   }
 
