@@ -1,7 +1,5 @@
 <template>
   <div class="about">
-    <!-- <h1>This is an about page</h1> -->
-
     <div class="transcript-container">
       <label>Recorded words:</label>
       <div>{{ temporaryTranscriptDisplay }}</div>
@@ -81,16 +79,25 @@
 
 <script setup>
 // import LoadingDots from '../components/LoadingDots.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
 import useFilterCorrectAndIncorrectWords from '@/composables/useFilterCorrectAndIncorrectWords'
-// import useCreateOpenAiParagraph from '@/composables/useCreateOpenAiParagraph'
-import { stateToString } from '@speechly/browser-client'
+// import { stateToString } from '@speechly/browser-client'
 // NOTE maybe put in App.js instead
 import { microphone, client } from '@/speechlyInit.js'
 // import '@speechly/browser-ui/core/big-transcript'
 // import '@speechly/browser-ui/core/intro-popup'
 import MicIcon from '@/assets/images/mic.vue'
+
+const props = defineProps({
+  paragraph: { type: String, required: true },
+  wordList: { type: Array, required: true }
+})
+
+onMounted(() => {
+  testedParagraph.value = props.paragraph
+  testedWordList.value = [...props.wordList]
+})
 
 // let showComponent = ref(false)
 let isRecording = ref(false)
@@ -98,8 +105,8 @@ let temporaryTranscript = ref('')
 let finalTranscript = ref('')
 let testComplete = ref(false)
 let micStateText = ref('Not actively recording')
+const clientConnected = computed(() => client.decoderOptions.connect === true)
 // let clientStateText = ref('Connecting...')
-let clientConnected = ref(false)
 // let clientFullyInitialized = ref(false)
 // let evaluationText = ref('')
 // let debugOutText = ref('')
@@ -111,34 +118,14 @@ let clientConnected = ref(false)
 // let timestamp = ref('')
 
 // client.onStateChange((state) => {
-//   clientStateText.value = stateToString(state)
+//   if (stateToString(state) === 'Connected') clientConnected.value = true
+//   // setTimeout(() => {
+//   //   clientFullyInitialized.value = true
+//   // }, 2000)
 // })
-client.onStateChange((state) => {
-  if (stateToString(state) === 'Connected') clientConnected.value = true
-  // setTimeout(() => {
-  //   clientFullyInitialized.value = true
-  // }, 2000)
-})
 
-const testedParagraph = ref(
-  'Stephen Hawking was a courageous and successful scientist who inspired many people throughout society. He had vivid ideas and a variety of interests, which he pursued with discipline and careful study. He was known for his wise words, and many people were comforted by his advice. He often said that to succeed in life, one must think carefully and have a solid plan.'
-)
-
-const testedWordList = ref([
-  'vivid',
-  'successful',
-  'inspired',
-  'variety',
-  'think',
-  'said',
-  'comforted',
-  'he', // replace this word, maybe with world (e.g. 'many people around the world were...')
-  'plan',
-  'study',
-  'courageous',
-  'society',
-  'discipline'
-])
+const testedParagraph = ref('')
+const testedWordList = ref([])
 
 const correctlyPronouncedTestedWords = ref([])
 const mispronouncedTestedWords = ref([])
@@ -163,8 +150,6 @@ const stopRecording = async () => {
   await client.stop()
   isRecording.value = false
 
-  // NOTE tested below, and it works:
-  // testedParagraph.value = await useCreateOpenAiParagraph(testedWordList.value)
   if (finalTranscript.value.split(' ').length <= 10) return
 
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
