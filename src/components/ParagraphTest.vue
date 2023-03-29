@@ -1,41 +1,48 @@
 <template>
   <div class="about">
-    <div class="transcript-container">
-      <label>Recorded words:</label>
-      <div>{{ temporaryTranscriptDisplay }}</div>
-    </div>
-
+    <hr />
     <div class="tested-paragraph">
       <p v-html="testedParagraph"></p>
     </div>
+    <hr />
     <!-- <button @click="handleMicPress">
       {{ isRecording ? 'Stop microphone' : 'Start microphone' }}
     </button> -->
 
-    <div class="tested-evaluation">
+    <div v-if="isRecording && !testComplete" class="transcript-container">
+      <label>Live transcript:</label>
+      <div>{{ temporaryTranscriptDisplay }}</div>
+    </div>
+
+    <div v-else class="tested-evaluation">
       <div v-if="evaluationText === 'isCurrentlyRecording'"></div>
-      <div v-else-if="evaluationText === 'noWordsRecorded'">
-        Hold the recording button to begin recording.
+      <div v-else-if="evaluationText === 'noWordsRecorded'" class="tested-evaluation__text">
+        <span>Hold the recording button to begin recording.</span>
       </div>
-      <div v-else-if="evaluationText === 'fewWordsRecorded'">
-        You didn't record enough words. Please try again.<br />
-        Remember to hold the button while recording!
+      <div v-else-if="evaluationText === 'fewWordsRecorded'" class="tested-evaluation__text">
+        <span>You didn't record enough words. Please try again.</span>
+        <span>Remember to hold the button while recording!</span>
       </div>
-      <div v-else-if="evaluationText === 'allWordsCorrect'">
-        You pronounced each tested word correctly. Very impressive!<br />
-        Now let's test your pronunciation of other words that are commonly mispronounced.
+      <div v-else-if="evaluationText === 'allWordsCorrect'" class="tested-evaluation__text">
+        <span>You pronounced each tested word correctly. Very impressive!</span>
+        <span
+          >Now let's test your pronunciation of other words that are commonly mispronounced.</span
+        >
       </div>
-      <div v-else-if="evaluationText === 'oneWordIncorrect'">
-        You pronounced only one word incorrectly. Good job!<br />
-        Let's test your pronunciation of this word again to make sure.
+      <div v-else-if="evaluationText === 'oneWordIncorrect'" class="tested-evaluation__text">
+        <span>You pronounced only one word incorrectly. Good job!</span>
+        <span>Let's practice pronouncing this word.</span>
       </div>
-      <div v-else-if="evaluationText === 'mostWordsCorrect'">
-        You did pretty good! But these highlighted words were not pronounced correctly.<br />
-        Let's test your pronunciation of these words again to make sure.
+      <div v-else-if="evaluationText === 'mostWordsCorrect'" class="tested-evaluation__text">
+        <span
+          >You did pretty well! However, these highlighted words were not pronounced
+          correctly.</span
+        >
+        <span>Let's practice pronouncing these words.</span>
       </div>
-      <div v-else-if="evaluationText === 'mostWordsIncorrect'">
-        These highlighted words were not pronounced correctly.<br />
-        But let's test your pronunciation of these words again to make sure.
+      <div v-else-if="evaluationText === 'mostWordsIncorrect'" class="tested-evaluation__text">
+        <span>These highlighted words were not pronounced correctly.</span>
+        <span>Let's practice pronouncing these words.</span>
       </div>
     </div>
 
@@ -257,7 +264,7 @@ microphone.onStateChange((state) => {
 // }
 
 const temporaryTranscriptDisplay = computed(() =>
-  testComplete.value ? '' : temporaryTranscript.value.split(' ').slice(-10).join(' ')
+  testComplete.value ? '' : temporaryTranscript.value.split(' ').slice(-8).join(' ')
 )
 
 const renderTranscript = (segment) => {
@@ -294,6 +301,7 @@ label {
 }
 
 .tested-paragraph {
+  margin: 1rem 0;
   // 'deep' selector is necessary, as scoped styles don't apply to content inside v-html
   &:deep(.incorrect),
   &:deep(.correct) {
@@ -333,20 +341,30 @@ label {
 
 .tested-evaluation {
   margin-top: 1rem;
-  height: 50px;
+  // height: 50px;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    span {
+      padding-bottom: 0.5rem;
+      font-weight: 600;
+    }
+  }
 }
 
 .transcript-container {
   position: fixed;
-  top: 0;
+  // top: 0;
   left: 0;
   right: 0;
+  // bottom: 1;
   max-height: 100vh;
-  padding: 3rem 0 0 0;
-  margin: 3rem 2rem 0 2rem;
+  // padding: 3rem 0 0 0;
+  margin: 1rem 2rem;
   // NOTE Probably needs to be lower, but test this first
   max-width: 500px;
-  z-index: 10;
+  // z-index: 10;
 }
 
 .button-container {
