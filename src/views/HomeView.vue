@@ -5,7 +5,7 @@
         <label>Insert words separated by spaces or commas:</label>
         <div class="input-field">
           <input placeholder="e.g. urban thin kindly" v-model="wordsInput" autofocus />
-          <button type="submit">Submit</button>
+          <button type="submit" :disabled="isLoading">Submit</button>
         </div>
       </div>
     </form>
@@ -46,7 +46,7 @@ const submitWords = async (words) => {
     width: 100%;
 
     label {
-      margin-bottom: 5px;
+      margin-bottom: 0.5rem;
     }
   }
   .input-field {

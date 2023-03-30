@@ -39,8 +39,8 @@ nav {
   width: 100%;
   font-size: 16px;
   text-align: center;
-  margin-top: 1.5rem;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 nav a.router-link-exact-active {

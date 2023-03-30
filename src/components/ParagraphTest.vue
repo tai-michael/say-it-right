@@ -17,7 +17,8 @@
     <div v-else class="tested-evaluation">
       <div v-if="evaluationText === 'isCurrentlyRecording'"></div>
       <div v-else-if="evaluationText === 'noWordsRecorded'" class="tested-evaluation__text">
-        <span>Hold the recording button to begin recording.</span>
+        <span>Let's start by testing your pronunciation.</span>
+        <span>Hold the button and read the paragraph.</span>
       </div>
       <div v-else-if="evaluationText === 'fewWordsRecorded'" class="tested-evaluation__text">
         <span>You didn't record enough words. Please try again.</span>
@@ -26,23 +27,23 @@
       <div v-else-if="evaluationText === 'allWordsCorrect'" class="tested-evaluation__text">
         <span>You pronounced each tested word correctly. Very impressive!</span>
         <span
-          >Now let's test your pronunciation of other words that are commonly mispronounced.</span
+          >Next, let's test your pronunciation of other words that are commonly mispronounced.</span
         >
       </div>
       <div v-else-if="evaluationText === 'oneWordIncorrect'" class="tested-evaluation__text">
         <span>You pronounced only one word incorrectly. Good job!</span>
-        <span>Let's practice pronouncing this word.</span>
+        <span>Next, let's practice pronouncing this word.</span>
       </div>
       <div v-else-if="evaluationText === 'mostWordsCorrect'" class="tested-evaluation__text">
         <span
           >You did pretty well! However, these highlighted words were not pronounced
           correctly.</span
         >
-        <span>Let's practice pronouncing these words.</span>
+        <span>Next, let's practice pronouncing these words.</span>
       </div>
       <div v-else-if="evaluationText === 'mostWordsIncorrect'" class="tested-evaluation__text">
         <span>These highlighted words were not pronounced correctly.</span>
-        <span>Let's practice pronouncing these words.</span>
+        <span>Next, let's practice pronouncing these words.</span>
       </div>
     </div>
 
@@ -374,7 +375,7 @@ label {
   left: 0;
   right: 0;
   max-height: 100vh;
-  padding: 0 0 3rem 0;
+  padding-bottom: 2rem;
 
   display: flex;
   flex-direction: row;
