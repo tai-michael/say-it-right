@@ -47,6 +47,9 @@
       </div>
     </div>
 
+    <button v-if="testComplete" @click="store.paragraphTestCompleted = true">Next</button>
+    <!-- <RouterLink to="/about/word-test">Next</RouterLink> -->
+
     <div class="button-container">
       <button
         v-if="clientConnected && !testComplete"
@@ -87,7 +90,7 @@
 
 <script setup>
 // import LoadingDots from '../components/LoadingDots.vue'
-import { ref, computed, onMounted } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
 import useFilterCorrectAndIncorrectWords from '@/composables/useFilterCorrectAndIncorrectWords'
 // import { stateToString } from '@speechly/browser-client'
@@ -96,6 +99,8 @@ import { microphone, client } from '@/speechlyInit.js'
 // import '@speechly/browser-ui/core/big-transcript'
 // import '@speechly/browser-ui/core/intro-popup'
 import MicIcon from '@/assets/images/mic.vue'
+import { useSuggestedListStore } from '@/stores/suggested'
+const store = useSuggestedListStore()
 
 const props = defineProps({
   paragraph: { type: String, required: true },
@@ -136,7 +141,7 @@ const testedParagraph = ref('')
 const testedWordList = ref([])
 
 const correctlyPronouncedTestedWords = ref([])
-const mispronouncedTestedWords = ref([])
+// const mispronouncedTestedWords = ref([])
 
 const initMic = async () => {
   if (!microphone.mediaStream) {
@@ -169,13 +174,15 @@ const stopRecording = async () => {
   )
 
   correctlyPronouncedTestedWords.value = correctWords
-  mispronouncedTestedWords.value = incorrectWords
+  store.mispronouncedTestedWords = incorrectWords
+  // mispronouncedTestedWords.value = incorrectWords
 
   // NOTE highlights mispronounced tested words in red and correctly pronounced words in green; consider not highlighting correct words in the final version
   testedParagraph.value = highlightCorrectAndIncorrectWords(
     testedParagraph.value,
     correctlyPronouncedTestedWords.value,
-    mispronouncedTestedWords.value
+    (store.mispronouncedTestedWords = incorrectWords)
+    // mispronouncedTestedWords.value
   )
 
   testComplete.value = true

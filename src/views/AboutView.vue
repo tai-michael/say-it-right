@@ -1,13 +1,23 @@
 <template>
   <main>
     <!-- <LoadingDots v-if="isLoading" /> -->
-    <ParagraphTest v-if="generatedParagraph" :wordList="wordList" :paragraph="generatedParagraph" />
+    <ParagraphTest
+      v-if="generatedParagraph && !store.paragraphTestCompleted"
+      :wordList="wordList"
+      :paragraph="generatedParagraph"
+    />
+    <WordTest v-else-if="store.paragraphTestCompleted && !store.wordTestCompleted" />
+    <SentenceTest v-else />
   </main>
 </template>
 
 <script setup>
 import ParagraphTest from '@/components/ParagraphTest.vue'
+import WordTest from '@/components/WordTest.vue'
+import SentenceTest from '@/components/SentenceTest.vue'
 import { ref } from 'vue'
+import { useSuggestedListStore } from '@/stores/suggested'
+const store = useSuggestedListStore()
 
 const wordList = ref([
   'vivid',

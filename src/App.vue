@@ -16,7 +16,6 @@ import HelloWorld from './components/HelloWorld.vue'
     </div>
   </header>
 
-  <!-- <RouterView /> -->
   <router-view v-slot="{ Component }">
     <keep-alive>
       <component :is="Component" :key="$route.fullPath"></component>

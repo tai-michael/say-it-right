@@ -15,7 +15,7 @@ defineProps({
       <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
     </h3> -->
-    <h3>Provide your own list of words or use our lists for practice</h3>
+    <h3>Practice pronunciation with your own list of words or with our suggested words</h3>
   </div>
 </template>
 
@@ -28,7 +28,6 @@ h1 {
 
 h3 {
   font-size: 1rem;
-  padding: 0 2rem;
 }
 
 .greetings h1,

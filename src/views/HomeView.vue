@@ -2,7 +2,7 @@
   <main>
     <form v-if="!generatedParagraph" class="submit-form" @submit.prevent="submitWords(wordList)">
       <div class="input-container">
-        <label>Insert words separated by spaces or commas:</label>
+        <label>Insert up to 10 words separated by spaces or commas:</label>
         <div class="input-field">
           <input placeholder="e.g. urban thin kindly" v-model="wordsInput" autofocus />
           <button type="submit" :disabled="isLoading">Submit</button>
