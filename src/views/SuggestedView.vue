@@ -6,18 +6,24 @@
       :wordList="wordList"
       :paragraph="generatedParagraph"
     />
+
     <WordTest v-else-if="store.paragraphTestCompleted && !store.wordTestCompleted" />
+
     <SentenceTest v-else />
   </main>
 </template>
 
 <script setup>
-import ParagraphTest from '@/components/ParagraphTest.vue'
-import WordTest from '@/components/WordTest.vue'
-import SentenceTest from '@/components/SentenceTest.vue'
 import { ref } from 'vue'
+
+import ParagraphTest from '@/components/ParagraphTest.vue'
+import SentenceTest from '@/components/SentenceTest.vue'
+import WordTest from '@/components/WordTest.vue'
+
 import { useSuggestedListStore } from '@/stores/suggested'
 const store = useSuggestedListStore()
+
+// const componentKey = 'suggested'
 
 const wordList = ref([
   'vivid',

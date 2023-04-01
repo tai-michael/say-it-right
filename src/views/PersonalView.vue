@@ -9,19 +9,23 @@
         </div>
       </div>
     </form>
+
     <div v-if="isLoading" class="loading-container">
       <LoadingDots />
     </div>
+
     <ParagraphTest v-if="generatedParagraph" :wordList="wordList" :paragraph="generatedParagraph" />
   </main>
 </template>
 
 <script setup>
-import ParagraphTest from '@/components/ParagraphTest.vue'
-import LoadingDots from '@/components/LoadingDots.vue'
-import useCreateOpenAiParagraph from '@/composables/useCreateOpenAiParagraph'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
+import LoadingDots from '@/components/LoadingDots.vue'
+import ParagraphTest from '@/components/ParagraphTest.vue'
+import useCreateOpenAiParagraph from '@/composables/useCreateOpenAiParagraph'
+
+// const componentKey = 'personal'
 let isLoading = ref(false)
 let wordsInput = ref('')
 const wordList = computed(() => wordsInput.value.trim().split(/[ ,]+/))

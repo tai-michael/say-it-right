@@ -1,6 +1,6 @@
 export default async function useConvertTextToSpeech(text, gender = 'female') {
   try {
-    // This particular female voice ('Bella') sounds more natural than the others in both intonation and pauses when speaking longer sentences
+    // Use this particular female voice ('Bella') for sentence/paragraph playback, as it sounds more natural than the others
     let voiceId = ''
     if (gender === 'male') voiceId = 'pNInz6obpgDQGcFmaJgB'
     else if (gender === 'female') voiceId = 'EXAVITQu4vr4xnSDxMaL'

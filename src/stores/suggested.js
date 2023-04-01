@@ -2,6 +2,9 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useSuggestedListStore = defineStore('suggested', () => {
+  // const temporaryTranscript = ref('')
+  // const finalTranscript = ref('')
+
   const paragraphTestCompleted = ref(false)
   const wordTestCompleted = ref(false)
   const sentenceTestCompleted = ref(false)
@@ -15,6 +18,8 @@ export const useSuggestedListStore = defineStore('suggested', () => {
   // }
 
   return {
+    // temporaryTranscript,
+    // finalTranscript,
     paragraphTestCompleted,
     wordTestCompleted,
     sentenceTestCompleted,
