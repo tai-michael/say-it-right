@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
 
 export const useSuggestedListStore = defineStore('suggested', () => {
   // const temporaryTranscript = ref('')
@@ -17,9 +18,12 @@ export const useSuggestedListStore = defineStore('suggested', () => {
   //   count.value++
   // }
 
+  const allProvidedWords = ref([...commonlyMispronouncedWords])
+
   return {
     // temporaryTranscript,
     // finalTranscript,
+    allProvidedWords,
     paragraphTestCompleted,
     wordTestCompleted,
     sentenceTestCompleted,

@@ -17,7 +17,8 @@
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
-    "wink-porter2-stemmer": "^2.0.1"
+    "wink-porter2-stemmer": "^2.0.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",

@@ -1,0 +1,880 @@
+[
+  {
+    "word": "vivid",
+    "mispronouncedAs": "wiwid",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Mispronouncing 'V' as 'W'",
+    "set": 1,
+    "essentialSound": "v",
+    "pronunciationTips": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip."
+  },
+  {
+    "word": "TV",
+    "mispronouncedAs": "tee-wee",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing 'V' as 'W'",
+    "essentialSound": "v",
+    "pronunciationTips": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip."
+  },
+  {
+    "word": "virus",
+    "mispronouncedAs": "wirus",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'V' as 'W'",
+    "essentialSound": "v",
+    "pronunciationTips": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip."
+  },
+  {
+    "word": "volunteer",
+    "mispronouncedAs": "wallunseer",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing 'V' as 'W'",
+    "essentialSound": "v",
+    "pronunciationTips": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip."
+  },
+  {
+    "word": "visited",
+    "mispronouncedAs": "wisited",
+    "mispronunciationFrequency": 4,
+    "mistakeType": "Mispronouncing 'V' as 'W'",
+    "essentialSound": "v",
+    "pronunciationTips": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip."
+  },
+  {
+    "word": "value",
+    "mispronouncedAs": "walue",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing 'V' as 'W'",
+    "essentialSound": "v",
+    "pronunciationTips": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip."
+  },
+  {
+    "word": "various",
+    "mispronouncedAs": "warious",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Mispronouncing 'V' as 'W'",
+    "essentialSound": "v",
+    "pronunciationTips": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip."
+  },
+  {
+    "word": "recall",
+    "mispronouncedAs": "recore",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'L' as 'R'",
+    "essentialSound": "l"
+  },
+  {
+    "word": "small",
+    "mispronouncedAs": "smar",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Mispronouncing 'L' as 'R'",
+    "essentialSound": "l"
+  },
+  {
+    "word": "walls",
+    "mispronouncedAs": "worse",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'L' as 'R'",
+    "essentialSound": "l"
+  },
+  {
+    "word": "meal",
+    "mispronouncedAs": "mear",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'L' as 'R'",
+    "essentialSound": "l"
+  },
+  {
+    "word": "well",
+    "mispronouncedAs": "werr",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'L' as 'R'",
+    "essentialSound": "l"
+  },
+  {
+    "word": "beautiful",
+    "mispronouncedAs": "beautifor",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'L' as 'R'",
+    "essentialSound": "l"
+  },
+  {
+    "word": "colorful",
+    "mispronouncedAs": "colorfor",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'L' as 'R'",
+    "essentialSound": "l"
+  },
+  {
+    "word": "successful",
+    "mispronouncedAs": "successfur",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Mispronouncing 'L' as 'R'",
+    "set": 1,
+    "essentialSound": "l"
+  },
+  {
+    "word": "while",
+    "mispronouncedAs": "well",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "meanwhile",
+    "mispronouncedAs": "meanwheel",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "child",
+    "mispronouncedAs": "cheeld",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "time",
+    "mispronouncedAs": "tahm",
+    "mispronunciationFrequency": 5,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "kind",
+    "mispronouncedAs": "kand",
+    "mispronunciationFrequency": 5,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "private",
+    "mispronouncedAs": "preevit",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "bikes",
+    "mispronouncedAs": "backs",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "climbing",
+    "mispronouncedAs": "clamming",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "like",
+    "mispronouncedAs": "lack",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "inspired",
+    "mispronouncedAs": "inspeer",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "set": 1,
+    "essentialSound": "i"
+  },
+  {
+    "word": "variety",
+    "mispronouncedAs": "varatee",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "smile",
+    "mispronouncedAs": "smell",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "required",
+    "mispronouncedAs": "reqered",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "mind",
+    "mispronouncedAs": "mand",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "admire",
+    "mispronouncedAs": "admeer",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Neglecting the 'AI' sound",
+    "essentialSound": "i"
+  },
+  {
+    "word": "thick",
+    "mispronouncedAs": "sick",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "essentialSound": "th"
+  },
+  {
+    "word": "thin",
+    "mispronouncedAs": "sin",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "essentialSound": "th"
+  },
+  {
+    "word": "think",
+    "mispronouncedAs": "sink",
+    "mispronunciationFrequency": 4,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "set": 1,
+    "essentialSound": "th"
+  },
+  {
+    "word": "thanks",
+    "mispronouncedAs": "sanks",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "essentialSound": "th"
+  },
+  {
+    "word": "thing",
+    "mispronouncedAs": "sing",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "essentialSound": "th"
+  },
+  {
+    "word": "thoughts",
+    "mispronouncedAs": "soughts",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "essentialSound": "th"
+  },
+  {
+    "word": "theories",
+    "mispronouncedAs": "series",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "essentialSound": "th"
+  },
+  {
+    "word": "healthy",
+    "mispronouncedAs": "helsier",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "essentialSound": "th"
+  },
+  {
+    "word": "method",
+    "mispronouncedAs": "mesh-ed",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "essentialSound": "th"
+  },
+  {
+    "word": "athlete",
+    "mispronouncedAs": "aslete",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing 'TH' as 'S'",
+    "essentialSound": "th"
+  },
+  {
+    "word": "develop",
+    "mispronouncedAs": "devipe",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Mispronouncing the 'EH' sound"
+  },
+  {
+    "word": "instead",
+    "mispronouncedAs": "inst-ai-d",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "whether",
+    "mispronouncedAs": "wh-ai-ther",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "whe"
+  },
+  {
+    "word": "best",
+    "mispronouncedAs": "b-ai-st",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "let",
+    "mispronouncedAs": "l-ai-t",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "special",
+    "mispronouncedAs": "spai-cial",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "impressed",
+    "mispronouncedAs": "impr-ai-sed",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "met",
+    "mispronouncedAs": "mite",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "smell",
+    "mispronouncedAs": "smile",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "said",
+    "mispronouncedAs": "side",
+    "mispronunciationFrequency": 4,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "set": 1,
+    "essentialSound": "e"
+  },
+  {
+    "word": "upset",
+    "mispronouncedAs": "upsite",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "pets",
+    "mispronouncedAs": "p-ai-ts",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "wear",
+    "mispronouncedAs": "wire",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "said",
+    "mispronouncedAs": "sad",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "better",
+    "mispronouncedAs": "bayter",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "help",
+    "mispronouncedAs": "heelp",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "hel"
+  },
+  {
+    "word": "efforts",
+    "mispronouncedAs": "ee-forts",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound",
+    "essentialSound": "eff"
+  },
+  {
+    "word": "details",
+    "mispronouncedAs": "dee-tie-ls",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EH' sound"
+  },
+  {
+    "word": "comforted",
+    "mispronouncedAs": "com-FORTED",
+    "mispronunciationFrequency": 5,
+    "mistakeType": "Placing stress on the wrong syllable",
+    "set": 1
+  },
+  {
+    "word": "project",
+    "mispronouncedAs": "PRO-ject",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Placing stress on the wrong syllable"
+  },
+  {
+    "word": "pays off",
+    "mispronouncedAs": "pace of",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Placing stress on the wrong syllable"
+  },
+  {
+    "word": "process",
+    "mispronouncedAs": "pro-CESS",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Placing stress on the wrong syllable"
+  },
+  {
+    "word": "record",
+    "mispronouncedAs": "RE-cord",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Placing stress on the wrong syllable"
+  },
+  {
+    "word": "excellent",
+    "mispronouncedAs": "ex-silent",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Placing stress on the wrong syllable"
+  },
+  {
+    "word": "he",
+    "mispronouncedAs": "hei",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "set": 1
+  },
+  {
+    "word": "defeat",
+    "mispronouncedAs": "defit",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "essentialSound": "ea"
+  },
+  {
+    "word": "skiing",
+    "mispronouncedAs": "skaying",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "essentialSound": "ii"
+  },
+  {
+    "word": "seats",
+    "mispronouncedAs": "sets",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "essentialSound": "ea"
+  },
+  {
+    "word": "fear",
+    "mispronouncedAs": "fair",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "beat",
+    "mispronouncedAs": "bit",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "dream",
+    "mispronouncedAs": "drim",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "really",
+    "mispronouncedAs": "rally",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "sweet",
+    "mispronouncedAs": "swayt",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "essentialSound": "e"
+  },
+  {
+    "word": "memories",
+    "mispronouncedAs": "memor-ai-z",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing the 'EE' sound",
+    "essentialSound": "ie"
+  },
+  {
+    "word": "plane",
+    "mispronouncedAs": "plan",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Mispronouncing the 'AY' sound"
+  },
+  {
+    "word": "train",
+    "mispronouncedAs": "treens",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Mispronouncing the 'AY' sound"
+  },
+  {
+    "word": "taste",
+    "mispronouncedAs": "test",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'AY' sound",
+    "essentialSound": "a"
+  },
+  {
+    "word": "tastefully",
+    "mispronouncedAs": "textfully",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'AY' sound",
+    "essentialSound": "a"
+  },
+  {
+    "word": "failed",
+    "mispronouncedAs": "feeld",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'AY' sound",
+    "essentialSound": "a"
+  },
+  {
+    "word": "straight",
+    "mispronouncedAs": "strite",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'AY' sound",
+    "essentialSound": "a"
+  },
+  {
+    "word": "brave",
+    "mispronouncedAs": "br-ai-v",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'AY' sound",
+    "essentialSound": "a"
+  },
+  {
+    "word": "great",
+    "mispronouncedAs": "gr-ai-t",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'AY' sound"
+  },
+  {
+    "word": "decorate",
+    "mispronouncedAs": "decor-ai-t",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing the 'AY' sound"
+  },
+  {
+    "word": "chatted",
+    "mispronouncedAs": "cheated",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'AA' sound"
+  },
+  {
+    "word": "snack",
+    "mispronouncedAs": "snake",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'AA' sound"
+  },
+  {
+    "word": "scared",
+    "mispronouncedAs": "skid",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'AA' sound"
+  },
+  {
+    "word": "plan",
+    "mispronouncedAs": "plane",
+    "mispronunciationFrequency": 4,
+    "mistakeType": "Mispronouncing the 'AA' sound",
+    "set": 1
+  },
+  {
+    "word": "world",
+    "mispronouncedAs": "word",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Omitting the ending 'L'",
+    "essentialSound": "l"
+  },
+  {
+    "word": "girl",
+    "mispronouncedAs": "ger",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Omitting the ending 'L'",
+    "essentialSound": "l"
+  },
+  {
+    "word": "rarely",
+    "mispronouncedAs": "rally",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Mispronouncing the 'R' sound"
+  },
+  {
+    "word": "fried",
+    "mispronouncedAs": "flied",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'R' sound",
+    "essentialSound": "r"
+  },
+  {
+    "word": "rest",
+    "mispronouncedAs": "west",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'R' sound",
+    "essentialSound": "r"
+  },
+  {
+    "word": "study",
+    "mispronouncedAs": "stardy",
+    "mispronunciationFrequency": 4,
+    "mistakeType": "Adding an unnecessary 'R' sound",
+    "set": 1
+  },
+  {
+    "word": "staff",
+    "mispronouncedAs": "starf",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Adding an unnecessary 'R' sound"
+  },
+  {
+    "word": "because",
+    "mispronouncedAs": "becurse",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Adding an unnecessary 'R' sound"
+  },
+  {
+    "word": "focus",
+    "mispronouncedAs": "focurse",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Adding an unnecessary 'R' sound"
+  },
+  {
+    "word": "obvious",
+    "mispronouncedAs": "obviours",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Adding an unnecessary 'R' sound"
+  },
+  {
+    "word": "famous",
+    "mispronouncedAs": "famers",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Adding an unnecessary 'R' sound"
+  },
+  {
+    "word": "countless",
+    "mispronouncedAs": "countlers",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Adding an unnecessary 'R' sound"
+  },
+  {
+    "word": "café",
+    "mispronouncedAs": "kayf",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "doubt",
+    "mispronouncedAs": "doubt (with b sound)",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "choice",
+    "mispronouncedAs": "chais",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "courageous",
+    "mispronouncedAs": "courage-as",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Other",
+    "set": 1
+  },
+  {
+    "word": "enthusiastic",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "experiment",
+    "mispronouncedAs": "expreement",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "experience",
+    "mispronouncedAs": "exprence",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "technology",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "museum",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "barista",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "society",
+    "mispronouncedAs": "social-ty",
+    "mispronunciationFrequency": 4,
+    "mistakeType": "Other",
+    "set": 1
+  },
+  {
+    "word": "vlog",
+    "mispronouncedAs": "vuh-log",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "women",
+    "mispronouncedAs": "woman",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "bread",
+    "mispronouncedAs": "bed",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "lighting",
+    "mispronouncedAs": "lightning",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "espresso",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "latte",
+    "mispronouncedAs": "la-tee",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "air",
+    "mispronouncedAs": "ear",
+    "mispronunciationFrequency": 3,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "possesses",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "lecture",
+    "mispronouncedAs": "letter",
+    "mispronunciationFrequency": 2,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "clothes",
+    "mispronouncedAs": "clothe-sez",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "breath",
+    "mispronouncedAs": "breethe",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "breathe",
+    "mispronouncedAs": "breth",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "colleague",
+    "mispronouncedAs": "college",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "ancient",
+    "mispronouncedAs": "ayshent",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "dessert",
+    "mispronouncedAs": "desert",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "inspiration",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "bored",
+    "mispronouncedAs": "broad",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "usually",
+    "mispronouncedAs": "urually",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Other"
+  },
+  {
+    "word": "discipline",
+    "mispronouncedAs": "discipl-ai-n",
+    "mispronunciationFrequency": 10,
+    "mistakeType": "Mispronouncing the 'IH' sound",
+    "set": 1
+  },
+  {
+    "word": "determined",
+    "mispronouncedAs": "determ-ai-ned",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'IH' sound"
+  },
+  {
+    "word": "rich",
+    "mispronouncedAs": "reach",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'IH' sound"
+  },
+  {
+    "word": "driven",
+    "mispronouncedAs": "drai-ven",
+    "mispronunciationFrequency": 1,
+    "mistakeType": "Mispronouncing the 'IH' sound"
+  }
+]
