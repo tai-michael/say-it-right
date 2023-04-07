@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
 
@@ -11,19 +11,29 @@ export const useSuggestedListStore = defineStore('suggested', () => {
   const sentenceTestCompleted = ref(false)
 
   const mispronouncedTestedWords = ref([])
-  // const sentencesTestCompleted = computed(
-  //   () => paragraphTestCompleted.value && wordTestCompleted.value
-  // )
-  // function increment() {
-  //   count.value++
-  // }
 
-  const allProvidedWords = ref([...commonlyMispronouncedWords])
+  // NOTE clickable word lists that will appear in UI, maybe as the 3rd or 1st tab
+  const allLists = ref([...commonlyMispronouncedWords])
+
+  const partiallyTestedLists = computed(() =>
+    allLists.value.filter((list) => list.testingStarted === true && list.testingCompleted === false)
+  )
+
+  const untestedLists = computed(() =>
+    allLists.value.filter(
+      (list) => list.testingStarted === false && list.testingCompleted === false
+    )
+  )
+
+  const completedLists = computed(() =>
+    allLists.value.filter((list) => list.testingStarted === true && list.testingCompleted === true)
+  )
 
   return {
-    // temporaryTranscript,
-    // finalTranscript,
-    allProvidedWords,
+    partiallyTestedLists,
+    untestedLists,
+    completedLists,
+    allLists,
     paragraphTestCompleted,
     wordTestCompleted,
     sentenceTestCompleted,

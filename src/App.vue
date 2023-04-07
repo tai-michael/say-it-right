@@ -7,6 +7,7 @@
       <nav>
         <RouterLink to="/">Personal</RouterLink>
         <RouterLink to="/about">Suggested</RouterLink>
+        <RouterLink to="/wordlists">Wordlists</RouterLink>
       </nav>
     </div>
   </header>

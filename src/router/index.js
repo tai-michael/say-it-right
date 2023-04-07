@@ -29,12 +29,17 @@ const router = createRouter({
       //     component: () => import('@/components/SentenceTest.vue')
       //   }
       // ]
-    }
+    },
     // {
     //   path: '/about/word-test',
     //   name: 'word-test',
     //   component: () => import('@/components/WordTest.vue')
     // }
+    {
+      path: '/wordlists',
+      name: 'wordlists',
+      component: () => import('@/views/WordlistsView.vue')
+    }
   ]
 })
 

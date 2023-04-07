@@ -45,6 +45,7 @@
       </div>
     </div>
 
+    <!-- TODO change below handler to a store function that changes the list's state instead -->
     <button class="next-button" v-if="testComplete" @click="store.paragraphTestCompleted = true">
       Next
     </button>
