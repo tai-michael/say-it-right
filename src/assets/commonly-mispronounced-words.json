@@ -1,1300 +1,1046 @@
 [
   {
     "listNumber": 1,
-    "words": [
-      {
-        "word": "vivid",
+    "words": {
+      "vivid": {
         "mispronouncedFrequentlyAs": "wiwid",
         "mispronunciationFrequency": 3,
         "mistakeType": "Mispronouncing 'V' as 'W'",
-        "listNumber": 1,
         "essentialSound": "v",
         "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "successful",
+      "successful": {
         "mispronouncedFrequentlyAs": "successfur",
         "mispronunciationFrequency": 10,
         "mistakeType": "Mispronouncing 'L' as 'R'",
-        "listNumber": 1,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "inspired",
+      "inspired": {
         "mispronouncedFrequentlyAs": "inspeer",
         "mispronunciationFrequency": 10,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 1,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "think",
+      "think": {
         "mispronouncedFrequentlyAs": "sink",
         "mispronunciationFrequency": 4,
         "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "listNumber": 1,
         "essentialSound": "th",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "said",
+      "said": {
         "mispronouncedFrequentlyAs": "side / sad",
         "mispronunciationFrequency": 4,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 1,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "comforted",
+      "comforted": {
         "mispronouncedFrequentlyAs": "com-FORTED",
         "mispronunciationFrequency": 5,
         "mistakeType": "Placing stress on the wrong syllable",
-        "listNumber": 1,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "he",
+      "he": {
         "mispronouncedFrequentlyAs": "hei",
         "mispronunciationFrequency": 10,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 1,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "plan",
+      "plan": {
         "mispronouncedFrequentlyAs": "plane",
         "mispronunciationFrequency": 4,
         "mistakeType": "Mispronouncing the 'AA' sound",
-        "listNumber": 1,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "study",
+      "study": {
         "mispronouncedFrequentlyAs": "stardy",
         "mispronunciationFrequency": 4,
         "mistakeType": "Adding an unnecessary 'R' sound",
-        "listNumber": 1,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "courageous",
+      "courageous": {
         "mispronouncedFrequentlyAs": "courage-as",
         "mispronunciationFrequency": 10,
         "mistakeType": "Other",
-        "listNumber": 1,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "society",
+      "society": {
         "mispronouncedFrequentlyAs": "social-ty",
         "mispronunciationFrequency": 4,
         "mistakeType": "Other",
-        "listNumber": 1,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "discipline",
+      "discipline": {
         "mispronouncedFrequentlyAs": "discipl-ai-n",
         "mispronunciationFrequency": 10,
         "mistakeType": "Mispronouncing the 'IH' sound",
-        "listNumber": 1,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
+    },
     "testingStarted": false,
     "testingCompleted": false
   },
   {
     "listNumber": 2,
-    "words": [
-      {
-        "word": "various",
+    "words": {
+      "various": {
         "mispronouncedFrequentlyAs": "warious",
         "mispronunciationFrequency": 10,
         "mistakeType": "Mispronouncing 'V' as 'W'",
-        "listNumber": 2,
         "essentialSound": "v",
         "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "private",
+      "private": {
         "mispronouncedFrequentlyAs": "preevit",
         "mispronunciationFrequency": 10,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 2,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "thanks",
+      "thanks": {
         "mispronouncedFrequentlyAs": "sanks",
         "mispronunciationFrequency": 10,
         "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "listNumber": 2,
         "essentialSound": "th",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "process",
+      "process": {
         "mispronouncedFrequentlyAs": "pro-CESS",
         "mispronunciationFrequency": 3,
         "mistakeType": "Placing stress on the wrong syllable",
-        "listNumber": 2,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "really",
+      "really": {
         "mispronouncedFrequentlyAs": "rally",
         "mispronunciationFrequency": 3,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 2,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "train",
+      "train": {
         "mispronouncedFrequentlyAs": "treens",
         "mispronunciationFrequency": 10,
         "mistakeType": "Mispronouncing the 'AY' sound",
-        "listNumber": 2,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "world",
+      "world": {
         "mispronouncedFrequentlyAs": "word",
         "mispronunciationFrequency": 10,
         "mistakeType": "Omitting the ending 'L'",
-        "listNumber": 2,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "because",
+      "because": {
         "mispronouncedFrequentlyAs": "becurse",
         "mispronunciationFrequency": 10,
         "mistakeType": "Adding an unnecessary 'R' sound",
-        "listNumber": 2,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "café",
+      "café": {
         "mispronouncedFrequentlyAs": "kayf",
         "mispronunciationFrequency": 10,
         "mistakeType": "Other",
-        "listNumber": 2,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "latte",
+      "latte": {
         "mispronouncedFrequentlyAs": "la-tee",
         "mispronunciationFrequency": 10,
         "mistakeType": "Other",
-        "listNumber": 2,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "usually",
+      "usually": {
         "mispronouncedFrequentlyAs": "urually",
         "mispronunciationFrequency": 10,
         "mistakeType": "Other",
-        "listNumber": 2,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
+    },
     "testingStarted": true,
     "testingCompleted": false
   },
   {
     "listNumber": 3,
-    "words": [
-      {
-        "word": "visited",
+    "words": {
+      "visited": {
         "mispronouncedFrequentlyAs": "wisited",
         "mispronunciationFrequency": 4,
         "mistakeType": "Mispronouncing 'V' as 'W'",
-        "listNumber": 3,
         "essentialSound": "v",
         "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "small",
+      "small": {
         "mispronouncedFrequentlyAs": "smar",
         "mispronunciationFrequency": 3,
         "mistakeType": "Mispronouncing 'L' as 'R'",
-        "listNumber": 3,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "kind",
+      "kind": {
         "mispronouncedFrequentlyAs": "kand",
         "mispronunciationFrequency": 5,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 3,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "thin",
+      "thin": {
         "mispronouncedFrequentlyAs": "sin",
         "mispronunciationFrequency": 3,
         "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "listNumber": 3,
         "essentialSound": "th",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "develop",
+      "develop": {
         "mispronouncedFrequentlyAs": "devipe",
         "mispronunciationFrequency": 3,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 3,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "excellent",
+      "excellent": {
         "mispronouncedFrequentlyAs": "ex-silent",
         "mispronunciationFrequency": 3,
         "mistakeType": "Placing stress on the wrong syllable",
-        "listNumber": 3,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "plane",
+      "plane": {
         "mispronouncedFrequentlyAs": "plan",
         "mispronunciationFrequency": 3,
         "mistakeType": "Mispronouncing the 'AY' sound",
-        "listNumber": 3,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "snack",
+      "snack": {
         "mispronouncedFrequentlyAs": "snake",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'AA' sound",
-        "listNumber": 3,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "rarely",
+      "rarely": {
         "mispronouncedFrequentlyAs": "rally",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing the 'R' sound",
-        "listNumber": 3,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "colleague",
+      "colleague": {
         "mispronouncedFrequentlyAs": "college",
         "mispronunciationFrequency": 10,
         "mistakeType": "Other",
-        "listNumber": 3,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "rich",
+      "rich": {
         "mispronouncedFrequentlyAs": "reach",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'IH' sound",
-        "listNumber": 3,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
-    "testingStarted": true,
-    "testingCompleted": true
+    },
+    "testingStarted": false,
+    "testingCompleted": false
   },
   {
     "listNumber": 4,
-    "words": [
-      {
-        "word": "value",
+    "words": {
+      "value": {
         "mispronouncedFrequentlyAs": "walue",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing 'V' as 'W'",
-        "listNumber": 4,
         "essentialSound": "v",
         "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "recall",
+      "recall": {
         "mispronouncedFrequentlyAs": "recore",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing 'L' as 'R'",
-        "listNumber": 4,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "while",
+      "while": {
         "mispronouncedFrequentlyAs": "well",
         "mispronunciationFrequency": 2,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 4,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "thoughts",
+      "thoughts": {
         "mispronouncedFrequentlyAs": "soughts",
         "mispronunciationFrequency": 3,
         "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "listNumber": 4,
         "essentialSound": "th",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "met",
+      "met": {
         "mispronouncedFrequentlyAs": "mite",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 4,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "pays",
+      "pays": {
         "mispronouncedFrequentlyAs": "pace",
         "mispronunciationFrequency": 2,
         "mistakeType": "Placing stress on the wrong syllable",
-        "listNumber": 4,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "memories",
+      "memories": {
         "mispronouncedFrequentlyAs": "memor-ai-z",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 4,
         "essentialSound": "ie",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "decorate",
+      "decorate": {
         "mispronouncedFrequentlyAs": "decor-ai-t",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing the 'AY' sound",
-        "listNumber": 4,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "famous",
+      "famous": {
         "mispronouncedFrequentlyAs": "famers",
         "mispronunciationFrequency": 2,
         "mistakeType": "Adding an unnecessary 'R' sound",
-        "listNumber": 4,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "vlog",
+      "vlog": {
         "mispronouncedFrequentlyAs": "vuh-log",
         "mispronunciationFrequency": 3,
         "mistakeType": "Other",
-        "listNumber": 4,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "air",
+      "air": {
         "mispronouncedFrequentlyAs": "ear",
         "mispronunciationFrequency": 3,
         "mistakeType": "Other",
-        "listNumber": 4,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
-    "testingStarted": true,
-    "testingCompleted": true
+    },
+    "testingStarted": false,
+    "testingCompleted": false
   },
   {
     "listNumber": 5,
-    "words": [
-      {
-        "word": "time",
+    "words": {
+      "time": {
         "mispronouncedFrequentlyAs": "tahm",
         "mispronunciationFrequency": 5,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 5,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "variety",
+      "variety": {
         "mispronouncedFrequentlyAs": "varatee",
         "mispronunciationFrequency": 3,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 5,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "thick",
+      "thick": {
         "mispronouncedFrequentlyAs": "sick",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "listNumber": 5,
         "essentialSound": "th",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "upset",
+      "upset": {
         "mispronouncedFrequentlyAs": "upsite",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 5,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "skiing",
+      "skiing": {
         "mispronouncedFrequentlyAs": "skaying",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 5,
         "essentialSound": "ii",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "tastefully",
+      "tastefully": {
         "mispronouncedFrequentlyAs": "textfully",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'AY' sound",
-        "listNumber": 5,
         "essentialSound": "a",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "rest",
+      "rest": {
         "mispronouncedFrequentlyAs": "west",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'R' sound",
-        "listNumber": 5,
         "essentialSound": "r",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "staff",
+      "staff": {
         "mispronouncedFrequentlyAs": "starf",
         "mispronunciationFrequency": 2,
         "mistakeType": "Adding an unnecessary 'R' sound",
-        "listNumber": 5,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "choice",
+      "choice": {
         "mispronouncedFrequentlyAs": "chais",
         "mispronunciationFrequency": 2,
         "mistakeType": "Other",
-        "listNumber": 5,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "lighting",
+      "lighting": {
         "mispronouncedFrequentlyAs": "lightning",
         "mispronunciationFrequency": 2,
         "mistakeType": "Other",
-        "listNumber": 5,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "possesses",
+      "possesses": {
         "mispronunciationFrequency": 2,
         "mistakeType": "Other",
-        "listNumber": 5,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
+    },
     "testingStarted": false,
     "testingCompleted": false
   },
   {
     "listNumber": 6,
-    "words": [
-      {
-        "word": "volunteer",
+    "words": {
+      "volunteer": {
         "mispronouncedFrequentlyAs": "wallunseer",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing 'V' as 'W'",
-        "listNumber": 6,
         "essentialSound": "v",
         "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "walls",
+      "walls": {
         "mispronouncedFrequentlyAs": "worse",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing 'L' as 'R'",
-        "listNumber": 6,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "child",
+      "child": {
         "mispronouncedFrequentlyAs": "cheeld",
         "mispronunciationFrequency": 2,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 6,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "thing",
+      "thing": {
         "mispronouncedFrequentlyAs": "sing",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "listNumber": 6,
         "essentialSound": "th",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "instead",
+      "instead": {
         "mispronouncedFrequentlyAs": "inst-ai-d",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 6,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "seats",
+      "seats": {
         "mispronouncedFrequentlyAs": "sets",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 6,
         "essentialSound": "ea",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "taste",
+      "taste": {
         "mispronouncedFrequentlyAs": "test",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'AY' sound",
-        "listNumber": 6,
         "essentialSound": "a",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "chatted",
+      "chatted": {
         "mispronouncedFrequentlyAs": "cheated",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'AA' sound",
-        "listNumber": 6,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "girl",
+      "girl": {
         "mispronouncedFrequentlyAs": "ger",
         "mispronunciationFrequency": 1,
         "mistakeType": "Omitting the ending 'L'",
-        "listNumber": 6,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "obvious",
+      "obvious": {
         "mispronouncedFrequentlyAs": "obviours",
         "mispronunciationFrequency": 1,
         "mistakeType": "Adding an unnecessary 'R' sound",
-        "listNumber": 6,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "enthusiastic",
+      "enthusiastic": {
         "mispronunciationFrequency": 2,
         "mistakeType": "Other",
-        "listNumber": 6,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
-    "testingStarted": true,
+    },
+    "testingStarted": false,
     "testingCompleted": false
   },
   {
     "listNumber": 7,
-    "words": [
-      {
-        "word": "TV",
+    "words": {
+      "TV": {
         "mispronouncedFrequentlyAs": "tee-wee",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing 'V' as 'W'",
-        "listNumber": 7,
         "essentialSound": "v",
         "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "well",
+      "well": {
         "mispronouncedFrequentlyAs": "werr",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing 'L' as 'R'",
-        "listNumber": 7,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "meanwhile",
+      "meanwhile": {
         "mispronouncedFrequentlyAs": "meanwheel",
         "mispronunciationFrequency": 1,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 7,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "whether",
+      "whether": {
         "mispronouncedFrequentlyAs": "wh-ai-ther",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 7,
         "essentialSound": "whe",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "beat",
+      "beat": {
         "mispronouncedFrequentlyAs": "bit",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 7,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "brave",
+      "brave": {
         "mispronouncedFrequentlyAs": "br-ai-v",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'AY' sound",
-        "listNumber": 7,
         "essentialSound": "a",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "scared",
+      "scared": {
         "mispronouncedFrequentlyAs": "skid",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'AA' sound",
-        "listNumber": 7,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "technology",
+      "technology": {
         "mispronunciationFrequency": 3,
         "mistakeType": "Other",
-        "listNumber": 7,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "bread",
+      "bread": {
         "mispronouncedFrequentlyAs": "bed",
         "mispronunciationFrequency": 3,
         "mistakeType": "Other",
-        "listNumber": 7,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "espresso",
+      "espresso": {
         "mispronunciationFrequency": 2,
         "mistakeType": "Other",
-        "listNumber": 7,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "driven",
+      "driven": {
         "mispronouncedFrequentlyAs": "drai-ven",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'IH' sound",
-        "listNumber": 7,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
+    },
     "testingStarted": false,
     "testingCompleted": false
   },
   {
     "listNumber": 8,
-    "words": [
-      {
-        "word": "meal",
+    "words": {
+      "meal": {
         "mispronouncedFrequentlyAs": "mear",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing 'L' as 'R'",
-        "listNumber": 8,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "bikes",
+      "bikes": {
         "mispronouncedFrequentlyAs": "backs",
         "mispronunciationFrequency": 1,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 8,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "mind",
+      "mind": {
         "mispronouncedFrequentlyAs": "mand",
         "mispronunciationFrequency": 2,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 8,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "theories",
+      "theories": {
         "mispronouncedFrequentlyAs": "series",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "listNumber": 8,
         "essentialSound": "th",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "best",
+      "best": {
         "mispronouncedFrequentlyAs": "b-ai-st",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 8,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "fear",
+      "fear": {
         "mispronouncedFrequentlyAs": "fair",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 8,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "failed",
+      "failed": {
         "mispronouncedFrequentlyAs": "feeld",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'AY' sound",
-        "listNumber": 8,
         "essentialSound": "a",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "fried",
+      "fried": {
         "mispronouncedFrequentlyAs": "flied",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'R' sound",
-        "listNumber": 8,
         "essentialSound": "r",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "experiment",
+      "experiment": {
         "mispronouncedFrequentlyAs": "expreement",
         "mispronunciationFrequency": 2,
         "mistakeType": "Other",
-        "listNumber": 8,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "women",
+      "women": {
         "mispronouncedFrequentlyAs": "woman",
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 8,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "determined",
+      "determined": {
         "mispronouncedFrequentlyAs": "determ-ai-ned",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'IH' sound",
-        "listNumber": 8,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
+    },
     "testingStarted": false,
     "testingCompleted": false
   },
   {
     "listNumber": 9,
-    "words": [
-      {
-        "word": "virus",
+    "words": {
+      "virus": {
         "mispronouncedFrequentlyAs": "wirus",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing 'V' as 'W'",
-        "listNumber": 9,
         "essentialSound": "v",
         "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "beautiful",
+      "beautiful": {
         "mispronouncedFrequentlyAs": "beautifor",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing 'L' as 'R'",
-        "listNumber": 9,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "climbing",
+      "climbing": {
         "mispronouncedFrequentlyAs": "clamming",
         "mispronunciationFrequency": 1,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 9,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "smile",
+      "smile": {
         "mispronouncedFrequentlyAs": "smell",
         "mispronunciationFrequency": 2,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 9,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "method",
+      "method": {
         "mispronouncedFrequentlyAs": "mesh-ed",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "listNumber": 9,
         "essentialSound": "th",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "let",
+      "let": {
         "mispronouncedFrequentlyAs": "l-ai-t",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 9,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "pets",
+      "pets": {
         "mispronouncedFrequentlyAs": "p-ai-ts",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 9,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "dream",
+      "dream": {
         "mispronouncedFrequentlyAs": "drim",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 9,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "great",
+      "great": {
         "mispronouncedFrequentlyAs": "gr-ai-t",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'AY' sound",
-        "listNumber": 9,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "experience",
+      "experience": {
         "mispronouncedFrequentlyAs": "exprence",
         "mispronunciationFrequency": 2,
         "mistakeType": "Other",
-        "listNumber": 9,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "lecture",
+      "lecture": {
         "mispronouncedFrequentlyAs": "letter",
         "mispronunciationFrequency": 2,
         "mistakeType": "Other",
-        "listNumber": 9,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
+    },
     "testingStarted": false,
     "testingCompleted": false
   },
   {
     "listNumber": 10,
-    "words": [
-      {
-        "word": "colorful",
+    "words": {
+      "colorful": {
         "mispronouncedFrequentlyAs": "colorfor",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing 'L' as 'R'",
-        "listNumber": 10,
         "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "like",
+      "like": {
         "mispronouncedFrequentlyAs": "lack",
         "mispronunciationFrequency": 1,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 10,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "athlete",
+      "athlete": {
         "mispronouncedFrequentlyAs": "aslete",
         "mispronunciationFrequency": 2,
         "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "listNumber": 10,
         "essentialSound": "th",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "smell",
+      "smell": {
         "mispronouncedFrequentlyAs": "smile",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 10,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "wear",
+      "wear": {
         "mispronouncedFrequentlyAs": "wire",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 10,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "sweet",
+      "sweet": {
         "mispronouncedFrequentlyAs": "swayt",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 10,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "straight",
+      "straight": {
         "mispronouncedFrequentlyAs": "strite",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'AY' sound",
-        "listNumber": 10,
         "essentialSound": "a",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "focus",
+      "focus": {
         "mispronouncedFrequentlyAs": "focurse",
         "mispronunciationFrequency": 1,
         "mistakeType": "Adding an unnecessary 'R' sound",
-        "listNumber": 10,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "barista",
+      "barista": {
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 10,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "breath",
+      "breath": {
         "mispronouncedFrequentlyAs": "breethe",
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 10,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "bored",
+      "bored": {
         "mispronouncedFrequentlyAs": "broad",
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 10,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
+    },
     "testingStarted": false,
     "testingCompleted": false
   },
   {
     "listNumber": 11,
-    "words": [
-      {
-        "word": "required",
+    "words": {
+      "required": {
         "mispronouncedFrequentlyAs": "reqered",
         "mispronunciationFrequency": 1,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 11,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "impressed",
+      "impressed": {
         "mispronouncedFrequentlyAs": "impr-ai-sed",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 11,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "better",
+      "better": {
         "mispronouncedFrequentlyAs": "bayter",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 11,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "details",
+      "details": {
         "mispronouncedFrequentlyAs": "dee-tie-ls",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 11,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "doubt",
+      "doubt": {
         "mispronouncedFrequentlyAs": "doubt (with b sound)",
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 11,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "museum",
+      "museum": {
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 11,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "clothes",
+      "clothes": {
         "mispronouncedFrequentlyAs": "clothe-sez",
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 11,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "breathe",
+      "breathe": {
         "mispronouncedFrequentlyAs": "breth",
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 11,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "ancient",
+      "ancient": {
         "mispronouncedFrequentlyAs": "ayshent",
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 11,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "dessert",
+      "dessert": {
         "mispronouncedFrequentlyAs": "desert",
         "mispronunciationFrequency": 10,
         "mistakeType": "Other",
-        "listNumber": 11,
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "inspiration",
+      "inspiration": {
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
-        "listNumber": 11,
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
+    },
     "testingStarted": false,
     "testingCompleted": false
   },
   {
     "listNumber": 12,
-    "words": [
-      {
-        "word": "admire",
+    "words": {
+      "admire": {
         "mispronouncedFrequentlyAs": "admeer",
         "mispronunciationFrequency": 10,
         "mistakeType": "Neglecting the 'AI' sound",
-        "listNumber": 12,
         "essentialSound": "i",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "special",
+      "special": {
         "mispronouncedFrequentlyAs": "spai-cial",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 12,
         "essentialSound": "e",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "help",
+      "help": {
         "mispronouncedFrequentlyAs": "heelp",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 12,
         "essentialSound": "hel",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "efforts",
+      "efforts": {
         "mispronouncedFrequentlyAs": "ee-forts",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EH' sound",
-        "listNumber": 12,
         "essentialSound": "eff",
         "attempts": 0,
         "attemptsSuccessful": 0
       },
-      {
-        "word": "defeat",
+      "defeat": {
         "mispronouncedFrequentlyAs": "defit",
         "mispronunciationFrequency": 1,
         "mistakeType": "Mispronouncing the 'EE' sound",
-        "listNumber": 12,
         "essentialSound": "ea",
         "attempts": 0,
         "attemptsSuccessful": 0
       }
-    ],
+    },
     "testingStarted": false,
     "testingCompleted": false
   }

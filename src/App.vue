@@ -3,9 +3,12 @@
     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
 
     <div class="wrapper">
-      <HelloWorld msg="Say It Right" />
+      <HelloWorld msg="Say It Right" @click="router.push({ name: 'home' })" />
       <nav>
-        <RouterLink to="/">Personal</RouterLink>
+        <!-- <RouterLink to="/">Personal</RouterLink> -->
+        <RouterLink :to="{ name: 'personal' }" :class="getLinkClass('/personal')"
+          >Personal</RouterLink
+        >
         <RouterLink :to="{ name: 'suggested' }" :class="getLinkClass('/suggested')"
           >Suggested</RouterLink
         >
@@ -22,8 +25,9 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+const router = useRouter()
 
 const getLinkClass = (path) => {
   const route = useRoute()

@@ -43,9 +43,7 @@
     </div>
 
     <!-- TODO change below handler to a store function that changes the list's state instead -->
-    <button class="next-button" v-if="testComplete" @click="store.paragraphTestCompleted = true">
-      Next
-    </button>
+    <button class="next-button" v-if="testComplete" @click="setParagraphTestComplete">Next</button>
     <!-- <RouterLink to="/suggested/word-test">Next</RouterLink> -->
 
     <RecorderButton
@@ -64,8 +62,10 @@ import RecorderButton from './RecorderButton.vue'
 import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
 import useFilterCorrectAndIncorrectWords from '@/composables/useFilterCorrectAndIncorrectWords'
 
-import { useSuggestedListStore } from '@/stores/suggested'
-const store = useSuggestedListStore()
+import { useRoute } from 'vue-router'
+// import { useSuggestedListStore } from '@/stores/suggested'
+const route = useRoute()
+// const store = useSuggestedListStore()
 
 const props = defineProps({
   paragraph: { type: String, required: true },
@@ -84,23 +84,32 @@ let testComplete = ref(false)
 const testedParagraph = ref('')
 const testedWordList = ref([])
 
-const correctlyPronouncedTestedWords = computed(() => {
-  return Object.keys(store.activeList.words).filter((word) => {
-    return (
-      store.activeList.words[word].attempts === 1 &&
-      store.activeList.words[word].attemptsSuccessful === 1
-    )
-  })
-})
+const emit = defineEmits(['paragraphTestCompleted'])
 
-const mispronouncedTestedWords = computed(() => {
-  return Object.keys(store.activeList.words).filter((word) => {
-    return (
-      store.activeList.words[word].attempts === 1 &&
-      store.activeList.words[word].attemptsSuccessful === 0
-    )
-  })
-})
+const setParagraphTestComplete = () => {
+  emit('paragraphTestCompleted')
+}
+
+// const correctlyPronouncedTestedWords = computed(() => {
+//   return Object.keys(store.activeList.words).filter((word) => {
+//     return (
+//       store.activeList.words[word].attempts === 1 &&
+//       store.activeList.words[word].attemptsSuccessful === 1
+//     )
+//   })
+// })
+
+// const mispronouncedTestedWords = computed(() => {
+//   return Object.keys(store.activeList.words).filter((word) => {
+//     return (
+//       store.activeList.words[word].attempts === 1 &&
+//       store.activeList.words[word].attemptsSuccessful === 0
+//     )
+//   })
+// })
+
+const correctlyPronouncedTestedWords = ref([])
+const mispronouncedTestedWords = ref([])
 
 // TODO relocate this to WordTest
 let temporaryTranscript = ref('')
@@ -124,7 +133,14 @@ const handleFinalTranscript = (transcript) => {
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
   testedWordList.value = useAdjustTestedWords(testedWordList.value, testedParagraph.value)
 
-  useFilterCorrectAndIncorrectWords(testedWordList.value, transcript)
+  const { correctWords, incorrectWords } = useFilterCorrectAndIncorrectWords(
+    testedWordList.value,
+    transcript,
+    route.name
+  )
+
+  correctlyPronouncedTestedWords.value = correctWords
+  mispronouncedTestedWords.value = incorrectWords
 
   // NOTE highlights mispronounced tested words in red and correctly pronounced words in green; consider not highlighting correct words in the final version
   testedParagraph.value = highlightCorrectAndIncorrectWords(

@@ -1,10 +1,8 @@
 import { useSuggestedListStore } from '@/stores/suggested'
 import { usePersonalListStore } from '@/stores/personal'
-import { useRoute } from 'vue-router'
 
-export default function useFilterCorrectAndIncorrectWords(testedWordList, transcriptString) {
-  const route = useRoute()
-  const store = route.name === 'suggested' ? useSuggestedListStore() : usePersonalListStore()
+export default function useFilterCorrectAndIncorrectWords(testedWordList, transcriptString, route) {
+  const store = route === 'suggested' ? useSuggestedListStore() : usePersonalListStore()
 
   const recordedWords = [...new Set(transcriptString.split(' '))]
   const correctWords = [...testedWordList.filter((word) => recordedWords.includes(word))]
@@ -14,7 +12,15 @@ export default function useFilterCorrectAndIncorrectWords(testedWordList, transc
     store.logPronunciationAttemptSuccessful(word)
   }
 
+  let incorrectWords = []
   for (const word of testedWordList) {
-    if (!correctWords.includes(word)) store.logPronunciationAttempt(word)
+    if (!correctWords.includes(word)) {
+      incorrectWords.push(word)
+      store.logPronunciationAttempt(word)
+    }
   }
+
+  console.log('Correctly pronounced keywords:', correctWords.join(', '))
+  console.log('Mispronounced keywords:', incorrectWords.join(', '))
+  return { correctWords, incorrectWords }
 }

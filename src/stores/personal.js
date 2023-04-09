@@ -1,8 +1,7 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
-// import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
-import commonlyMispronouncedWords from '@/assets/test-json.json'
+import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
 
 export const usePersonalListStore = defineStore('personal', () => {
   const route = useRoute()

@@ -7,7 +7,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'home'
+      // component: PersonalView
+    },
+    {
+      path: '/personal/:id?',
+      name: 'personal',
       component: PersonalView
     },
     {
@@ -42,7 +47,8 @@ const router = createRouter({
       name: 'wordlists',
       component: () => import('@/views/WordlistsView.vue')
     }
-  ]
+  ],
+  includeQueryParams: true
 })
 
 export default router

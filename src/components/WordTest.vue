@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import RecorderButton from './RecorderButton.vue'
 
@@ -37,11 +37,36 @@ const store = useSuggestedListStore()
 //     .map((wordObj) => wordObj.word)
 // })
 
-const mispronouncedTestedWords = computed(() => {
-  return store.activeList.words.filter(
-    (wordObj) => wordObj.attempts > 0 && wordObj.attemptsSuccessful === 0
-  )
+const mispronouncedTestedWords = ref([])
+
+onMounted(() => {
+  mispronouncedTestedWords.value = [
+    ...Object.keys(store.activeList.words).filter((word) => {
+      return (
+        store.activeList.words[word].attempts > 0 &&
+        store.activeList.words[word].attemptsSuccessful === 0
+      )
+    })
+  ]
 })
+
+// const mispronouncedTestedWords = computed(() => {
+//   return Object.keys(store.activeList.words).filter((word) => {
+//     return (
+//       store.activeList.words[word].attempts > 0 &&
+//       store.activeList.words[word].attemptsSuccessful === 0
+//     )
+//   })
+// })
+
+// const correctlyPronouncedTestedWords = computed(() => {
+//   return Object.keys(store.activeList.words).filter((word) => {
+//     return (
+//       store.activeList.words[word].attempts === 1 &&
+//       store.activeList.words[word].attemptsSuccessful === 1
+//     )
+//   })
+// })
 
 const testedWord = computed(() => mispronouncedTestedWords.value[0])
 
