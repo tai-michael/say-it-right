@@ -1,13 +1,10 @@
 <template>
-  <div class="about">
+  <main>
     <hr />
     <div class="test-paragraph">
       <p v-html="testedParagraph"></p>
     </div>
     <hr />
-    <!-- <button @click="handleMicPress">
-      {{ isRecording ? 'Stop microphone' : 'Start microphone' }}
-    </button> -->
 
     <div v-if="isRecording && !testComplete" class="transcript-container">
       <label>Live transcript:</label>
@@ -49,7 +46,7 @@
     <button class="next-button" v-if="testComplete" @click="store.paragraphTestCompleted = true">
       Next
     </button>
-    <!-- <RouterLink to="/about/word-test">Next</RouterLink> -->
+    <!-- <RouterLink to="/suggested/word-test">Next</RouterLink> -->
 
     <RecorderButton
       @recording-started="isRecording = true"
@@ -57,43 +54,12 @@
       @temporary-transcript-rendered="handleTempTranscriptRender"
       :test-complete="testComplete"
     />
-
-    <!-- <div>Tentative transcript: {{ tentativeText }}</div> -->
-    <!-- <div>Final transcript: {{ transcriptText }}</div> -->
-    <!-- <div>Connection to Speechly API: {{ clientStateText }}</div> -->
-    <!-- <div>Mic status: {{ micStateText }}</div> -->
-    <!-- <p>Duration: {{ timestamp }}</p> -->
-    <!-- <div>{{ debugOutText }}</div> -->
-    <!-- <div>{{ intentText }}</div>
-    <div>{{ entitiesListText }}</div> -->
-    <!-- <big-transcript placement="top"> </big-transcript> -->
-
-    <!-- <push-to-talk-button
-      v-cloak
-      v-show="showComponent"
-      placement="bottom"
-      appid="20b0ff74-506d-4327-8970-73b671c98193"
-    >
-    </push-to-talk-button> -->
-    <!-- <intro-popup> </intro-popup> -->
-    <!-- <intro-popup>
-      <span slot="priming-body">You'll be able to control this web app faster with voice.</span>
-    </intro-popup> -->
-    <!-- <button @click="handleClearPress" :disabled="!transcript">Clear</button> -->
-  </div>
+  </main>
 </template>
 
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-
 import RecorderButton from './RecorderButton.vue'
-
-// REVIEW maybe put in App.js instead
-// import { client, microphone } from '@/speechlyInit.js'
-// import MicIcon from '@/assets/images/mic.vue'
-// import { stateToString } from '@speechly/browser-client'
-// import '@speechly/browser-ui/core/big-transcript'
-// import '@speechly/browser-ui/core/intro-popup'
 
 import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
 import useFilterCorrectAndIncorrectWords from '@/composables/useFilterCorrectAndIncorrectWords'
@@ -112,37 +78,29 @@ onMounted(() => {
   testedWordList.value = [...props.wordList]
 })
 
-// let showComponent = ref(false)
-
 let isRecording = ref(false)
 let testComplete = ref(false)
-// let temporaryTranscript = ref('')
-// let finalTranscript = ref('')
-// let micStateText = ref('Not actively recording')
-// const clientConnected = computed(() => client.decoderOptions.connect === true)
-// let clientStateText = ref('Connecting...')
-// let clientFullyInitialized = ref(false)
-// let evaluationText = ref('')
-// let debugOutText = ref('')
-// let tentativeText = ref('')
-// let transcriptText = ref('')
-// NOTE Speechly's intent and entity detection allows the guessing of words from users when it's unclear. This feature is counterproductive, as our app trains pronunciation.
-// let intentText = ref('')
-// let entitiesListText = ref('')
-// let timestamp = ref('')
-
-// client.onStateChange((state) => {
-//   if (stateToString(state) === 'Connected') clientConnected.value = true
-//   // setTimeout(() => {
-//   //   clientFullyInitialized.value = true
-//   // }, 2000)
-// })
 
 const testedParagraph = ref('')
 const testedWordList = ref([])
 
-const correctlyPronouncedTestedWords = ref([])
-// const mispronouncedTestedWords = ref([])
+const correctlyPronouncedTestedWords = computed(() => {
+  return Object.keys(store.activeList.words).filter((word) => {
+    return (
+      store.activeList.words[word].attempts === 1 &&
+      store.activeList.words[word].attemptsSuccessful === 1
+    )
+  })
+})
+
+const mispronouncedTestedWords = computed(() => {
+  return Object.keys(store.activeList.words).filter((word) => {
+    return (
+      store.activeList.words[word].attempts === 1 &&
+      store.activeList.words[word].attemptsSuccessful === 0
+    )
+  })
+})
 
 // TODO relocate this to WordTest
 let temporaryTranscript = ref('')
@@ -166,21 +124,13 @@ const handleFinalTranscript = (transcript) => {
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
   testedWordList.value = useAdjustTestedWords(testedWordList.value, testedParagraph.value)
 
-  const { correctWords, incorrectWords } = useFilterCorrectAndIncorrectWords(
-    testedWordList.value,
-    transcript
-  )
-
-  correctlyPronouncedTestedWords.value = correctWords
-  store.mispronouncedTestedWords = incorrectWords
-  // mispronouncedTestedWords.value = incorrectWords
+  useFilterCorrectAndIncorrectWords(testedWordList.value, transcript)
 
   // NOTE highlights mispronounced tested words in red and correctly pronounced words in green; consider not highlighting correct words in the final version
   testedParagraph.value = highlightCorrectAndIncorrectWords(
     testedParagraph.value,
     correctlyPronouncedTestedWords.value,
-    (store.mispronouncedTestedWords = incorrectWords)
-    // mispronouncedTestedWords.value
+    mispronouncedTestedWords.value
   )
 
   testComplete.value = true
@@ -251,7 +201,7 @@ const evaluationText = computed(() => {
 
 <style lang="scss" scoped>
 @media (min-width: 1024px) {
-  .about {
+  main {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -321,18 +271,6 @@ label {
 .transcript-container {
   margin-top: 1rem;
   min-height: 64px;
-
-  // position: fixed;
-  // // top: 0;
-  // left: 0;
-  // right: 0;
-  // // bottom: 1;
-  // max-height: 100vh;
-  // // padding: 3rem 0 0 0;
-  // margin: 1rem 2rem;
-  // // NOTE Probably needs to be lower, but test this first
-  // max-width: 500px;
-  // // z-index: 10;
 }
 
 .next-button {

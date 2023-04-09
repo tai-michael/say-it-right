@@ -4,10 +4,9 @@ import { useRoute } from 'vue-router'
 // import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
 import commonlyMispronouncedWords from '@/assets/test-json.json'
 
-export const useSuggestedListStore = defineStore('suggested', () => {
+export const usePersonalListStore = defineStore('personal', () => {
   const route = useRoute()
 
-  // NOTE the '+' is necessary b/c the number becomes a string when sent as a parameter
   const activeList = computed(() =>
     allLists.value.find((list) => list.listNumber === +route.params.id)
   )

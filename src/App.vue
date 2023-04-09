@@ -6,8 +6,10 @@
       <HelloWorld msg="Say It Right" />
       <nav>
         <RouterLink to="/">Personal</RouterLink>
-        <RouterLink to="/about">Suggested</RouterLink>
-        <RouterLink to="/wordlists">Wordlists</RouterLink>
+        <RouterLink :to="{ name: 'suggested' }" :class="getLinkClass('/suggested')"
+          >Suggested</RouterLink
+        >
+        <RouterLink to="/wordlists">Word Lists</RouterLink>
       </nav>
     </div>
   </header>
@@ -20,8 +22,13 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+
+const getLinkClass = (path) => {
+  const route = useRoute()
+  return route.path.startsWith(path) ? 'router-link-exact-active' : ''
+}
 </script>
 
 <style scoped>
@@ -53,7 +60,7 @@ nav a.router-link-exact-active:hover {
 
 nav a {
   display: inline-block;
-  padding: 0 1rem;
+  padding: 0 0.8rem;
   border-left: 1px solid var(--color-border);
 }
 

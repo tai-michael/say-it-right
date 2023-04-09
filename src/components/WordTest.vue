@@ -1,7 +1,7 @@
 <template>
   <main>
     <div>Word Test</div>
-    <div>{{ store.mispronouncedTestedWords[0] }}</div>
+    <div>{{ testedWord }}</div>
     <button @click="play">Speaker icon</button>
 
     <div v-if="isRecording && !testComplete" class="transcript-container">
@@ -28,6 +28,22 @@ import RecorderButton from './RecorderButton.vue'
 import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.js'
 import { useSuggestedListStore } from '@/stores/suggested'
 const store = useSuggestedListStore()
+
+// TODO should probably make this and testedWord onMounted instead, b/c i don't want the word to change automatically after its answered right, and I want a new instance of this component every time
+// const mispronouncedTestedWords = computed(() => {
+//   const list = store.allLists.find((list) => list.listNumber === props.id)
+//   return list.words
+//     .filter((wordObj) => wordObj.attempts > 0 && wordObj.attemptsSuccessful === 0)
+//     .map((wordObj) => wordObj.word)
+// })
+
+const mispronouncedTestedWords = computed(() => {
+  return store.activeList.words.filter(
+    (wordObj) => wordObj.attempts > 0 && wordObj.attemptsSuccessful === 0
+  )
+})
+
+const testedWord = computed(() => mispronouncedTestedWords.value[0])
 
 const play = () => {
   useConvertTextToSpeech('Espresso.', 'male')
