@@ -453,8 +453,8 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testingStarted": true,
+    "testingCompleted": true
   },
   {
     "listNumber": 6,

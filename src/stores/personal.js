@@ -1,16 +1,18 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
-import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
 
 export const usePersonalListStore = defineStore('personal', () => {
   const route = useRoute()
 
+  // NOTE the '+' is necessary b/c the number becomes a string when sent as a parameter
   const activeList = computed(() =>
     allLists.value.find((list) => list.listNumber === +route.params.id)
   )
 
-  const allLists = ref([...commonlyMispronouncedWords])
+  const activeId = ref(null)
+
+  const allLists = ref([])
 
   const partiallyTestedLists = computed(() =>
     allLists.value.filter((list) => list.testingStarted === true && list.testingCompleted === false)
@@ -26,11 +28,15 @@ export const usePersonalListStore = defineStore('personal', () => {
     allLists.value.filter((list) => list.testingStarted === true && list.testingCompleted === true)
   )
 
-  const paragraphTestCompleted = ref(false)
-  const wordTestCompleted = ref(false)
-  const sentenceTestCompleted = ref(false)
+  // const paragraphTestCompleted = ref(false)
+  // const wordTestCompleted = ref(false)
+  // const sentenceTestCompleted = ref(false)
 
   const mispronouncedTestedWords = ref([])
+
+  const setActiveId = (id) => {
+    activeId.value = id
+  }
 
   const logPronunciationAttempt = (testedWord) => {
     const matchedWord = activeList.value.words[testedWord]
@@ -51,16 +57,18 @@ export const usePersonalListStore = defineStore('personal', () => {
 
   return {
     activeList,
+    activeId,
     allLists,
     partiallyTestedLists,
     untestedLists,
     completelyTestedLists,
 
-    paragraphTestCompleted,
-    wordTestCompleted,
-    sentenceTestCompleted,
+    // paragraphTestCompleted,
+    // wordTestCompleted,
+    // sentenceTestCompleted,
     mispronouncedTestedWords,
 
+    setActiveId,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful
   }

@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="list-type">
+    <div v-if="store.partiallyTestedLists.length" class="list-type">
       <label>In Progress</label>
       <div class="list-container">
         <div v-for="list of store.partiallyTestedLists" :key="list.listNumber">
@@ -16,7 +16,7 @@
 
     <hr />
 
-    <div class="list-type">
+    <div v-if="store.untestedLists.length" class="list-type">
       <label>Not Started</label>
       <div class="list-container">
         <div v-for="list of store.untestedLists" :key="list.listNumber">
@@ -32,7 +32,7 @@
 
     <hr />
 
-    <div class="list-type">
+    <div v-if="store.completelyTestedLists.length" class="list-type">
       <label>Completed</label>
       <div class="list-container">
         <div v-for="list of store.completelyTestedLists" :key="list.listNumber">

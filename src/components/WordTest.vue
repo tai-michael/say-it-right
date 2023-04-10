@@ -37,6 +37,7 @@ const store = useSuggestedListStore()
 //     .map((wordObj) => wordObj.word)
 // })
 
+// TODO probably replace this with emit from paragraph, as below might cause the instances to all show the same list (maybe)
 const mispronouncedTestedWords = ref([])
 
 onMounted(() => {
@@ -55,15 +56,6 @@ onMounted(() => {
 //     return (
 //       store.activeList.words[word].attempts > 0 &&
 //       store.activeList.words[word].attemptsSuccessful === 0
-//     )
-//   })
-// })
-
-// const correctlyPronouncedTestedWords = computed(() => {
-//   return Object.keys(store.activeList.words).filter((word) => {
-//     return (
-//       store.activeList.words[word].attempts === 1 &&
-//       store.activeList.words[word].attemptsSuccessful === 1
 //     )
 //   })
 // })
