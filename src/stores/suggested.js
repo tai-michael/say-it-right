@@ -16,17 +16,20 @@ export const useSuggestedListStore = defineStore('suggested', () => {
   const allLists = ref([...commonlyMispronouncedWords])
 
   const partiallyTestedLists = computed(() =>
-    allLists.value.filter((list) => list.testingStarted === true && list.testingCompleted === false)
-  )
-
-  const untestedLists = computed(() =>
     allLists.value.filter(
-      (list) => list.testingStarted === false && list.testingCompleted === false
+      (list) =>
+        list.testStatus === 'paragraph test in progress' ||
+        list.testStatus === 'word test in progress' ||
+        list.testStatus === 'sentence test in progress'
     )
   )
 
+  const untestedLists = computed(() =>
+    allLists.value.filter((list) => list.testStatus === 'not started')
+  )
+
   const completelyTestedLists = computed(() =>
-    allLists.value.filter((list) => list.testingStarted === true && list.testingCompleted === true)
+    allLists.value.filter((list) => list.testStatus === 'completed')
   )
 
   // const paragraphTestCompleted = ref(false)

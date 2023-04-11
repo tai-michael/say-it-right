@@ -93,8 +93,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "paragraph test in progress",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "John, a successful businessman, inspired many with his vivid visions of a better society. He said that discipline and a courageous spirit were essential to achieving greatness. As he shared his plan, people began to think about their own potential. Comforted by his words, they decided to study hard and contribute to a brighter future.  "
   },
   {
     "listNumber": 2,
@@ -183,8 +185,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": true,
-    "testingCompleted": false
+    "testStatus": "not started",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "Samantha enjoyed visiting various cafés around the world. In her private time, she would really immerse herself in the process of tasting different lattes. Thanks to her passion, she usually knew the best places to find a great cup of coffee, because she had trained her palate to recognize quality.  "
   },
   {
     "listNumber": 3,
@@ -272,8 +276,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "word test in progress",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "Robert, an excellent pilot, visited small islands where he would often develop friendships with the kind locals. He was a thin man who rarely indulged in rich foods, but he couldn't resist the occasional snack on a plane. One day, a colleague introduced him to the joys of homemade treats.  "
   },
   {
     "listNumber": 4,
@@ -363,8 +369,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "completed",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "Emily was a famous vlogger known for her air travel adventures. She would recall her experiences with vivid memories and decorate her videos with valuable insights. While exploring new places, she met interesting people and captured their thoughts, which she later shared with her audience.  "
   },
   {
     "listNumber": 5,
@@ -453,8 +461,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": true,
-    "testingCompleted": true
+    "testStatus": "not started",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "During his free time, Thomas enjoyed a variety of activities, from skiing on thick snow to resting at home. He was never upset with his staff's choice of lighting, as they tastefully arranged the ambiance. The tasteful atmosphere possessed a calming effect, allowing him to relax and unwind.  "
   },
   {
     "listNumber": 6,
@@ -545,8 +555,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "not started",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "Laura, a young girl with an enthusiastic spirit, would often volunteer at the local community center. She loved chatting with the children and helping them with various tasks. Instead of staying home, Laura chose to make a difference, and her obvious passion for helping others was contagious.  "
   },
   {
     "listNumber": 7,
@@ -634,8 +646,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "completed",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "Alex, a technology-driven entrepreneur, was always up-to-date with the latest trends. He loved espresso and often watched TV while eating a slice of bread. Meanwhile, he pondered whether to invest in a brave new startup or focus on his existing business. He was not scared of taking risks but knew when to be cautious.  "
   },
   {
     "listNumber": 8,
@@ -726,8 +740,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "not started",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "Sarah, a determined scientist, devoted her life to researching the best methods to combat fear. She experimented with various techniques and theories, even when she failed. Her passion for helping others led her to create a meal plan that incorporated fried foods and bikes, which surprisingly had a positive effect on her test subjects.  "
   },
   {
     "listNumber": 9,
@@ -819,8 +835,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "not started",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "During the height of the virus, David found solace in climbing and spending time with his pets. His beautiful smile would light up any room, and he was known for his great sense of humor. One day, he had a vivid dream that inspired him to create a unique method for teaching a college lecture.  "
   },
   {
     "listNumber": 10,
@@ -909,8 +927,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "not started",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "Carla, a skilled athlete, loved the sweet smell of victory. Her focus was unwavering, and she was always dressed in colorful clothes that matched her vibrant spirit. She would often take a deep breath before her final sprint, knowing that her hard work and determination would carry her through.  "
   },
   {
     "listNumber": 11,
@@ -994,8 +1014,10 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "not started",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "Sophia, an ancient history enthusiast, was impressed by the details found in museum exhibits. She believed that the better we understand our past, the more inspired we can be to create a brighter future. She doubted anyone who didn't share her passion for clothes from ancient civilizations, as she felt they were missing out on a rich source of inspiration.  "
   },
   {
     "listNumber": 12,
@@ -1041,7 +1063,9 @@
         "attemptsSuccessful": 0
       }
     },
-    "testingStarted": false,
-    "testingCompleted": false
+    "testStatus": "not started",
+    "attempts": 0,
+    "attemptsSuccessful": 0,
+    "paragraph": "Michael had a special gift for helping others. His friends and family would often admire his efforts to assist those in need. He believed that everyone had the power to defeat their"
   }
 ]

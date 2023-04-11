@@ -34,6 +34,10 @@ const store = useSuggestedListStore()
 const wordList = ref([])
 const allTestsCompleteMessage = ref(false)
 const paragraphTestCompleted = ref(false)
+
+// NOTE the optional chaining operator (?.) is needed because activeList becomes undefined if we mount this tab with no params id, or if we navigate to the Word Lists tab
+const generatedParagraph = computed(() => store.activeList?.paragraph)
+
 // const componentKey = 'suggested'
 
 // TODO add respective paragraphs too
@@ -79,9 +83,9 @@ onActivated(() => {
 // )
 // const wordList = computed(() => Object.keys(store.activeList.words))
 
-let generatedParagraph = ref(
-  'Stephen Hawking was a courageous and successful scientist who inspired many people throughout society. He had vivid ideas and a variety of interests, which he pursued with discipline and careful study. He was known for his wise words, and many people were comforted by his advice. He often said that to succeed in life, one must think carefully and have a solid plan.'
-)
+// let generatedParagraph = ref(
+//   'Stephen Hawking was a courageous and successful scientist who inspired many people throughout society. He had vivid ideas and a variety of interests, which he pursued with discipline and careful study. He was known for his wise words, and many people were comforted by his advice. He often said that to succeed in life, one must think carefully and have a solid plan.'
+// )
 
 const shouldShowParagraphTest = computed(
   () =>
