@@ -6,7 +6,7 @@
     </div>
     <hr />
 
-    <div v-if="isRecording && !testComplete" class="transcript-container">
+    <div v-if="isRecording" class="transcript-container">
       <label>Live transcript:</label>
       <div>{{ temporaryTranscriptDisplay }}</div>
     </div>
@@ -42,15 +42,20 @@
       </div>
     </div>
 
-    <!-- TODO change below handler to a store function that changes the list's state instead -->
-    <button class="next-button" v-if="testComplete" @click="setParagraphTestComplete">Next</button>
+    <button
+      class="next-button"
+      v-if="store.activeList.testStatus === 'paragraph test recording completed'"
+      @click="store.setTestStatus('word test in progress')"
+    >
+      Next
+    </button>
     <!-- <RouterLink to="/suggested/word-test">Next</RouterLink> -->
 
     <RecorderButton
       @recording-started="isRecording = true"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
-      :test-complete="testComplete"
+      :test-complete="store.activeList.testStatus === 'paragraph test recording completed'"
     />
   </main>
 </template>
@@ -63,9 +68,11 @@ import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
 import useFilterCorrectAndIncorrectWords from '@/composables/useFilterCorrectAndIncorrectWords'
 
 import { useRoute } from 'vue-router'
-// import { useSuggestedListStore } from '@/stores/suggested'
+import { useSuggestedListStore } from '@/stores/suggested'
+import { usePersonalListStore } from '@/stores/personal'
+
 const route = useRoute()
-// const store = useSuggestedListStore()
+const store = route.name === 'suggested' ? useSuggestedListStore() : usePersonalListStore()
 
 const props = defineProps({
   paragraph: { type: String, required: true },
@@ -79,37 +86,30 @@ onMounted(() => {
 })
 
 let isRecording = ref(false)
-let testComplete = ref(false)
 
 const testedParagraph = ref('')
 const testedWordList = ref([])
 
-const emit = defineEmits(['paragraphTestCompleted'])
+const correctlyPronouncedTestedWords = computed(() => {
+  return Object.keys(store.activeList.words).filter((word) => {
+    return (
+      store.activeList.words[word].attempts === 1 &&
+      store.activeList.words[word].attemptsSuccessful === 1
+    )
+  })
+})
 
-const setParagraphTestComplete = () => {
-  emit('paragraphTestCompleted')
-}
+const mispronouncedTestedWords = computed(() => {
+  return Object.keys(store.activeList.words).filter((word) => {
+    return (
+      store.activeList.words[word].attempts === 1 &&
+      store.activeList.words[word].attemptsSuccessful === 0
+    )
+  })
+})
 
-// const correctlyPronouncedTestedWords = computed(() => {
-//   return Object.keys(store.activeList.words).filter((word) => {
-//     return (
-//       store.activeList.words[word].attempts === 1 &&
-//       store.activeList.words[word].attemptsSuccessful === 1
-//     )
-//   })
-// })
-
-// const mispronouncedTestedWords = computed(() => {
-//   return Object.keys(store.activeList.words).filter((word) => {
-//     return (
-//       store.activeList.words[word].attempts === 1 &&
-//       store.activeList.words[word].attemptsSuccessful === 0
-//     )
-//   })
-// })
-
-const correctlyPronouncedTestedWords = ref([])
-const mispronouncedTestedWords = ref([])
+// const correctlyPronouncedTestedWords = ref([])
+// const mispronouncedTestedWords = ref([])
 
 // TODO relocate this to WordTest
 let temporaryTranscript = ref('')
@@ -119,28 +119,21 @@ const handleTempTranscriptRender = (transcript) => {
 }
 
 const temporaryTranscriptDisplay = computed(() =>
-  testComplete.value ? '' : temporaryTranscript.value?.split(' ').slice(-8).join(' ')
+  store.activeList.testStatus === 'paragraph test recording completed'
+    ? ''
+    : temporaryTranscript.value?.split(' ').slice(-8).join(' ')
 )
-
-let finalTranscript = ref('')
 
 const handleFinalTranscript = (transcript) => {
   isRecording.value = false
-  finalTranscript.value = transcript
+  store.setFinalParagraphTranscript(transcript)
 
   if (transcript.split(' ').length <= 10) return
 
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
   testedWordList.value = useAdjustTestedWords(testedWordList.value, testedParagraph.value)
 
-  const { correctWords, incorrectWords } = useFilterCorrectAndIncorrectWords(
-    testedWordList.value,
-    transcript,
-    route.name
-  )
-
-  correctlyPronouncedTestedWords.value = correctWords
-  mispronouncedTestedWords.value = incorrectWords
+  useFilterCorrectAndIncorrectWords(testedWordList.value, transcript, route.name)
 
   // NOTE highlights mispronounced tested words in red and correctly pronounced words in green; consider not highlighting correct words in the final version
   testedParagraph.value = highlightCorrectAndIncorrectWords(
@@ -149,7 +142,9 @@ const handleFinalTranscript = (transcript) => {
     mispronouncedTestedWords.value
   )
 
-  testComplete.value = true
+  store.setNewParagraph(testedParagraph.value)
+
+  store.setTestStatus('paragraph test recording completed')
 }
 
 const highlightCorrectAndIncorrectWords = (paragraph, correctWords, incorrectWords) => {
@@ -203,8 +198,9 @@ const fixPunctuation = (paragraph) => {
 
 const evaluationText = computed(() => {
   if (isRecording.value) return 'isCurrentlyRecording'
-  else if (!finalTranscript.value.length) return 'noWordsRecorded'
-  else if (finalTranscript.value.split(' ').length <= 10) return 'fewWordsRecorded'
+  else if (!store.activeList.finalParagraphTranscript) return 'noWordsRecorded'
+  else if (store.activeList.finalParagraphTranscript.split(' ').length <= 10)
+    return 'fewWordsRecorded'
   else if (correctlyPronouncedTestedWords.value.length === testedWordList.value.length)
     return 'allWordsCorrect'
   else if (correctlyPronouncedTestedWords.value.length === testedWordList.value.length - 1)

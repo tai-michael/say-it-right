@@ -18,7 +18,7 @@ export const useSuggestedListStore = defineStore('suggested', () => {
   const partiallyTestedLists = computed(() =>
     allLists.value.filter(
       (list) =>
-        list.testStatus === 'paragraph test in progress' ||
+        list.testStatus === 'paragraph test recording completed' ||
         list.testStatus === 'word test in progress' ||
         list.testStatus === 'sentence test in progress'
     )
@@ -40,6 +40,19 @@ export const useSuggestedListStore = defineStore('suggested', () => {
 
   const setActiveId = (id) => {
     activeId.value = id
+  }
+
+  const setTestStatus = (status) => {
+    activeList.value.testStatus = status
+  }
+
+  const setNewParagraph = (paragraph) => {
+    activeList.value.paragraph = paragraph
+  }
+
+  const setFinalParagraphTranscript = (transcript) => {
+    activeList.value.finalParagraphTranscript = transcript
+    console.log(activeList.value.finalParagraphTranscript)
   }
 
   const logPronunciationAttempt = (testedWord) => {
@@ -73,6 +86,9 @@ export const useSuggestedListStore = defineStore('suggested', () => {
     mispronouncedTestedWords,
 
     setActiveId,
+    setTestStatus,
+    setNewParagraph,
+    setFinalParagraphTranscript,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful
   }

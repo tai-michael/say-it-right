@@ -22,5 +22,5 @@ export default function useFilterCorrectAndIncorrectWords(testedWordList, transc
 
   console.log('Correctly pronounced keywords:', correctWords.join(', '))
   console.log('Mispronounced keywords:', incorrectWords.join(', '))
-  return { correctWords, incorrectWords }
+  // return { correctWords, incorrectWords }
 }

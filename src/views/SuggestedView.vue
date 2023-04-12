@@ -1,25 +1,23 @@
 <template>
   <main>
     <!-- <LoadingDots v-if="isLoading" /> -->
-    <ParagraphTest
-      v-if="shouldShowParagraphTest"
-      :wordList="wordList"
-      :paragraph="generatedParagraph"
-      @paragraph-test-completed="paragraphTestCompleted = true"
-    />
+    <ParagraphTest v-if="showParagraphTest" :wordList="wordList" :paragraph="paragraph" />
 
-    <WordTest v-else-if="shouldShowWordTest" />
+    <WordTest v-else-if="store.activeList?.testStatus === 'word test in progress'" />
 
-    <SentenceTest v-else />
+    <SentenceTest v-else-if="store.activeList?.testStatus === 'sentence test in progress'" />
 
-    <div v-if="allTestsCompleteMessage">
-      You have completed all suggested lists. Click on any list in the Word Lists tab to review it.
+    <div v-if="store.completelyTestedLists.length === store.allLists.length">
+      <span
+        >You have completed all suggested lists. Click on any list in the Word Lists tab to review
+        the list.</span
+      >
     </div>
   </main>
 </template>
 
 <script setup>
-import { computed, onActivated, ref } from 'vue'
+import { computed, onActivated } from 'vue'
 
 import ParagraphTest from '@/components/ParagraphTest.vue'
 import SentenceTest from '@/components/SentenceTest.vue'
@@ -30,69 +28,40 @@ import { useSuggestedListStore } from '@/stores/suggested'
 const route = useRoute()
 const router = useRouter()
 const store = useSuggestedListStore()
-
-const wordList = ref([])
-const allTestsCompleteMessage = ref(false)
-const paragraphTestCompleted = ref(false)
-
-// NOTE the optional chaining operator (?.) is needed because activeList becomes undefined if we mount this tab with no params id, or if we navigate to the Word Lists tab
-const generatedParagraph = computed(() => store.activeList?.paragraph)
-
 // const componentKey = 'suggested'
 
-// TODO add respective paragraphs too
-onActivated(() => {
-  if (route.params.id) {
-    store.setActiveId(route.params.id)
-    wordList.value = Object.keys(store.activeList.words)
-  } else if (store.activeId) {
-    router.push({ params: { id: store.activeId } })
-  } else if (store.partiallyTestedLists.length > 0) {
-    store.setActiveId(store.partiallyTestedLists[0].listNumber)
-    wordList.value = Object.keys(store.partiallyTestedLists[0].words)
-    router.push({ params: { id: store.partiallyTestedLists[0].listNumber } })
-  } else if (store.untestedLists.length > 0) {
-    store.setActiveId(store.untestedLists[0].listNumber)
-    router.push({ params: { id: store.untestedLists[0].listNumber } })
-    wordList.value = Object.keys(store.untestedLists[0].words)
-  } else allTestsCompleteMessage.value = true
+// NOTE the optional chaining operator (?.) is needed because activeList becomes undefined if we mount this tab with no params id, or if we navigate to the Word Lists tab
+const paragraph = computed(() => {
+  return store.activeList?.paragraph
 })
 
-// const id = computed(() => ref(route.params.id))
-
-// watch(id, (newId) => {
-//   if (newId) {
-//     wordList.value = Object.keys(store.activeList.words)
-//   } else if (store.partiallyTestedLists.length > 0) {
-//     wordList.value = Object.keys(store.partiallyTestedLists[0].words)
-//     route.push({ params: { id: store.partiallyTestedLists[0].listNumber } })
-//   } else if (store.untestedLists.length > 0) {
-//     wordList.value = Object.keys(store.untestedLists[0].words)
-//   } else {
-//     allTestsCompleteMessage.value = true
-//   }
-// })
-// watch(
-//   () => store.activeList,
-//   (activeList) => {
-//     if (activeList) {
-//       wordList.value = Object.keys(activeList.words)
-//       console.log(store.activeList)
-//     }
-//   }
-// )
-// const wordList = computed(() => Object.keys(store.activeList.words))
-
-// let generatedParagraph = ref(
-//   'Stephen Hawking was a courageous and successful scientist who inspired many people throughout society. He had vivid ideas and a variety of interests, which he pursued with discipline and careful study. He was known for his wise words, and many people were comforted by his advice. He often said that to succeed in life, one must think carefully and have a solid plan.'
-// )
-
-const shouldShowParagraphTest = computed(
+const showParagraphTest = computed(
   () =>
-    generatedParagraph.value && Object.keys(wordList.value).length && !paragraphTestCompleted.value
+    store.activeList?.testStatus === 'not started' ||
+    store.activeList?.testStatus === 'paragraph test recording completed'
 )
 
-const shouldShowWordTest = computed(() => paragraphTestCompleted.value && !store.wordTestCompleted)
+const wordList = computed(() => {
+  return Object.keys(store.activeList?.words)
+})
+
+// NOTE activeId is needed for persisting id between tab switches
+// if no id, the view defaults to partially tested lists, then untested lists
+const activeId = computed(() => {
+  return (
+    route.params.id ||
+    store.activeId ||
+    store.partiallyTestedLists[0]?.listNumber ||
+    store.untestedLists[0]?.listNumber
+  )
+})
+
+// NOTE onActivated instead of onMounted, as onMounted doesn't trigger
+// for keep-alive components
+onActivated(() => {
+  router.push({ params: { id: activeId.value } })
+  store.setActiveId(route.params.id)
+})
 </script>
 
 <style lang="scss" scoped></style>

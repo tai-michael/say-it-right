@@ -15,17 +15,20 @@ export const usePersonalListStore = defineStore('personal', () => {
   const allLists = ref([])
 
   const partiallyTestedLists = computed(() =>
-    allLists.value.filter((list) => list.testingStarted === true && list.testingCompleted === false)
-  )
-
-  const untestedLists = computed(() =>
     allLists.value.filter(
-      (list) => list.testingStarted === false && list.testingCompleted === false
+      (list) =>
+        list.testStatus === 'paragraph test recording completed' ||
+        list.testStatus === 'word test in progress' ||
+        list.testStatus === 'sentence test in progress'
     )
   )
 
+  const untestedLists = computed(() =>
+    allLists.value.filter((list) => list.testStatus === 'not started')
+  )
+
   const completelyTestedLists = computed(() =>
-    allLists.value.filter((list) => list.testingStarted === true && list.testingCompleted === true)
+    allLists.value.filter((list) => list.testStatus === 'completed')
   )
 
   // const paragraphTestCompleted = ref(false)
@@ -36,6 +39,19 @@ export const usePersonalListStore = defineStore('personal', () => {
 
   const setActiveId = (id) => {
     activeId.value = id
+  }
+
+  const setTestStatus = (status) => {
+    activeList.value.testStatus = status
+  }
+
+  const setNewParagraph = (paragraph) => {
+    activeList.value.paragraph = paragraph
+  }
+
+  const setFinalParagraphTranscript = (transcript) => {
+    activeList.value.finalParagraphTranscript = transcript
+    console.log(activeList.value.finalParagraphTranscript)
   }
 
   const logPronunciationAttempt = (testedWord) => {
@@ -69,6 +85,9 @@ export const usePersonalListStore = defineStore('personal', () => {
     mispronouncedTestedWords,
 
     setActiveId,
+    setTestStatus,
+    setNewParagraph,
+    setFinalParagraphTranscript,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful
   }

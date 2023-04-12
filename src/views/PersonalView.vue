@@ -1,6 +1,6 @@
 <template>
   <main>
-    <form v-if="!generatedParagraph" class="submit-form" @submit.prevent="submitWords(wordsInput)">
+    <form v-if="!paragraph" class="submit-form" @submit.prevent="submitWords(wordsInput)">
       <div class="input-container">
         <label>Insert up to 10 words separated by spaces or commas:</label>
         <div class="input-field">
@@ -15,16 +15,18 @@
     </div>
 
     <ParagraphTest
-      v-if="generatedParagraph"
+      v-if="paragraph"
       :wordList="wordList"
-      :paragraph="generatedParagraph"
+      :paragraph="paragraph"
       @paragraph-test-completed="paragraphTestCompleted = true"
     />
+
+    <!-- TODO add in WordTest and SentenceTest -->
   </main>
 </template>
 
 <script setup>
-import { onActivated, ref } from 'vue'
+import { computed, onActivated, ref } from 'vue'
 
 import LoadingDots from '@/components/LoadingDots.vue'
 import ParagraphTest from '@/components/ParagraphTest.vue'
@@ -35,20 +37,44 @@ import { usePersonalListStore } from '@/stores/personal'
 const route = useRoute()
 const router = useRouter()
 const store = usePersonalListStore()
-
 // const componentKey = 'personal'
+
 let isLoading = ref(false)
 let wordsInput = ref('')
-// const wordList = computed(() => wordsInput.value.trim().split(/[ ,]+/))
-const wordList = ref([])
+let newlyCreatedParagraph = ref('')
 
-let generatedParagraph = ref('')
+// NOTE the optional chaining operator (?.) is needed because activeList becomes undefined if we mount this tab with no params id, or if we navigate to the Word Lists tab
+const paragraph = computed(() => {
+  return store.activeList?.paragraph
+})
+
+const wordList = computed(() => {
+  return Object.keys(store.activeList?.words)
+})
+
+// NOTE activeId is needed for persisting id between tab switches
+// if no id, the view defaults to partially tested lists, then untested lists
+const activeId = computed(() => {
+  return (
+    route.params.id ||
+    store.activeId ||
+    store.partiallyTestedLists[0]?.listNumber ||
+    store.untestedLists[0]?.listNumber
+  )
+})
+
+// NOTE onActivated instead of onMounted, as onMounted doesn't trigger
+// for keep-alive components
+onActivated(() => {
+  if (store.allLists.length > 0) router.push({ params: { id: activeId.value } })
+})
+
 const submitWords = async (words) => {
   if (!words) return
   isLoading.value = true
-  wordList.value = words.trim().split(/[ ,]+/)
-  generatedParagraph.value = await useCreateOpenAiParagraph(wordList.value)
-  convertWordListToListObject(wordList.value, store.allLists, generatedParagraph.value)
+  const wordsArray = words.trim().split(/[ ,]+/)
+  newlyCreatedParagraph.value = await useCreateOpenAiParagraph(wordsArray)
+  convertWordListToListObject(wordsArray, store.allLists, newlyCreatedParagraph.value)
   router.push({ params: { id: store.allLists.length } })
   // store.setActiveId(route.params.id)
   isLoading.value = false
@@ -72,26 +98,6 @@ function convertWordListToListObject(wordList, allLists, paragraph) {
 
   allLists.push(newListObject)
 }
-
-// TODO add respective paragraphs too
-onActivated(() => {
-  if (route.params.id && store.allLists.length > 0) {
-    store.setActiveId(route.params.id)
-    wordList.value = Object.keys(store.activeList.words)
-    generatedParagraph.value = store.activeList.paragraph
-  } else if (store.activeId) {
-    router.push({ params: { id: store.activeId } })
-  } else if (store.partiallyTestedLists.length > 0) {
-    store.setActiveId(store.partiallyTestedLists[0].listNumber)
-    wordList.value = Object.keys(store.partiallyTestedLists[0].words)
-    router.push({ params: { id: store.partiallyTestedLists[0].listNumber } })
-  } else if (store.untestedLists.length > 0) {
-    store.setActiveId(store.untestedLists[0].listNumber)
-    router.push({ params: { id: store.untestedLists[0].listNumber } })
-    wordList.value = Object.keys(store.untestedLists[0].words)
-  }
-  // }else
-})
 </script>
 
 <style lang="scss" scoped>
