@@ -41,13 +41,13 @@ const store = useSuggestedListStore()
 const mispronouncedTestedWords = ref([])
 
 onMounted(() => {
+  // REVIEW spreading it like this will cause it to lose reactivity, which I might not want if I'm going to use the splice method to get the next word
   mispronouncedTestedWords.value = [
-    ...Object.keys(store.activeList.words).filter((word) => {
-      return (
+    ...Object.keys(store.activeList.words).filter(
+      (word) =>
         store.activeList.words[word].attempts > 0 &&
         store.activeList.words[word].attemptsSuccessful === 0
-      )
-    })
+    )
   ]
 })
 

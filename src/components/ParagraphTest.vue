@@ -44,8 +44,8 @@
 
     <button
       class="next-button"
-      v-if="store.activeList.testStatus === 'paragraph test recording completed'"
-      @click="store.setTestStatus('word test in progress')"
+      v-if="testStatus === 'paragraph test recording completed'"
+      @click="handleNextButton"
     >
       Next
     </button>
@@ -55,7 +55,7 @@
       @recording-started="isRecording = true"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
-      :test-complete="store.activeList.testStatus === 'paragraph test recording completed'"
+      :test-complete="testStatus === 'paragraph test recording completed'"
     />
   </main>
 </template>
@@ -75,35 +75,39 @@ const route = useRoute()
 const store = route.name === 'suggested' ? useSuggestedListStore() : usePersonalListStore()
 
 const props = defineProps({
-  paragraph: { type: String, required: true },
-  wordList: { type: Array, required: true }
+  listObject: { type: Object, required: true }
+  // paragraph: { type: String, required: true },
+  // wordList: { type: Array, required: true }
   // recorderComponentKey: { type: String, required: true }
 })
 
-onMounted(() => {
-  testedParagraph.value = props.paragraph
-  testedWordList.value = [...props.wordList]
-})
-
 let isRecording = ref(false)
-
+const testStatus = ref('')
 const testedParagraph = ref('')
 const testedWordList = ref([])
 
+onMounted(() => {
+  // TODO probably can remove this conditional
+  if (!testedParagraph.value && testedWordList.value) {
+    testedParagraph.value = props.listObject.paragraph
+    testedWordList.value = [...Object.keys(props.listObject.words)]
+  }
+})
+
 const correctlyPronouncedTestedWords = computed(() => {
-  return Object.keys(store.activeList.words).filter((word) => {
+  return Object.keys(props.listObject.words).filter((word) => {
     return (
-      store.activeList.words[word].attempts === 1 &&
-      store.activeList.words[word].attemptsSuccessful === 1
+      props.listObject.words[word].attempts === 1 &&
+      props.listObject.words[word].attemptsSuccessful === 1
     )
   })
 })
 
 const mispronouncedTestedWords = computed(() => {
-  return Object.keys(store.activeList.words).filter((word) => {
+  return Object.keys(props.listObject.words).filter((word) => {
     return (
-      store.activeList.words[word].attempts === 1 &&
-      store.activeList.words[word].attemptsSuccessful === 0
+      props.listObject.words[word].attempts === 1 &&
+      props.listObject.words[word].attemptsSuccessful === 0
     )
   })
 })
@@ -119,14 +123,16 @@ const handleTempTranscriptRender = (transcript) => {
 }
 
 const temporaryTranscriptDisplay = computed(() =>
-  store.activeList.testStatus === 'paragraph test recording completed'
+  testStatus.value === 'paragraph test recording completed'
     ? ''
     : temporaryTranscript.value?.split(' ').slice(-8).join(' ')
 )
 
+let finalTranscript = ref('')
+
 const handleFinalTranscript = (transcript) => {
   isRecording.value = false
-  store.setFinalParagraphTranscript(transcript)
+  finalTranscript.value = transcript
 
   if (transcript.split(' ').length <= 10) return
 
@@ -141,10 +147,11 @@ const handleFinalTranscript = (transcript) => {
     correctlyPronouncedTestedWords.value,
     mispronouncedTestedWords.value
   )
+  testStatus.value = 'paragraph test recording completed'
 
+  // TODO in the store, these functions will also send data to backend
   store.setNewParagraph(testedParagraph.value)
-
-  store.setTestStatus('paragraph test recording completed')
+  store.setTestStatus(testStatus.value)
 }
 
 const highlightCorrectAndIncorrectWords = (paragraph, correctWords, incorrectWords) => {
@@ -196,11 +203,15 @@ const fixPunctuation = (paragraph) => {
   return paragraph
 }
 
+const handleNextButton = () => {
+  testStatus.value = 'word test in progress'
+  store.setTestStatus('word test in progress')
+}
+
 const evaluationText = computed(() => {
   if (isRecording.value) return 'isCurrentlyRecording'
-  else if (!store.activeList.finalParagraphTranscript) return 'noWordsRecorded'
-  else if (store.activeList.finalParagraphTranscript.split(' ').length <= 10)
-    return 'fewWordsRecorded'
+  else if (!finalTranscript.value.length) return 'noWordsRecorded'
+  else if (finalTranscript.value.split(' ').length <= 10) return 'fewWordsRecorded'
   else if (correctlyPronouncedTestedWords.value.length === testedWordList.value.length)
     return 'allWordsCorrect'
   else if (correctlyPronouncedTestedWords.value.length === testedWordList.value.length - 1)
