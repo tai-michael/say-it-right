@@ -17,7 +17,7 @@
     <hr />
 
     <div v-if="store.untestedLists.length" class="list-type">
-      <label>Not Started</label>
+      <label>TEST_NOT_STARTED</label>
       <div class="list-container">
         <div v-for="list of store.untestedLists" :key="list.listNumber">
           <RouterLink :to="{ name: 'suggested', params: { id: list.listNumber } }" class="list">

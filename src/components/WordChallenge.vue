@@ -16,7 +16,7 @@
       :test-complete="testComplete"
     />
 
-    <button @click="store.wordTestCompleted = true">Next</button>
+    <button @click="store.wordChallengeCompleted = true">Next</button>
   </main>
 </template>
 

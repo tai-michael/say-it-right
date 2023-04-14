@@ -17,23 +17,23 @@ export const usePersonalListStore = defineStore('personal', () => {
   const partiallyTestedLists = computed(() =>
     allLists.value.filter(
       (list) =>
-        list.testStatus === 'paragraph test recording completed' ||
-        list.testStatus === 'word test in progress' ||
-        list.testStatus === 'sentence test in progress'
+        list.testStatus === 'PARAGRAPH_RECORDING_ENDED' ||
+        list.testStatus === 'WORD_CHALLENGE_STARTED' ||
+        list.testStatus === 'SENTENCE_CHALLENGE_STARTED'
     )
   )
 
   const untestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'not started')
+    allLists.value.filter((list) => list.testStatus === 'TEST_NOT_STARTED')
   )
 
   const completelyTestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'completed')
+    allLists.value.filter((list) => list.testStatus === 'TEST_COMPLETED')
   )
 
-  // const paragraphTestCompleted = ref(false)
-  // const wordTestCompleted = ref(false)
-  // const sentenceTestCompleted = ref(false)
+  // const paragraphChallengeCompleted = ref(false)
+  // const wordChallengeCompleted = ref(false)
+  // const sentenceChallengeCompleted = ref(false)
 
   const mispronouncedTestedWords = ref([])
 
@@ -79,9 +79,9 @@ export const usePersonalListStore = defineStore('personal', () => {
     untestedLists,
     completelyTestedLists,
 
-    // paragraphTestCompleted,
-    // wordTestCompleted,
-    // sentenceTestCompleted,
+    // paragraphChallengeCompleted,
+    // wordChallengeCompleted,
+    // sentenceChallengeCompleted,
     mispronouncedTestedWords,
 
     setActiveId,

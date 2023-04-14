@@ -1,11 +1,11 @@
 <template>
   <main>
     <!-- <LoadingDots v-if="isLoading" /> -->
-    <ParagraphTest v-if="showParagraphTest" :listObject="listObject" />
+    <ParagraphChallenge v-if="showParagraphChallenge" :listObject="listObject" />
 
-    <WordTest v-else-if="listObject.testStatus === 'word test in progress'" />
+    <WordChallenge v-else-if="listObject.testStatus === 'WORD_CHALLENGE_STARTED'" />
 
-    <SentenceTest v-else-if="listObject.testStatus === 'sentence test in progress'" />
+    <SentenceChallenge v-else-if="listObject.testStatus === 'SENTENCE_CHALLENGE_STARTED'" />
 
     <div v-if="store.completelyTestedLists.length === store.allLists.length">
       <span
@@ -19,9 +19,9 @@
 <script setup>
 import { computed, onActivated, ref } from 'vue'
 
-import ParagraphTest from '@/components/ParagraphTest.vue'
-import SentenceTest from '@/components/SentenceTest.vue'
-import WordTest from '@/components/WordTest.vue'
+import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
+import SentenceChallenge from '@/components/SentenceChallenge.vue'
+import WordChallenge from '@/components/WordChallenge.vue'
 
 import { useRoute, useRouter } from 'vue-router'
 import { useSuggestedListStore } from '@/stores/suggested'
@@ -32,11 +32,11 @@ const store = useSuggestedListStore()
 
 const listObject = ref({})
 
-const showParagraphTest = computed(
+const showParagraphChallenge = computed(
   () =>
     Object.keys(listObject.value).length &&
-    (listObject.value.testStatus === 'not started' ||
-      listObject.value.testStatus === 'paragraph test recording completed')
+    (listObject.value.testStatus === 'TEST_NOT_STARTED' ||
+      listObject.value.testStatus === 'PARAGRAPH_RECORDING_ENDED')
 )
 
 // NOTE onActivated instead of onMounted, as onMounted doesn't trigger

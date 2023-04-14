@@ -28,19 +28,19 @@ const router = createRouter({
       //   {
       //     path: 'word-test',
       //     name: 'word-test',
-      //     component: () => import('@/components/WordTest.vue')
+      //     component: () => import('@/components/WordChallenge.vue')
       //   },
       //   {
       //     path: 'sentence-test',
       //     name: 'sentence-test',
-      //     component: () => import('@/components/SentenceTest.vue')
+      //     component: () => import('@/components/SentenceChallenge.vue')
       //   }
       // ]
     },
     // {
     //   path: '/suggested/word-test',
     //   name: 'word-test',
-    //   component: () => import('@/components/WordTest.vue')
+    //   component: () => import('@/components/WordChallenge.vue')
     // }
     {
       path: '/wordlists',

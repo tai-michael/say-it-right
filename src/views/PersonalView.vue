@@ -14,14 +14,14 @@
       <LoadingDots />
     </div>
 
-    <ParagraphTest
+    <ParagraphChallenge
       v-if="paragraph"
       :wordList="wordList"
       :paragraph="paragraph"
-      @paragraph-test-completed="paragraphTestCompleted = true"
+      @paragraph-test-completed="paragraphChallengeCompleted = true"
     />
 
-    <!-- TODO add in WordTest and SentenceTest -->
+    <!-- TODO add in WordChallenge and SentenceChallenge -->
   </main>
 </template>
 
@@ -29,7 +29,7 @@
 import { computed, onActivated, ref } from 'vue'
 
 import LoadingDots from '@/components/LoadingDots.vue'
-import ParagraphTest from '@/components/ParagraphTest.vue'
+import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import useCreateOpenAiParagraph from '@/composables/useCreateOpenAiParagraph'
 
 import { useRoute, useRouter } from 'vue-router'

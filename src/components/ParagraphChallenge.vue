@@ -44,7 +44,7 @@
 
     <button
       class="next-button"
-      v-if="testStatus === 'paragraph test recording completed'"
+      v-if="testStatus === 'PARAGRAPH_RECORDING_ENDED'"
       @click="handleNextButton"
     >
       Next
@@ -55,7 +55,7 @@
       @recording-started="isRecording = true"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
-      :test-complete="testStatus === 'paragraph test recording completed'"
+      :test-complete="testStatus === 'PARAGRAPH_RECORDING_ENDED'"
     />
   </main>
 </template>
@@ -115,7 +115,7 @@ const mispronouncedTestedWords = computed(() => {
 // const correctlyPronouncedTestedWords = ref([])
 // const mispronouncedTestedWords = ref([])
 
-// TODO relocate this to WordTest
+// TODO relocate this to WordChallenge
 let temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript) => {
@@ -123,7 +123,7 @@ const handleTempTranscriptRender = (transcript) => {
 }
 
 const temporaryTranscriptDisplay = computed(() =>
-  testStatus.value === 'paragraph test recording completed'
+  testStatus.value === 'PARAGRAPH_RECORDING_ENDED'
     ? ''
     : temporaryTranscript.value?.split(' ').slice(-8).join(' ')
 )
@@ -147,7 +147,7 @@ const handleFinalTranscript = (transcript) => {
     correctlyPronouncedTestedWords.value,
     mispronouncedTestedWords.value
   )
-  testStatus.value = 'paragraph test recording completed'
+  testStatus.value = 'PARAGRAPH_RECORDING_ENDED'
 
   // TODO in the store, these functions will also send data to backend
   store.setNewParagraph(testedParagraph.value)
@@ -204,8 +204,8 @@ const fixPunctuation = (paragraph) => {
 }
 
 const handleNextButton = () => {
-  testStatus.value = 'word test in progress'
-  store.setTestStatus('word test in progress')
+  testStatus.value = 'WORD_CHALLENGE_STARTED'
+  store.setTestStatus('WORD_CHALLENGE_STARTED')
 }
 
 const evaluationText = computed(() => {
