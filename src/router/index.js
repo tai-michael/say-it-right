@@ -43,9 +43,9 @@ const router = createRouter({
     //   component: () => import('@/components/WordChallenge.vue')
     // }
     {
-      path: '/wordlists',
-      name: 'wordlists',
-      component: () => import('@/views/WordlistsView.vue')
+      path: '/lists',
+      name: 'lists',
+      component: () => import('@/views/OverviewView.vue')
     }
   ],
   includeQueryParams: true

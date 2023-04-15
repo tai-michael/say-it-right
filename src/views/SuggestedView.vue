@@ -1,15 +1,15 @@
 <template>
   <main>
     <!-- <LoadingDots v-if="isLoading" /> -->
-    <ParagraphChallenge v-if="showParagraphChallenge" :listObject="listObject" />
+    <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
-    <WordChallenge v-else-if="listObject.testStatus === 'WORD_CHALLENGE_STARTED'" />
+    <WordChallenge v-else-if="list.status === 'WORD_CHALLENGE_STARTED'" :list="list" />
 
-    <SentenceChallenge v-else-if="listObject.testStatus === 'SENTENCE_CHALLENGE_STARTED'" />
+    <SentenceChallenge v-else-if="list.status === 'SENTENCE_CHALLENGE_STARTED'" :list="list" />
 
-    <div v-if="store.completelyTestedLists.length === store.allLists.length">
+    <div v-if="store.completedLists.length === store.allLists.length">
       <span
-        >You have completed all suggested lists. Click on any list in the Word Lists tab to review
+        >You have completed all suggested lists. Click on any list in the 'Overview' tab to review
         the list.</span
       >
     </div>
@@ -30,32 +30,31 @@ const router = useRouter()
 const store = useSuggestedListStore()
 // const componentKey = 'suggested'
 
-const listObject = ref({})
+const list = ref({})
 
 const showParagraphChallenge = computed(
   () =>
-    Object.keys(listObject.value).length &&
-    (listObject.value.testStatus === 'TEST_NOT_STARTED' ||
-      listObject.value.testStatus === 'PARAGRAPH_RECORDING_ENDED')
+    Object.keys(list.value).length &&
+    (list.value.status === 'LIST_NOT_STARTED' || list.value.status === 'PARAGRAPH_RECORDING_ENDED')
 )
 
 // NOTE onActivated instead of onMounted, as onMounted doesn't trigger
 // for keep-alive components
 onActivated(() => {
   if (route.params.id) {
-    if (!Object.keys(listObject.value).length) {
+    if (!Object.keys(list.value).length) {
       // NOTE get direct reactive store reference to the list
       // means computed properties wouldn't have to rerender needlessly
       const listNum = store.activeList.listNumber
-      listObject.value = store.allLists[listNum - 1]
+      list.value = store.allLists[listNum - 1]
     }
     store.setActiveId(route.params.id)
   } else if (store.activeId) {
     router.push({ params: { id: store.activeId } })
-  } else if (store.partiallyTestedLists.length > 0) {
-    router.push({ params: { id: store.partiallyTestedLists[0].listNumber } })
-  } else if (store.untestedLists.length > 0) {
-    router.push({ params: { id: store.untestedLists[0].listNumber } })
+  } else if (store.inProgressLists.length > 0) {
+    router.push({ params: { id: store.inProgressLists[0].listNumber } })
+  } else if (store.untouchedLists.length > 0) {
+    router.push({ params: { id: store.untouchedLists[0].listNumber } })
   }
 })
 </script>

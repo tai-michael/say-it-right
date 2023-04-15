@@ -14,21 +14,21 @@ export const usePersonalListStore = defineStore('personal', () => {
 
   const allLists = ref([])
 
-  const partiallyTestedLists = computed(() =>
+  const inProgressLists = computed(() =>
     allLists.value.filter(
       (list) =>
-        list.testStatus === 'PARAGRAPH_RECORDING_ENDED' ||
-        list.testStatus === 'WORD_CHALLENGE_STARTED' ||
-        list.testStatus === 'SENTENCE_CHALLENGE_STARTED'
+        list.status === 'PARAGRAPH_RECORDING_ENDED' ||
+        list.status === 'WORD_CHALLENGE_STARTED' ||
+        list.status === 'SENTENCE_CHALLENGE_STARTED'
     )
   )
 
-  const untestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'TEST_NOT_STARTED')
+  const untouchedLists = computed(() =>
+    allLists.value.filter((list) => list.status === 'LIST_NOT_STARTED')
   )
 
-  const completelyTestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'TEST_COMPLETED')
+  const completedLists = computed(() =>
+    allLists.value.filter((list) => list.status === 'LIST_COMPLETED')
   )
 
   // const paragraphChallengeCompleted = ref(false)
@@ -41,8 +41,8 @@ export const usePersonalListStore = defineStore('personal', () => {
     activeId.value = id
   }
 
-  const setTestStatus = (status) => {
-    activeList.value.testStatus = status
+  const setListStatus = (status) => {
+    activeList.value.status = status
   }
 
   const setNewParagraph = (paragraph) => {
@@ -75,9 +75,9 @@ export const usePersonalListStore = defineStore('personal', () => {
     activeList,
     activeId,
     allLists,
-    partiallyTestedLists,
-    untestedLists,
-    completelyTestedLists,
+    inProgressLists,
+    untouchedLists,
+    completedLists,
 
     // paragraphChallengeCompleted,
     // wordChallengeCompleted,
@@ -85,7 +85,7 @@ export const usePersonalListStore = defineStore('personal', () => {
     mispronouncedTestedWords,
 
     setActiveId,
-    setTestStatus,
+    setListStatus,
     setNewParagraph,
     setFinalParagraphTranscript,
     logPronunciationAttempt,

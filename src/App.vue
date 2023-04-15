@@ -12,7 +12,7 @@
         <RouterLink :to="{ name: 'suggested' }" :class="getLinkClass('/suggested')"
           >Suggested</RouterLink
         >
-        <RouterLink to="/wordlists">Word Lists</RouterLink>
+        <RouterLink to="/lists">Overview</RouterLink>
       </nav>
     </div>
   </header>

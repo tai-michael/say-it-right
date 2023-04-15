@@ -1,7 +1,7 @@
 <template>
   <div class="button-container">
     <button
-      v-if="clientConnected && !props.testComplete"
+      v-if="clientConnected && !props.challengeStatus.includes('ENDED')"
       class="recording-btn"
       @mousedown="startRecording"
       @touchstart="startRecording"
@@ -21,7 +21,7 @@ import { client, microphone } from '@/speechlyInit.js'
 import MicIcon from '@/assets/images/mic.vue'
 
 const props = defineProps({
-  testComplete: { type: Boolean, required: true }
+  challengeStatus: { type: String, required: true }
 })
 
 let finalTranscript = ref('')

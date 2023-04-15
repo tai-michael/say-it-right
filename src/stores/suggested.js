@@ -15,38 +15,29 @@ export const useSuggestedListStore = defineStore('suggested', () => {
 
   const allLists = ref([...commonlyMispronouncedWords])
 
-  const partiallyTestedLists = computed(() =>
+  const inProgressLists = computed(() =>
     allLists.value.filter(
       (list) =>
-        list.testStatus === 'PARAGRAPH_RECORDING_ENDED' ||
-        list.testStatus === 'WORD_CHALLENGE_STARTED' ||
-        list.testStatus === 'SENTENCE_CHALLENGE_STARTED'
+        list.status === 'PARAGRAPH_RECORDING_ENDED' ||
+        list.status === 'WORD_CHALLENGE_STARTED' ||
+        list.status === 'SENTENCE_CHALLENGE_STARTED'
     )
   )
 
-  const untestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'TEST_NOT_STARTED')
+  const untouchedLists = computed(() =>
+    allLists.value.filter((list) => list.status === 'LIST_NOT_STARTED')
   )
 
-  const completelyTestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'TEST_COMPLETED')
+  const completedLists = computed(() =>
+    allLists.value.filter((list) => list.status === 'LIST_COMPLETED')
   )
 
   const setActiveId = (id) => {
     activeId.value = id
   }
 
-  const setTestStatus = (status) => {
-    activeList.value.testStatus = status
-  }
-
-  const setNewParagraph = (paragraph) => {
-    activeList.value.paragraph = paragraph
-  }
-
-  const setFinalParagraphTranscript = (transcript) => {
-    activeList.value.finalParagraphTranscript = transcript
-    console.log(activeList.value.finalParagraphTranscript)
+  const setListStatus = (status) => {
+    activeList.value.status = status
   }
 
   const logPronunciationAttempt = (testedWord) => {
@@ -58,7 +49,6 @@ export const useSuggestedListStore = defineStore('suggested', () => {
     const matchedWord = activeList.value.words[testedWord]
     if (matchedWord) matchedWord.attemptsSuccessful++
   }
-
   // const logPronunciationAttempt = (testedWord) => {
   //   for (const list of allLists.value) {
   //     const wordObj = list.words.find((word) => word === testedWord)
@@ -66,19 +56,28 @@ export const useSuggestedListStore = defineStore('suggested', () => {
   //   }
   // }
 
+  // const setNewParagraph = (paragraph) => {
+  //   activeList.value.paragraph = paragraph
+  // }
+
+  // const setFinalParagraphTranscript = (transcript) => {
+  //   activeList.value.finalParagraphTranscript = transcript
+  //   console.log(activeList.value.finalParagraphTranscript)
+  // }
+
   return {
     activeList,
     activeId,
     allLists,
-    partiallyTestedLists,
-    untestedLists,
-    completelyTestedLists,
+    inProgressLists,
+    untouchedLists,
+    completedLists,
 
     setActiveId,
-    setTestStatus,
-    setNewParagraph,
-    setFinalParagraphTranscript,
+    setListStatus,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful
+    // setNewParagraph,
+    // setFinalParagraphTranscript,
   }
 })
