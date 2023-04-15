@@ -13,10 +13,10 @@
       @recording-started="isRecording = true"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
-      :test-complete="testComplete"
+      :challenge-status="props.list.status"
     />
 
-    <button @click="store.wordTestCompleted = true">Next</button>
+    <button @click="store.wordChallengeCompleted = true">Next</button>
   </main>
 </template>
 
@@ -28,6 +28,10 @@ import RecorderButton from './RecorderButton.vue'
 import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.js'
 import { useSuggestedListStore } from '@/stores/suggested'
 const store = useSuggestedListStore()
+
+const props = defineProps({
+  list: { type: Object, required: true }
+})
 
 // TODO should probably make this and testedWord onMounted instead, b/c i don't want the word to change automatically after its answered right, and I want a new instance of this component every time
 // const mispronouncedTestedWords = computed(() => {
@@ -41,13 +45,13 @@ const store = useSuggestedListStore()
 const mispronouncedTestedWords = ref([])
 
 onMounted(() => {
+  // REVIEW spreading it like this will cause it to lose reactivity, which I might not want if I'm going to use the splice method to get the next word
   mispronouncedTestedWords.value = [
-    ...Object.keys(store.activeList.words).filter((word) => {
-      return (
+    ...Object.keys(props.list.words).filter(
+      (word) =>
         store.activeList.words[word].attempts > 0 &&
         store.activeList.words[word].attemptsSuccessful === 0
-      )
-    })
+    )
   ]
 })
 

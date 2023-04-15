@@ -1,7 +1,7 @@
 <template>
   <main>
     <hr />
-    <div class="test-paragraph">
+    <div class="tested-paragraph">
       <p v-html="testedParagraph"></p>
     </div>
     <hr />
@@ -11,32 +11,32 @@
       <div>{{ temporaryTranscriptDisplay }}</div>
     </div>
 
-    <div v-else class="test-evaluation">
-      <div v-if="evaluationText === 'isCurrentlyRecording'"></div>
-      <div v-else-if="evaluationText === 'noWordsRecorded'" class="test-evaluation__text">
+    <div v-else class="message">
+      <div v-if="assessment === 'isCurrentlyRecording'"></div>
+      <div v-else-if="assessment === 'noWordsRecorded'" class="message__text">
         <span>Let's start by testing your pronunciation.</span>
         <span>Hold the button and read the paragraph.</span>
       </div>
-      <div v-else-if="evaluationText === 'fewWordsRecorded'" class="test-evaluation__text">
+      <div v-else-if="assessment === 'fewWordsRecorded'" class="message__text">
         <span>You didn't record enough words. Please try again.</span>
         <span>Remember to hold the button while recording!</span>
       </div>
-      <div v-else-if="evaluationText === 'allWordsCorrect'" class="test-evaluation__text">
+      <div v-else-if="assessment === 'allWordsCorrect'" class="message__text">
         <span>You pronounced each tested word correctly. Very impressive!</span>
         <span>Let's test your pronunciation of other words that are commonly mispronounced.</span>
       </div>
-      <div v-else-if="evaluationText === 'oneWordIncorrect'" class="test-evaluation__text">
+      <div v-else-if="assessment === 'oneWordIncorrect'" class="message__text">
         <span>You pronounced only one word incorrectly. Good job!</span>
         <span>Next, let's practice pronouncing this word.</span>
       </div>
-      <div v-else-if="evaluationText === 'mostWordsCorrect'" class="test-evaluation__text">
+      <div v-else-if="assessment === 'mostWordsCorrect'" class="message__text">
         <span
           >You did pretty well! However, these highlighted words were not pronounced
           correctly.</span
         >
         <span>Next, let's practice pronouncing these words.</span>
       </div>
-      <div v-else-if="evaluationText === 'mostWordsIncorrect'" class="test-evaluation__text">
+      <div v-else-if="assessment === 'mostWordsIncorrect'" class="message__text">
         <span>These highlighted words were not pronounced correctly.</span>
         <span>Next, let's practice pronouncing these words.</span>
       </div>
@@ -44,8 +44,8 @@
 
     <button
       class="next-button"
-      v-if="store.activeList.testStatus === 'paragraph test recording completed'"
-      @click="store.setTestStatus('word test in progress')"
+      v-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
+      @click="store.setListStatus('WORD_CHALLENGE_STARTED')"
     >
       Next
     </button>
@@ -55,7 +55,7 @@
       @recording-started="isRecording = true"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
-      :test-complete="store.activeList.testStatus === 'paragraph test recording completed'"
+      :challenge-status="props.list.status"
     />
   </main>
 </template>
@@ -75,43 +75,25 @@ const route = useRoute()
 const store = route.name === 'suggested' ? useSuggestedListStore() : usePersonalListStore()
 
 const props = defineProps({
-  paragraph: { type: String, required: true },
-  wordList: { type: Array, required: true }
+  list: { type: Object, required: true }
+  // paragraph: { type: String, required: true },
+  // words: { type: Array, required: true }
   // recorderComponentKey: { type: String, required: true }
 })
 
-onMounted(() => {
-  testedParagraph.value = props.paragraph
-  testedWordList.value = [...props.wordList]
-})
-
 let isRecording = ref(false)
-
 const testedParagraph = ref('')
-const testedWordList = ref([])
+const testedWords = ref([])
 
-const correctlyPronouncedTestedWords = computed(() => {
-  return Object.keys(store.activeList.words).filter((word) => {
-    return (
-      store.activeList.words[word].attempts === 1 &&
-      store.activeList.words[word].attemptsSuccessful === 1
-    )
-  })
+onMounted(() => {
+  testedParagraph.value = props.list.paragraph
+  testedWords.value = [...Object.keys(props.list.words)]
 })
 
-const mispronouncedTestedWords = computed(() => {
-  return Object.keys(store.activeList.words).filter((word) => {
-    return (
-      store.activeList.words[word].attempts === 1 &&
-      store.activeList.words[word].attemptsSuccessful === 0
-    )
-  })
-})
+const correctlyPronouncedTestedWords = ref([])
+const mispronouncedTestedWords = ref([])
 
-// const correctlyPronouncedTestedWords = ref([])
-// const mispronouncedTestedWords = ref([])
-
-// TODO relocate this to WordTest
+// TODO relocate this to WordChallenge
 let temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript) => {
@@ -119,32 +101,39 @@ const handleTempTranscriptRender = (transcript) => {
 }
 
 const temporaryTranscriptDisplay = computed(() =>
-  store.activeList.testStatus === 'paragraph test recording completed'
+  props.list.status === 'PARAGRAPH_RECORDING_ENDED'
     ? ''
     : temporaryTranscript.value?.split(' ').slice(-8).join(' ')
 )
 
+let finalTranscript = ref('')
+
 const handleFinalTranscript = (transcript) => {
   isRecording.value = false
-  store.setFinalParagraphTranscript(transcript)
+  finalTranscript.value = transcript
 
   if (transcript.split(' ').length <= 10) return
 
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
-  testedWordList.value = useAdjustTestedWords(testedWordList.value, testedParagraph.value)
+  testedWords.value = useAdjustTestedWords(testedWords.value, testedParagraph.value)
 
-  useFilterCorrectAndIncorrectWords(testedWordList.value, transcript, route.name)
+  const { correctWords, incorrectWords } = useFilterCorrectAndIncorrectWords(
+    testedWords.value,
+    transcript,
+    route.name
+  )
+  correctlyPronouncedTestedWords.value = correctWords
+  mispronouncedTestedWords.value = incorrectWords
 
-  // NOTE highlights mispronounced tested words in red and correctly pronounced words in green; consider not highlighting correct words in the final version
+  // NOTE highlights mispronounced tested words in red and correctly pronounced words in green; consider not highlighting correct words in the final version.
   testedParagraph.value = highlightCorrectAndIncorrectWords(
     testedParagraph.value,
     correctlyPronouncedTestedWords.value,
     mispronouncedTestedWords.value
   )
 
-  store.setNewParagraph(testedParagraph.value)
-
-  store.setTestStatus('paragraph test recording completed')
+  // TODO will need to also send testedParagraph (for this MAYBE do it in the composable) and status to backend
+  store.setListStatus('PARAGRAPH_RECORDING_ENDED')
 }
 
 const highlightCorrectAndIncorrectWords = (paragraph, correctWords, incorrectWords) => {
@@ -196,16 +185,15 @@ const fixPunctuation = (paragraph) => {
   return paragraph
 }
 
-const evaluationText = computed(() => {
+const assessment = computed(() => {
   if (isRecording.value) return 'isCurrentlyRecording'
-  else if (!store.activeList.finalParagraphTranscript) return 'noWordsRecorded'
-  else if (store.activeList.finalParagraphTranscript.split(' ').length <= 10)
-    return 'fewWordsRecorded'
-  else if (correctlyPronouncedTestedWords.value.length === testedWordList.value.length)
+  else if (!finalTranscript.value.length) return 'noWordsRecorded'
+  else if (finalTranscript.value.split(' ').length <= 10) return 'fewWordsRecorded'
+  else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length)
     return 'allWordsCorrect'
-  else if (correctlyPronouncedTestedWords.value.length === testedWordList.value.length - 1)
+  else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length - 1)
     return 'oneWordIncorrect'
-  else if (correctlyPronouncedTestedWords.value.length > testedWordList.value.length * 0.5)
+  else if (correctlyPronouncedTestedWords.value.length > testedWords.value.length * 0.5)
     return 'mostWordsCorrect'
   else return 'mostWordsIncorrect'
 })
@@ -226,7 +214,7 @@ label {
   font-weight: 800;
 }
 
-.test-paragraph {
+.tested-paragraph {
   margin: 1rem 0;
   // 'deep' selector is necessary, as scoped styles don't apply to content inside v-html
   &:deep(.incorrect),
@@ -265,7 +253,7 @@ label {
   }
 }
 
-.test-evaluation {
+.message {
   margin-top: 1rem;
   // height: 50px;
 

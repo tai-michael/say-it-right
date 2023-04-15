@@ -14,14 +14,14 @@
       <LoadingDots />
     </div>
 
-    <ParagraphTest
+    <ParagraphChallenge
       v-if="paragraph"
-      :wordList="wordList"
+      :words="words"
       :paragraph="paragraph"
-      @paragraph-test-completed="paragraphTestCompleted = true"
+      @paragraph-test-completed="paragraphChallengeCompleted = true"
     />
 
-    <!-- TODO add in WordTest and SentenceTest -->
+    <!-- TODO add in WordChallenge and SentenceChallenge -->
   </main>
 </template>
 
@@ -29,7 +29,7 @@
 import { computed, onActivated, ref } from 'vue'
 
 import LoadingDots from '@/components/LoadingDots.vue'
-import ParagraphTest from '@/components/ParagraphTest.vue'
+import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import useCreateOpenAiParagraph from '@/composables/useCreateOpenAiParagraph'
 
 import { useRoute, useRouter } from 'vue-router'
@@ -43,12 +43,12 @@ let isLoading = ref(false)
 let wordsInput = ref('')
 let newlyCreatedParagraph = ref('')
 
-// NOTE the optional chaining operator (?.) is needed because activeList becomes undefined if we mount this tab with no params id, or if we navigate to the Word Lists tab
+// NOTE the optional chaining operator (?.) is needed because activeList becomes undefined if we mount this tab with no params id, or if we navigate to the Overview tab
 const paragraph = computed(() => {
   return store.activeList?.paragraph
 })
 
-const wordList = computed(() => {
+const words = computed(() => {
   return Object.keys(store.activeList?.words)
 })
 
@@ -58,8 +58,8 @@ const activeId = computed(() => {
   return (
     route.params.id ||
     store.activeId ||
-    store.partiallyTestedLists[0]?.listNumber ||
-    store.untestedLists[0]?.listNumber
+    store.inProgressLists[0]?.listNumber ||
+    store.untouchedLists[0]?.listNumber
   )
 })
 
@@ -74,13 +74,13 @@ const submitWords = async (words) => {
   isLoading.value = true
   const wordsArray = words.trim().split(/[ ,]+/)
   newlyCreatedParagraph.value = await useCreateOpenAiParagraph(wordsArray)
-  convertWordListToListObject(wordsArray, store.allLists, newlyCreatedParagraph.value)
+  createNewListObjectFromWords(wordsArray, store.allLists, newlyCreatedParagraph.value)
   router.push({ params: { id: store.allLists.length } })
   // store.setActiveId(route.params.id)
   isLoading.value = false
 }
 
-function convertWordListToListObject(wordList, allLists, paragraph) {
+function createNewListObjectFromWords(words, allLists, paragraph) {
   const newListObject = {
     listNumber: allLists.length + 1,
     words: {},
@@ -89,7 +89,7 @@ function convertWordListToListObject(wordList, allLists, paragraph) {
     paragraph: paragraph
   }
 
-  wordList.forEach((word) => {
+  words.forEach((word) => {
     newListObject.words[word] = {
       attempts: 0,
       attemptsSuccessful: 0

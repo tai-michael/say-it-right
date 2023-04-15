@@ -1,9 +1,9 @@
 <template>
   <main>
-    <div v-if="store.partiallyTestedLists.length" class="list-type">
+    <div v-if="store.inProgressLists.length" class="list-type">
       <label>In Progress</label>
       <div class="list-container">
-        <div v-for="list of store.partiallyTestedLists" :key="list.listNumber">
+        <div v-for="list of store.inProgressLists" :key="list.listNumber">
           <router-link :to="{ name: 'suggested', params: { id: list.listNumber } }" class="list">
             <div class="list-item">
               <span>List {{ list.listNumber }}</span>
@@ -12,14 +12,13 @@
           </router-link>
         </div>
       </div>
+      <hr />
     </div>
 
-    <hr />
-
-    <div v-if="store.untestedLists.length" class="list-type">
-      <label>Not Started</label>
+    <div v-if="store.untouchedLists.length" class="list-type">
+      <label v-if="anyListStarted">Not Started</label>
       <div class="list-container">
-        <div v-for="list of store.untestedLists" :key="list.listNumber">
+        <div v-for="list of store.untouchedLists" :key="list.listNumber">
           <RouterLink :to="{ name: 'suggested', params: { id: list.listNumber } }" class="list">
             <div class="list-item">
               <span>List {{ list.listNumber }}</span>
@@ -30,12 +29,11 @@
       </div>
     </div>
 
-    <hr />
-
-    <div v-if="store.completelyTestedLists.length" class="list-type">
+    <div v-if="store.completedLists.length" class="list-type">
+      <hr />
       <label>Completed</label>
       <div class="list-container">
-        <div v-for="list of store.completelyTestedLists" :key="list.listNumber">
+        <div v-for="list of store.completedLists" :key="list.listNumber">
           <RouterLink :to="{ name: 'suggested', params: { id: list.listNumber } }" class="list">
             <div class="list-item">
               <span>List {{ list.listNumber }}</span>
@@ -49,11 +47,14 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import ListChecked from '@/assets/images/list-checked.vue'
 import ListRegular from '@/assets/images/list-regular.vue'
 
 import { useSuggestedListStore } from '@/stores/suggested'
 const store = useSuggestedListStore()
+
+const anyListStarted = computed(() => store.inProgressLists.length || store.completedLists.length)
 </script>
 
 <style lang="scss" scoped>

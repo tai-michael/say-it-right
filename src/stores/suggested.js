@@ -15,44 +15,29 @@ export const useSuggestedListStore = defineStore('suggested', () => {
 
   const allLists = ref([...commonlyMispronouncedWords])
 
-  const partiallyTestedLists = computed(() =>
+  const inProgressLists = computed(() =>
     allLists.value.filter(
       (list) =>
-        list.testStatus === 'paragraph test recording completed' ||
-        list.testStatus === 'word test in progress' ||
-        list.testStatus === 'sentence test in progress'
+        list.status === 'PARAGRAPH_RECORDING_ENDED' ||
+        list.status === 'WORD_CHALLENGE_STARTED' ||
+        list.status === 'SENTENCE_CHALLENGE_STARTED'
     )
   )
 
-  const untestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'not started')
+  const untouchedLists = computed(() =>
+    allLists.value.filter((list) => list.status === 'LIST_NOT_STARTED')
   )
 
-  const completelyTestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'completed')
+  const completedLists = computed(() =>
+    allLists.value.filter((list) => list.status === 'LIST_COMPLETED')
   )
-
-  // const paragraphTestCompleted = ref(false)
-  // const wordTestCompleted = ref(false)
-  // const sentenceTestCompleted = ref(false)
-
-  const mispronouncedTestedWords = ref([])
 
   const setActiveId = (id) => {
     activeId.value = id
   }
 
-  const setTestStatus = (status) => {
-    activeList.value.testStatus = status
-  }
-
-  const setNewParagraph = (paragraph) => {
-    activeList.value.paragraph = paragraph
-  }
-
-  const setFinalParagraphTranscript = (transcript) => {
-    activeList.value.finalParagraphTranscript = transcript
-    console.log(activeList.value.finalParagraphTranscript)
+  const setListStatus = (status) => {
+    activeList.value.status = status
   }
 
   const logPronunciationAttempt = (testedWord) => {
@@ -64,7 +49,6 @@ export const useSuggestedListStore = defineStore('suggested', () => {
     const matchedWord = activeList.value.words[testedWord]
     if (matchedWord) matchedWord.attemptsSuccessful++
   }
-
   // const logPronunciationAttempt = (testedWord) => {
   //   for (const list of allLists.value) {
   //     const wordObj = list.words.find((word) => word === testedWord)
@@ -72,24 +56,28 @@ export const useSuggestedListStore = defineStore('suggested', () => {
   //   }
   // }
 
+  // const setNewParagraph = (paragraph) => {
+  //   activeList.value.paragraph = paragraph
+  // }
+
+  // const setFinalParagraphTranscript = (transcript) => {
+  //   activeList.value.finalParagraphTranscript = transcript
+  //   console.log(activeList.value.finalParagraphTranscript)
+  // }
+
   return {
     activeList,
     activeId,
     allLists,
-    partiallyTestedLists,
-    untestedLists,
-    completelyTestedLists,
-
-    // paragraphTestCompleted,
-    // wordTestCompleted,
-    // sentenceTestCompleted,
-    mispronouncedTestedWords,
+    inProgressLists,
+    untouchedLists,
+    completedLists,
 
     setActiveId,
-    setTestStatus,
-    setNewParagraph,
-    setFinalParagraphTranscript,
+    setListStatus,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful
+    // setNewParagraph,
+    // setFinalParagraphTranscript,
   }
 })

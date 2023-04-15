@@ -14,26 +14,26 @@ export const usePersonalListStore = defineStore('personal', () => {
 
   const allLists = ref([])
 
-  const partiallyTestedLists = computed(() =>
+  const inProgressLists = computed(() =>
     allLists.value.filter(
       (list) =>
-        list.testStatus === 'paragraph test recording completed' ||
-        list.testStatus === 'word test in progress' ||
-        list.testStatus === 'sentence test in progress'
+        list.status === 'PARAGRAPH_RECORDING_ENDED' ||
+        list.status === 'WORD_CHALLENGE_STARTED' ||
+        list.status === 'SENTENCE_CHALLENGE_STARTED'
     )
   )
 
-  const untestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'not started')
+  const untouchedLists = computed(() =>
+    allLists.value.filter((list) => list.status === 'LIST_NOT_STARTED')
   )
 
-  const completelyTestedLists = computed(() =>
-    allLists.value.filter((list) => list.testStatus === 'completed')
+  const completedLists = computed(() =>
+    allLists.value.filter((list) => list.status === 'LIST_COMPLETED')
   )
 
-  // const paragraphTestCompleted = ref(false)
-  // const wordTestCompleted = ref(false)
-  // const sentenceTestCompleted = ref(false)
+  // const paragraphChallengeCompleted = ref(false)
+  // const wordChallengeCompleted = ref(false)
+  // const sentenceChallengeCompleted = ref(false)
 
   const mispronouncedTestedWords = ref([])
 
@@ -41,8 +41,8 @@ export const usePersonalListStore = defineStore('personal', () => {
     activeId.value = id
   }
 
-  const setTestStatus = (status) => {
-    activeList.value.testStatus = status
+  const setListStatus = (status) => {
+    activeList.value.status = status
   }
 
   const setNewParagraph = (paragraph) => {
@@ -75,17 +75,17 @@ export const usePersonalListStore = defineStore('personal', () => {
     activeList,
     activeId,
     allLists,
-    partiallyTestedLists,
-    untestedLists,
-    completelyTestedLists,
+    inProgressLists,
+    untouchedLists,
+    completedLists,
 
-    // paragraphTestCompleted,
-    // wordTestCompleted,
-    // sentenceTestCompleted,
+    // paragraphChallengeCompleted,
+    // wordChallengeCompleted,
+    // sentenceChallengeCompleted,
     mispronouncedTestedWords,
 
     setActiveId,
-    setTestStatus,
+    setListStatus,
     setNewParagraph,
     setFinalParagraphTranscript,
     logPronunciationAttempt,

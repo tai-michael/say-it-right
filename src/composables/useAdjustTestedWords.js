@@ -2,7 +2,7 @@
 import stem from 'wink-porter2-stemmer'
 
 // REVIEW potential alternative function name: useMatchTestedWordsToWordsInParagraph
-export default function useAdjustTestedWords(testedWordList, testedParagraph) {
+export default function useAdjustTestedWords(testedWords, testedParagraph) {
   // Matches any sequence of characters that are not whitespace or certain punctuation marks, including the punctuation marks themselves
   const wordRegex = /(?:[^\s.,;:!?"'’“”()[\]{}<>«»]+)|(?:[.,;:!?"'’“”()[\]{}<>«»]+)/g
 
@@ -10,9 +10,9 @@ export default function useAdjustTestedWords(testedWordList, testedParagraph) {
   const paragraphWords = testedParagraph.match(wordRegex).map((word) => word.toLowerCase())
 
   // TODO in the final version, user-submitted tested words will be auto-converted to lowercase before being posted to backend, so this part will be unnecessary
-  const lowercaseTestedWordList = testedWordList.map((word) => word.toLowerCase())
+  const lowercaseTestedWords = testedWords.map((word) => word.toLowerCase())
 
-  const adjustedTestedWords = lowercaseTestedWordList.map((testedWord) => {
+  const adjustedTestedWords = lowercaseTestedWords.map((testedWord) => {
     for (const paragraphWord of paragraphWords) {
       if (stem(testedWord) === stem(paragraphWord)) {
         return paragraphWord
