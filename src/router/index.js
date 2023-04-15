@@ -1,28 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PersonalView from '@/views/PersonalView.vue'
-// import SuggestedView from '@/views/SuggestedView.vue'
+import CustomLists from '@/views/CustomLists.vue'
+// import ProvidedLists from '@/views/ProvidedLists.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home'
-      // component: PersonalView
+      name: 'home',
+      redirect: { name: 'custom-lists' }
     },
     {
-      path: '/personal/:id?',
-      name: 'personal',
-      component: PersonalView
+      path: '/custom-lists/:id?',
+      name: 'custom-lists',
+      component: CustomLists
     },
     {
-      path: '/suggested/:id?',
-      name: 'suggested',
+      path: '/provided-lists/:id?',
+      name: 'provided-lists',
       // NOTE Route level code-splitting; this generates a separate chunk for this route which is lazy-loaded when the route is visited
-      component: () => import('@/views/SuggestedView.vue')
-      // // NOTE This (and 'props' in SuggestedView component) is necessary for converting the params id from a string to number
+      component: () => import('@/views/ProvidedLists.vue')
+      // // NOTE This (and 'props' in ProvidedLists component) is necessary for converting the params id from a string to number
       // props: ({ params }) => ({ id: Number.parseInt(params.id) })
-      // children: [{ path: '', name: 'suggested', component: SuggestedView }]
+      // children: [{ path: '', name: 'provided-lists', component: ProvidedLists }]
 
       // children: [
       //   {
@@ -38,14 +38,14 @@ const router = createRouter({
       // ]
     },
     // {
-    //   path: '/suggested/word-test',
+    //   path: '/provided-lists/word-test',
     //   name: 'word-test',
     //   component: () => import('@/components/WordChallenge.vue')
     // }
     {
-      path: '/lists',
-      name: 'lists',
-      component: () => import('@/views/OverviewView.vue')
+      path: '/overview',
+      name: 'overview',
+      component: () => import('@/views/TheOverview.vue')
     }
   ],
   includeQueryParams: true

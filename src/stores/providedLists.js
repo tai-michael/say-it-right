@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
 import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
 
-export const useSuggestedListStore = defineStore('suggested', () => {
+export const useProvidedListsStore = defineStore('providedLists', () => {
   const route = useRoute()
 
   // NOTE the '+' is necessary b/c the number becomes a string when sent as a parameter

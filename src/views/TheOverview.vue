@@ -4,7 +4,10 @@
       <label>In Progress</label>
       <div class="list-container">
         <div v-for="list of store.inProgressLists" :key="list.listNumber">
-          <router-link :to="{ name: 'suggested', params: { id: list.listNumber } }" class="list">
+          <router-link
+            :to="{ name: 'provided-lists', params: { id: list.listNumber } }"
+            class="list"
+          >
             <div class="list-item">
               <span>List {{ list.listNumber }}</span>
               <ListRegular />
@@ -19,7 +22,10 @@
       <label v-if="anyListStarted">Not Started</label>
       <div class="list-container">
         <div v-for="list of store.untouchedLists" :key="list.listNumber">
-          <RouterLink :to="{ name: 'suggested', params: { id: list.listNumber } }" class="list">
+          <RouterLink
+            :to="{ name: 'provided-lists', params: { id: list.listNumber } }"
+            class="list"
+          >
             <div class="list-item">
               <span>List {{ list.listNumber }}</span>
               <ListRegular />
@@ -34,7 +40,10 @@
       <label>Completed</label>
       <div class="list-container">
         <div v-for="list of store.completedLists" :key="list.listNumber">
-          <RouterLink :to="{ name: 'suggested', params: { id: list.listNumber } }" class="list">
+          <RouterLink
+            :to="{ name: 'provided-lists', params: { id: list.listNumber } }"
+            class="list"
+          >
             <div class="list-item">
               <span>List {{ list.listNumber }}</span>
               <ListChecked />
@@ -51,8 +60,8 @@ import { computed } from 'vue'
 import ListChecked from '@/assets/images/list-checked.vue'
 import ListRegular from '@/assets/images/list-regular.vue'
 
-import { useSuggestedListStore } from '@/stores/suggested'
-const store = useSuggestedListStore()
+import { useProvidedListsStore } from '@/stores/providedLists'
+const store = useProvidedListsStore()
 
 const anyListStarted = computed(() => store.inProgressLists.length || store.completedLists.length)
 </script>

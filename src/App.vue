@@ -5,14 +5,14 @@
     <div class="wrapper">
       <HelloWorld msg="Say It Right" @click="router.push({ name: 'home' })" />
       <nav>
-        <!-- <RouterLink to="/">Personal</RouterLink> -->
-        <RouterLink :to="{ name: 'personal' }" :class="getLinkClass('/personal')"
-          >Personal</RouterLink
+        <!-- <RouterLink to="/">CustomLists</RouterLink> -->
+        <RouterLink :to="{ name: 'custom-lists' }" :class="getLinkClass('/custom-lists')"
+          >Custom Lists</RouterLink
         >
-        <RouterLink :to="{ name: 'suggested' }" :class="getLinkClass('/suggested')"
-          >Suggested</RouterLink
+        <RouterLink :to="{ name: 'provided-lists' }" :class="getLinkClass('/provided-lists')"
+          >Provided Lists</RouterLink
         >
-        <RouterLink to="/lists">Overview</RouterLink>
+        <RouterLink to="/overview">Overview</RouterLink>
       </nav>
     </div>
   </header>

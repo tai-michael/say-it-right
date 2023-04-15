@@ -9,7 +9,7 @@
 
     <div v-if="store.completedLists.length === store.allLists.length">
       <span
-        >You have completed all suggested lists. Click on any list in the 'Overview' tab to review
+        >You have completed all provided lists. Click on any list in the 'Overview' tab to review
         the list.</span
       >
     </div>
@@ -24,11 +24,11 @@ import SentenceChallenge from '@/components/SentenceChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
 
 import { useRoute, useRouter } from 'vue-router'
-import { useSuggestedListStore } from '@/stores/suggested'
+import { useProvidedListsStore } from '@/stores/providedLists'
 const route = useRoute()
 const router = useRouter()
-const store = useSuggestedListStore()
-// const componentKey = 'suggested'
+const store = useProvidedListsStore()
+// const componentKey = 'provided-lists'
 
 const list = ref({})
 

@@ -1,8 +1,12 @@
-import { useSuggestedListStore } from '@/stores/suggested'
-import { usePersonalListStore } from '@/stores/personal'
+import { useProvidedListsStore } from '@/stores/providedLists'
+import { useCustomListsStore } from '@/stores/customLists'
 
-export default function useFilterCorrectAndIncorrectWords(testedWords, transcriptString, route) {
-  const store = route === 'suggested' ? useSuggestedListStore() : usePersonalListStore()
+export default function useFilterCorrectAndIncorrectWords(
+  testedWords,
+  transcriptString,
+  routeName
+) {
+  const store = routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 
   const recordedWords = [...new Set(transcriptString.split(' '))]
   const correctWords = [...testedWords.filter((word) => recordedWords.includes(word))]

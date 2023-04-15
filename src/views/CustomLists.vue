@@ -33,11 +33,11 @@ import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import useCreateOpenAiParagraph from '@/composables/useCreateOpenAiParagraph'
 
 import { useRoute, useRouter } from 'vue-router'
-import { usePersonalListStore } from '@/stores/personal'
+import { useCustomListsStore } from '@/stores/customLists'
 const route = useRoute()
 const router = useRouter()
-const store = usePersonalListStore()
-// const componentKey = 'personal'
+const store = useCustomListsStore()
+// const componentKey = 'custom-list'
 
 let isLoading = ref(false)
 let wordsInput = ref('')

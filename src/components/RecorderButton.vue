@@ -1,7 +1,7 @@
 <template>
   <div class="button-container">
     <button
-      v-if="clientConnected && !props.challengeStatus.includes('ENDED')"
+      v-if="clientConnected && !props.challengeStatus.includes('RECORDING_ENDED')"
       class="recording-btn"
       @mousedown="startRecording"
       @touchstart="startRecording"

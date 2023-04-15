@@ -12,31 +12,31 @@
     </div>
 
     <div v-else class="message">
-      <div v-if="assessment === 'isCurrentlyRecording'"></div>
-      <div v-else-if="assessment === 'noWordsRecorded'" class="message__text">
+      <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
+      <div v-else-if="recordingStatus === 'NO_WORDS_RECORDED'" class="message__text">
         <span>Let's start by testing your pronunciation.</span>
         <span>Hold the button and read the paragraph.</span>
       </div>
-      <div v-else-if="assessment === 'fewWordsRecorded'" class="message__text">
+      <div v-else-if="recordingStatus === 'FEW_WORD_RECORDED'" class="message__text">
         <span>You didn't record enough words. Please try again.</span>
         <span>Remember to hold the button while recording!</span>
       </div>
-      <div v-else-if="assessment === 'allWordsCorrect'" class="message__text">
+      <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
         <span>You pronounced each tested word correctly. Very impressive!</span>
         <span>Let's test your pronunciation of other words that are commonly mispronounced.</span>
       </div>
-      <div v-else-if="assessment === 'oneWordIncorrect'" class="message__text">
+      <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
         <span>You pronounced only one word incorrectly. Good job!</span>
         <span>Next, let's practice pronouncing this word.</span>
       </div>
-      <div v-else-if="assessment === 'mostWordsCorrect'" class="message__text">
+      <div v-else-if="recordingStatus === 'MOST_WORDS_CORRECT'" class="message__text">
         <span
           >You did pretty well! However, these highlighted words were not pronounced
           correctly.</span
         >
         <span>Next, let's practice pronouncing these words.</span>
       </div>
-      <div v-else-if="assessment === 'mostWordsIncorrect'" class="message__text">
+      <div v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'" class="message__text">
         <span>These highlighted words were not pronounced correctly.</span>
         <span>Next, let's practice pronouncing these words.</span>
       </div>
@@ -49,7 +49,7 @@
     >
       Next
     </button>
-    <!-- <RouterLink to="/suggested/word-test">Next</RouterLink> -->
+    <!-- <RouterLink to="/provided-lists/word-test">Next</RouterLink> -->
 
     <RecorderButton
       @recording-started="isRecording = true"
@@ -68,11 +68,11 @@ import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
 import useFilterCorrectAndIncorrectWords from '@/composables/useFilterCorrectAndIncorrectWords'
 
 import { useRoute } from 'vue-router'
-import { useSuggestedListStore } from '@/stores/suggested'
-import { usePersonalListStore } from '@/stores/personal'
+import { useProvidedListsStore } from '@/stores/providedLists'
+import { useCustomListsStore } from '@/stores/customLists'
 
 const route = useRoute()
-const store = route.name === 'suggested' ? useSuggestedListStore() : usePersonalListStore()
+const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 
 const props = defineProps({
   list: { type: Object, required: true }
@@ -101,9 +101,7 @@ const handleTempTranscriptRender = (transcript) => {
 }
 
 const temporaryTranscriptDisplay = computed(() =>
-  props.list.status === 'PARAGRAPH_RECORDING_ENDED'
-    ? ''
-    : temporaryTranscript.value?.split(' ').slice(-8).join(' ')
+  temporaryTranscript.value?.split(' ').slice(-8).join(' ')
 )
 
 let finalTranscript = ref('')
@@ -185,17 +183,17 @@ const fixPunctuation = (paragraph) => {
   return paragraph
 }
 
-const assessment = computed(() => {
-  if (isRecording.value) return 'isCurrentlyRecording'
-  else if (!finalTranscript.value.length) return 'noWordsRecorded'
-  else if (finalTranscript.value.split(' ').length <= 10) return 'fewWordsRecorded'
+const recordingStatus = computed(() => {
+  if (isRecording.value) return 'IS_CURRENTLY_RECORDING'
+  else if (!finalTranscript.value.length) return 'NO_WORDS_RECORDED'
+  else if (finalTranscript.value.split(' ').length <= 10) return 'FEW_WORD_RECORDED'
   else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length)
-    return 'allWordsCorrect'
+    return 'ALL_WORDS_CORRECT'
   else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length - 1)
-    return 'oneWordIncorrect'
+    return 'ONE_WORD_CORRECT'
   else if (correctlyPronouncedTestedWords.value.length > testedWords.value.length * 0.5)
-    return 'mostWordsCorrect'
-  else return 'mostWordsIncorrect'
+    return 'MOST_WORDS_CORRECT'
+  else return 'MOST_WORDS_INCORRECT'
 })
 </script>
 

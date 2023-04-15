@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
 
-export const usePersonalListStore = defineStore('personal', () => {
+export const useCustomListsStore = defineStore('customLists', () => {
   const route = useRoute()
 
   // NOTE the '+' is necessary b/c the number becomes a string when sent as a parameter

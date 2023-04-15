@@ -26,8 +26,8 @@ import { computed, onMounted, ref } from 'vue'
 import RecorderButton from './RecorderButton.vue'
 
 import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.js'
-import { useSuggestedListStore } from '@/stores/suggested'
-const store = useSuggestedListStore()
+import { useProvidedListsStore } from '@/stores/providedLists'
+const store = useProvidedListsStore()
 
 const props = defineProps({
   list: { type: Object, required: true }
