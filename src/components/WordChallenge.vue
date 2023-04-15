@@ -24,10 +24,14 @@
 import { computed, onMounted, ref } from 'vue'
 
 import RecorderButton from './RecorderButton.vue'
-
 import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.js'
+
+import { useRoute } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/providedLists'
-const store = useProvidedListsStore()
+import { useCustomListsStore } from '@/stores/customLists'
+
+const route = useRoute()
+const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 
 const props = defineProps({
   list: { type: Object, required: true }

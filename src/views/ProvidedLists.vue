@@ -20,8 +20,8 @@
 import { computed, onActivated, ref } from 'vue'
 
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
-import SentenceChallenge from '@/components/SentenceChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
+import SentenceChallenge from '@/components/SentenceChallenge.vue'
 
 import { useRoute, useRouter } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/providedLists'

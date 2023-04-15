@@ -3,6 +3,15 @@
     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
 
     <div class="wrapper">
+      <div style="margin-bottom: 0.7rem">
+        <div v-if="isAuthenticated">
+          <span style="margin-right: 1rem">Welcome, {{ user.displayName }}</span>
+          <button @click="store.signOutUser">Sign Out</button>
+        </div>
+        <div v-else>
+          <button @click="store.signInUser">Sign In with Google</button>
+        </div>
+      </div>
       <HelloWorld msg="Say It Right" @click="router.push({ name: 'home' })" />
       <nav>
         <!-- <RouterLink to="/">CustomLists</RouterLink> -->
@@ -27,7 +36,11 @@
 <script setup>
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { isAuthenticated, user } from '@/firebaseInit'
+import { useAuthStore } from '@/stores/auth'
+
 const router = useRouter()
+const store = useAuthStore()
 
 const getLinkClass = (path) => {
   const route = useRoute()
