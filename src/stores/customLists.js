@@ -49,10 +49,10 @@ export const useCustomListsStore = defineStore('customLists', () => {
     activeList.value.paragraph = paragraph
   }
 
-  const setFinalParagraphTranscript = (transcript) => {
-    activeList.value.finalParagraphTranscript = transcript
-    console.log(activeList.value.finalParagraphTranscript)
-  }
+  // const setFinalParagraphTranscript = (transcript) => {
+  //   activeList.value.finalParagraphTranscript = transcript
+  //   console.log(activeList.value.finalParagraphTranscript)
+  // }
 
   const logPronunciationAttempt = (testedWord) => {
     const matchedWord = activeList.value.words[testedWord]
@@ -87,7 +87,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
     setActiveId,
     setListStatus,
     setNewParagraph,
-    setFinalParagraphTranscript,
+    // setFinalParagraphTranscript,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful
   }

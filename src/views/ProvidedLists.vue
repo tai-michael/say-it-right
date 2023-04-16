@@ -45,8 +45,8 @@ onActivated(() => {
     if (!Object.keys(list.value).length) {
       // NOTE get direct reactive store reference to the list
       // means computed properties wouldn't have to rerender needlessly
-      const listNum = store.activeList.listNumber
-      list.value = store.allLists[listNum - 1]
+      const listIndex = +route.params.id - 1
+      list.value = store.allLists[listIndex]
     }
     store.setActiveId(route.params.id)
   } else if (store.activeId) {

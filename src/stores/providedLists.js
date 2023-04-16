@@ -1,6 +1,14 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
+import { db } from '@/firebaseInit'
+import {
+  doc,
+  updateDoc
+  // setDoc
+  // arrayUnion,
+} from 'firebase/firestore'
+import { user } from '@/firebaseInit'
 import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
 
 export const useProvidedListsStore = defineStore('providedLists', () => {
@@ -40,6 +48,12 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     activeList.value.status = status
   }
 
+  const updateListsInFirestore = () => {
+    updateDoc(doc(db, 'users', user.value.uid), {
+      providedLists: allLists.value
+    })
+  }
+
   const logPronunciationAttempt = (testedWord) => {
     const matchedWord = activeList.value.words[testedWord]
     if (matchedWord) matchedWord.attempts++
@@ -56,9 +70,14 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   //   }
   // }
 
-  // const setNewParagraph = (paragraph) => {
-  //   activeList.value.paragraph = paragraph
-  // }
+  // NOTE when user reviews a completed list, simply replace the entire list with its counterpart in the json file, as word attempts would need to be reset too. This also means weak words should definitely be copies rather than references, as references would get reset meaning they'd disappear from the weak/passed words lists
+  const setParagraph = (paragraph) => {
+    activeList.value.paragraph = paragraph
+  }
+
+  const setTestedWordsObj = (wordsObj) => {
+    activeList.value.words = { ...wordsObj }
+  }
 
   // const setFinalParagraphTranscript = (transcript) => {
   //   activeList.value.finalParagraphTranscript = transcript
@@ -76,8 +95,10 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     setActiveId,
     setListStatus,
     logPronunciationAttempt,
-    logPronunciationAttemptSuccessful
-    // setNewParagraph,
+    logPronunciationAttemptSuccessful,
+    updateListsInFirestore,
+    setParagraph,
+    setTestedWordsObj
     // setFinalParagraphTranscript,
   }
 })

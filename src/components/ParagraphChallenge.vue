@@ -83,11 +83,13 @@ const props = defineProps({
 
 let isRecording = ref(false)
 const testedParagraph = ref('')
+const testedWordsObj = ref({})
 const testedWords = ref([])
 
 onMounted(() => {
   testedParagraph.value = props.list.paragraph
-  testedWords.value = [...Object.keys(props.list.words)]
+  // testedWords.value = [...Object.keys(props.list.words)]
+  testedWordsObj.value = { ...props.list.words }
 })
 
 const correctlyPronouncedTestedWords = ref([])
@@ -113,7 +115,8 @@ const handleFinalTranscript = (transcript) => {
   if (transcript.split(' ').length <= 10) return
 
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
-  testedWords.value = useAdjustTestedWords(testedWords.value, testedParagraph.value)
+  // testedWords.value = useAdjustTestedWords(testedWords.value, testedParagraph.value)
+  testedWords.value = useAdjustTestedWords(testedWordsObj.value, testedParagraph.value, route.name)
 
   const { correctWords, incorrectWords } = useFilterCorrectAndIncorrectWords(
     testedWords.value,
@@ -130,8 +133,9 @@ const handleFinalTranscript = (transcript) => {
     mispronouncedTestedWords.value
   )
 
-  // TODO will need to also send testedParagraph (for this MAYBE do it in the composable) and status to backend
+  store.setParagraph(testedParagraph.value)
   store.setListStatus('PARAGRAPH_RECORDING_ENDED')
+  store.updateListsInFirestore()
 }
 
 const highlightCorrectAndIncorrectWords = (paragraph, correctWords, incorrectWords) => {

@@ -9,8 +9,8 @@ import {
 } from 'firebase/auth'
 import {
   doc,
-  setDoc
-  // updateDoc,
+  setDoc,
+  updateDoc
   // arrayUnion,
 } from 'firebase/firestore'
 // import { collection, setDoc } from 'firebase/firestore';
@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
       await signInWithPopup(auth, new GoogleAuthProvider())
 
       const user = auth.currentUser
-      // NOTE if it's user's first time logging in...
+      // NOTE if it's user's first time logging in, send provided lists
       if (user.metadata.creationTime === user.metadata.lastSignInTime)
         setDoc(doc(db, 'users', user.uid), {
           userName: user.displayName,
@@ -40,12 +40,43 @@ export const useAuthStore = defineStore('auth', () => {
 
   const signOutUser = () => {
     signOut(auth)
-    // location.reload()
+    location.reload()
+  }
+
+  // TODO for testing purposes only; remove before production
+  const resetAllLists = async () => {
+    console.log('Resetting...')
+    await setDoc(doc(db, 'users', auth.currentUser.uid), {
+      userName: auth.currentUser.displayName,
+      customLists: [],
+      providedLists: commonlyMispronouncedWords
+    })
+    console.log('Resetted ALL the lists')
+  }
+
+  const resetCustomLists = async () => {
+    console.log('Resetting...')
+    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+      customLists: []
+    })
+    console.log('Resetted the Custom lists')
+  }
+
+  const resetProvidedLists = async () => {
+    console.log('Resetting...')
+    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+      providedLists: commonlyMispronouncedWords
+    })
+    console.log('Resetted the Provided lists')
   }
 
   return {
     signInUser,
-    signOutUser
+    signOutUser,
+
+    resetAllLists,
+    resetCustomLists,
+    resetProvidedLists
   }
 })
 
