@@ -6,10 +6,18 @@
       <div style="margin-bottom: 0.7rem">
         <div v-if="isAuthenticated">
           <span style="margin-right: 1rem">Welcome, {{ user.displayName }}</span>
-          <button @click="store.signOutUser">Sign Out</button>
+          <button @click="authStore.signOutUser">Sign Out</button>
+
+          <!-- TODO for testing purposes only; remove before production -->
+          <br />
+          <div style="display: flex; column-gap: 0.5rem; margin-top: 0.5rem">
+            <button @click="authStore.resetAllLists">Reset all</button>
+            <button @click="authStore.resetCustomLists">Reset Custom lists</button>
+            <button @click="authStore.resetProvidedLists">Reset Provided lists</button>
+          </div>
         </div>
         <div v-else>
-          <button @click="store.signInUser">Sign In with Google</button>
+          <button @click="authStore.signInUser">Sign In with Google</button>
         </div>
       </div>
       <HelloWorld msg="Say It Right" @click="router.push({ name: 'home' })" />
@@ -26,26 +34,57 @@
     </div>
   </header>
 
-  <router-view v-slot="{ Component }">
-    <keep-alive>
-      <component :is="Component" :key="$route.fullPath"></component>
-    </keep-alive>
-  </router-view>
+  <div v-if="backendDataFetched">
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" :key="$route.fullPath"></component>
+      </keep-alive>
+    </router-view>
+  </div>
 </template>
 
 <script setup>
-import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
-import { isAuthenticated, user } from '@/firebaseInit'
+import { ref, onMounted } from 'vue'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { db, isAuthenticated, user } from '@/firebaseInit'
+import { doc, getDoc } from 'firebase/firestore'
 import { useAuthStore } from '@/stores/auth'
+import { useCustomListsStore } from '@/stores/customLists'
+import { useProvidedListsStore } from '@/stores/providedLists'
 
 const router = useRouter()
-const store = useAuthStore()
+const authStore = useAuthStore()
+const customListsStore = useCustomListsStore()
+const providedListsStore = useProvidedListsStore()
 
 const getLinkClass = (path) => {
   const route = useRoute()
   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
 }
+
+const backendDataFetched = ref(false)
+
+onMounted(async () => {
+  if (isAuthenticated.value) {
+    try {
+      // commit('TOGGLE_BOOKMARKS_SPINNER', true)
+      const docRef = doc(db, 'users', user.value.uid)
+      const docSnap = await getDoc(docRef)
+      console.log(docSnap.data())
+      // commit('SET_STORED_BOOKMARKS', docSnap.data().bookmarks)
+      // commit('SET_USER_RECIPES', docSnap.data().uploadedRecipes)
+      customListsStore.allLists = docSnap.data().customLists
+      providedListsStore.allLists = docSnap.data().providedLists
+      // commit('TOGGLE_BOOKMARKS_SPINNER', false)
+      console.log('Fetched user data from firestore')
+      backendDataFetched.value = true
+    } catch (err) {
+      console.error(`Failed to get user data from firestore: ${err}`)
+      // commit('TOGGLE_BOOKMARKS_SPINNER', false)
+    }
+  }
+})
 </script>
 
 <style scoped>

@@ -86,14 +86,31 @@ const testedParagraph = ref('')
 const testedWordsObj = ref({})
 const testedWords = ref([])
 
+const correctlyPronouncedTestedWords = ref([])
+const mispronouncedTestedWords = ref([])
+
 onMounted(() => {
   testedParagraph.value = props.list.paragraph
   // testedWords.value = [...Object.keys(props.list.words)]
   testedWordsObj.value = { ...props.list.words }
-})
 
-const correctlyPronouncedTestedWords = ref([])
-const mispronouncedTestedWords = ref([])
+  // NOTE restore the words if recording has ended & page is reloaded
+  if (props.list.status === 'PARAGRAPH_RECORDING_ENDED') {
+    correctlyPronouncedTestedWords.value = Object.keys(testedWordsObj.value).filter((word) => {
+      return (
+        testedWordsObj.value[word].attempts === 1 &&
+        testedWordsObj.value[word].attemptsSuccessful === 1
+      )
+    })
+
+    mispronouncedTestedWords.value = Object.keys(testedWordsObj.value).filter((word) => {
+      return (
+        testedWordsObj.value[word].attempts === 1 &&
+        testedWordsObj.value[word].attemptsSuccessful === 0
+      )
+    })
+  }
+})
 
 // TODO relocate this to WordChallenge
 let temporaryTranscript = ref('')
@@ -189,8 +206,15 @@ const fixPunctuation = (paragraph) => {
 
 const recordingStatus = computed(() => {
   if (isRecording.value) return 'IS_CURRENTLY_RECORDING'
-  else if (!finalTranscript.value.length) return 'NO_WORDS_RECORDED'
-  else if (finalTranscript.value.split(' ').length <= 10) return 'FEW_WORD_RECORDED'
+  // NOTE list status is needed b/c finalTranscript is not stored in backend;
+  // allows for correct message upon reloading page
+  else if (!finalTranscript.value.length && props.list.status === 'LIST_NOT_STARTED')
+    return 'NO_WORDS_RECORDED'
+  else if (
+    finalTranscript.value.split(' ').length <= 10 &&
+    props.list.status === 'LIST_NOT_STARTED'
+  )
+    return 'FEW_WORD_RECORDED'
   else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length)
     return 'ALL_WORDS_CORRECT'
   else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length - 1)

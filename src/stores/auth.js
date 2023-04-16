@@ -28,11 +28,13 @@ export const useAuthStore = defineStore('auth', () => {
       const user = auth.currentUser
       // NOTE if it's user's first time logging in, send provided lists
       if (user.metadata.creationTime === user.metadata.lastSignInTime)
-        setDoc(doc(db, 'users', user.uid), {
+        await setDoc(doc(db, 'users', user.uid), {
           userName: user.displayName,
           customLists: [],
           providedLists: commonlyMispronouncedWords
         })
+
+      location.reload()
     } catch (err) {
       console.log(err)
     }

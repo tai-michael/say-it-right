@@ -9,7 +9,7 @@ import {
   // arrayUnion,
 } from 'firebase/firestore'
 import { user } from '@/firebaseInit'
-import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
+// import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
 
 export const useProvidedListsStore = defineStore('providedLists', () => {
   const route = useRoute()
@@ -21,7 +21,12 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
 
   const activeId = ref(null)
 
-  const allLists = ref([...commonlyMispronouncedWords])
+  const firestoreLists = ref([])
+
+  const allLists =
+    // ref([...JSON.parse(sessionStorage.getItem('allProvidedLists'))]) ||
+    // ref([...firestoreLists.value])
+    ref([])
 
   const inProgressLists = computed(() =>
     allLists.value.filter(
@@ -52,6 +57,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     updateDoc(doc(db, 'users', user.value.uid), {
       providedLists: allLists.value
     })
+    // sessionStorage.setItem('allProvidedLists', JSON.stringify(allLists.value))
   }
 
   const logPronunciationAttempt = (testedWord) => {
@@ -91,6 +97,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     inProgressLists,
     untouchedLists,
     completedLists,
+    firestoreLists,
 
     setActiveId,
     setListStatus,

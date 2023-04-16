@@ -14,6 +14,8 @@ export const useCustomListsStore = defineStore('customLists', () => {
 
   const allLists = ref([])
 
+  const firestoreLists = ref([])
+
   const inProgressLists = computed(() =>
     allLists.value.filter(
       (list) =>
@@ -78,7 +80,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
     inProgressLists,
     untouchedLists,
     completedLists,
-
+    firestoreLists,
     // paragraphChallengeCompleted,
     // wordChallengeCompleted,
     // sentenceChallengeCompleted,
