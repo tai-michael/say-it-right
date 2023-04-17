@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import CustomLists from '@/views/CustomLists.vue'
-// import ProvidedLists from '@/views/ProvidedLists.vue'
+import CustomListsView from '@/views/CustomListsView.vue'
+// import ProvidedListsView from '@/views/ProvidedListsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,16 +13,16 @@ const router = createRouter({
     {
       path: '/custom-lists/:id?',
       name: 'custom-lists',
-      component: CustomLists
+      component: CustomListsView
     },
     {
       path: '/provided-lists/:id?',
       name: 'provided-lists',
       // NOTE Route level code-splitting; this generates a separate chunk for this route which is lazy-loaded when the route is visited
-      component: () => import('@/views/ProvidedLists.vue')
+      component: () => import('@/views/ProvidedListsView.vue')
       // // NOTE This (and 'props' in ProvidedLists component) is necessary for converting the params id from a string to number
       // props: ({ params }) => ({ id: Number.parseInt(params.id) })
-      // children: [{ path: '', name: 'provided-lists', component: ProvidedLists }]
+      // children: [{ path: '', name: 'provided-lists', component: ProvidedListsView }]
 
       // children: [
       //   {
@@ -45,7 +45,7 @@ const router = createRouter({
     {
       path: '/overview',
       name: 'overview',
-      component: () => import('@/views/TheOverview.vue')
+      component: () => import('@/views/OverviewView.vue')
     }
   ],
   includeQueryParams: true

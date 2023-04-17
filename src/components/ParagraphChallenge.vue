@@ -68,8 +68,8 @@ import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
 import useFilterCorrectAndIncorrectWords from '@/composables/useFilterCorrectAndIncorrectWords'
 
 import { useRoute } from 'vue-router'
-import { useProvidedListsStore } from '@/stores/providedLists'
-import { useCustomListsStore } from '@/stores/customLists'
+import { useProvidedListsStore } from '@/stores'
+import { useCustomListsStore } from '@/stores'
 
 const route = useRoute()
 const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()

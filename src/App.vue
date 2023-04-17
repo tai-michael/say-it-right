@@ -49,14 +49,13 @@ import { ref, onMounted } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
 import { doc, getDoc } from 'firebase/firestore'
-import { useAuthStore } from '@/stores/auth'
-import { useCustomListsStore } from '@/stores/customLists'
-import { useProvidedListsStore } from '@/stores/providedLists'
+import { useAuthStore, useCustomListsStore, useProvidedListsStore } from '@/stores'
 
-const router = useRouter()
 const authStore = useAuthStore()
 const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
+
+const router = useRouter()
 
 const getLinkClass = (path) => {
   const route = useRoute()
@@ -65,20 +64,24 @@ const getLinkClass = (path) => {
 
 const backendDataFetched = ref(false)
 
+const fetchBackendData = async () => {
+  const docRef = doc(db, 'users', user.value.uid)
+  const docSnap = await getDoc(docRef)
+  console.log(docSnap.data())
+
+  customListsStore.allLists = docSnap.data().customLists
+  providedListsStore.allLists = docSnap.data().providedLists
+
+  console.log('Fetched user data from firestore')
+}
+
 onMounted(async () => {
   if (isAuthenticated.value) {
     try {
       // commit('TOGGLE_BOOKMARKS_SPINNER', true)
-      const docRef = doc(db, 'users', user.value.uid)
-      const docSnap = await getDoc(docRef)
-      console.log(docSnap.data())
-      // commit('SET_STORED_BOOKMARKS', docSnap.data().bookmarks)
-      // commit('SET_USER_RECIPES', docSnap.data().uploadedRecipes)
-      customListsStore.allLists = docSnap.data().customLists
-      providedListsStore.allLists = docSnap.data().providedLists
-      // commit('TOGGLE_BOOKMARKS_SPINNER', false)
-      console.log('Fetched user data from firestore')
+      await fetchBackendData()
       backendDataFetched.value = true
+      // commit('TOGGLE_BOOKMARKS_SPINNER', false)
     } catch (err) {
       console.error(`Failed to get user data from firestore: ${err}`)
       // commit('TOGGLE_BOOKMARKS_SPINNER', false)

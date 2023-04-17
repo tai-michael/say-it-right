@@ -1,5 +1,5 @@
-import { useProvidedListsStore } from '@/stores/providedLists'
-import { useCustomListsStore } from '@/stores/customLists'
+import { useProvidedListsStore } from '@/stores'
+import { useCustomListsStore } from '@/stores'
 // NOTE used for useAdjustTestedWords composable
 import stem from 'wink-porter2-stemmer'
 

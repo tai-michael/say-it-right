@@ -38,7 +38,7 @@ import useCreateOpenAiParagraph from '@/composables/useCreateOpenAiParagraph'
 import LoadingDots from '@/components/LoadingDots.vue'
 
 import { useRoute, useRouter } from 'vue-router'
-import { useCustomListsStore } from '@/stores/customLists'
+import { useCustomListsStore } from '@/stores'
 const route = useRoute()
 const router = useRouter()
 const store = useCustomListsStore()
