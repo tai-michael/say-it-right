@@ -34,17 +34,22 @@
     </div>
   </header>
 
-  <div v-if="backendDataFetched">
-    <router-view v-slot="{ Component }">
-      <keep-alive>
-        <component :is="Component" :key="$route.fullPath"></component>
-      </keep-alive>
-    </router-view>
-  </div>
+  <body>
+    <LoadingSpinner v-if="fetchingBackendData" />
+    <div v-else-if="!fetchingBackendData && backendDataFetched">
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" :key="$route.fullPath"></component>
+        </keep-alive>
+      </router-view>
+    </div>
+    <div v-else>(Sign up or Intro display/message)</div>
+  </body>
 </template>
 
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import { ref, onMounted } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
@@ -62,6 +67,7 @@ const getLinkClass = (path) => {
   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
 }
 
+const fetchingBackendData = ref(false)
 const backendDataFetched = ref(false)
 
 const fetchBackendData = async () => {
@@ -78,13 +84,13 @@ const fetchBackendData = async () => {
 onMounted(async () => {
   if (isAuthenticated.value) {
     try {
-      // commit('TOGGLE_BOOKMARKS_SPINNER', true)
+      fetchingBackendData.value = true
       await fetchBackendData()
+      fetchingBackendData.value = false
       backendDataFetched.value = true
-      // commit('TOGGLE_BOOKMARKS_SPINNER', false)
     } catch (err) {
       console.error(`Failed to get user data from firestore: ${err}`)
-      // commit('TOGGLE_BOOKMARKS_SPINNER', false)
+      fetchingBackendData.value = false
     }
   }
 })
@@ -125,6 +131,11 @@ nav a {
 
 nav a:first-of-type {
   border: 0;
+}
+
+body {
+  display: flex;
+  justify-content: center;
 }
 
 @media (min-width: 1024px) {
