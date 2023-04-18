@@ -20,11 +20,11 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 
 import RecorderButton from './RecorderButton.vue'
-import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.js'
+import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.ts'
 
 import { useRoute } from 'vue-router'
 import { useProvidedListsStore } from '@/stores'
@@ -46,15 +46,14 @@ const props = defineProps({
 // })
 
 // TODO probably replace this with emit from paragraph, as below might cause the instances to all show the same list (maybe)
-const mispronouncedTestedWords = ref([])
+const mispronouncedTestedWords = ref<string[]>([])
 
 onMounted(() => {
   // REVIEW spreading it like this will cause it to lose reactivity, which I might not want if I'm going to use the splice method to get the next word
   mispronouncedTestedWords.value = [
     ...Object.keys(props.list.words).filter(
       (word) =>
-        store.activeList.words[word].attempts > 0 &&
-        store.activeList.words[word].attemptsSuccessful === 0
+        props.list.words[word].attempts > 0 && props.list.words[word].attemptsSuccessful === 0
     )
   ]
 })
@@ -74,16 +73,16 @@ const play = () => {
   useConvertTextToSpeech('Espresso.', 'male')
 }
 
-let isRecording = ref(false)
-let testComplete = ref(false)
+const isRecording = ref(false)
+const testComplete = ref(false)
 
-let temporaryTranscript = ref('')
-const handleTempTranscriptRender = (transcript) => {
+const temporaryTranscript = ref('')
+const handleTempTranscriptRender = (transcript: string) => {
   temporaryTranscript.value = transcript
 }
 
-let finalTranscript = ref('')
-const handleFinalTranscript = (transcript) => {
+const finalTranscript = ref('')
+const handleFinalTranscript = (transcript: string) => {
   finalTranscript.value = transcript
 }
 

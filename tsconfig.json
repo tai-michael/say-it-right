@@ -8,7 +8,11 @@
     },
     "preserveValueImports": false,
     "importsNotUsedAsValues": "remove",
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "declaration": true,
+    "declarationDir": "types",
+    "allowJs": true
   },
 
   "references": [
