@@ -60,7 +60,7 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import RecorderButton from './RecorderButton.vue'
 
@@ -81,7 +81,7 @@ const props = defineProps({
   // recorderComponentKey: { type: String, required: true }
 })
 
-let isRecording = ref(false)
+const isRecording = ref(false)
 const testedParagraph = ref('')
 const testedWordsObj = ref({})
 const testedWords = ref([])
@@ -113,7 +113,7 @@ onMounted(() => {
 })
 
 // TODO relocate this to WordChallenge
-let temporaryTranscript = ref('')
+const temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript) => {
   temporaryTranscript.value = transcript
@@ -123,7 +123,7 @@ const temporaryTranscriptDisplay = computed(() =>
   temporaryTranscript.value?.split(' ').slice(-8).join(' ')
 )
 
-let finalTranscript = ref('')
+const finalTranscript = ref('')
 
 const handleFinalTranscript = (transcript) => {
   isRecording.value = false
@@ -181,7 +181,7 @@ const highlightCorrectAndIncorrectWords = (paragraph, correctWords, incorrectWor
     }
   })
 
-  let highlightedParagraph = highlightedWords.join(' ')
+  const highlightedParagraph = highlightedWords.join(' ')
 
   return fixPunctuation(highlightedParagraph)
 }
