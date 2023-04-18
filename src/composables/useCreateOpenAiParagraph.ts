@@ -1,4 +1,4 @@
-import { openai, defaultOptions } from '@/openaiInit.ts'
+import { openai, defaultOptions } from '@/openaiInit.js'
 
 export default async function useCreateOpenAiParagraph(words, apiOptions = defaultOptions) {
   console.log('Performing api call with openapi')

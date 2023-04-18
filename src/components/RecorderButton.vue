@@ -14,26 +14,24 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed, onDeactivated, ref } from 'vue'
 
-import { client, microphone } from '@/speechlyInit.ts'
+import { client, microphone } from '@/speechlyInit.js'
 import MicIcon from '@/assets/images/mic.vue'
 
 const props = defineProps({
   challengeStatus: { type: String, required: true }
 })
 
-const finalTranscript = ref('')
-const temporaryTranscript = ref('')
+let finalTranscript = ref('')
+let temporaryTranscript = ref('')
 
-// @ts-ignore
 const clientConnected = computed(() => client.decoderOptions.connect === true)
 
 const attachMicrophone = async () => {
   if (microphone.mediaStream) return
   await microphone.initialize()
-  // @ts-ignore
   await client.attach(microphone.mediaStream)
 }
 
@@ -55,15 +53,8 @@ const stopRecording = async () => {
   emit('recordingStopped', finalTranscript.value)
 }
 
-interface Segment {
-  words: {
-    value: string
-  }[]
-}
-
-const renderTranscript = (segment: unknown) => {
-  const s = segment as Segment
-  return s.words.map((w) => w.value).join(' ')
+const renderTranscript = (segment) => {
+  return segment.words.map((w) => w.value).join(' ')
 }
 
 client.onSegmentChange((segment) => {

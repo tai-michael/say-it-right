@@ -1,5 +1,4 @@
 import { computed, ref } from 'vue'
-import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
 
@@ -7,38 +6,13 @@ export const useCustomListsStore = defineStore('customLists', () => {
   const route = useRoute()
 
   // NOTE the '+' is necessary b/c the number becomes a string when sent as a parameter
-  const activeList = computed<List | undefined>(() =>
+  const activeList = computed(() =>
     allLists.value.find((list) => list.listNumber === +route.params.id)
   )
 
-  const setListStatus = (status: string) => {
-    if (activeList.value) activeList.value.status = status
-  }
+  const activeId = ref(null)
 
-  const activeId: Ref<number | null> = ref(null)
-  // const activeId = ref(null)
-
-  interface Word {
-    mispronouncedFrequentlyAs: string
-    mispronunciationFrequency: number
-    mistakeType: string
-    essentialSound: string
-    pronunciationTip: string
-    attempts: number
-    attemptsSuccessful: number
-  }
-
-  interface List {
-    listNumber: number
-    status: string
-    paragraph: string
-    words: {
-      [key: string]: Word
-    }
-  }
-
-  const allLists = ref<Array<List>>([])
-  // const allLists = ref([])
+  const allLists = ref([])
 
   const firestoreLists = ref([])
 
@@ -65,16 +39,16 @@ export const useCustomListsStore = defineStore('customLists', () => {
 
   const mispronouncedTestedWords = ref([])
 
-  const setActiveId = (id: number): void => {
+  const setActiveId = (id) => {
     activeId.value = id
   }
 
-  // const setListStatus = (status: string) => {
-  //   activeList.value.status = status
-  // }
+  const setListStatus = (status) => {
+    activeList.value.status = status
+  }
 
-  const setNewParagraph = (paragraph: string) => {
-    if (activeList.value) activeList.value.paragraph = paragraph
+  const setNewParagraph = (paragraph) => {
+    activeList.value.paragraph = paragraph
   }
 
   // const setFinalParagraphTranscript = (transcript) => {
@@ -82,13 +56,13 @@ export const useCustomListsStore = defineStore('customLists', () => {
   //   console.log(activeList.value.finalParagraphTranscript)
   // }
 
-  const logPronunciationAttempt = (testedWord: string) => {
-    const matchedWord = activeList.value?.words[testedWord]
+  const logPronunciationAttempt = (testedWord) => {
+    const matchedWord = activeList.value.words[testedWord]
     if (matchedWord) matchedWord.attempts++
   }
 
-  const logPronunciationAttemptSuccessful = (testedWord: string) => {
-    const matchedWord = activeList.value?.words[testedWord]
+  const logPronunciationAttemptSuccessful = (testedWord) => {
+    const matchedWord = activeList.value.words[testedWord]
     if (matchedWord) matchedWord.attemptsSuccessful++
   }
 
