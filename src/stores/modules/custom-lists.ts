@@ -2,7 +2,17 @@ import { computed, ref } from 'vue'
 import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
+import { db } from '@/firebaseInit'
+import {
+  doc,
+  updateDoc
+  // setDoc
+  // arrayUnion,
+} from 'firebase/firestore'
+import { user } from '@/firebaseInit'
+import type { List, ListStatus } from './types/List'
 
+// @ts-ignore
 export const useCustomListsStore = defineStore('customLists', () => {
   const route = useRoute()
 
@@ -11,34 +21,9 @@ export const useCustomListsStore = defineStore('customLists', () => {
     allLists.value.find((list) => list.listNumber === +route.params.id)
   )
 
-  const setListStatus = (status: string) => {
-    if (activeList.value) activeList.value.status = status
-  }
-
   const activeId: Ref<number | null> = ref(null)
-  // const activeId = ref(null)
 
-  interface Word {
-    mispronouncedFrequentlyAs: string
-    mispronunciationFrequency: number
-    mistakeType: string
-    essentialSound: string
-    pronunciationTip: string
-    attempts: number
-    attemptsSuccessful: number
-  }
-
-  interface List {
-    listNumber: number
-    status: string
-    paragraph: string
-    words: {
-      [key: string]: Word
-    }
-  }
-
-  const allLists = ref<Array<List>>([])
-  // const allLists = ref([])
+  const allLists = ref<List[]>([])
 
   const firestoreLists = ref([])
 
@@ -59,28 +44,21 @@ export const useCustomListsStore = defineStore('customLists', () => {
     allLists.value.filter((list) => list.status === 'LIST_COMPLETED')
   )
 
-  // const paragraphChallengeCompleted = ref(false)
-  // const wordChallengeCompleted = ref(false)
-  // const sentenceChallengeCompleted = ref(false)
-
-  const mispronouncedTestedWords = ref([])
-
   const setActiveId = (id: number): void => {
     activeId.value = id
   }
 
-  // const setListStatus = (status: string) => {
-  //   activeList.value.status = status
-  // }
-
-  const setNewParagraph = (paragraph: string) => {
-    if (activeList.value) activeList.value.paragraph = paragraph
+  const setListStatus = (status: ListStatus) => {
+    if (activeList.value) activeList.value.status = status
   }
 
-  // const setFinalParagraphTranscript = (transcript) => {
-  //   activeList.value.finalParagraphTranscript = transcript
-  //   console.log(activeList.value.finalParagraphTranscript)
-  // }
+  const updateListsInFirestore = () => {
+    if (user.value)
+      updateDoc(doc(db, 'users', user.value.uid), {
+        providedLists: allLists.value
+      })
+    // sessionStorage.setItem('allProvidedLists', JSON.stringify(allLists.value))
+  }
 
   const logPronunciationAttempt = (testedWord: string) => {
     const matchedWord = activeList.value?.words[testedWord]
@@ -92,11 +70,18 @@ export const useCustomListsStore = defineStore('customLists', () => {
     if (matchedWord) matchedWord.attemptsSuccessful++
   }
 
-  // const logPronunciationAttempt = (testedWord) => {
-  //   for (const list of allLists.value) {
-  //     const wordObj = list.words.find((word) => word === testedWord)
-  //     if (wordObj) wordObj.attempts++
-  //   }
+  // NOTE when user reviews a completed list, simply replace the entire list with its counterpart in the json file, as word attempts would need to be reset too. This also means weak words should definitely be copies rather than references, as references would get reset meaning they'd disappear from the weak/passed words lists
+  const setParagraph = (paragraph: string) => {
+    if (activeList.value) activeList.value.paragraph = paragraph
+  }
+
+  const setTestedWordsObj = (wordsObj: object) => {
+    if (activeList.value) activeList.value.words = { ...wordsObj }
+  }
+
+  // const setFinalParagraphTranscript = (transcript) => {
+  //   activeList.value.finalParagraphTranscript = transcript
+  //   console.log(activeList.value.finalParagraphTranscript)
   // }
 
   return {
@@ -107,16 +92,14 @@ export const useCustomListsStore = defineStore('customLists', () => {
     untouchedLists,
     completedLists,
     firestoreLists,
-    // paragraphChallengeCompleted,
-    // wordChallengeCompleted,
-    // sentenceChallengeCompleted,
-    mispronouncedTestedWords,
 
     setActiveId,
     setListStatus,
-    setNewParagraph,
-    // setFinalParagraphTranscript,
     logPronunciationAttempt,
-    logPronunciationAttemptSuccessful
+    logPronunciationAttemptSuccessful,
+    updateListsInFirestore,
+    setParagraph,
+    setTestedWordsObj
+    // setFinalParagraphTranscript,
   }
 })

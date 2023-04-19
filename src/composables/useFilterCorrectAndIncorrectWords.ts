@@ -2,9 +2,9 @@ import { useProvidedListsStore } from '@/stores'
 import { useCustomListsStore } from '@/stores'
 
 export default function useFilterCorrectAndIncorrectWords(
-  testedWords,
-  transcriptString,
-  routeName
+  testedWords: string[],
+  transcriptString: string,
+  routeName: string | null | undefined | symbol
 ) {
   const store = routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 
@@ -16,7 +16,7 @@ export default function useFilterCorrectAndIncorrectWords(
     store.logPronunciationAttemptSuccessful(word)
   }
 
-  let incorrectWords = []
+  const incorrectWords = []
   for (const word of testedWords) {
     if (!correctWords.includes(word)) {
       incorrectWords.push(word)

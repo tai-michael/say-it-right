@@ -16,7 +16,7 @@
       :challenge-status="props.list.status"
     />
 
-    <button @click="store.wordChallengeCompleted = true">Next</button>
+    <button @click="store.setListStatus('SENTENCE_CHALLENGE_STARTED')">Next</button>
   </main>
 </template>
 
@@ -27,8 +27,8 @@ import RecorderButton from './RecorderButton.vue'
 import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.ts'
 
 import { useRoute } from 'vue-router'
-import { useProvidedListsStore } from '@/stores'
-import { useCustomListsStore } from '@/stores'
+import { useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore } from '@/stores/index.ts'
 
 const route = useRoute()
 const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()

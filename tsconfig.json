@@ -1,6 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "tsconfig.json"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "tsconfig.json", "index.d.ts"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -13,6 +13,8 @@
     "declaration": true,
     "declarationDir": "types",
     "allowJs": true
+    // NOTE uncomment to disable '[variable] is possibly [null | undefined]' check
+    // "strictNullChecks": false
   },
 
   "references": [

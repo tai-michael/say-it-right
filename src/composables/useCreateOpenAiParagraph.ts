@@ -1,6 +1,9 @@
 import { openai, defaultOptions } from '@/openaiInit.ts'
 
-export default async function useCreateOpenAiParagraph(words, apiOptions = defaultOptions) {
+export default async function useCreateOpenAiParagraph(
+  words: string[],
+  apiOptions = defaultOptions
+) {
   console.log('Performing api call with openapi')
   const completion = await openai.createChatCompletion({
     messages: [
@@ -14,8 +17,8 @@ export default async function useCreateOpenAiParagraph(words, apiOptions = defau
     ],
     ...apiOptions
   })
-  console.log(completion.data.choices[0].message.content)
-  return completion.data.choices[0].message.content
+  console.log(completion?.data?.choices[0]?.message?.content)
+  return completion?.data?.choices[0]?.message?.content
 }
 
 // export default async function useCreateOpenAiParagraph(params = {}) {

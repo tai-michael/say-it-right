@@ -24,7 +24,7 @@ import WordChallenge from '@/components/WordChallenge.vue'
 import SentenceChallenge from '@/components/SentenceChallenge.vue'
 
 import { useRoute, useRouter } from 'vue-router'
-import { useProvidedListsStore } from '@/stores'
+import { useProvidedListsStore } from '@/stores/index.ts'
 const route = useRoute()
 const router = useRouter()
 const store = useProvidedListsStore()

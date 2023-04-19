@@ -54,7 +54,7 @@ import { ref, onMounted } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
 import { doc, getDoc } from 'firebase/firestore'
-import { useAuthStore, useCustomListsStore, useProvidedListsStore } from '@/stores'
+import { useAuthStore, useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 
 const authStore = useAuthStore()
 const customListsStore = useCustomListsStore()

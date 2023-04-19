@@ -62,14 +62,15 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
+import type { Words } from '@/stores/modules/types/List'
 import RecorderButton from './RecorderButton.vue'
 
 import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
 import useFilterCorrectAndIncorrectWords from '@/composables/useFilterCorrectAndIncorrectWords'
 
 import { useRoute } from 'vue-router'
-import { useProvidedListsStore } from '@/stores'
-import { useCustomListsStore } from '@/stores'
+import { useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore } from '@/stores/index.ts'
 
 const route = useRoute()
 const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
@@ -83,11 +84,11 @@ const props = defineProps({
 
 const isRecording = ref(false)
 const testedParagraph = ref('')
-const testedWordsObj = ref({})
-const testedWords = ref([])
+const testedWordsObj = ref<Words>({})
+const testedWords = ref<string[]>([])
 
-const correctlyPronouncedTestedWords = ref([])
-const mispronouncedTestedWords = ref([])
+const correctlyPronouncedTestedWords = ref<string[]>([])
+const mispronouncedTestedWords = ref<string[]>([])
 
 onMounted(() => {
   testedParagraph.value = props.list.paragraph
@@ -115,7 +116,7 @@ onMounted(() => {
 // TODO relocate this to WordChallenge
 const temporaryTranscript = ref('')
 
-const handleTempTranscriptRender = (transcript) => {
+const handleTempTranscriptRender = (transcript: string) => {
   temporaryTranscript.value = transcript
 }
 
@@ -125,7 +126,7 @@ const temporaryTranscriptDisplay = computed(() =>
 
 const finalTranscript = ref('')
 
-const handleFinalTranscript = (transcript) => {
+const handleFinalTranscript = (transcript: string) => {
   isRecording.value = false
   finalTranscript.value = transcript
 
@@ -155,13 +156,18 @@ const handleFinalTranscript = (transcript) => {
   store.updateListsInFirestore()
 }
 
-const highlightCorrectAndIncorrectWords = (paragraph, correctWords, incorrectWords) => {
+const highlightCorrectAndIncorrectWords = (
+  paragraph: string,
+  correctWords: string[],
+  incorrectWords: string[]
+) => {
   // Matches any sequence of characters that are not whitespace or certain punctuation marks, including the punctuation marks themselves
   const wordRegex = /(?:[^\s.,;:!?"'’“”()[\]{}<>«»]+)|(?:[.,;:!?"'’“”()[\]{}<>«»]+)/g
 
   // Splits the paragraph into an array of words and punctuation marks
   const paragraphWords = paragraph.match(wordRegex)
 
+  // @ts-ignore
   const lowercaseParagraphWords = paragraphWords.map((word) => word.toLowerCase())
 
   // NOTE keeps track of words that have already been marked as incorrect and correct, so that only the first instance of the word is highlighted
@@ -169,6 +175,7 @@ const highlightCorrectAndIncorrectWords = (paragraph, correctWords, incorrectWor
   const highlightedCorrectWords = new Set()
 
   const highlightedWords = lowercaseParagraphWords.map((word, index) => {
+    // @ts-ignore
     const originalWord = paragraphWords[index]
     if (incorrectWords.includes(word) && !highlightedIncorrectWords.has(word)) {
       highlightedIncorrectWords.add(word)
@@ -186,7 +193,7 @@ const highlightCorrectAndIncorrectWords = (paragraph, correctWords, incorrectWor
   return fixPunctuation(highlightedParagraph)
 }
 
-const fixPunctuation = (paragraph) => {
+const fixPunctuation = (paragraph: string) => {
   const replacements = [
     { from: ' .', to: '.' },
     { from: ' , ', to: ', ' },
@@ -199,6 +206,7 @@ const fixPunctuation = (paragraph) => {
   ]
 
   for (const { from, to } of replacements) {
+    // @ts-ignore
     paragraph = paragraph.replaceAll(from, to)
   }
   return paragraph

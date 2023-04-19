@@ -38,15 +38,15 @@ import useCreateOpenAiParagraph from '@/composables/useCreateOpenAiParagraph'
 import LoadingDots from '@/components/LoadingDots.vue'
 
 import { useRoute, useRouter } from 'vue-router'
-import { useCustomListsStore } from '@/stores'
+import { useCustomListsStore } from '@/stores/index.ts'
 const route = useRoute()
 const router = useRouter()
 const store = useCustomListsStore()
 // const componentKey = 'custom-list'
 
-let isLoading = ref(false)
-let wordsInput = ref('')
-let newlyCreatedParagraph = ref('')
+const isLoading = ref(false)
+const wordsInput = ref('')
+const newlyCreatedParagraph = ref('')
 
 const list = ref({})
 
