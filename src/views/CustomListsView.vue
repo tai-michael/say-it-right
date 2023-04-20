@@ -65,8 +65,11 @@ const submitWords = async (words) => {
   const wordsArray = words.trim().split(/[ ,]+/)
   newlyCreatedParagraph.value = await useCreateOpenAiParagraph(wordsArray)
   createNewListObjectFromWords(wordsArray, store.allLists, newlyCreatedParagraph.value)
+  store.updateListsInFirestore()
 
-  router.push({ params: { id: store.allLists.length } })
+  // NOTE I could router push here instead of in store; it could cause
+  // sync issues though, if the firestore update is unsuccessful
+  // router.push({ params: { id: store.allLists.length } })
   isLoading.value = false
 }
 
@@ -93,10 +96,15 @@ function createNewListObjectFromWords(words, allLists, paragraph) {
 onActivated(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
-      // NOTE get direct reactive store reference to the list
-      // means computed properties wouldn't have to rerender needlessly
-      const listNum = store.activeList.listNumber
-      list.value = store.allLists[listNum - 1]
+      // NOTE this creates a direct reactive store reference to the list,
+      // meaning computed properties wouldn't have to rerender needlessly
+      if (store.activeList) {
+        const listNum = store.activeList.listNumber
+        list.value = store.allLists[listNum - 1]
+      } else {
+        router.push('/custom-lists')
+        return
+      }
     }
     store.setActiveId(route.params.id)
   } else if (store.activeId) {
@@ -105,6 +113,8 @@ onActivated(() => {
     router.push({ params: { id: store.inProgressLists[0].listNumber } })
   } else if (store.untouchedLists.length > 0) {
     router.push({ params: { id: store.untouchedLists[0].listNumber } })
+  } else {
+    router.push('/custom-lists')
   }
 })
 </script>

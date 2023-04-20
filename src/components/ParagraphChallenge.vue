@@ -199,6 +199,7 @@ const fixPunctuation = (paragraph: string) => {
     { from: ' , ', to: ', ' },
     { from: ' ; ', to: '; ' },
     { from: ' : ', to: ': ' },
+    { from: ' ! ', to: '! ' },
     { from: " ' ", to: "' " },
     { from: "' ", to: "'" },
     { from: '" ', to: '"' },

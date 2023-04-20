@@ -11,6 +11,11 @@ const router = createRouter({
       redirect: { name: 'custom-lists' }
     },
     {
+      path: '/not-found',
+      name: 'not-found',
+      component: () => import('@/views/NotFoundView.vue')
+    },
+    {
       path: '/custom-lists/:id?',
       name: 'custom-lists',
       component: CustomListsView
@@ -48,6 +53,7 @@ const router = createRouter({
       component: () => import('@/views/OverviewView.vue')
     }
   ],
+  // @ts-ignore
   includeQueryParams: true
 })
 

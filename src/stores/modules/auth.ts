@@ -55,6 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
         providedLists: commonlyMispronouncedWords
       })
     console.log('Resetted ALL the lists')
+    location.reload()
   }
 
   const resetCustomLists = async () => {
@@ -64,6 +65,7 @@ export const useAuthStore = defineStore('auth', () => {
         customLists: []
       })
     console.log('Resetted the Custom lists')
+    location.reload()
   }
 
   const resetProvidedLists = async () => {
@@ -73,6 +75,7 @@ export const useAuthStore = defineStore('auth', () => {
         providedLists: commonlyMispronouncedWords
       })
     console.log('Resetted the Provided lists')
+    location.reload()
   }
 
   return {

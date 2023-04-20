@@ -61,6 +61,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
         providedLists: allLists.value
       })
     // sessionStorage.setItem('allProvidedLists', JSON.stringify(allLists.value))
+    console.log('Updated firestore providedList')
   }
 
   const logPronunciationAttempt = (testedWord: string) => {

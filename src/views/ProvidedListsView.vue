@@ -45,8 +45,13 @@ onActivated(() => {
     if (!Object.keys(list.value).length) {
       // NOTE get direct reactive store reference to the list
       // means computed properties wouldn't have to rerender needlessly
-      const listIndex = +route.params.id - 1
-      list.value = store.allLists[listIndex]
+      if (store.activeList) {
+        const listIndex = +route.params.id - 1
+        list.value = store.allLists[listIndex]
+      } else {
+        router.push('/not-found')
+        return
+      }
     }
     store.setActiveId(route.params.id)
   } else if (store.activeId) {
@@ -55,6 +60,8 @@ onActivated(() => {
     router.push({ params: { id: store.inProgressLists[0].listNumber } })
   } else if (store.untouchedLists.length > 0) {
     router.push({ params: { id: store.untouchedLists[0].listNumber } })
+  } else {
+    router.push('/not-found')
   }
 })
 </script>
