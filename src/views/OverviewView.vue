@@ -60,7 +60,7 @@ import { computed } from 'vue'
 import ListChecked from '@/assets/images/list-checked.vue'
 import ListRegular from '@/assets/images/list-regular.vue'
 
-import { useProvidedListsStore } from '@/stores'
+import { useProvidedListsStore } from '@/stores/index.ts'
 const store = useProvidedListsStore()
 
 const anyListStarted = computed(() => store.inProgressLists.length || store.completedLists.length)

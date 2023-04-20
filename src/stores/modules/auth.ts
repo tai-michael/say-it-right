@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       const user = auth.currentUser
       // NOTE if it's user's first time logging in, send provided lists
-      if (user.metadata.creationTime === user.metadata.lastSignInTime)
+      if (user && user.metadata.creationTime === user.metadata.lastSignInTime)
         await setDoc(doc(db, 'users', user.uid), {
           userName: user.displayName,
           customLists: [],
@@ -48,28 +48,34 @@ export const useAuthStore = defineStore('auth', () => {
   // TODO for testing purposes only; remove before production
   const resetAllLists = async () => {
     console.log('Resetting...')
-    await setDoc(doc(db, 'users', auth.currentUser.uid), {
-      userName: auth.currentUser.displayName,
-      customLists: [],
-      providedLists: commonlyMispronouncedWords
-    })
+    if (auth.currentUser)
+      await setDoc(doc(db, 'users', auth.currentUser.uid), {
+        userName: auth.currentUser.displayName,
+        customLists: [],
+        providedLists: commonlyMispronouncedWords
+      })
     console.log('Resetted ALL the lists')
+    location.reload()
   }
 
   const resetCustomLists = async () => {
     console.log('Resetting...')
-    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-      customLists: []
-    })
+    if (auth.currentUser)
+      await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+        customLists: []
+      })
     console.log('Resetted the Custom lists')
+    location.reload()
   }
 
   const resetProvidedLists = async () => {
     console.log('Resetting...')
-    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-      providedLists: commonlyMispronouncedWords
-    })
+    if (auth.currentUser)
+      await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+        providedLists: commonlyMispronouncedWords
+      })
     console.log('Resetted the Provided lists')
+    location.reload()
   }
 
   return {

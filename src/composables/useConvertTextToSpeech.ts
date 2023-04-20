@@ -1,4 +1,4 @@
-export default async function useConvertTextToSpeech(text, gender = 'female') {
+export default async function useConvertTextToSpeech(text: string, gender = 'female') {
   try {
     // Use this particular female voice ('Bella') for sentence/paragraph playback, as it sounds more natural than the others
     let voiceId = ''
@@ -31,10 +31,10 @@ export default async function useConvertTextToSpeech(text, gender = 'female') {
     if (!response.ok) throw new Error(`Failed to generate audio for '${text}'.`)
 
     const stream = response.body
-    const reader = stream.getReader()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const reader = stream!.getReader()
     const audioChunks = []
 
-    // eslint-disable-next-line
     while (true) {
       const { done, value } = await reader.read()
       if (done) {

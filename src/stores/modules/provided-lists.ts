@@ -1,4 +1,5 @@
 import { computed, ref } from 'vue'
+import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
 import { db } from '@/firebaseInit'
@@ -10,6 +11,7 @@ import {
 } from 'firebase/firestore'
 import { user } from '@/firebaseInit'
 // import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
+import type { List, ListStatus } from './types/List'
 
 export const useProvidedListsStore = defineStore('providedLists', () => {
   const route = useRoute()
@@ -19,14 +21,14 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     allLists.value.find((list) => list.listNumber === +route.params.id)
   )
 
-  const activeId = ref(null)
+  const activeId: Ref<number | null> = ref(null)
 
   const firestoreLists = ref([])
 
   const allLists =
     // ref([...JSON.parse(sessionStorage.getItem('allProvidedLists'))]) ||
     // ref([...firestoreLists.value])
-    ref([])
+    ref<List[]>([])
 
   const inProgressLists = computed(() =>
     allLists.value.filter(
@@ -45,28 +47,30 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     allLists.value.filter((list) => list.status === 'LIST_COMPLETED')
   )
 
-  const setActiveId = (id) => {
+  const setActiveId = (id: number) => {
     activeId.value = id
   }
 
-  const setListStatus = (status) => {
-    activeList.value.status = status
+  const setListStatus = (status: ListStatus) => {
+    if (activeList.value) activeList.value.status = status
   }
 
   const updateListsInFirestore = () => {
-    updateDoc(doc(db, 'users', user.value.uid), {
-      providedLists: allLists.value
-    })
+    if (user.value)
+      updateDoc(doc(db, 'users', user.value.uid), {
+        providedLists: allLists.value
+      })
     // sessionStorage.setItem('allProvidedLists', JSON.stringify(allLists.value))
+    console.log('Updated firestore providedList')
   }
 
-  const logPronunciationAttempt = (testedWord) => {
-    const matchedWord = activeList.value.words[testedWord]
+  const logPronunciationAttempt = (testedWord: string) => {
+    const matchedWord = activeList.value?.words[testedWord]
     if (matchedWord) matchedWord.attempts++
   }
 
-  const logPronunciationAttemptSuccessful = (testedWord) => {
-    const matchedWord = activeList.value.words[testedWord]
+  const logPronunciationAttemptSuccessful = (testedWord: string) => {
+    const matchedWord = activeList.value?.words[testedWord]
     if (matchedWord) matchedWord.attemptsSuccessful++
   }
   // const logPronunciationAttempt = (testedWord) => {
@@ -77,12 +81,12 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   // }
 
   // NOTE when user reviews a completed list, simply replace the entire list with its counterpart in the json file, as word attempts would need to be reset too. This also means weak words should definitely be copies rather than references, as references would get reset meaning they'd disappear from the weak/passed words lists
-  const setParagraph = (paragraph) => {
-    activeList.value.paragraph = paragraph
+  const setParagraph = (paragraph: string) => {
+    if (activeList.value) activeList.value.paragraph = paragraph
   }
 
-  const setTestedWordsObj = (wordsObj) => {
-    activeList.value.words = { ...wordsObj }
+  const setTestedWordsObj = (wordsObj: object) => {
+    if (activeList.value) activeList.value.words = { ...wordsObj }
   }
 
   // const setFinalParagraphTranscript = (transcript) => {
