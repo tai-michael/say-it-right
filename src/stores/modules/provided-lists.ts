@@ -23,12 +23,12 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
 
   const activeId: Ref<number | null> = ref(null)
 
-  const firestoreLists = ref([])
-
   const allLists =
     // ref([...JSON.parse(sessionStorage.getItem('allProvidedLists'))]) ||
     // ref([...firestoreLists.value])
     ref<List[]>([])
+
+  const firestoreLists = ref([])
 
   const inProgressLists = computed(() =>
     allLists.value.filter(

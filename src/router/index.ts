@@ -13,7 +13,9 @@ const router = createRouter({
     {
       path: '/not-found',
       name: 'not-found',
-      component: () => import('@/views/NotFoundView.vue')
+      component: () => import('@/views/NotFoundView.vue'),
+      // NOTE match any path that does not match an existing route
+      alias: '/:pathMatch(.*)*'
     },
     {
       path: '/custom-lists/:id?',

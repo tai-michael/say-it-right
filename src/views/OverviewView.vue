@@ -56,14 +56,26 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import ListChecked from '@/assets/images/list-checked.vue'
 import ListRegular from '@/assets/images/list-regular.vue'
-
 import { useProvidedListsStore } from '@/stores/index.ts'
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
+
 const store = useProvidedListsStore()
 
 const anyListStarted = computed(() => store.inProgressLists.length || store.completedLists.length)
+
+onMounted(() => {
+  // check if any parameters were passed in the URL
+  if (route.params.catchAll) {
+    // redirect to your error component
+    console.log(route.params)
+    router.push('/not-found')
+  }
+})
 </script>
 
 <style lang="scss" scoped>

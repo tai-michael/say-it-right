@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { db } from '@/firebaseInit'
 import {
   doc,
@@ -15,7 +15,6 @@ import type { List, ListStatus } from './types/List'
 // @ts-ignore
 export const useCustomListsStore = defineStore('customLists', () => {
   const route = useRoute()
-  const router = useRouter()
 
   // NOTE the '+' is necessary b/c the number becomes a string when sent as a parameter
   const activeList = computed<List | undefined>(() =>
@@ -59,7 +58,6 @@ export const useCustomListsStore = defineStore('customLists', () => {
         customLists: allLists.value
       })
     // sessionStorage.setItem('allProvidedLists', JSON.stringify(allLists.value))
-    router.push({ params: { id: allLists.value.length } })
     console.log('Updated firestore customList')
   }
 

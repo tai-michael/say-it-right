@@ -18,6 +18,8 @@
       <LoadingDots />
     </div>
 
+    <div v-if="submissionError" class="error">Oops! Something went wrong. Please try again.</div>
+
     <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
     <WordChallenge v-else-if="list.status === 'WORD_CHALLENGE_STARTED'" :list="list" />
@@ -47,6 +49,7 @@ const store = useCustomListsStore()
 const isLoading = ref(false)
 const wordsInput = ref('')
 const newlyCreatedParagraph = ref('')
+const submissionError = ref(false)
 
 const list = ref({})
 
@@ -58,19 +61,24 @@ const showParagraphChallenge = computed(
 
 // TODO probably need to add error-handling in here for openai
 const submitWords = async (words) => {
-  if (!words) return
+  try {
+    if (!words) return
+    submissionError.value = false
+    isLoading.value = true
 
-  isLoading.value = true
+    const wordsArray = words.trim().split(/[ ,]+/)
 
-  const wordsArray = words.trim().split(/[ ,]+/)
-  newlyCreatedParagraph.value = await useCreateOpenAiParagraph(wordsArray)
-  createNewListObjectFromWords(wordsArray, store.allLists, newlyCreatedParagraph.value)
-  store.updateListsInFirestore()
+    newlyCreatedParagraph.value = await useCreateOpenAiParagraph(wordsArray)
 
-  // NOTE I could router push here instead of in store; it could cause
-  // sync issues though, if the firestore update is unsuccessful
-  // router.push({ params: { id: store.allLists.length } })
-  isLoading.value = false
+    createNewListObjectFromWords(wordsArray, store.allLists, newlyCreatedParagraph.value)
+
+    await store.updateListsInFirestore()
+    router.push({ params: { id: store.allLists.length } })
+  } catch (err) {
+    console.log(err)
+    isLoading.value = false
+    submissionError.value = true
+  }
 }
 
 function createNewListObjectFromWords(words, allLists, paragraph) {
@@ -101,6 +109,7 @@ onActivated(() => {
       if (store.activeList) {
         const listNum = store.activeList.listNumber
         list.value = store.allLists[listNum - 1]
+        isLoading.value = false
       } else {
         router.push('/custom-lists')
         return
@@ -140,6 +149,12 @@ onActivated(() => {
       width: 100%;
     }
   }
+}
+
+.error {
+  margin-top: 1rem;
+  // color: hsl(2, 65%, 54%);
+  color: #ff7f5f;
 }
 
 .loading-container {
