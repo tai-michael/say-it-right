@@ -17,7 +17,6 @@
     "@vueuse/firebase": "^10.0.2",
     "firebase": "^9.19.1",
     "format-duration": "^3.0.2",
-    "openai": "^3.2.1",
     "pinia": "^2.0.32",
     "typescript": "^5.0.4",
     "vue": "^3.2.47",
