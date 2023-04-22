@@ -5,7 +5,7 @@
     <div class="wrapper">
       <div style="margin-bottom: 0.7rem">
         <div v-if="isAuthenticated">
-          <span style="margin-right: 1rem">Welcome, {{ user.displayName }}</span>
+          <span style="margin-right: 1rem">Welcome, {{ user?.displayName }}</span>
           <button @click="authStore.signOutUser">Sign Out</button>
 
           <!-- TODO for testing purposes only; remove before production -->
@@ -47,7 +47,7 @@
   </body>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import { ref, onMounted } from 'vue'
@@ -62,7 +62,7 @@ const providedListsStore = useProvidedListsStore()
 
 const router = useRouter()
 
-const getLinkClass = (path) => {
+const getLinkClass = (path: string) => {
   const route = useRoute()
   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
 }
@@ -71,14 +71,19 @@ const fetchingBackendData = ref(false)
 const backendDataFetched = ref(false)
 
 const fetchBackendData = async () => {
-  const docRef = doc(db, 'users', user.value.uid)
-  const docSnap = await getDoc(docRef)
-  console.log(docSnap.data())
+  try {
+    if (!user.value) throw new Error('User not defined')
+    const docRef = doc(db, 'users', user.value.uid)
+    const docSnap = await getDoc(docRef)
+    console.log(docSnap.data())
 
-  customListsStore.allLists = docSnap.data().customLists
-  providedListsStore.allLists = docSnap.data().providedLists
+    customListsStore.allLists = docSnap.data()?.customLists
+    providedListsStore.allLists = docSnap.data()?.providedLists
 
-  console.log('Fetched user data from firestore')
+    console.log('Fetched user data from firestore')
+  } catch (err) {
+    throw err
+  }
 }
 
 onMounted(async () => {
