@@ -55,7 +55,7 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import ListChecked from '@/assets/images/list-checked.vue'
 import ListRegular from '@/assets/images/list-regular.vue'

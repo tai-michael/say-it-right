@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
-import type { Words } from '@/stores/modules/types/List'
+import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import RecorderButton from './RecorderButton.vue'
 
 import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
@@ -84,7 +84,8 @@ const props = defineProps({
 
 const isRecording = ref(false)
 const testedParagraph = ref('')
-const testedWordsObj = ref<Words>({})
+const testedWordsObj =
+  route.name === 'provided-lists' ? ref<Words<ProvidedWord>>({}) : ref<Words<CustomWord>>({})
 const testedWords = ref<string[]>([])
 
 const correctlyPronouncedTestedWords = ref<string[]>([])

@@ -30,8 +30,9 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onActivated, ref } from 'vue'
+import type { List } from '@/stores/modules/types/List'
 
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
@@ -51,16 +52,17 @@ const wordsInput = ref('')
 const newlyCreatedParagraph = ref('')
 const submissionError = ref(false)
 
-const list = ref({})
+const list = ref<List | Record<string, never>>({})
 
 const showParagraphChallenge = computed(
   () =>
     Object.keys(list.value).length &&
-    (list.value.status === 'LIST_NOT_STARTED' || list.value.status === 'PARAGRAPH_RECORDING_ENDED')
+    (list.value?.status === 'LIST_NOT_STARTED' ||
+      list.value?.status === 'PARAGRAPH_RECORDING_ENDED')
 )
 
 // TODO probably need to add error-handling in here for openai
-const submitWords = async (words) => {
+const submitWords = async (words: string) => {
   try {
     if (!words) return
     submissionError.value = false
@@ -81,12 +83,12 @@ const submitWords = async (words) => {
   }
 }
 
-function createNewListObjectFromWords(words, allLists, paragraph) {
-  const newListObject = {
+function createNewListObjectFromWords(words: string[], allLists: List[], paragraph: string) {
+  const newListObject: List = {
     listNumber: allLists.length + 1,
-    words: {},
     status: 'LIST_NOT_STARTED',
-    paragraph: paragraph
+    paragraph: paragraph,
+    words: {}
   }
 
   words.forEach((word) => {
@@ -115,7 +117,7 @@ onActivated(() => {
         return
       }
     }
-    store.setActiveId(route.params.id)
+    store.setActiveId(+route.params.id)
   } else if (store.activeId) {
     router.push({ params: { id: store.activeId } })
   } else if (store.inProgressLists.length > 0) {

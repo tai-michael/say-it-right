@@ -2,7 +2,7 @@ export interface List {
   listNumber: number
   status: ListStatus
   paragraph: string
-  words: Words
+  words: Words<ProvidedWord> | Words<CustomWord>
 }
 
 export type ListStatus =
@@ -12,16 +12,21 @@ export type ListStatus =
   | 'SENTENCE_CHALLENGE_STARTED'
   | 'LIST_COMPLETED'
 
-export interface Words {
-  [key: string]: Word
+export interface Words<T> {
+  [key: string]: T
 }
 
-export interface Word {
+export interface ProvidedWord {
   mispronouncedFrequentlyAs: string
   mispronunciationFrequency: number
   mistakeType: string
   essentialSound: string
   pronunciationTip: string
+  attempts: number
+  attemptsSuccessful: number
+}
+
+export interface CustomWord {
   attempts: number
   attemptsSuccessful: number
 }

@@ -16,8 +16,9 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onActivated, ref } from 'vue'
+import type { List } from '@/stores/modules/types/List'
 
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
@@ -30,7 +31,9 @@ const router = useRouter()
 const store = useProvidedListsStore()
 // const componentKey = 'provided-lists'
 
-const list = ref({})
+// NOTE the 'Record<string, never>' type represents an empty object with
+// string keys and values of type 'never'
+const list = ref<List | Record<string, never>>({})
 
 const showParagraphChallenge = computed(
   () =>
@@ -53,7 +56,7 @@ onActivated(() => {
         return
       }
     }
-    store.setActiveId(route.params.id)
+    store.setActiveId(+route.params.id)
   } else if (store.activeId) {
     router.push({ params: { id: store.activeId } })
   } else if (store.inProgressLists.length > 0) {
