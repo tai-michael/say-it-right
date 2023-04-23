@@ -30,6 +30,7 @@
           >Provided Lists</RouterLink
         >
         <RouterLink to="/overview">Overview</RouterLink>
+        <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink>
       </nav>
     </div>
   </header>
@@ -73,9 +74,16 @@ const backendDataFetched = ref(false)
 const fetchBackendData = async () => {
   try {
     if (!user.value) throw new Error('User not defined')
+    // TODO get docRef and docSnap from global lists
+    // store the docSnap in store and make it reactive using vueUse
+    // assign a watcher to the variable. If it changes, push new value
+    // to local providedLists, then update lists on backend
+
     const docRef = doc(db, 'users', user.value.uid)
     const docSnap = await getDoc(docRef)
     console.log(docSnap.data())
+
+    // TODO make comparisons b/e the two here. If diff, add extra lists to user's providedLists in firestore (maybe arrayUnion?). Await that. Then, getDoc again.
 
     customListsStore.allLists = docSnap.data()?.customLists
     providedListsStore.allLists = docSnap.data()?.providedLists

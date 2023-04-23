@@ -34,6 +34,8 @@
         </div>
       </div>
     </form>
+
+    <button @click="test">Test</button>
   </div>
 </template>
 
@@ -41,7 +43,7 @@
 import { onMounted, ref } from 'vue'
 import coreLists from '@/assets/lists_1-12.json'
 import { db } from '@/firebaseInit'
-import { deleteDoc, doc, collection, setDoc, writeBatch } from 'firebase/firestore'
+import { deleteDoc, doc, collection, getDocs, setDoc, writeBatch } from 'firebase/firestore'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/index.ts'
 
@@ -51,6 +53,11 @@ const router = useRouter()
 const isLoading = ref(false)
 const listNumOfListToDel = ref('')
 const listNumOfListToAdd = ref('')
+
+const test = async () => {
+  const querySnapshot = await getDocs(collection(db, 'global_provided_lists'))
+  console.log(querySnapshot.docs)
+}
 
 const uploadCoreLists = async (lists) => {
   try {

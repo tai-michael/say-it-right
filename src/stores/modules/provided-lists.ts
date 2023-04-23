@@ -4,13 +4,15 @@ import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
 import { db } from '@/firebaseInit'
 import {
+  collection,
   doc,
+  getDocs,
   updateDoc
   // setDoc
   // arrayUnion,
 } from 'firebase/firestore'
 import { user } from '@/firebaseInit'
-// import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
+// import commonlyMispronouncedWords from '@/assets/lists_1-12.json'
 import type { List, ListStatus } from './types/List'
 
 export const useProvidedListsStore = defineStore('providedLists', () => {
@@ -94,6 +96,59 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   //   console.log(activeList.value.finalParagraphTranscript)
   // }
 
+  // @ts-ignore
+  const downloadAndExtractGlobalProvidedLists = async () => {
+    const querySnapshot = await getDocs(collection(db, 'global_provided_lists'))
+    const lists = querySnapshot.docs.map((doc) => doc.data())
+
+    const wordsByListNumber = {}
+
+    lists.forEach((list) => {
+      const { listNumber, words, paragraph } = list
+      const wordsObject = {}
+
+      Object.keys(words).forEach((word) => {
+        // @ts-ignore
+        wordsObject[word] = {
+          ...words[word],
+          attempts: 0,
+          attemptsSuccessful: 0
+        }
+      })
+
+      // @ts-ignore
+      wordsByListNumber[listNumber] = {
+        listNumber,
+        words: wordsObject,
+        status: 'LIST_NOT_STARTED',
+        attempts: 0,
+        attemptsSuccessful: 0,
+        paragraph: paragraph || ''
+      }
+    })
+
+    // @ts-ignore
+    const result = []
+
+    Object.keys(wordsByListNumber)
+      // @ts-ignore
+      .sort((a, b) => a - b)
+      .forEach((listNumber) => {
+        // @ts-ignore
+        result.push(wordsByListNumber[listNumber])
+      })
+
+    // @ts-ignore
+    console.log(result)
+    // @ts-ignore
+    return result
+    // TODO set allLists.value as result (if not authenticated).
+    // Maybe do outside of this function though (to keep things more modularized).
+
+    // if user is authenticated, first check if there are more lists than lists in their provided lists. If so, extract and push that extra list to their provided lists. [Do this in App.vue]
+    // if first time signing in ever, then repeat what's currently there except use allLists instead of commonlyMispronouncedWords. [Do this in auth.ts]
+  }
+
   return {
     activeList,
     activeId,
@@ -109,7 +164,8 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     logPronunciationAttemptSuccessful,
     updateListsInFirestore,
     setParagraph,
-    setTestedWordsObj
+    setTestedWordsObj,
+    downloadAndExtractGlobalProvidedLists
     // setFinalParagraphTranscript,
   }
 })

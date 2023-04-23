@@ -4,6 +4,7 @@ import {
   // createUserWithEmailAndPassword,
   // signInWithEmailAndPassword,
   GoogleAuthProvider,
+  getAdditionalUserInfo,
   signInWithPopup,
   signOut
 } from 'firebase/auth'
@@ -14,25 +15,27 @@ import {
   // arrayUnion,
 } from 'firebase/firestore'
 // import { collection, setDoc } from 'firebase/firestore';
-import commonlyMispronouncedWords from '@/assets/lists_1-12.json'
-
 import { defineStore } from 'pinia'
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
+import { useProvidedListsStore } from '@/stores'
 
 export const useAuthStore = defineStore('auth', () => {
+  const providedListsStore = useProvidedListsStore()
+
   const signInUser = async () => {
     try {
-      await signInWithPopup(auth, new GoogleAuthProvider())
-
+      const result = await signInWithPopup(auth, new GoogleAuthProvider())
       const user = auth.currentUser
+
       // NOTE if it's user's first time logging in, send provided lists
-      if (user && user.metadata.creationTime === user.metadata.lastSignInTime)
+      if (user && getAdditionalUserInfo(result)?.isNewUser) {
+        const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+
         await setDoc(doc(db, 'users', user.uid), {
           userName: user.displayName,
           customLists: [],
-          providedLists: commonlyMispronouncedWords
+          providedLists: globalProvidedLists
         })
+      }
 
       location.reload()
     } catch (err) {
@@ -48,32 +51,40 @@ export const useAuthStore = defineStore('auth', () => {
   // TODO for testing purposes only; remove before production
   const resetAllLists = async () => {
     console.log('Resetting...')
-    if (auth.currentUser)
-      await setDoc(doc(db, 'users', auth.currentUser.uid), {
-        userName: auth.currentUser.displayName,
-        customLists: [],
-        providedLists: commonlyMispronouncedWords
-      })
+    if (!auth.currentUser) return
+
+    const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+
+    await setDoc(doc(db, 'users', auth.currentUser.uid), {
+      userName: auth.currentUser.displayName,
+      customLists: [],
+      providedLists: globalProvidedLists
+    })
+
     console.log('Resetted ALL the lists')
     location.reload()
   }
 
   const resetCustomLists = async () => {
     console.log('Resetting...')
-    if (auth.currentUser)
-      await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-        customLists: []
-      })
+    if (!auth.currentUser) return
+
+    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+      customLists: []
+    })
     console.log('Resetted the Custom lists')
     location.reload()
   }
 
   const resetProvidedLists = async () => {
     console.log('Resetting...')
-    if (auth.currentUser)
-      await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-        providedLists: commonlyMispronouncedWords
-      })
+    if (!auth.currentUser) return
+
+    const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+
+    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+      providedLists: globalProvidedLists
+    })
     console.log('Resetted the Provided lists')
     location.reload()
   }
