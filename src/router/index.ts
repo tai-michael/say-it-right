@@ -53,6 +53,11 @@ const router = createRouter({
       path: '/overview',
       name: 'overview',
       component: () => import('@/views/OverviewView.vue')
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('@/views/AdminView.vue')
     }
   ],
   // @ts-ignore

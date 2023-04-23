@@ -1,0 +1,97 @@
+{
+  "listNumber": 13,
+  "status": "LIST_NOT_STARTED",
+  "paragraph": "Sakura is a college student who is currently studying computer science. She loves to code and spends most of her free time working on programming projects. She has one younger sister who is in high school. Emily is very organized and likes to plan out her day in advance, making a to-do list with two or three tasks. She also enjoys running and usually goes for a jog around the park at six in the morning. Emily's favorite number is twelve, which is the number of hours of sleep she needs to feel fully rested.",
+  "words": {
+    "college": {
+      "mispronouncedFrequentlyAs": "wiwid",
+      "mispronunciationFrequency": 3,
+      "mistakeType": "Mispronouncing 'V' as 'W'",
+      "essentialSound": "v",
+      "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "currently": {
+      "mispronouncedFrequentlyAs": "successfur",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Mispronouncing 'L' as 'R'",
+      "essentialSound": "l",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "science": {
+      "mispronouncedFrequentlyAs": "inspeer",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Neglecting the 'AI' sound",
+      "essentialSound": "i",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "code": {
+      "mispronouncedFrequentlyAs": "sink",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Mispronouncing 'TH' as 'S'",
+      "essentialSound": "th",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "programming": {
+      "mispronouncedFrequentlyAs": "side / sad",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Mispronouncing the 'EH' sound",
+      "essentialSound": "e",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "projects": {
+      "mispronouncedFrequentlyAs": "com-FORTED",
+      "mispronunciationFrequency": 5,
+      "mistakeType": "Placing stress on the wrong syllable",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "younger": {
+      "mispronouncedFrequentlyAs": "hei",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Mispronouncing the 'EE' sound",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "sister": {
+      "mispronouncedFrequentlyAs": "plane",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Mispronouncing the 'AA' sound",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "organized": {
+      "mispronouncedFrequentlyAs": "stardy",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Adding an unnecessary 'R' sound",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "list": {
+      "mispronouncedFrequentlyAs": "courage-as",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Other",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "running": {
+      "mispronouncedFrequentlyAs": "social-ty",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Other",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "twelve": {
+      "mispronouncedFrequentlyAs": "discipl-ai-n",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Mispronouncing the 'IH' sound",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    }
+  }
+}

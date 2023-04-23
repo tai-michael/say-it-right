@@ -1,13 +1,13 @@
-import type { Words } from '@/stores/modules/types/List'
+import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import { useProvidedListsStore } from '@/stores'
 import { useCustomListsStore } from '@/stores'
 // NOTE used for useAdjustTestedWords composable
 import stem from 'wink-porter2-stemmer'
 
 export default function useAdjustTestedWords(
-  testedWords: Words,
+  testedWords: Words<ProvidedWord> | Words<CustomWord>,
   testedParagraph: string,
-  routeName: string | null | undefined | symbol
+  routeName: string | unknown
 ) {
   const store = routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 
@@ -18,7 +18,7 @@ export default function useAdjustTestedWords(
   // @ts-ignore
   const paragraphWords = testedParagraph.match(wordRegex).map((word) => word.toLowerCase())
 
-  const adjustedTestedWordsObj: Words = {}
+  const adjustedTestedWordsObj: Words<ProvidedWord> | Words<CustomWord> = {}
 
   const keys = Object.keys(testedWords)
   for (const key of keys) {

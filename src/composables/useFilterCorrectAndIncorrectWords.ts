@@ -4,7 +4,7 @@ import { useCustomListsStore } from '@/stores'
 export default function useFilterCorrectAndIncorrectWords(
   testedWords: string[],
   transcriptString: string,
-  routeName: string | null | undefined | symbol
+  routeName: string | unknown
 ) {
   const store = routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 

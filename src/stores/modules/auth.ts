@@ -1,5 +1,5 @@
-// import { computed, ref } from 'vue'
-import { auth, db } from '@/firebaseInit'
+import { computed } from 'vue'
+import { auth, db, user } from '@/firebaseInit'
 import {
   // createUserWithEmailAndPassword,
   // signInWithEmailAndPassword,
@@ -14,7 +14,7 @@ import {
   // arrayUnion,
 } from 'firebase/firestore'
 // import { collection, setDoc } from 'firebase/firestore';
-import commonlyMispronouncedWords from '@/assets/commonly-mispronounced-words.json'
+import commonlyMispronouncedWords from '@/assets/lists_1-12.json'
 
 import { defineStore } from 'pinia'
 // import { useRouter } from 'vue-router'
@@ -78,7 +78,11 @@ export const useAuthStore = defineStore('auth', () => {
     location.reload()
   }
 
+  const signedInAsAdmin = computed(() => user.value?.email === import.meta.env.VITE_ADMIN_EMAIL)
+
   return {
+    signedInAsAdmin,
+
     signInUser,
     signOutUser,
 
