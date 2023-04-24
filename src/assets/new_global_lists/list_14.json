@@ -1,0 +1,97 @@
+{
+  "listNumber": 14,
+  "status": "LIST_NOT_STARTED",
+  "paragraph": "A dog is a domesticated mammal that has been bred for companionship and various working purposes. They are known for their loyalty, intelligence, and affectionate nature towards their owners. Dogs come in a variety of breeds, shapes, and sizes, and are often considered as man's best friend due to their unwavering devotion and loving personalities.",
+  "words": {
+    "dog": {
+      "mispronouncedFrequentlyAs": "wiwid",
+      "mispronunciationFrequency": 3,
+      "mistakeType": "Mispronouncing 'V' as 'W'",
+      "essentialSound": "v",
+      "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "domesticated": {
+      "mispronouncedFrequentlyAs": "successfur",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Mispronouncing 'L' as 'R'",
+      "essentialSound": "l",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "mammal": {
+      "mispronouncedFrequentlyAs": "inspeer",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Neglecting the 'AI' sound",
+      "essentialSound": "i",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "bred": {
+      "mispronouncedFrequentlyAs": "sink",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Mispronouncing 'TH' as 'S'",
+      "essentialSound": "th",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "companionship": {
+      "mispronouncedFrequentlyAs": "side / sad",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Mispronouncing the 'EH' sound",
+      "essentialSound": "e",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "working": {
+      "mispronouncedFrequentlyAs": "com-FORTED",
+      "mispronunciationFrequency": 5,
+      "mistakeType": "Placing stress on the wrong syllable",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "loyalty": {
+      "mispronouncedFrequentlyAs": "hei",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Mispronouncing the 'EE' sound",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "intelligence": {
+      "mispronouncedFrequentlyAs": "plane",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Mispronouncing the 'AA' sound",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "affectionate": {
+      "mispronouncedFrequentlyAs": "stardy",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Adding an unnecessary 'R' sound",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "breeds": {
+      "mispronouncedFrequentlyAs": "courage-as",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Other",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "sizes": {
+      "mispronouncedFrequentlyAs": "social-ty",
+      "mispronunciationFrequency": 4,
+      "mistakeType": "Other",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    },
+    "considered": {
+      "mispronouncedFrequentlyAs": "discipl-ai-n",
+      "mispronunciationFrequency": 10,
+      "mistakeType": "Mispronouncing the 'IH' sound",
+      "attempts": 0,
+      "attemptsSuccessful": 0
+    }
+  }
+}

@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
       const result = await signInWithPopup(auth, new GoogleAuthProvider())
       const user = auth.currentUser
 
-      // NOTE if it's user's first time logging in, send provided lists
+      // NOTE if it's user's first time logging in, send provided lists from backend
       if (user && getAdditionalUserInfo(result)?.isNewUser) {
         const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
 
@@ -37,6 +37,7 @@ export const useAuthStore = defineStore('auth', () => {
         })
       }
 
+      // NOTE after reload, lists will be hydrated in App.vue
       location.reload()
     } catch (err) {
       console.log(err)

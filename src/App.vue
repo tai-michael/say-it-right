@@ -49,12 +49,13 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref, onMounted, watch, watchEffect } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import { ref, onMounted } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
-import { doc, getDoc } from 'firebase/firestore'
+import { useFirestore } from '@vueuse/firebase/useFirestore'
+import { collection, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { useAuthStore, useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 
 const authStore = useAuthStore()
@@ -70,29 +71,85 @@ const getLinkClass = (path: string) => {
 
 const fetchingBackendData = ref(false)
 const backendDataFetched = ref(false)
+const globalListsQuery = computed(() => collection(db, 'global_provided_lists'))
+const globalLists = useFirestore(globalListsQuery)
 
 const fetchBackendData = async () => {
   try {
     if (!user.value) throw new Error('User not defined')
-    // TODO get docRef and docSnap from global lists
-    // store the docSnap in store and make it reactive using vueUse
-    // assign a watcher to the variable. If it changes, push new value
-    // to local providedLists, then update lists on backend
 
-    const docRef = doc(db, 'users', user.value.uid)
-    const docSnap = await getDoc(docRef)
-    console.log(docSnap.data())
-
-    // TODO make comparisons b/e the two here. If diff, add extra lists to user's providedLists in firestore (maybe arrayUnion?). Await that. Then, getDoc again.
-
-    customListsStore.allLists = docSnap.data()?.customLists
-    providedListsStore.allLists = docSnap.data()?.providedLists
-
+    const usersDocRef = doc(db, 'users', user.value.uid)
+    let userDocSnap = await getDoc(usersDocRef)
     console.log('Fetched user data from firestore')
+    const userProvidedList = ref(userDocSnap.data()?.providedLists)
+    // console.log(userDocSnap.data())
+
+    // NOTE adds any new lists to backend user lists when App starts
+    if (globalLists.value && globalLists.value.length > userProvidedList.value.length) {
+      const newLists = extractNewLists(globalLists.value, userProvidedList.value)
+
+      const newProvidedLists = [...userProvidedList.value, ...newLists]
+      console.log(newProvidedLists)
+
+      await updateDoc(usersDocRef, {
+        providedLists: newProvidedLists
+      })
+
+      userDocSnap = await getDoc(usersDocRef)
+    }
+
+    customListsStore.allLists = userDocSnap.data()?.customLists
+    providedListsStore.allLists = userDocSnap.data()?.providedLists
+
+    // NOTE triggers the watcher after allLists has been hydrated
+    // adds a new list whenever a new global list is added
+    watchEffect(() => {
+      addWatcherForGlobalProvidedLists()
+    })
   } catch (err) {
     throw err
   }
 }
+
+const addWatcherForGlobalProvidedLists = () => {
+  // NOTE 'return' returns the cleanup function for the watcher
+  return watch(globalLists, (newVal) => {
+    console.log('watcher triggered')
+
+    // @ts-ignore
+    if (newVal && newVal.length <= providedListsStore.allLists.length) return
+
+    // NOTE adds new list(s) to store
+    const newLists = extractNewLists(newVal, providedListsStore.allLists)
+
+    // @ts-ignore
+    providedListsStore.allLists.push(...newLists)
+    providedListsStore.updateListsInFirestore()
+    // console.log(providedListsStore.allLists)
+  })
+}
+
+// @ts-ignore
+const extractNewLists = (newArray, oldArray) => {
+  const newItems = []
+
+  for (let i = oldArray.length; i < newArray.length; i++) {
+    const newItem = JSON.parse(JSON.stringify(newArray[i]))
+    newItems.push(newItem)
+  }
+
+  return newItems
+}
+
+// if (newVal && newVal.length > providedListsStore.allLists.length) {
+//   for (let i = providedListsStore.allLists.length; i < newVal.length; i++) {
+//     const copy = JSON.parse(JSON.stringify(newVal[i]))
+//     // providedListsStore.allLists.push(copy)
+//     console.log(copy)
+//     // console.log('pushed new list to allLists')
+//   }
+//   // console.log(providedListsStore.allLists)
+// }
 
 onMounted(async () => {
   if (isAuthenticated.value) {

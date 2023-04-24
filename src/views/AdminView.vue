@@ -34,8 +34,6 @@
         </div>
       </div>
     </form>
-
-    <button @click="test">Test</button>
   </div>
 </template>
 
@@ -53,11 +51,6 @@ const router = useRouter()
 const isLoading = ref(false)
 const listNumOfListToDel = ref('')
 const listNumOfListToAdd = ref('')
-
-const test = async () => {
-  const querySnapshot = await getDocs(collection(db, 'global_provided_lists'))
-  console.log(querySnapshot.docs)
-}
 
 const uploadCoreLists = async (lists) => {
   try {
@@ -86,7 +79,7 @@ const uploadList = async () => {
 
     const listData = await import(`@/assets/new_global_lists/list_${listNumOfListToAdd.value}.json`)
     const adjustedListNumber = addLeadingZeros(listNumOfListToAdd.value, 3)
-    await setDoc(doc(db, 'global_provided_lists', adjustedListNumber), listData)
+    await setDoc(doc(db, 'global_provided_lists', adjustedListNumber), listData.default)
     console.log(`Uploaded list_${listNumOfListToAdd.value}`)
 
     listNumOfListToAdd.value = ''

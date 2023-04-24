@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
@@ -14,6 +14,7 @@ import {
 import { user } from '@/firebaseInit'
 // import commonlyMispronouncedWords from '@/assets/lists_1-12.json'
 import type { List, ListStatus } from './types/List'
+import { useFirestore } from '@vueuse/firebase/useFirestore'
 
 export const useProvidedListsStore = defineStore('providedLists', () => {
   const route = useRoute()
@@ -24,6 +25,36 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   )
 
   const activeId: Ref<number | null> = ref(null)
+
+  // const globalLists = ref<List[]>([])
+
+  // const setGlobalLists = (lists: any) => {
+  //   globalLists.value = lists
+  // }
+
+  // const globalListsQuery = computed(() => collection(db, 'global_provided_lists'))
+
+  // const globalLists = useFirestore(globalListsQuery)
+
+  // watchEffect(() => {
+  //   if (!allLists.value.length) {
+  //     console.log('stop triggered')
+  //     return // Don't start the watcher if globalLists is empty
+  //   }
+
+  //   return watch(globalLists, (newVal) => {
+  //     console.log('watcher triggered')
+  //     if (!allLists.value.length) return
+  //     if (newVal && newVal.length > allLists.value.length) {
+  //       for (let i = allLists.value.length; i < newVal.length; i++) {
+  //         const copy = JSON.parse(JSON.stringify(newVal[i]))
+  //         allLists.value.push(copy)
+  //         console.log('pushed new list to allLists')
+  //       }
+  //       console.log(allLists.value)
+  //     }
+  //   })
+  // })
 
   const allLists =
     // ref([...JSON.parse(sessionStorage.getItem('allProvidedLists'))]) ||
@@ -157,6 +188,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     untouchedLists,
     completedLists,
     firestoreLists,
+    // globalLists,
 
     setActiveId,
     setListStatus,
@@ -166,6 +198,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     setParagraph,
     setTestedWordsObj,
     downloadAndExtractGlobalProvidedLists
+    // setGlobalLists
     // setFinalParagraphTranscript,
   }
 })
