@@ -1,6 +1,8 @@
 {
   "listNumber": 14,
   "status": "LIST_NOT_STARTED",
+  "attempts": 0,
+  "attemptsSuccessful": 0,
   "paragraph": "A dog is a domesticated mammal that has been bred for companionship and various working purposes. They are known for their loyalty, intelligence, and affectionate nature towards their owners. Dogs come in a variety of breeds, shapes, and sizes, and are often considered as man's best friend due to their unwavering devotion and loving personalities.",
   "words": {
     "dog": {
