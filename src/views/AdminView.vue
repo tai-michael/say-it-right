@@ -41,7 +41,7 @@
 import { onMounted, ref } from 'vue'
 import coreLists from '@/assets/lists_1-12.json'
 import { db } from '@/firebaseInit'
-import { deleteDoc, doc, collection, getDocs, setDoc, writeBatch } from 'firebase/firestore'
+import { deleteDoc, doc, collection, setDoc, writeBatch } from 'firebase/firestore'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/index.ts'
 

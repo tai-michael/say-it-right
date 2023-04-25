@@ -71,6 +71,7 @@ const getLinkClass = (path: string) => {
 
 const fetchingBackendData = ref(false)
 const backendDataFetched = ref(false)
+
 const globalListsQuery = computed(() => collection(db, 'global_provided_lists'))
 const globalLists = useFirestore(globalListsQuery)
 
@@ -80,8 +81,8 @@ const fetchBackendData = async () => {
 
     const usersDocRef = doc(db, 'users', user.value.uid)
     let userDocSnap = await getDoc(usersDocRef)
-    console.log('Fetched user data from firestore')
     const userProvidedList = ref(userDocSnap.data()?.providedLists)
+    console.log('Fetched user data from firestore')
     // console.log(userDocSnap.data())
 
     // NOTE adds any new lists to backend user lists when App starts
@@ -98,11 +99,11 @@ const fetchBackendData = async () => {
       userDocSnap = await getDoc(usersDocRef)
     }
 
-    customListsStore.allLists = userDocSnap.data()?.customLists
-    providedListsStore.allLists = userDocSnap.data()?.providedLists
+    customListsStore.setLists(userDocSnap.data()?.customLists)
+    providedListsStore.setLists(userDocSnap.data()?.providedLists)
 
-    // NOTE triggers the watcher after allLists has been hydrated
-    // adds a new list whenever a new global list is added
+    // NOTE triggers watcher after allLists has been hydrated
+    // Adds a new list whenever a new global list is added
     watchEffect(() => {
       addWatcherForGlobalProvidedLists()
     })
@@ -116,13 +117,17 @@ const addWatcherForGlobalProvidedLists = () => {
   return watch(globalLists, (newVal) => {
     console.log('watcher triggered')
 
-    // @ts-ignore
     if (newVal && newVal.length <= providedListsStore.allLists.length) return
 
     // NOTE adds new list(s) to store
     const newLists = extractNewLists(newVal, providedListsStore.allLists)
 
-    // @ts-ignore
+    // TODO add delete new list(s) ability
+    // Can be something like (if oldVal.length > newVal.length) map the listNumbers to array, compare the
+    // arrays, and find the list that was deleted
+    // then delete that list from user's provided list
+    // in firestore.
+
     providedListsStore.allLists.push(...newLists)
     providedListsStore.updateListsInFirestore()
     // console.log(providedListsStore.allLists)
@@ -143,9 +148,9 @@ const extractNewLists = (newArray, oldArray) => {
 
 // if (newVal && newVal.length > providedListsStore.allLists.length) {
 //   for (let i = providedListsStore.allLists.length; i < newVal.length; i++) {
-//     const copy = JSON.parse(JSON.stringify(newVal[i]))
-//     // providedListsStore.allLists.push(copy)
-//     console.log(copy)
+//     const newList = JSON.parse(JSON.stringify(newVal[i]))
+//     // providedListsStore.allLists.push(newList)
+//     console.log(newList)
 //     // console.log('pushed new list to allLists')
 //   }
 //   // console.log(providedListsStore.allLists)

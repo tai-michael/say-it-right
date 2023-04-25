@@ -12,7 +12,6 @@ import {
 import { user } from '@/firebaseInit'
 import type { List, ListStatus } from './types/List'
 
-// @ts-ignore
 export const useCustomListsStore = defineStore('customLists', () => {
   const route = useRoute()
 
@@ -24,8 +23,6 @@ export const useCustomListsStore = defineStore('customLists', () => {
   const activeId: Ref<number | null> = ref(null)
 
   const allLists = ref<List[]>([])
-
-  const firestoreLists = ref([])
 
   const inProgressLists = computed(() =>
     allLists.value.filter(
@@ -50,6 +47,10 @@ export const useCustomListsStore = defineStore('customLists', () => {
 
   const setListStatus = (status: ListStatus) => {
     if (activeList.value) activeList.value.status = status
+  }
+
+  const setLists = (lists: List[]) => {
+    allLists.value = lists
   }
 
   const updateListsInFirestore = async () => {
@@ -92,10 +93,10 @@ export const useCustomListsStore = defineStore('customLists', () => {
     inProgressLists,
     untouchedLists,
     completedLists,
-    firestoreLists,
 
     setActiveId,
     setListStatus,
+    setLists,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful,
     updateListsInFirestore,

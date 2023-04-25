@@ -1,4 +1,4 @@
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
@@ -12,9 +12,7 @@ import {
   // arrayUnion,
 } from 'firebase/firestore'
 import { user } from '@/firebaseInit'
-// import commonlyMispronouncedWords from '@/assets/lists_1-12.json'
 import type { List, ListStatus } from './types/List'
-import { useFirestore } from '@vueuse/firebase/useFirestore'
 
 export const useProvidedListsStore = defineStore('providedLists', () => {
   const route = useRoute()
@@ -25,36 +23,6 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   )
 
   const activeId: Ref<number | null> = ref(null)
-
-  // const globalLists = ref<List[]>([])
-
-  // const setGlobalLists = (lists: any) => {
-  //   globalLists.value = lists
-  // }
-
-  // const globalListsQuery = computed(() => collection(db, 'global_provided_lists'))
-
-  // const globalLists = useFirestore(globalListsQuery)
-
-  // watchEffect(() => {
-  //   if (!allLists.value.length) {
-  //     console.log('stop triggered')
-  //     return // Don't start the watcher if globalLists is empty
-  //   }
-
-  //   return watch(globalLists, (newVal) => {
-  //     console.log('watcher triggered')
-  //     if (!allLists.value.length) return
-  //     if (newVal && newVal.length > allLists.value.length) {
-  //       for (let i = allLists.value.length; i < newVal.length; i++) {
-  //         const copy = JSON.parse(JSON.stringify(newVal[i]))
-  //         allLists.value.push(copy)
-  //         console.log('pushed new list to allLists')
-  //       }
-  //       console.log(allLists.value)
-  //     }
-  //   })
-  // })
 
   const allLists =
     // ref([...JSON.parse(sessionStorage.getItem('allProvidedLists'))]) ||
@@ -86,6 +54,10 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
 
   const setListStatus = (status: ListStatus) => {
     if (activeList.value) activeList.value.status = status
+  }
+
+  const setLists = (lists: List[]) => {
+    allLists.value = lists
   }
 
   const updateListsInFirestore = () => {
@@ -127,7 +99,6 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   //   console.log(activeList.value.finalParagraphTranscript)
   // }
 
-  // @ts-ignore
   const downloadAndExtractGlobalProvidedLists = async () => {
     const querySnapshot = await getDocs(collection(db, 'global_provided_lists'))
     const lists = querySnapshot.docs.map((doc) => doc.data())
@@ -136,6 +107,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
 
     lists.forEach((list) => {
       const { listNumber, words, paragraph } = list
+      // @ts-ignore
       const wordsObject = {}
 
       Object.keys(words).forEach((word) => {
@@ -173,11 +145,6 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     console.log(result)
     // @ts-ignore
     return result
-    // TODO set allLists.value as result (if not authenticated).
-    // Maybe do outside of this function though (to keep things more modularized).
-
-    // if user is authenticated, first check if there are more lists than lists in their provided lists. If so, extract and push that extra list to their provided lists. [Do this in App.vue]
-    // if first time signing in ever, then repeat what's currently there except use allLists instead of commonlyMispronouncedWords. [Do this in auth.ts]
   }
 
   return {
@@ -188,17 +155,16 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     untouchedLists,
     completedLists,
     firestoreLists,
-    // globalLists,
 
     setActiveId,
     setListStatus,
+    setLists,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful,
     updateListsInFirestore,
     setParagraph,
     setTestedWordsObj,
     downloadAndExtractGlobalProvidedLists
-    // setGlobalLists
     // setFinalParagraphTranscript,
   }
 })
