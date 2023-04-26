@@ -107,7 +107,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
 
     lists.forEach((list) => {
       const { listNumber, words, paragraph } = list
-      // @ts-ignore
+
       const wordsObject = {}
 
       Object.keys(words).forEach((word) => {

@@ -1,7 +1,7 @@
 <template>
   <main>
     <div>Word Test</div>
-    <div>{{ testedWord }}</div>
+    <div>{{ testedWords[0] }}</div>
     <button @click="play">Speaker icon</button>
 
     <div v-if="isRecording && !testComplete" class="transcript-container">
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import RecorderButton from './RecorderButton.vue'
 import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.ts'
@@ -38,7 +38,7 @@ const props = defineProps({
 })
 
 // TODO should probably make this and testedWord onMounted instead, b/c i don't want the word to change automatically after its answered right, and I want a new instance of this component every time
-// const mispronouncedTestedWords = computed(() => {
+// const testedWords = computed(() => {
 //   const list = store.allLists.find((list) => list.listNumber === props.id)
 //   return list.words
 //     .filter((wordObj) => wordObj.attempts > 0 && wordObj.attemptsSuccessful === 0)
@@ -46,31 +46,30 @@ const props = defineProps({
 // })
 
 // TODO probably replace this with emit from paragraph, as below might cause the instances to all show the same list (maybe)
-const mispronouncedTestedWords = ref<string[]>([])
+// const testedWords = ref<string[]>([])
 
-onMounted(() => {
-  // REVIEW spreading it like this will cause it to lose reactivity, which I might not want if I'm going to use the splice method to get the next word
-  mispronouncedTestedWords.value = [
-    ...Object.keys(props.list.words).filter(
-      (word) =>
-        props.list.words[word].attempts > 0 && props.list.words[word].attemptsSuccessful === 0
+const testedWords = computed(() => {
+  const mispronouncedParagraphWords = Object.fromEntries(
+    Object.entries(props.list.words).filter(
+      ([word, wordObj]) => wordObj.attempts > 1 || wordObj.attemptsSuccessful === 0
     )
-  ]
+  )
+
+  return Object.keys(mispronouncedParagraphWords).filter(
+    (word) =>
+      mispronouncedParagraphWords[word].attempts < 6 &&
+      mispronouncedParagraphWords[word].attemptsSuccessful < 3
+  )
 })
 
-// const mispronouncedTestedWords = computed(() => {
-//   return Object.keys(store.activeList.words).filter((word) => {
-//     return (
-//       store.activeList.words[word].attempts > 0 &&
-//       store.activeList.words[word].attemptsSuccessful === 0
-//     )
-//   })
-// })
-
-const testedWord = computed(() => mispronouncedTestedWords.value[0])
+const testedWord = computed(
+  () => testedWords.value[0].slice(0, 1).toUpperCase() + testedWords.value[0].slice(1) + '.'
+)
 
 const play = () => {
-  useConvertTextToSpeech('Espresso.', 'male')
+  // NOTE with how Speechly works, adding '!' and making it all caps is necessary for higher volume and slower speed
+  useConvertTextToSpeech(`!${testedWord.value.toUpperCase()}`, 'female')
+  // useConvertTextToSpeech(testedWord.value, 'female')
 }
 
 const isRecording = ref(false)
