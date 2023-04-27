@@ -1,16 +1,41 @@
 <template>
   <main>
-    <div>Word Test</div>
-    <div>{{ testedWords[0] }}</div>
-    <button @click="play">Speaker icon</button>
+    <div class="tested-word-container">
+      <div class="tested-word">{{ testedWord }}</div>
+      <PlayAudioIcon @click="play" />
+    </div>
 
-    <div v-if="isRecording && !testComplete" class="transcript-container">
+    <div v-if="isRecording" class="transcript-container">
       <label>Live transcript:</label>
       <div>{{ temporaryTranscriptDisplay }}</div>
     </div>
 
+    <div v-else class="message">
+      <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
+      <div v-else-if="recordingStatus === 'NOTHING_RECORDED'" class="message__text">
+        <span>Let's test your pronunciation of single words.</span>
+        <span>Hold the button and read the word.</span>
+      </div>
+      <div v-else-if="recordingStatus === 'WORD_CORRECT_ONCE'" class="message__text">
+        <span>Good job! Now read it just one more time.</span>
+        <!-- <span>Let's test your pronunciation of other words that are commonly mispronounced.</span> -->
+      </div>
+      <div v-else-if="recordingStatus === 'WORD_CORRECT_TWICE'" class="message__text">
+        <span>Good job! Now try reading some sentences.</span>
+        <!-- <span>Let's test your pronunciation of other words that are commonly mispronounced.</span> -->
+      </div>
+      <div v-else-if="recordingStatus === 'WORD_INCORRECT'" class="message__text">
+        <span>Try again.</span>
+        <!-- <span>Next, let's practice pronouncing these words.</span> -->
+      </div>
+    </div>
+
+    <!-- <div class="message">
+      <div class="message__text"><span>Hold the button and read the word.</span></div>
+    </div> -->
+
     <RecorderButton
-      @recording-started="isRecording = true"
+      @recording-started="handleRecordingStarted"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
       :challenge-status="props.list.status"
@@ -21,8 +46,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onActivated, ref } from 'vue'
 
+import PlayAudioIcon from '@/assets/images/play-audio.vue'
 import RecorderButton from './RecorderButton.vue'
 import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.ts'
 
@@ -37,21 +63,22 @@ const props = defineProps({
   list: { type: Object, required: true }
 })
 
-// TODO should probably make this and testedWord onMounted instead, b/c i don't want the word to change automatically after its answered right, and I want a new instance of this component every time
-// const testedWords = computed(() => {
-//   const list = store.allLists.find((list) => list.listNumber === props.id)
-//   return list.words
-//     .filter((wordObj) => wordObj.attempts > 0 && wordObj.attemptsSuccessful === 0)
-//     .map((wordObj) => wordObj.word)
-// })
+// onActivated(() => (finalTranscript.value = ''))
 
-// TODO probably replace this with emit from paragraph, as below might cause the instances to all show the same list (maybe)
-// const testedWords = ref<string[]>([])
+const handleRecordingStarted = () => {
+  isRecording.value = true
+  // NOTE clears the temporary transcript from any residual transcripts
+  temporaryTranscript.value = ''
+}
 
 const testedWords = computed(() => {
+  // @ts-ignore
   const mispronouncedParagraphWords = Object.fromEntries(
+    // @ts-ignore
     Object.entries(props.list.words).filter(
-      ([word, wordObj]) => wordObj.attempts > 1 || wordObj.attemptsSuccessful === 0
+      /* eslint-disable @typescript-eslint/no-unused-vars  */
+      /*  @ts-ignore */
+      ([_, wordObj]) => wordObj.attempts > 1 || wordObj.attemptsSuccessful === 0
     )
   )
 
@@ -63,34 +90,109 @@ const testedWords = computed(() => {
 })
 
 const testedWord = computed(
-  () => testedWords.value[0].slice(0, 1).toUpperCase() + testedWords.value[0].slice(1) + '.'
+  () => testedWords.value[0]
+  // () => testedWords.value[0].slice(0, 1).toUpperCase() + testedWords.value[0].slice(1)
+)
+
+const testedWordAudioText = computed(
+  () => `${testedWords.value[0].slice(0, 1).toUpperCase() + testedWords.value[0].slice(1)}.`
+  // NOTE with how Eleven AI works, adding '!' and making the word
+  // all caps makes it louder
+  // `${testedWord.value.toUpperCase()}!`
 )
 
 const play = () => {
-  // NOTE with how Speechly works, adding '!' and making it all caps is necessary for higher volume and slower speed
-  useConvertTextToSpeech(`!${testedWord.value.toUpperCase()}`, 'female')
-  // useConvertTextToSpeech(testedWord.value, 'female')
+  useConvertTextToSpeech(testedWordAudioText.value, 'female', 1)
 }
 
 const isRecording = ref(false)
-const testComplete = ref(false)
 
 const temporaryTranscript = ref('')
-const handleTempTranscriptRender = (transcript: string) => {
-  temporaryTranscript.value = transcript
-}
 
-const finalTranscript = ref('')
-const handleFinalTranscript = (transcript: string) => {
-  finalTranscript.value = transcript
+const handleTempTranscriptRender = (transcript: string) => {
+  // console.log(store.activeList?.listNumber)
+  // console.log(props.list.listNumber)
+  if (store.activeList?.listNumber === props.list.listNumber) {
+    temporaryTranscript.value = transcript
+    console.log(`word challenge: ${transcript}`)
+  }
 }
 
 const temporaryTranscriptDisplay = computed(() =>
-  testComplete.value ? '' : temporaryTranscript.value?.split(' ').slice(-8).join(' ')
+  temporaryTranscript.value?.split(' ').slice(-8).join(' ')
 )
+
+const finalTranscript = ref('')
+
+const handleFinalTranscript = (transcript: string) => {
+  isRecording.value = false
+  if (!transcript) return
+  finalTranscript.value = transcript
+  console.log(finalTranscript.value)
+
+  const finalTranscriptWords = finalTranscript.value.split(' ')
+  if (finalTranscriptWords.includes(testedWord.value)) {
+    successfulTries.value++
+    // store.logPronunciationAttemptSuccessful(testedWord.value)
+    console.log('logged successful tries')
+  }
+  // if (finalTranscript.value === testedWord.value)
+  tries.value++
+  finalTranscript.value = ''
+}
+
+const tries = ref<number>(0)
+const successfulTries = ref<number>(0)
+
+const recordingStatus = computed(() => {
+  if (isRecording.value) return 'IS_CURRENTLY_RECORDING'
+  else if (!temporaryTranscript.value && !tries.value)
+    // else if (!finalTranscript.value.length)
+    return 'NOTHING_RECORDED'
+  // TODO replace successfulTries && tries with store values; or keep, if i want to save read and writes and only do at the end
+  else if (temporaryTranscript.value === testedWord.value && successfulTries.value === 1)
+    return 'WORD_CORRECT_ONCE'
+  else if (temporaryTranscript.value === testedWord.value && successfulTries.value === 2)
+    return 'WORD_CORRECT_TWICE'
+  else return 'WORD_INCORRECT'
+})
+// NOTE 'Next' button handler
+// const handleNextButtonClick = () => {
+//   // Increment successfulAttempts by 1
+//   store.incrementSuccessfulAttempts(currentTestedWord.value)
+
+//   // Move to the SentenceTest
+//   store.setListStatus('SENTENCE_CHALLENGE_STARTED')
+// }
 </script>
 
 <style lang="scss" scoped>
+.tested-word-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  column-gap: 0.5rem;
+  margin-bottom: 4rem;
+}
+.tested-word {
+  font-size: 24px;
+}
+
+.message {
+  margin-top: 1rem;
+  // height: 50px;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    span {
+      padding-bottom: 0.5rem;
+      font-weight: 600;
+      color: #ff7f5f;
+    }
+  }
+}
+
 .transcript-container {
   margin-top: 1rem;
   min-height: 64px;

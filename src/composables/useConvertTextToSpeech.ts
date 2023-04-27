@@ -1,4 +1,8 @@
-export default async function useConvertTextToSpeech(text: string, gender = 'female') {
+export default async function useConvertTextToSpeech(
+  text: string,
+  gender = 'female',
+  stability = 0.75
+) {
   try {
     // Use this particular female voice ('Bella') for sentence/paragraph playback, as it sounds more natural than the others
     let voiceId = ''
@@ -9,8 +13,8 @@ export default async function useConvertTextToSpeech(text: string, gender = 'fem
     const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`
     // These are the recommended settings by Eleven Labs
     const voiceSettings = {
-      // Increasing stability will make the voice more consistent between regenerations, but it can also make it sounds a bit monotone. On longer text fragments they recommend lowering this value.
-      stability: 0.75,
+      // Default is 0.75, maximum is 1. Increasing stability makes the voice more consistent between regenerations, but it can also make it sounds a bit monotone. On longer text fragments they recommend lowering this value.
+      stability: stability,
       // High enhancement boosts overall voice clarity and target speaker similarity. Very high values can cause artifacts, so adjusting this setting to find the optimal value is encouraged.
       similarity_boost: 0.75
     }

@@ -37,9 +37,11 @@ const attachMicrophone = async () => {
   await client.attach(microphone.mediaStream)
 }
 
-// NOTE Resetting the value here is necessary, since I'm currently unable to 'detach' the mic/mediastream/client when I swap between views, meaning finalTranscript in this component carries over
+// NOTE Resetting the value here is necessary, since I'm currently unable to 'detach' the mic/mediastream/client when I swap between views, meaning finalTranscript and temporaryTranscript in this component carries over to the new view
+// REVIEW doesn't seem to actually work or matter (for temporaryTranscript at least)
 onDeactivated(() => {
   finalTranscript.value = ''
+  temporaryTranscript.value = ''
 })
 
 const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])
@@ -53,6 +55,7 @@ const startRecording = async () => {
 const stopRecording = async () => {
   await client.stop()
   emit('recordingStopped', finalTranscript.value)
+  finalTranscript.value = ''
 }
 
 interface Segment {

@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onActivated, onMounted } from 'vue'
 import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import RecorderButton from './RecorderButton.vue'
 
@@ -93,7 +93,7 @@ const mispronouncedTestedWords = ref<string[]>([])
 
 onMounted(() => {
   testedParagraph.value = props.list.paragraph
-  // testedWords.value = [...Object.keys(props.list.words)]
+  testedWords.value = [...Object.keys(props.list.words)]
   testedWordsObj.value = { ...props.list.words }
 
   // NOTE restore the words if recording has ended & page is reloaded
@@ -114,7 +114,8 @@ onMounted(() => {
   }
 })
 
-// TODO relocate this to WordChallenge
+// onActivated(() => (finalTranscript.value = ''))
+
 const temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript: string) => {
@@ -129,17 +130,19 @@ const finalTranscript = ref('')
 
 const handleFinalTranscript = (transcript: string) => {
   isRecording.value = false
-  finalTranscript.value = transcript
+  // TODO test if recording -> stopping -> recording works. Check finalTranscript value in Vue Devtools
+  finalTranscript.value = `${finalTranscript.value} ${transcript}`.trim()
 
-  if (transcript.split(' ').length <= 10) return
+  if (finalTranscript.value.split(' ').length <= 10) return
 
+  console.log(`para challenge: ${transcript}`)
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
   // testedWords.value = useAdjustTestedWords(testedWords.value, testedParagraph.value)
   testedWords.value = useAdjustTestedWords(testedWordsObj.value, testedParagraph.value, route.name)
 
   const { correctWords, incorrectWords } = useFilterCorrectAndIncorrectWords(
     testedWords.value,
-    transcript,
+    finalTranscript.value,
     route.name
   )
   correctlyPronouncedTestedWords.value = correctWords
