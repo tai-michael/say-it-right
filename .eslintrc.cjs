@@ -12,6 +12,14 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
-    '@typescript-eslint/ban-ts-comment': 'off'
+    '@typescript-eslint/ban-ts-comment': 'off',
+    'no-unused-vars': [
+      'error',
+      {
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_'
+      }
+    ],
+    '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }]
   }
 }
