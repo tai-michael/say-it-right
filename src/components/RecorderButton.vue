@@ -38,10 +38,8 @@ const attachMicrophone = async () => {
 }
 
 // NOTE Resetting the value here is necessary, since I'm currently unable to 'detach' the mic/mediastream/client when I swap between views, meaning finalTranscript and temporaryTranscript in this component carries over to the new view
-// REVIEW doesn't seem to actually work or matter (for temporaryTranscript at least)
 onDeactivated(() => {
   finalTranscript.value = ''
-  temporaryTranscript.value = ''
 })
 
 const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])

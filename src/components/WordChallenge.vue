@@ -1,12 +1,19 @@
 <template>
   <main>
     <div class="tested-word-container">
-      <div class="tested-word">{{ testedWord }}</div>
+      <div class="tested-word" :class="{ 'correct-pronunciation': isPronouncedCorrectly }">
+        {{ testedWord }}
+      </div>
       <PlayAudioIcon @click="play" />
     </div>
+    <!-- <div class="checkmark-container" v-if="isPronouncedCorrectly">
+      <transition name="fade" mode="out-in" appear>
+        <CheckmarkIcon class="checkmark" />
+      </transition>
+    </div> -->
 
     <div v-if="isRecording" class="transcript-container">
-      <label>Live transcript:</label>
+      <!-- <label>Live transcript:</label> -->
       <div>{{ temporaryTranscriptDisplay }}</div>
     </div>
 
@@ -41,14 +48,15 @@
       :challenge-status="props.list.status"
     />
 
-    <button @click="store.setListStatus('SENTENCE_CHALLENGE_STARTED')">Next</button>
+    <!-- <button @click="store.setListStatus('SENTENCE_CHALLENGE_STARTED')">Next</button> -->
   </main>
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import PlayAudioIcon from '@/assets/images/play-audio.vue'
+// import CheckmarkIcon from '@/assets/images/checkmark.vue'
 import RecorderButton from './RecorderButton.vue'
 import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.ts'
 
@@ -110,12 +118,8 @@ const isRecording = ref(false)
 const temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript: string) => {
-  // console.log(store.activeList?.listNumber)
-  // console.log(props.list.listNumber)
-  if (store.activeList?.listNumber === props.list.listNumber) {
-    temporaryTranscript.value = transcript
-    console.log(`word challenge: ${transcript}`)
-  }
+  // TODO add this to other places where its needed (e.g. handleFinalTranscript here and in paragraph test, and temp transcript in paragraphTest), then look into removing the resetting of final transcript here and in RecorderButton. Finally, look into whether it's possible to use something other than temporaryTranscript.value for recordingStatus below (currently it's ineffective if you record multiple words, as the value wont be the same as testedvalue)
+  if (store.activeList?.listNumber === props.list.listNumber) temporaryTranscript.value = transcript
 }
 
 const temporaryTranscriptDisplay = computed(() =>
@@ -124,20 +128,29 @@ const temporaryTranscriptDisplay = computed(() =>
 
 const finalTranscript = ref('')
 
+const isPronouncedCorrectly = ref(false)
+
 const handleFinalTranscript = (transcript: string) => {
   isRecording.value = false
   if (!transcript) return
+
   finalTranscript.value = transcript
   console.log(finalTranscript.value)
 
   const finalTranscriptWords = finalTranscript.value.split(' ')
   if (finalTranscriptWords.includes(testedWord.value)) {
     successfulTries.value++
+    isPronouncedCorrectly.value = true
+    setTimeout(() => {
+      isPronouncedCorrectly.value = false
+    }, 2000)
     // store.logPronunciationAttemptSuccessful(testedWord.value)
     console.log('logged successful tries')
   }
   // if (finalTranscript.value === testedWord.value)
   tries.value++
+  // NOTE maybe just let finalTranscript accumulate and add guard above for list switching
+  // Then I could replace temp transcript below with final transcript. Runs into the problem of single wrong words or something. Maybe the solution is to use a watcher for the temp transcript, which when triggered would look for whether temp transcript === tested word, and if so it logs successful attempt and attempt
   finalTranscript.value = ''
 }
 
@@ -167,19 +180,32 @@ const recordingStatus = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+// main {
+//   min-height: 80px;
+// }
 .tested-word-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
   column-gap: 0.5rem;
   margin-bottom: 4rem;
+  // NOTE enable below if I want to include checkmark
+  // position: relative;
 }
+
 .tested-word {
   font-size: 24px;
+  // Note that transition is applied here rather than in correct-pronunciation
+  transition: color 0.2s ease-in-out;
+}
+
+.correct-pronunciation {
+  color: green;
 }
 
 .message {
   margin-top: 1rem;
+  min-height: 64px;
   // height: 50px;
 
   &__text {
@@ -209,4 +235,29 @@ const recordingStatus = computed(() => {
   // max-width: 500px;
   // // z-index: 10;
 }
+
+// .checkmark-container {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+// }
+
+// .checkmark {
+//   color: green;
+// }
+
+// .fade-enter-active,
+// .fade-leave-active {
+//   transition: opacity 0.2s;
+// }
+
+// .fade-enter,
+// .fade-leave-to {
+//   opacity: 0;
+// }
 </style>

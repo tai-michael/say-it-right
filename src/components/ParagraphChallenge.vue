@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onActivated, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import RecorderButton from './RecorderButton.vue'
 
