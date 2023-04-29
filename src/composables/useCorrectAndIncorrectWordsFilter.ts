@@ -1,7 +1,7 @@
 import { useProvidedListsStore } from '@/stores'
 import { useCustomListsStore } from '@/stores'
 
-export default function useFilterCorrectAndIncorrectWords(
+export default function useCorrectAndIncorrectWordsFilter(
   testedWords: string[],
   transcriptString: string,
   routeName: string | unknown

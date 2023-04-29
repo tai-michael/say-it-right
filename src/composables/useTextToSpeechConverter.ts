@@ -1,4 +1,4 @@
-export default async function useConvertTextToSpeech(
+export default async function useTextToSpeechConverter(
   text: string,
   gender = 'female',
   stability = 0.75

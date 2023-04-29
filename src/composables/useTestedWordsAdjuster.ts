@@ -1,10 +1,10 @@
 import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import { useProvidedListsStore } from '@/stores'
 import { useCustomListsStore } from '@/stores'
-// NOTE used for useAdjustTestedWords composable
+// NOTE used for useTestedWordsAdjuster composable
 import stem from 'wink-porter2-stemmer'
 
-export default function useAdjustTestedWords(
+export default function useTestedWordsAdjuster(
   testedWords: Words<ProvidedWord> | Words<CustomWord>,
   testedParagraph: string,
   routeName: string | unknown

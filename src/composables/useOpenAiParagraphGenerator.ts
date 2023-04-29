@@ -6,7 +6,7 @@ import axios from 'axios'
 // May need to create firebase function inside say-it-right project
 // Then initialize the app with it (along with auth / firestore)
 
-export default async function useCreateOpenAiParagraph(words: string[]) {
+export default async function useOpenAiParagraphGenerator(words: string[]) {
   try {
     const url = import.meta.env.VITE_FIREBASE_FUNCTION_ENDPOINT
     const query = words.join(', ')
