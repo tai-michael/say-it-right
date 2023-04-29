@@ -34,6 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
           userName: user.displayName,
           customLists: [],
           providedLists: globalProvidedLists
+          // TODO add reviewWords*: [],  also below
         })
       }
 

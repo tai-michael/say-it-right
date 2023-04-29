@@ -55,6 +55,11 @@ const router = createRouter({
       component: () => import('@/views/OverviewView.vue')
     },
     {
+      path: '/hard-words',
+      name: 'hard-words',
+      component: () => import('@/views/HardWordsView.vue')
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: () => import('@/views/AdminView.vue')

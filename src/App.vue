@@ -30,6 +30,7 @@
           >Provided Lists</RouterLink
         >
         <RouterLink to="/overview">Overview</RouterLink>
+        <RouterLink to="/hard-words">Hard Words</RouterLink>
         <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink>
       </nav>
     </div>
@@ -101,6 +102,7 @@ const fetchBackendData = async () => {
 
     customListsStore.setLists(userDocSnap.data()?.customLists)
     providedListsStore.setLists(userDocSnap.data()?.providedLists)
+    // TODO create a new store for reviewWords* first
 
     // NOTE triggers watcher after allLists has been hydrated
     // Adds a new list whenever a new global list is added

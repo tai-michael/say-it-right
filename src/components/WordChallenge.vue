@@ -60,8 +60,8 @@ import { computed, onMounted, ref } from 'vue'
 import PlayAudioIcon from '@/assets/images/play-audio.vue'
 // import CheckmarkIcon from '@/assets/images/checkmark.vue'
 import RecorderButton from './RecorderButton.vue'
-import useConvertTextToSpeech from '@/composables/useConvertTextToSpeech.ts'
-
+import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
+import useHardWordLogger from '@/composables/useHardWordLogger'
 import { useRoute } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 import { useCustomListsStore } from '@/stores/index.ts'
@@ -96,12 +96,13 @@ const showRecorderButton = computed(
 
 const handleRecordingStarted = () => {
   isRecording.value = true
-  // NOTE clears the temporary transcript of any residual transcripts
+  // NOTE clears the temporary and final transcripts of any residual transcripts
   temporaryTranscript.value = ''
+  finalTranscriptWords.value = []
 }
 
 const play = () => {
-  useConvertTextToSpeech(testedWordAudioText.value, 'female', 1)
+  useTextToSpeechConverter(testedWordAudioText.value, 'female', 1)
 }
 
 const isRecording = ref(false)
@@ -168,9 +169,10 @@ const handleCorrectPronunciation = () => {
 
 const skipWord = () => {
   store.logPronunciationAttempt(testedWord.value)
+  useHardWordLogger(testedWord.value)
   setTimeout(() => {
     // TODO push/add testedWord to new array/object somewhere
-    // and add to user's backend data as well
+    // and add to user's backend data as well (refer to how I replace providedList)
     testedWords.value = testedWords.value.slice(1)
     finalTranscriptWords.value = []
     introductionNeeded.value = false
@@ -205,9 +207,9 @@ onMounted(() => {
       // @ts-ignore
       .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
   )
-  // TODO put skipped words in WeakWords/SkippedWords list/view/component
-  // TODO create backend collection for attempts/attemptsSuccessful
+  // TODO put skipped words in user's database
   // TODO on mount, generate the sentences, then push them to backend collection
+  // TODO Implement hints, which I'll generate with GPT first. (e.g. v-if with attemptsSuccessful < attemptsSuccessfulRequired && attempts >= attemptsLimit - 3)
 
   testedWords.value = Object.keys(mispronouncedParagraphWords).filter(
     (word) =>

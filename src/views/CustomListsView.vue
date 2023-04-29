@@ -37,7 +37,7 @@ import type { List } from '@/stores/modules/types/List'
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
 import SentenceChallenge from '@/components/SentenceChallenge.vue'
-import useCreateOpenAiParagraph from '@/composables/useCreateOpenAiParagraph'
+import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import LoadingDots from '@/components/LoadingDots.vue'
 
 import { useRoute, useRouter } from 'vue-router'
@@ -70,7 +70,7 @@ const submitWords = async (words: string) => {
 
     const wordsArray = words.trim().split(/[ ,]+/)
 
-    newlyCreatedParagraph.value = await useCreateOpenAiParagraph(wordsArray)
+    newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(wordsArray)
 
     createNewListObjectFromWords(wordsArray, store.allLists, newlyCreatedParagraph.value)
 

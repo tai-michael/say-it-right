@@ -65,8 +65,8 @@ import { computed, ref, onMounted } from 'vue'
 import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import RecorderButton from './RecorderButton.vue'
 
-import useAdjustTestedWords from '@/composables/useAdjustTestedWords'
-import useFilterCorrectAndIncorrectWords from '@/composables/useFilterCorrectAndIncorrectWords'
+import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
+import useCorrectAndIncorrectWordsFilter from '@/composables/useCorrectAndIncorrectWordsFilter'
 
 import { useRoute } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
@@ -140,10 +140,14 @@ const handleFinalTranscript = (transcript: string) => {
 
   console.log(`para challenge: ${transcript}`)
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
-  // testedWords.value = useAdjustTestedWords(testedWords.value, testedParagraph.value)
-  testedWords.value = useAdjustTestedWords(testedWordsObj.value, testedParagraph.value, route.name)
+  // testedWords.value = useTestedWordsAdjuster(testedWords.value, testedParagraph.value)
+  testedWords.value = useTestedWordsAdjuster(
+    testedWordsObj.value,
+    testedParagraph.value,
+    route.name
+  )
 
-  const { correctWords, incorrectWords } = useFilterCorrectAndIncorrectWords(
+  const { correctWords, incorrectWords } = useCorrectAndIncorrectWordsFilter(
     testedWords.value,
     finalTranscript.value,
     route.name
