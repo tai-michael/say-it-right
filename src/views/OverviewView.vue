@@ -79,6 +79,11 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+hr {
+  border: none;
+  height: 0.5px;
+  background-color: var(--vt-c-text-dark-2); // gray
+}
 .list-type {
   display: flex;
   flex-direction: column;

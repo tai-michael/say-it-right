@@ -252,6 +252,12 @@ const recordingStatus = computed(() => {
   }
 }
 
+hr {
+  border: none;
+  height: 0.5px;
+  background-color: var(--vt-c-text-dark-2); // gray
+}
+
 label {
   font-weight: 800;
 }

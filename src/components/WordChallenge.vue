@@ -169,6 +169,8 @@ const handleCorrectPronunciation = () => {
 const skipWord = () => {
   store.logPronunciationAttempt(testedWord.value)
   setTimeout(() => {
+    // TODO push/add testedWord to new array/object somewhere
+    // and add to user's backend data as well
     testedWords.value = testedWords.value.slice(1)
     finalTranscriptWords.value = []
     introductionNeeded.value = false
