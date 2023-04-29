@@ -72,11 +72,16 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   const logPronunciationAttempt = (testedWord: string) => {
     const matchedWord = activeList.value?.words[testedWord]
     if (matchedWord) matchedWord.attempts++
+    console.log(`logged attempt for ${testedWord}. Total attempts: ${matchedWord?.attempts}`)
+    // console.log('logged 1 attempt')
   }
 
   const logPronunciationAttemptSuccessful = (testedWord: string) => {
     const matchedWord = activeList.value?.words[testedWord]
     if (matchedWord) matchedWord.attemptsSuccessful++
+    console.log(
+      `logged successful attempt for ${testedWord}. Total successful attempts: ${matchedWord?.attemptsSuccessful}`
+    )
   }
   // const logPronunciationAttempt = (testedWord) => {
   //   for (const list of allLists.value) {
@@ -84,6 +89,16 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   //     if (wordObj) wordObj.attempts++
   //   }
   // }
+
+  const attemptsLimit = 6
+
+  const softResetAttempts = (testedWord: string) => {
+    const matchedWord = activeList.value?.words[testedWord]
+    if (matchedWord && matchedWord.attempts >= attemptsLimit - 2) {
+      matchedWord.attempts -= 2
+      console.log(`reset attempt for ${testedWord}. Total attempts: ${matchedWord?.attempts}`)
+    }
+  }
 
   // NOTE when user reviews a completed list, simply replace the entire list with its counterpart in the json file, as word attempts would need to be reset too. This also means weak words should definitely be copies rather than references, as references would get reset meaning they'd disappear from the weak/passed words lists
   const setParagraph = (paragraph: string) => {
@@ -155,12 +170,14 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     untouchedLists,
     completedLists,
     firestoreLists,
+    attemptsLimit,
 
     setActiveId,
     setListStatus,
     setLists,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful,
+    softResetAttempts,
     updateListsInFirestore,
     setParagraph,
     setTestedWordsObj,

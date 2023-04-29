@@ -130,7 +130,10 @@ const finalTranscript = ref('')
 
 const handleFinalTranscript = (transcript: string) => {
   isRecording.value = false
-  // TODO test if recording -> stopping -> recording works. Check finalTranscript value in Vue Devtools
+
+  // NOTE this guard is necessary b/c the recorder cannot be deactivated between views
+  if (store.activeList?.listNumber !== props.list.listNumber) return
+
   finalTranscript.value = `${finalTranscript.value} ${transcript}`.trim()
 
   if (finalTranscript.value.split(' ').length <= 10) return
@@ -302,7 +305,7 @@ label {
     span {
       padding-bottom: 0.5rem;
       font-weight: 600;
-      color: #ff7f5f;
+      color: var(--orange-color);
     }
   }
 }

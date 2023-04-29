@@ -20,40 +20,42 @@
     <div v-else class="message">
       <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
       <div v-else-if="recordingStatus === 'NOTHING_RECORDED'" class="message__text">
-        <span>Let's test your pronunciation of single words.</span>
+        <span v-if="introductionNeeded">Let's test your pronunciation of single words.</span>
         <span>Hold the button and read the word.</span>
       </div>
-      <div v-else-if="recordingStatus === 'WORD_CORRECT_ONCE'" class="message__text">
+      <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
         <span>Good job! Now read it just one more time.</span>
-        <!-- <span>Let's test your pronunciation of other words that are commonly mispronounced.</span> -->
       </div>
-      <div v-else-if="recordingStatus === 'WORD_CORRECT_TWICE'" class="message__text">
+      <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
         <span>Good job! Now try reading some sentences.</span>
-        <!-- <span>Let's test your pronunciation of other words that are commonly mispronounced.</span> -->
       </div>
-      <div v-else-if="recordingStatus === 'WORD_INCORRECT'" class="message__text">
+      <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text">
         <span>Try again.</span>
-        <!-- <span>Next, let's practice pronouncing these words.</span> -->
+      </div>
+      <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
+        <span>Let's skip this word for now.</span>
       </div>
     </div>
 
-    <!-- <div class="message">
-      <div class="message__text"><span>Hold the button and read the word.</span></div>
-    </div> -->
-
     <RecorderButton
+      v-if="showRecorderButton"
       @recording-started="handleRecordingStarted"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
       :challenge-status="props.list.status"
     />
 
-    <!-- <button @click="store.setListStatus('SENTENCE_CHALLENGE_STARTED')">Next</button> -->
+    <!-- <button
+      v-if="props.list.words[testedWord].attemptsSuccessful === 2"
+      @click="store.setListStatus('SENTENCE_CHALLENGE_STARTED')"
+    >
+      Next
+    </button> -->
   </main>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import PlayAudioIcon from '@/assets/images/play-audio.vue'
 // import CheckmarkIcon from '@/assets/images/checkmark.vue'
@@ -71,43 +73,32 @@ const props = defineProps({
   list: { type: Object, required: true }
 })
 
-// onActivated(() => (finalTranscript.value = ''))
-
-const handleRecordingStarted = () => {
-  isRecording.value = true
-  // NOTE clears the temporary transcript from any residual transcripts
-  temporaryTranscript.value = ''
-}
-
-const testedWords = computed(() => {
-  // @ts-ignore
-  const mispronouncedParagraphWords = Object.fromEntries(
-    // @ts-ignore
-    Object.entries(props.list.words).filter(
-      /* eslint-disable @typescript-eslint/no-unused-vars  */
-      /*  @ts-ignore */
-      ([_, wordObj]) => wordObj.attempts > 1 || wordObj.attemptsSuccessful === 0
-    )
-  )
-
-  return Object.keys(mispronouncedParagraphWords).filter(
-    (word) =>
-      mispronouncedParagraphWords[word].attempts < 6 &&
-      mispronouncedParagraphWords[word].attemptsSuccessful < 3
-  )
-})
-
+const testedWords = ref<string[]>([])
 const testedWord = computed(
   () => testedWords.value[0]
   // () => testedWords.value[0].slice(0, 1).toUpperCase() + testedWords.value[0].slice(1)
 )
+const storeWord = computed(() => props.list.words[testedWord.value])
 
 const testedWordAudioText = computed(
   () => `${testedWords.value[0].slice(0, 1).toUpperCase() + testedWords.value[0].slice(1)}.`
-  // NOTE with how Eleven AI works, adding '!' and making the word
+  // NOTE with how Eleven Labs works, adding '!' and making the word
   // all caps makes it louder
   // `${testedWord.value.toUpperCase()}!`
 )
+
+const attemptsSuccessfulRequired = 2
+const showRecorderButton = computed(
+  () =>
+    storeWord.value?.attemptsSuccessful < attemptsSuccessfulRequired &&
+    storeWord.value?.attempts !== store.attemptsLimit
+)
+
+const handleRecordingStarted = () => {
+  isRecording.value = true
+  // NOTE clears the temporary transcript of any residual transcripts
+  temporaryTranscript.value = ''
+}
 
 const play = () => {
   useConvertTextToSpeech(testedWordAudioText.value, 'female', 1)
@@ -118,57 +109,111 @@ const isRecording = ref(false)
 const temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript: string) => {
-  // TODO add this to other places where its needed (e.g. handleFinalTranscript here and in paragraph test, and temp transcript in paragraphTest), then look into removing the resetting of final transcript here and in RecorderButton. Finally, look into whether it's possible to use something other than temporaryTranscript.value for recordingStatus below (currently it's ineffective if you record multiple words, as the value wont be the same as testedvalue)
-  if (store.activeList?.listNumber === props.list.listNumber) temporaryTranscript.value = transcript
+  // NOTE this guard is necessary b/c the recorder cannot be deactivated between views
+  if (store.activeList?.listNumber !== props.list.listNumber) return
+  temporaryTranscript.value = transcript
 }
 
 const temporaryTranscriptDisplay = computed(() =>
   temporaryTranscript.value?.split(' ').slice(-8).join(' ')
 )
 
-const finalTranscript = ref('')
+const finalTranscriptWords = ref<string[]>([])
+const finalTranscriptWord = computed(
+  () => finalTranscriptWords.value[finalTranscriptWords.value.length - 1]
+)
 
 const isPronouncedCorrectly = ref(false)
 
 const handleFinalTranscript = (transcript: string) => {
   isRecording.value = false
-  if (!transcript) return
+  if (!transcript || store.activeList?.listNumber !== props.list.listNumber) return
 
-  finalTranscript.value = transcript
-  console.log(finalTranscript.value)
+  finalTranscriptWords.value = transcript.split(' ')
 
-  const finalTranscriptWords = finalTranscript.value.split(' ')
-  if (finalTranscriptWords.includes(testedWord.value)) {
-    successfulTries.value++
-    isPronouncedCorrectly.value = true
-    setTimeout(() => {
-      isPronouncedCorrectly.value = false
-    }, 2000)
-    // store.logPronunciationAttemptSuccessful(testedWord.value)
-    console.log('logged successful tries')
-  }
-  // if (finalTranscript.value === testedWord.value)
-  tries.value++
-  // NOTE maybe just let finalTranscript accumulate and add guard above for list switching
-  // Then I could replace temp transcript below with final transcript. Runs into the problem of single wrong words or something. Maybe the solution is to use a watcher for the temp transcript, which when triggered would look for whether temp transcript === tested word, and if so it logs successful attempt and attempt
-  finalTranscript.value = ''
+  if (finalTranscriptWord.value === testedWord.value) {
+    handleCorrectPronunciation()
+  } else if (storeWord.value.attempts === store.attemptsLimit - 1) {
+    skipWord()
+  } else store.logPronunciationAttempt(testedWord.value)
+
+  store.updateListsInFirestore()
 }
 
-const tries = ref<number>(0)
-const successfulTries = ref<number>(0)
+const introductionNeeded = ref(true)
+
+const handleCorrectPronunciation = () => {
+  // NOTE triggers css change
+  isPronouncedCorrectly.value = true
+  setTimeout(() => {
+    isPronouncedCorrectly.value = false
+  }, 2000)
+
+  if (storeWord.value.attemptsSuccessful === attemptsSuccessfulRequired - 2) {
+    // NOTE when user answers correctly once, give them a couple more attempts
+    store.softResetAttempts(testedWord.value)
+    store.logPronunciationAttemptSuccessful(testedWord.value)
+    store.logPronunciationAttempt(testedWord.value)
+  } else if (storeWord.value.attemptsSuccessful === attemptsSuccessfulRequired - 1) {
+    store.logPronunciationAttemptSuccessful(testedWord.value)
+    store.logPronunciationAttempt(testedWord.value)
+
+    setTimeout(() => {
+      store.setListStatus('SENTENCE_CHALLENGE_STARTED')
+      testedWords.value = testedWords.value.slice(1)
+      introductionNeeded.value = false
+    }, 2000)
+  }
+}
+
+const skipWord = () => {
+  store.logPronunciationAttempt(testedWord.value)
+  setTimeout(() => {
+    testedWords.value = testedWords.value.slice(1)
+    finalTranscriptWords.value = []
+    introductionNeeded.value = false
+  }, 2000)
+}
 
 const recordingStatus = computed(() => {
   if (isRecording.value) return 'IS_CURRENTLY_RECORDING'
-  else if (!temporaryTranscript.value && !tries.value)
-    // else if (!finalTranscript.value.length)
-    return 'NOTHING_RECORDED'
-  // TODO replace successfulTries && tries with store values; or keep, if i want to save read and writes and only do at the end
-  else if (temporaryTranscript.value === testedWord.value && successfulTries.value === 1)
-    return 'WORD_CORRECT_ONCE'
-  else if (temporaryTranscript.value === testedWord.value && successfulTries.value === 2)
-    return 'WORD_CORRECT_TWICE'
-  else return 'WORD_INCORRECT'
+  if (!finalTranscriptWords.value.length) return 'NOTHING_RECORDED'
+
+  const { attempts, attemptsSuccessful } = storeWord.value
+
+  if (finalTranscriptWord.value === testedWord.value && attemptsSuccessful === 1)
+    return 'PRONOUNCED_CORRECTLY_ONCE'
+  if (finalTranscriptWord.value === testedWord.value && attemptsSuccessful === 2)
+    return 'PRONOUNCED_CORRECTLY_TWICE'
+  if (attempts === store.attemptsLimit && attemptsSuccessful < 2) return 'SKIPPING_WORD'
+  return 'PRONOUNCED_INCORRECTLY'
 })
+
+onMounted(() => {
+  console.log(props.list)
+  // @ts-ignore
+  const mispronouncedParagraphWords = Object.fromEntries(
+    // @ts-ignore
+    Object.entries(props.list.words)
+      /* eslint-disable @typescript-eslint/no-unused-vars  */
+      /*  @ts-ignore */
+      .filter(([_, wordObj]) => wordObj.attempts > wordObj.attemptsSuccessful)
+      // NOTE sorts the array by the key in ascending order
+      // so that testedWord remains the same word after reloading
+      // @ts-ignore
+      .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+  )
+  // TODO put skipped words in WeakWords/SkippedWords list/view/component
+  // TODO create backend collection for attempts/attemptsSuccessful
+  // TODO on mount, generate the sentences, then push them to backend collection
+
+  testedWords.value = Object.keys(mispronouncedParagraphWords).filter(
+    (word) =>
+      mispronouncedParagraphWords[word].attempts < store.attemptsLimit &&
+      mispronouncedParagraphWords[word].attemptsSuccessful < attemptsSuccessfulRequired
+  )
+})
+
 // NOTE 'Next' button handler
 // const handleNextButtonClick = () => {
 //   // Increment successfulAttempts by 1
@@ -180,9 +225,6 @@ const recordingStatus = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-// main {
-//   min-height: 80px;
-// }
 .tested-word-container {
   display: flex;
   flex-direction: row;
@@ -214,7 +256,7 @@ const recordingStatus = computed(() => {
     span {
       padding-bottom: 0.5rem;
       font-weight: 600;
-      color: #ff7f5f;
+      color: var(--orange-color);
     }
   }
 }
