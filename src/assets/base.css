@@ -1,5 +1,9 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
+  /* Note: only works with hsla or rgba */
+  --green-color: hsla(160, 100%, 37%, 1);
+  --orange-color: hsla(12, 100%, 69%, 1);
+
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;

@@ -156,7 +156,7 @@ onActivated(() => {
 .error {
   margin-top: 1rem;
   // color: hsl(2, 65%, 54%);
-  color: #ff7f5f;
+  color: var(--orange-color);
 }
 
 .loading-container {
