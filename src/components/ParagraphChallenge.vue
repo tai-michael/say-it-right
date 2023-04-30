@@ -63,6 +63,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
+import type { WordObject } from '@/stores/modules/types/Review'
 import RecorderButton from './RecorderButton.vue'
 
 import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
@@ -71,9 +72,11 @@ import useCorrectAndIncorrectWordsFilter from '@/composables/useCorrectAndIncorr
 import { useRoute } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 import { useCustomListsStore } from '@/stores/index.ts'
+import { useWordReviewStore } from '@/stores/index.ts'
 
 const route = useRoute()
 const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
+const wordReviewStore = useWordReviewStore()
 
 const props = defineProps({
   list: { type: Object, required: true }
@@ -162,9 +165,22 @@ const handleFinalTranscript = (transcript: string) => {
     mispronouncedTestedWords.value
   )
 
+  addWordsToWordReview(mispronouncedTestedWords.value)
+
   store.setParagraph(testedParagraph.value)
   store.setListStatus('PARAGRAPH_RECORDING_ENDED')
   store.updateListsInFirestore()
+  wordReviewStore.updateWordReviewInFirestore()
+}
+
+const addWordsToWordReview = (words: string[]) => {
+  const wordObjects = words.map((word) => ({
+    word,
+    attempts: 0,
+    attemptsSuccessful: 0,
+    created: Date.now()
+  }))
+  wordReviewStore.addWords(wordObjects)
 }
 
 const highlightCorrectAndIncorrectWords = (

@@ -14,6 +14,7 @@
             <button @click="authStore.resetAllLists">Reset all</button>
             <button @click="authStore.resetCustomLists">Reset Custom lists</button>
             <button @click="authStore.resetProvidedLists">Reset Provided lists</button>
+            <button @click="authStore.resetWordReview">Reset Word review</button>
           </div>
         </div>
         <div v-else>
@@ -29,6 +30,7 @@
         <RouterLink :to="{ name: 'provided-lists' }" :class="getLinkClass('/provided-lists')"
           >Provided Lists</RouterLink
         >
+        <RouterLink to="/word-review">Word Review</RouterLink>
         <RouterLink to="/overview">Overview</RouterLink>
         <RouterLink to="/hard-words">Hard Words</RouterLink>
         <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink>
@@ -57,11 +59,17 @@ import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
 import { collection, doc, getDoc, updateDoc } from 'firebase/firestore'
-import { useAuthStore, useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+import {
+  useAuthStore,
+  useCustomListsStore,
+  useProvidedListsStore,
+  useWordReviewStore
+} from '@/stores/index.ts'
 
 const authStore = useAuthStore()
 const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
+const wordReviewStore = useWordReviewStore()
 
 const router = useRouter()
 
@@ -102,7 +110,7 @@ const fetchBackendData = async () => {
 
     customListsStore.setLists(userDocSnap.data()?.customLists)
     providedListsStore.setLists(userDocSnap.data()?.providedLists)
-    // TODO create a new store for reviewWords* first
+    wordReviewStore.setWords(userDocSnap.data()?.wordReview)
 
     // NOTE triggers watcher after allLists has been hydrated
     // Adds a new list whenever a new global list is added

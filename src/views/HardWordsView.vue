@@ -1,6 +1,6 @@
 <template>
   <main>
-    <h3>Top 10 Hardest Words For Users</h3>
+    <h4>Top 10 Hardest Words For Users</h4>
     <ol class="list">
       <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">
         <!-- {{ entry.word }}: {{ entry.count }} -->
@@ -40,7 +40,11 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-h3 {
+main {
+  padding-bottom: 7rem;
+}
+
+h4 {
   margin-bottom: 1rem;
 }
 
@@ -48,7 +52,7 @@ ol {
   list-style: none;
   padding-inline-start: 0;
   counter-reset: leaderboard;
-  font-size: 18px;
+  font-size: 16px;
 }
 li {
   counter-increment: leaderboard;

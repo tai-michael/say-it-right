@@ -33,8 +33,8 @@ export const useAuthStore = defineStore('auth', () => {
         await setDoc(doc(db, 'users', user.uid), {
           userName: user.displayName,
           customLists: [],
-          providedLists: globalProvidedLists
-          // TODO add reviewWords*: [],  also below
+          providedLists: globalProvidedLists,
+          wordReview: []
         })
       }
 
@@ -60,7 +60,8 @@ export const useAuthStore = defineStore('auth', () => {
     await setDoc(doc(db, 'users', auth.currentUser.uid), {
       userName: auth.currentUser.displayName,
       customLists: [],
-      providedLists: globalProvidedLists
+      providedLists: globalProvidedLists,
+      wordReview: []
     })
 
     console.log('Resetted ALL the lists')
@@ -91,6 +92,17 @@ export const useAuthStore = defineStore('auth', () => {
     location.reload()
   }
 
+  const resetWordReview = async () => {
+    console.log('Resetting...')
+    if (!auth.currentUser) return
+
+    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+      wordReview: []
+    })
+    console.log('Resetted Word review')
+    location.reload()
+  }
+
   const signedInAsAdmin = computed(() => user.value?.email === import.meta.env.VITE_ADMIN_EMAIL)
 
   return {
@@ -101,7 +113,8 @@ export const useAuthStore = defineStore('auth', () => {
 
     resetAllLists,
     resetCustomLists,
-    resetProvidedLists
+    resetProvidedLists,
+    resetWordReview
   }
 })
 
