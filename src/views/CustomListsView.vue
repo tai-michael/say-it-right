@@ -77,8 +77,6 @@ const submitWords = async (words: string) => {
 
     createNewListObjectFromWords(wordsArray, store.allLists, newlyCreatedParagraph.value)
 
-    // console.log(JSON.parse(newlyCreatedSentences.value))
-
     await store.updateListsInFirestore()
     router.push({ params: { id: store.allLists.length } })
 
