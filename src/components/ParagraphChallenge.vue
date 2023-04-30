@@ -165,6 +165,7 @@ const handleFinalTranscript = (transcript: string) => {
     mispronouncedTestedWords.value
   )
 
+  // TODO maybe filter for words that aren't already in Review first, then...
   addWordsToWordReview(mispronouncedTestedWords.value)
 
   store.setParagraph(testedParagraph.value)

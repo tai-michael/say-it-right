@@ -57,6 +57,7 @@ export const useWordReviewStore = defineStore('wordReview', () => {
   //   allLists.value = lists
   // }
 
+  // TODO adjust these
   const activeList = ref<List[]>([])
 
   const logPronunciationAttempt = (testedWord: string) => {

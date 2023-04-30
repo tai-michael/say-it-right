@@ -38,7 +38,7 @@ import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
 import SentenceChallenge from '@/components/SentenceChallenge.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
-import useOpenAiSentencesGenerator from '@/composables/useOpenAiSentencesGenerator'
+// import useOpenAiSentencesGenerator from '@/composables/useOpenAiSentencesGenerator'
 import LoadingDots from '@/components/LoadingDots.vue'
 
 import { useRoute, useRouter } from 'vue-router'
@@ -62,8 +62,6 @@ const showParagraphChallenge = computed(
       list.value?.status === 'PARAGRAPH_RECORDING_ENDED')
 )
 
-const newlyCreatedSentences = ref('')
-
 // TODO probably need to add error-handling in here for openai
 const submitWords = async (words: string) => {
   try {
@@ -79,11 +77,6 @@ const submitWords = async (words: string) => {
 
     await store.updateListsInFirestore()
     router.push({ params: { id: store.allLists.length } })
-
-    newlyCreatedSentences.value = await useOpenAiSentencesGenerator(wordsArray)
-
-    const newlyCreatedSentencesObj = JSON.parse(newlyCreatedSentences.value)
-    console.log(newlyCreatedSentencesObj['four'][0])
   } catch (err) {
     console.log(err)
     isLoading.value = false
