@@ -13,8 +13,36 @@ export default async function useOpenAiSentencesGenerator(words: string[]) {
     const params = { query }
     const response = await axios.get(url, { params })
     console.log(response)
-    return response?.data?.choices[0]?.message?.content
+    const content = response?.data?.choices[0]?.message?.content
+    console.log(content)
+    return processJsonString(content)
   } catch (err) {
     throw new Error(`Failed to create sentences with openAI: ${err}`)
   }
+}
+
+// NOTE chatGPT3.5 sometimes returns a string that encloses the curly bracers with double quotes instead of the single quotes that are needed for JSON.parse to work. Hence, the necessity for these functions.
+function isJsonString(str: string) {
+  try {
+    JSON.parse(str)
+  } catch (err) {
+    return false
+  }
+  return true
+}
+
+function fixJsonString(jsonString: string) {
+  const fixedString = jsonString
+    .replace(/^"/, "'")
+    .replace(/"$/, "'")
+    .replace(/([^\\])"/g, '$1\\"')
+  return fixedString
+}
+
+function processJsonString(jsonString: string) {
+  if (!isJsonString(jsonString)) {
+    const fixedString = fixJsonString(jsonString)
+    return JSON.parse(fixedString)
+  }
+  return JSON.parse(jsonString)
 }
