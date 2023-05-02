@@ -12,7 +12,8 @@
       "essentialSound": "v",
       "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": ["I graduated from college last year.", "She is attending a community college."]
     },
     "currently": {
       "mispronouncedFrequentlyAs": "successfur",
@@ -20,7 +21,8 @@
       "mistakeType": "Mispronouncing 'L' as 'R'",
       "essentialSound": "l",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": ["I am currently working on a project.", "He is currently living in Paris."]
     },
     "science": {
       "mispronouncedFrequentlyAs": "inspeer",
@@ -28,7 +30,11 @@
       "mistakeType": "Neglecting the 'AI' sound",
       "essentialSound": "i",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "She has a degree in science.",
+        "The science behind the experiment is fascinating."
+      ]
     },
     "code": {
       "mispronouncedFrequentlyAs": "sink",
@@ -36,7 +42,11 @@
       "mistakeType": "Mispronouncing 'TH' as 'S'",
       "essentialSound": "th",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "He spent all night writing code for his website.",
+        "Learning to code can open up many opportunities."
+      ]
     },
     "programming": {
       "mispronouncedFrequentlyAs": "side / sad",
@@ -44,56 +54,85 @@
       "mistakeType": "Mispronouncing the 'EH' sound",
       "essentialSound": "e",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "She is interested in programming and wants to learn more.",
+        "Programming is a valuable skill in today's job market."
+      ]
     },
     "projects": {
       "mispronouncedFrequentlyAs": "com-FORTED",
       "mispronunciationFrequency": 5,
       "mistakeType": "Placing stress on the wrong syllable",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "He has several projects he's working on at the moment.",
+        "She enjoys taking on new projects."
+      ]
     },
     "younger": {
       "mispronouncedFrequentlyAs": "hei",
       "mispronunciationFrequency": 10,
       "mistakeType": "Mispronouncing the 'EE' sound",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "My younger brother just started high school.",
+        "She is the younger of the two sisters."
+      ]
     },
     "sister": {
       "mispronouncedFrequentlyAs": "plane",
       "mispronunciationFrequency": 4,
       "mistakeType": "Mispronouncing the 'AA' sound",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "She has a younger sister who is in college.",
+        "Her sister is a successful businesswoman."
+      ]
     },
     "organized": {
       "mispronouncedFrequentlyAs": "stardy",
       "mispronunciationFrequency": 4,
       "mistakeType": "Adding an unnecessary 'R' sound",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "She keeps her desk organized at all times.",
+        "He is known for being very organized and efficient."
+      ]
     },
     "list": {
       "mispronouncedFrequentlyAs": "courage-as",
       "mispronunciationFrequency": 10,
       "mistakeType": "Other",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "Make a list of all the things you need from the store.",
+        "She checked off everything on her to-do list."
+      ]
     },
     "running": {
       "mispronouncedFrequentlyAs": "social-ty",
       "mispronunciationFrequency": 4,
       "mistakeType": "Other",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "He enjoys running in the morning to start his day.",
+        "She is training for a marathon and runs every day."
+      ]
     },
     "twelve": {
       "mispronouncedFrequentlyAs": "discipl-ai-n",
       "mispronunciationFrequency": 10,
       "mistakeType": "Mispronouncing the 'IH' sound",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": ["There are twelve months in a year.", "He turned twelve years old last week."]
     }
   }
 }

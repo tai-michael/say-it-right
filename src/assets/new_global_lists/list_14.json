@@ -12,7 +12,11 @@
       "essentialSound": "v",
       "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "He has a loyal dog who follows him everywhere.",
+        "She adopted a rescue dog from the shelter."
+      ]
     },
     "domesticated": {
       "mispronouncedFrequentlyAs": "successfur",
@@ -20,7 +24,11 @@
       "mistakeType": "Mispronouncing 'L' as 'R'",
       "essentialSound": "l",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "Dogs are one of the most popular domesticated animals.",
+        "Cats are also a common domesticated pet."
+      ]
     },
     "mammal": {
       "mispronouncedFrequentlyAs": "inspeer",
@@ -28,7 +36,11 @@
       "mistakeType": "Neglecting the 'AI' sound",
       "essentialSound": "i",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "Dolphins are a type of aquatic mammal.",
+        "Humans are also classified as mammals."
+      ]
     },
     "bred": {
       "mispronouncedFrequentlyAs": "sink",
@@ -36,7 +48,11 @@
       "mistakeType": "Mispronouncing 'TH' as 'S'",
       "essentialSound": "th",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "This dog was bred for its hunting abilities.",
+        "The farm bred chickens for their eggs."
+      ]
     },
     "companionship": {
       "mispronouncedFrequentlyAs": "side / sad",
@@ -44,56 +60,88 @@
       "mistakeType": "Mispronouncing the 'EH' sound",
       "essentialSound": "e",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "Many people keep pets for companionship.",
+        "The elderly often enjoy the companionship of their peers."
+      ]
     },
     "working": {
       "mispronouncedFrequentlyAs": "com-FORTED",
       "mispronunciationFrequency": 5,
       "mistakeType": "Placing stress on the wrong syllable",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "He is currently working as a software engineer.",
+        "She enjoys working with her hands and creating things."
+      ]
     },
     "loyalty": {
       "mispronouncedFrequentlyAs": "hei",
       "mispronunciationFrequency": 10,
       "mistakeType": "Mispronouncing the 'EE' sound",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "Dogs are known for their loyalty to their owners.",
+        "She values loyalty in her friendships."
+      ]
     },
     "intelligence": {
       "mispronouncedFrequentlyAs": "plane",
       "mispronunciationFrequency": 4,
       "mistakeType": "Mispronouncing the 'AA' sound",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "Dolphins are known for their high level of intelligence.",
+        "He is a professor of artificial intelligence."
+      ]
     },
     "affectionate": {
       "mispronouncedFrequentlyAs": "stardy",
       "mispronunciationFrequency": 4,
       "mistakeType": "Adding an unnecessary 'R' sound",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "Cats can be very affectionate with their owners.",
+        "She is known for being very affectionate towards her friends."
+      ]
     },
     "breeds": {
       "mispronouncedFrequentlyAs": "courage-as",
       "mispronunciationFrequency": 10,
       "mistakeType": "Other",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "There are many different breeds of dogs.",
+        "She is interested in learning about different breeds of cats."
+      ]
     },
     "sizes": {
       "mispronouncedFrequentlyAs": "social-ty",
       "mispronunciationFrequency": 4,
       "mistakeType": "Other",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "Dogs come in all shapes and sizes.",
+        "She prefers small dogs because of their size."
+      ]
     },
     "considered": {
       "mispronouncedFrequentlyAs": "discipl-ai-n",
       "mispronunciationFrequency": 10,
       "mistakeType": "Mispronouncing the 'IH' sound",
       "attempts": 0,
-      "attemptsSuccessful": 0
+      "attemptsSuccessful": 0,
+      "sentences": [
+        "He is considered to be one of the best chefs in the city.",
+        "The proposal is being considered by the board."
+      ]
     }
   }
 }
