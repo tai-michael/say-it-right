@@ -15,34 +15,19 @@ export default async function useOpenAiSentencesGenerator(words: string[]) {
     console.log(response)
     const content = response?.data?.choices[0]?.message?.content
     console.log(content)
-    return processJsonString(content)
+    const sentencesObject = processJsonString(content)
+    console.log(sentencesObject)
+    return sentencesObject
   } catch (err) {
     throw new Error(`Failed to create sentences with openAI: ${err}`)
   }
 }
 
-// NOTE chatGPT3.5 sometimes returns a string that encloses the curly bracers with double quotes instead of the single quotes that are needed for JSON.parse to work. Hence, the necessity for these functions.
-function isJsonString(str: string) {
-  try {
-    JSON.parse(str)
-  } catch (err) {
-    return false
-  }
-  return true
-}
-
-function fixJsonString(jsonString: string) {
-  const fixedString = jsonString
-    .replace(/^"/, "'")
-    .replace(/"$/, "'")
-    .replace(/([^\\])"/g, '$1\\"')
-  return fixedString
-}
-
 function processJsonString(jsonString: string) {
-  if (!isJsonString(jsonString)) {
-    const fixedString = fixJsonString(jsonString)
-    return JSON.parse(fixedString)
-  }
-  return JSON.parse(jsonString)
+  // Take only string portion between first and last curly bracers
+  const jsonRegex = /{.*}/s
+  // @ts-ignore
+  const fixedString = jsonString.match(jsonRegex)[0]
+
+  return JSON.parse(fixedString)
 }
