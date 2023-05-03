@@ -6,28 +6,45 @@ import axios from 'axios'
 // May need to create firebase function inside say-it-right project
 // Then initialize the app with it (along with auth / firestore)
 
-export default async function useOpenAiSentencesGenerator(words: string[]) {
+export default async function useOpenAiSentencesGenerator(mispronouncedWords: string[]) {
   try {
     const url = import.meta.env.VITE_SENTENCES_GENERATOR_ENDPOINT
-    const query = words.join(', ')
+    const query = mispronouncedWords.join(', ')
     const params = { query }
     const response = await axios.get(url, { params })
     console.log(response)
     const content = response?.data?.choices[0]?.message?.content
     console.log(content)
-    const sentencesObject = processJsonString(content)
+
+    // Take only string portion between first and last curly bracers
+    const sentencesObject = extractObjectFromString(content)
     console.log(sentencesObject)
-    return sentencesObject
+
+    // Matches only values that match mispronounced words.
+    // Necessary because sometimes chatGPT inserts its own random words
+    const finalSentencesObject = filterMatchingWords(sentencesObject, mispronouncedWords)
+    console.log(finalSentencesObject)
+    return finalSentencesObject
   } catch (err) {
     throw new Error(`Failed to create sentences with openAI: ${err}`)
   }
 }
 
-function processJsonString(jsonString: string) {
-  // Take only string portion between first and last curly bracers
+function extractObjectFromString(jsonString: string) {
   const jsonRegex = /{.*}/s
   // @ts-ignore
   const fixedString = jsonString.match(jsonRegex)[0]
 
   return JSON.parse(fixedString)
+}
+
+function filterMatchingWords(dataObject, wordsArray: string[]) {
+  const result = wordsArray.reduce((acc, word) => {
+    if (dataObject[word]) {
+      acc[word] = dataObject[word]
+    }
+    return acc
+  }, {})
+
+  return result
 }
