@@ -24,9 +24,11 @@ export interface ProvidedWord {
   pronunciationTip: string
   attempts: number
   attemptsSuccessful: number
+  sentences: string[]
 }
 
 export interface CustomWord {
   attempts: number
   attemptsSuccessful: number
+  sentences: string[]
 }

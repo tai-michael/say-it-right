@@ -65,10 +65,9 @@ import { computed, ref, onMounted } from 'vue'
 import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import type { WordObject } from '@/stores/modules/types/Review'
 import RecorderButton from './RecorderButton.vue'
-
 import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
 import useCorrectAndIncorrectWordsFilter from '@/composables/useCorrectAndIncorrectWordsFilter'
-
+import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'
 import { useRoute } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 import { useCustomListsStore } from '@/stores/index.ts'
@@ -131,7 +130,7 @@ const temporaryTranscriptDisplay = computed(() =>
 
 const finalTranscript = ref('')
 
-const handleFinalTranscript = (transcript: string) => {
+const handleFinalTranscript = async (transcript: string) => {
   isRecording.value = false
 
   // NOTE this guard is necessary b/c the recorder cannot be deactivated between views
@@ -143,7 +142,6 @@ const handleFinalTranscript = (transcript: string) => {
 
   console.log(`para challenge: ${transcript}`)
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
-  // testedWords.value = useTestedWordsAdjuster(testedWords.value, testedParagraph.value)
   testedWords.value = useTestedWordsAdjuster(
     testedWordsObj.value,
     testedParagraph.value,
@@ -165,23 +163,42 @@ const handleFinalTranscript = (transcript: string) => {
     mispronouncedTestedWords.value
   )
 
-  // TODO maybe filter for words that aren't already in Review first, then...
-  addWordsToWordReview(mispronouncedTestedWords.value)
-
   store.setParagraph(testedParagraph.value)
   store.setListStatus('PARAGRAPH_RECORDING_ENDED')
-  store.updateListsInFirestore()
-  wordReviewStore.updateWordReviewInFirestore()
+
+  if (route.name === 'provided-lists') {
+    // NOTE provided lists all have sentences already, so no need to generate any
+    addWordsToReview(mispronouncedTestedWords.value, props.list.words)
+    store.updateListsInFirestore()
+    wordReviewStore.updateWordReviewInFirestore()
+  } else {
+    // NOTE splitting up the sentence generation is necessary, as it can be quite slow
+    const firstCoupleWords = mispronouncedTestedWords.value.slice(0, 2)
+    const remainingWords = mispronouncedTestedWords.value.slice(2)
+
+    // NOTE awaiting the first is necessary, as openAI doesn't allow concurrent queries
+    await useSentencesCreationAndStorage(firstCoupleWords, props.list.listNumber)
+    useSentencesCreationAndStorage(remainingWords, props.list.listNumber)
+  }
 }
 
-const addWordsToWordReview = (words: string[]) => {
-  const wordObjects = words.map((word) => ({
-    word,
-    attempts: 0,
-    attemptsSuccessful: 0,
-    created: Date.now()
-  }))
-  wordReviewStore.addWords(wordObjects)
+const addWordsToReview = (mispronouncedWords: string[], listWords: Words<ProvidedWord>) => {
+  const wordObjectsToAdd: WordObject[] = []
+
+  for (const mispronouncedWord of mispronouncedWords) {
+    if (listWords.hasOwnProperty(mispronouncedWord)) {
+      const wordObject = {
+        word: mispronouncedWord,
+        sentences: listWords[mispronouncedWord].sentences,
+        attempts: 0,
+        attemptsSuccessful: 0,
+        created: Date.now()
+      }
+      wordObjectsToAdd.push(wordObject)
+    }
+  }
+
+  wordReviewStore.addWords(wordObjectsToAdd)
 }
 
 const highlightCorrectAndIncorrectWords = (

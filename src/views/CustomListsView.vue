@@ -38,7 +38,6 @@ import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
 import SentenceChallenge from '@/components/SentenceChallenge.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
-// import useOpenAiSentencesGenerator from '@/composables/useOpenAiSentencesGenerator'
 import LoadingDots from '@/components/LoadingDots.vue'
 
 import { useRoute, useRouter } from 'vue-router'
@@ -69,6 +68,8 @@ const submitWords = async (words: string) => {
     submissionError.value = false
     isLoading.value = true
 
+    // TODO if user enters just one word, do a SingleWordChallenge
+    // instead of a ParagraphChallenge; adjust below accordingly
     const wordsArray = words.trim().split(/[ ,]+/)
 
     newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(wordsArray)
@@ -94,6 +95,7 @@ function createNewListObjectFromWords(words: string[], allLists: List[], paragra
 
   words.forEach((word) => {
     newListObject.words[word] = {
+      sentences: [],
       attempts: 0,
       attemptsSuccessful: 0
     }

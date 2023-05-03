@@ -53,6 +53,7 @@ const listNumOfListToDel = ref('')
 const listNumOfListToAdd = ref('')
 
 const uploadCoreLists = async (lists) => {
+  console.log(lists)
   try {
     isLoading.value = true
     const batch = writeBatch(db)
