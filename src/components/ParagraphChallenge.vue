@@ -172,13 +172,18 @@ const handleFinalTranscript = async (transcript: string) => {
     store.updateListsInFirestore()
     wordReviewStore.updateWordReviewInFirestore()
   } else {
+    const sortedMispronouncedWords = mispronouncedTestedWords.value.sort()
+    console.log(sortedMispronouncedWords)
     // NOTE splitting up the sentence generation is necessary, as it can be quite slow
-    const firstCoupleWords = mispronouncedTestedWords.value.slice(0, 2)
-    const remainingWords = mispronouncedTestedWords.value.slice(2)
+    const firstCoupleWords = sortedMispronouncedWords.slice(0, 2)
+    const remainingWords = sortedMispronouncedWords.slice(2)
+    console.log(firstCoupleWords)
+    console.log(remainingWords)
 
     // NOTE awaiting the first is necessary, as openAI doesn't allow concurrent queries
     await useSentencesCreationAndStorage(firstCoupleWords, props.list.listNumber)
     useSentencesCreationAndStorage(remainingWords, props.list.listNumber)
+    console.log('finished executing entire handleFinalTranscript function')
   }
 }
 

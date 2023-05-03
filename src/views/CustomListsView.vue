@@ -70,7 +70,9 @@ const submitWords = async (words: string) => {
 
     // TODO if user enters just one word, do a SingleWordChallenge
     // instead of a ParagraphChallenge; adjust below accordingly
-    const wordsArray = words.trim().split(/[ ,]+/)
+    // TODO Also, use a Set or something so that there are only unique words
+    // TODO Limit this to 7 words
+    const wordsArray = words.trim().replace(/^,|,$/g, '').split(/[ ,]+/)
 
     newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(wordsArray)
 
