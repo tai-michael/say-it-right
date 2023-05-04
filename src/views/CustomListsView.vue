@@ -6,7 +6,7 @@
       @submit.prevent="submitWords(wordsInput)"
     >
       <div class="input-container">
-        <label>Insert up to 10 words separated by spaces or commas:</label>
+        <label>Insert up to 7 words separated by spaces or commas:</label>
         <div class="input-field">
           <input placeholder="e.g. urban thin kindly" v-model="wordsInput" autofocus />
           <button type="submit" :disabled="isLoading">Submit</button>
@@ -18,7 +18,7 @@
       <LoadingDots />
     </div>
 
-    <div v-if="submissionError" class="error">Oops! Something went wrong. Please try again.</div>
+    <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
     <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
@@ -50,7 +50,7 @@ const store = useCustomListsStore()
 const isLoading = ref(false)
 const wordsInput = ref('')
 const newlyCreatedParagraph = ref('')
-const submissionError = ref(false)
+const submissionError = ref('')
 
 const list = ref<List | Record<string, never>>({})
 
@@ -64,26 +64,28 @@ const showParagraphChallenge = computed(
 // TODO probably need to add error-handling in here for openai
 const submitWords = async (words: string) => {
   try {
-    if (!words) return
-    submissionError.value = false
-    isLoading.value = true
+    if (!words) return (submissionError.value = 'Please enter at least one word')
 
+    submissionError.value = ''
     // TODO if user enters just one word, do a SingleWordChallenge
     // instead of a ParagraphChallenge; adjust below accordingly
-    // TODO Also, use a Set or something so that there are only unique words
-    // TODO Limit this to 7 words
     const wordsArray = words.trim().replace(/^,|,$/g, '').split(/[ ,]+/)
+    const uniqueWordsArray = [...new Set(wordsArray)]
+    console.log(uniqueWordsArray)
 
-    newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(wordsArray)
+    if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
 
-    createNewListObjectFromWords(wordsArray, store.allLists, newlyCreatedParagraph.value)
+    isLoading.value = true
+    newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)
+
+    createNewListObjectFromWords(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
 
     await store.updateListsInFirestore()
     router.push({ params: { id: store.allLists.length } })
   } catch (err) {
     console.log(err)
     isLoading.value = false
-    submissionError.value = true
+    submissionError.value = 'Oops! Something went wrong. Please try again'
   }
 }
 
