@@ -14,7 +14,7 @@
 
     <div v-if="isRecording" class="transcript-container">
       <!-- <label>Live transcript:</label> -->
-      <div>{{ temporaryTranscriptDisplay }}</div>
+      <div>{{ temporaryTranscript }}</div>
     </div>
 
     <div v-else class="message">
@@ -59,6 +59,8 @@ import { computed, onMounted, ref } from 'vue'
 
 import PlayAudioIcon from '@/assets/images/play-audio.vue'
 // import CheckmarkIcon from '@/assets/images/checkmark.vue'
+import { metaphone } from 'metaphone'
+
 import RecorderButton from './RecorderButton.vue'
 import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
 import useHardWordLogger from '@/composables/useHardWordLogger'
@@ -110,20 +112,23 @@ const isRecording = ref(false)
 const temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript: string) => {
+  console.log(transcript)
   // NOTE this guard is necessary b/c the recorder cannot be deactivated between views
   if (store.activeList?.listNumber !== props.list.listNumber) return
-  temporaryTranscript.value = transcript
+
+  temporaryTranscript.value = transcript.split(' ').slice(-1).join(' ')
+
+  const transcribedWordCode = getPhoneticCode(temporaryTranscript.value)
+  const testedWordCode = getPhoneticCode(testedWord.value)
+  if (transcribedWordCode === testedWordCode) temporaryTranscript.value = testedWord.value
 }
 
-const temporaryTranscriptDisplay = computed(() =>
-  temporaryTranscript.value?.split(' ').slice(-8).join(' ')
-)
+// const temporaryTranscriptDisplay = computed(() =>
+//   temporaryTranscript.value?.split(' ').slice(-8).join(' ')
+// )
 
 const finalTranscriptWords = ref<string[]>([])
-const finalTranscriptWord = computed(
-  () => finalTranscriptWords.value[finalTranscriptWords.value.length - 1]
-)
-
+const finalTranscriptWord = ref('')
 const isPronouncedCorrectly = ref(false)
 
 const handleFinalTranscript = (transcript: string) => {
@@ -131,8 +136,13 @@ const handleFinalTranscript = (transcript: string) => {
   if (!transcript || store.activeList?.listNumber !== props.list.listNumber) return
 
   finalTranscriptWords.value = transcript.split(' ')
+  finalTranscriptWord.value = finalTranscriptWords.value[finalTranscriptWords.value.length - 1]
 
-  if (finalTranscriptWord.value === testedWord.value) {
+  const transcribedWordCode = getPhoneticCode(finalTranscriptWord.value)
+  const testedWordCode = getPhoneticCode(testedWord.value)
+
+  if (transcribedWordCode === testedWordCode) {
+    finalTranscriptWord.value = testedWord.value
     handleCorrectPronunciation()
   } else if (storeWord.value.attempts === store.attemptsLimit - 1) {
     skipWord()
@@ -165,6 +175,12 @@ const handleCorrectPronunciation = () => {
       introductionNeeded.value = false
     }, 2000)
   }
+}
+
+// NOTE convert any mistranscribed word to the tested word
+// if they sound the same
+const getPhoneticCode = (word: string) => {
+  return metaphone(word)
 }
 
 const skipWord = () => {

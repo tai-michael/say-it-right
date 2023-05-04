@@ -3,9 +3,9 @@
   "status": "LIST_NOT_STARTED",
   "attempts": 0,
   "attemptsSuccessful": 0,
-  "paragraph": "Sakura is a college student who is currently studying computer science. She loves to code and spends most of her free time working on programming projects. She has one younger sister who is in high school. Emily is very organized and likes to plan out her day in advance, making a to-do list with two or three tasks. She also enjoys running and usually goes for a jog around the park at six in the morning. Emily's favorite number is twelve, which is the number of hours of sleep she needs to feel fully rested.",
+  "paragraph": "Sakura is a college student who is currently studying computer science. She loves to code and spends most of her free time working on programming projects in cafés. She has one younger sister who is in high school. Emily is very organized and likes to plan out her day in advance, making a to-do list with two or three tasks. She also enjoys running and usually goes for a jog around the park at six in the morning. Emily is never bored. Her favorite number is twelve, which is the number of hours of sleep she needs to feel fully rested.",
   "words": {
-    "college": {
+    "café": {
       "mispronouncedFrequentlyAs": "wiwid",
       "mispronunciationFrequency": 3,
       "mistakeType": "Mispronouncing 'V' as 'W'",
@@ -15,7 +15,7 @@
       "attemptsSuccessful": 0,
       "sentences": ["I graduated from college last year.", "She is attending a community college."]
     },
-    "currently": {
+    "bored": {
       "mispronouncedFrequentlyAs": "successfur",
       "mispronunciationFrequency": 10,
       "mistakeType": "Mispronouncing 'L' as 'R'",
