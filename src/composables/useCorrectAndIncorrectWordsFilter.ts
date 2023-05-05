@@ -9,20 +9,28 @@ export default function useCorrectAndIncorrectWordsFilter(
 ) {
   const store = routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 
-  //TODO use metaphone here for extra safety
+  //NOTE metaphone allows us to get the Phonetic code of a word
+  // it's used below in case a correctly pronounced word is mistranscribed
+  // it also helps if there's an accented word in the paragraph (e.g. café)
   const recordedWords = [...new Set(transcriptString.split(' '))]
-  const correctWords = [...testedWords.filter((word) => recordedWords.includes(word))]
+  const testedWordsPhonetic = testedWords.map((word) => metaphone(word))
+  const recordedWordsPhonetic = recordedWords.map((word) => metaphone(word))
 
-  for (const word of correctWords) {
-    store.logPronunciationAttempt(word)
-    store.logPronunciationAttemptSuccessful(word)
-  }
-
+  const correctWords = []
   const incorrectWords = []
-  for (const word of testedWords) {
-    if (!correctWords.includes(word)) {
-      incorrectWords.push(word)
-      store.logPronunciationAttempt(word)
+
+  for (const [index, testedWordPhonetic] of testedWordsPhonetic.entries()) {
+    const foundIndex = recordedWordsPhonetic.findIndex(
+      (recordedWordPhonetic) => testedWordPhonetic === recordedWordPhonetic
+    )
+
+    if (foundIndex !== -1) {
+      correctWords.push(testedWords[index])
+      store.logPronunciationAttempt(testedWords[index])
+      store.logPronunciationAttemptSuccessful(testedWords[index])
+    } else {
+      incorrectWords.push(testedWords[index])
+      store.logPronunciationAttempt(testedWords[index])
     }
   }
 
