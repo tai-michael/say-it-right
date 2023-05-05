@@ -1,5 +1,6 @@
 import { useProvidedListsStore } from '@/stores'
 import { useCustomListsStore } from '@/stores'
+import { metaphone } from 'metaphone'
 
 export default function useCorrectAndIncorrectWordsFilter(
   testedWords: string[],
@@ -8,6 +9,7 @@ export default function useCorrectAndIncorrectWordsFilter(
 ) {
   const store = routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 
+  //TODO use metaphone here for extra safety
   const recordedWords = [...new Set(transcriptString.split(' '))]
   const correctWords = [...testedWords.filter((word) => recordedWords.includes(word))]
 

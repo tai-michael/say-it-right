@@ -38,9 +38,11 @@ function extractObjectFromString(jsonString: string) {
   return JSON.parse(fixedString)
 }
 
+// @ts-ignore
 function filterMatchingWords(dataObject, wordsArray: string[]) {
   const result = wordsArray.reduce((acc, word) => {
     if (dataObject[word]) {
+      // @ts-ignore
       acc[word] = dataObject[word]
     }
     return acc

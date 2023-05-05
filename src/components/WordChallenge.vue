@@ -223,8 +223,6 @@ onMounted(() => {
       // @ts-ignore
       .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
   )
-  // TODO put skipped words in user's database
-  // TODO on mount, generate the sentences, then push them to backend collection
   // TODO Implement hints, which I'll generate with GPT first. (e.g. v-if with attemptsSuccessful < attemptsSuccessfulRequired && attempts >= attemptsLimit - 3)
 
   testedWords.value = Object.keys(mispronouncedParagraphWords).filter(

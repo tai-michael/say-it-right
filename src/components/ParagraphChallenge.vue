@@ -68,6 +68,7 @@ import RecorderButton from './RecorderButton.vue'
 import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
 import useCorrectAndIncorrectWordsFilter from '@/composables/useCorrectAndIncorrectWordsFilter'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'
+import useCheckIfWordsExistInWordReview from '@/composables/useCheckIfWordsExistInWordReview'
 import { useRoute } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 import { useCustomListsStore } from '@/stores/index.ts'
@@ -166,28 +167,36 @@ const handleFinalTranscript = async (transcript: string) => {
   store.setParagraph(testedParagraph.value)
   store.setListStatus('PARAGRAPH_RECORDING_ENDED')
 
+  // NOTE provided lists all have sentences already,
+  // so no need to generate new sentences for those
   if (route.name === 'provided-lists') {
-    // NOTE provided lists all have sentences already, so no need to generate any
-    addWordsToReview(mispronouncedTestedWords.value, props.list.words)
+    // NOTE only add words that aren't already in Review to Review
+    const { nonMatchingWords } = useCheckIfWordsExistInWordReview(mispronouncedTestedWords.value)
+    addWordsToReview(nonMatchingWords, props.list.words)
     store.updateListsInFirestore()
     wordReviewStore.updateWordReviewInFirestore()
   } else {
     const sortedMispronouncedWords = mispronouncedTestedWords.value.sort()
     console.log(sortedMispronouncedWords)
     // NOTE splitting up the sentence generation is necessary, as it can be quite slow
-    const firstCoupleWords = sortedMispronouncedWords.slice(0, 2)
-    const remainingWords = sortedMispronouncedWords.slice(2)
-    console.log(firstCoupleWords)
-    console.log(remainingWords)
+    if (sortedMispronouncedWords.length > 3) {
+      const firstCoupleWords = sortedMispronouncedWords.slice(0, 2)
+      const remainingWords = sortedMispronouncedWords.slice(2)
+      // console.log(firstCoupleWords)
+      // console.log(remainingWords)
+      // NOTE awaiting the first is necessary, as openAI doesn't allow concurrent queries
+      await useSentencesCreationAndStorage(firstCoupleWords, props.list.listNumber)
+      useSentencesCreationAndStorage(remainingWords, props.list.listNumber)
+    } else useSentencesCreationAndStorage(sortedMispronouncedWords, props.list.listNumber)
 
-    // NOTE awaiting the first is necessary, as openAI doesn't allow concurrent queries
-    await useSentencesCreationAndStorage(firstCoupleWords, props.list.listNumber)
-    useSentencesCreationAndStorage(remainingWords, props.list.listNumber)
     console.log('finished executing entire handleFinalTranscript function')
   }
 }
 
 const addWordsToReview = (mispronouncedWords: string[], listWords: Words<ProvidedWord>) => {
+  // TODO Either here or in a new function,
+  // only add words that aren't already in Review.
+  // Test with providedLists
   const wordObjectsToAdd: WordObject[] = []
 
   for (const mispronouncedWord of mispronouncedWords) {

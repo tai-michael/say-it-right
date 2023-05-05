@@ -14,18 +14,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import type { WordObject } from '@/stores/modules/types/Review'
+// import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+// import type { WordObject } from '@/stores/modules/types/Review'
 import { useWordReviewStore } from '@/stores/index.ts'
 
 const store = useWordReviewStore()
-
-const allWords = ref<WordObject[]>([])
-
-// REVIEW or use computed
-onMounted(() => {
-  allWords.value = [...store.allWords]
-})
+const { allWords } = storeToRefs(store)
 </script>
 
 <style lang="scss" scoped>

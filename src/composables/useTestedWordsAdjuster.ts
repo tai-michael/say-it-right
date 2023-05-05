@@ -14,7 +14,6 @@ export default function useTestedWordsAdjuster(
   // Matches any sequence of characters that are not whitespace or certain punctuation marks, including the punctuation marks themselves
   const wordRegex = /(?:[^\s.,;:!?"'’“”()[\]{}<>«»]+)|(?:[.,;:!?"'’“”()[\]{}<>«»]+)/g
   // Splits the paragraph into an array of words and punctuation marks
-  // TODO in the final version, user-submitted tested words will be auto-converted to lowercase before being posted to backend, so toLowerCase will be unnecessary
   // @ts-ignore
   const paragraphWords = testedParagraph.match(wordRegex).map((word) => word.toLowerCase())
 
@@ -22,10 +21,9 @@ export default function useTestedWordsAdjuster(
 
   const keys = Object.keys(testedWords)
   for (const key of keys) {
-    const lowercaseTestedWord = key.toLowerCase()
-    let result = lowercaseTestedWord
+    let result = key
     for (const paragraphWord of paragraphWords) {
-      if (stem(lowercaseTestedWord) === stem(paragraphWord)) {
+      if (stem(key) === stem(paragraphWord)) {
         result = paragraphWord
         break
       }

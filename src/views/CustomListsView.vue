@@ -67,15 +67,19 @@ const submitWords = async (words: string) => {
     if (!words) return (submissionError.value = 'Please enter at least one word')
 
     submissionError.value = ''
-    // TODO if user enters just one word, do a SingleWordChallenge
-    // instead of a ParagraphChallenge; adjust below accordingly
-    const wordsArray = words.trim().replace(/^,|,$/g, '').split(/[ ,]+/)
-    const uniqueWordsArray = [...new Set(wordsArray)]
-    console.log(uniqueWordsArray)
 
+    const wordsArray = words.trim().toLowerCase().replace(/^,|,$/g, '').split(/[ ,]+/)
+    const uniqueWordsArray = [...new Set(wordsArray)]
     if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
 
     isLoading.value = true
+    // TODO if user enters just one word, do a SingleWordChallenge
+    // instead of a ParagraphChallenge; put below code block in
+    // in condition (or just 'return' at end of implementation of
+    // single word challenge)
+    // Maybe add a 'word' prop to WordChallenge, and use conditions
+    // Ask niark how much % of a code change means new component
+
     newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)
 
     createNewListObjectFromWords(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
