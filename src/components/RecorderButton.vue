@@ -126,10 +126,10 @@ client.onSegmentChange((segment) => {
 
     &:active {
       background-color: #e96c6c;
-      // transition: 0.3s;
-      // width: 85px;
-      // height: 85px;
-      // transition: width 0.3s, height 0.3s;
+      transition: 0.3s;
+      width: 85px;
+      height: 85px;
+      transition: width 0.3s, height 0.3s;
     }
   }
 }

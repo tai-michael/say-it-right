@@ -62,7 +62,8 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
-import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
+import type { PropType } from 'vue'
+import type { List, CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import type { WordObject } from '@/stores/modules/types/Review'
 import RecorderButton from './RecorderButton.vue'
 import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
@@ -79,7 +80,7 @@ const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCus
 const wordReviewStore = useWordReviewStore()
 
 const props = defineProps({
-  list: { type: Object, required: true }
+  list: { type: Object as PropType<List>, required: true }
   // paragraph: { type: String, required: true },
   // words: { type: Array, required: true }
   // recorderComponentKey: { type: String, required: true }
@@ -193,7 +194,10 @@ const handleFinalTranscript = async (transcript: string) => {
   }
 }
 
-const addWordsToReview = (mispronouncedWords: string[], listWords: Words<ProvidedWord>) => {
+const addWordsToReview = (
+  mispronouncedWords: string[],
+  listWords: Words<ProvidedWord> | Words<CustomWord>
+) => {
   // TODO Either here or in a new function,
   // only add words that aren't already in Review.
   // Test with providedLists
