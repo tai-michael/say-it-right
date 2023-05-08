@@ -1,55 +1,61 @@
 <template>
   <main>
-    <hr />
-    <div class="tested-paragraph">
-      <p v-html="testedParagraph"></p>
-    </div>
-    <hr />
+    <div class="content">
+      <hr />
+      <div class="tested-paragraph">
+        <p v-html="testedParagraph"></p>
+      </div>
+      <hr />
 
-    <div v-if="isRecording" class="transcript-container">
-      <label>Live transcript:</label>
-      <div>{{ temporaryTranscriptDisplay }}</div>
-    </div>
+      <div v-if="isRecording" class="transcript-container">
+        <label>Live transcript:</label>
+        <div>{{ temporaryTranscriptDisplay }}</div>
+      </div>
 
-    <div v-else class="message">
-      <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
-      <div v-else-if="recordingStatus === 'NO_WORDS_RECORDED'" class="message__text">
-        <span>Let's start by testing your pronunciation.</span>
-        <span>Hold the button and read the paragraph.</span>
-      </div>
-      <div v-else-if="recordingStatus === 'FEW_WORD_RECORDED'" class="message__text">
-        <span>You didn't record enough words. Please try again.</span>
-        <span>Remember to hold the button while recording!</span>
-      </div>
-      <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
-        <span>You pronounced each tested word correctly. Very impressive!</span>
-        <span>Let's test your pronunciation of other words that are commonly mispronounced.</span>
-      </div>
-      <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
-        <span>You pronounced only one word incorrectly. Good job!</span>
-        <span>Next, let's practice pronouncing this word.</span>
-      </div>
-      <div v-else-if="recordingStatus === 'MOST_WORDS_CORRECT'" class="message__text">
-        <span
-          >You did pretty well! However, these highlighted words were not pronounced
-          correctly.</span
+      <div v-else class="message">
+        <div>
+          <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
+          <div v-else-if="recordingStatus === 'NO_WORDS_RECORDED'" class="message__text">
+            <span>Let's start by testing your pronunciation.</span>
+            <span>Hold the button and read the paragraph.</span>
+          </div>
+          <div v-else-if="recordingStatus === 'FEW_WORD_RECORDED'" class="message__text">
+            <span>You didn't record enough words. Please try again.</span>
+            <span>Remember to hold the button while recording!</span>
+          </div>
+          <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
+            <span>You pronounced each tested word correctly. Very impressive!</span>
+            <span
+              >Let's test your pronunciation of other words that are commonly mispronounced.</span
+            >
+          </div>
+          <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
+            <span>You pronounced only one word incorrectly. Good job!</span>
+            <span>Next, let's practice pronouncing this word.</span>
+          </div>
+          <div v-else-if="recordingStatus === 'MOST_WORDS_CORRECT'" class="message__text">
+            <span
+              >You did pretty well! However, these highlighted words were not pronounced
+              correctly.</span
+            >
+            <span>Next, let's practice pronouncing these words.</span>
+          </div>
+          <div v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'" class="message__text">
+            <span>These highlighted words were not pronounced correctly.</span>
+            <span>Next, let's practice pronouncing these words.</span>
+          </div>
+        </div>
+
+        <button
+          class="next-button"
+          v-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
+          @click="store.setListStatus('WORD_CHALLENGE_STARTED')"
         >
-        <span>Next, let's practice pronouncing these words.</span>
+          Next
+        </button>
       </div>
-      <div v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'" class="message__text">
-        <span>These highlighted words were not pronounced correctly.</span>
-        <span>Next, let's practice pronouncing these words.</span>
-      </div>
+      <!-- <RouterLink to="/provided-lists/word-test">Next</RouterLink> -->
     </div>
-
-    <button
-      class="next-button"
-      v-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
-      @click="store.setListStatus('WORD_CHALLENGE_STARTED')"
-    >
-      Next
-    </button>
-    <!-- <RouterLink to="/provided-lists/word-test">Next</RouterLink> -->
 
     <RecorderButton
       @recording-started="isRecording = true"
@@ -321,6 +327,13 @@ label {
   font-weight: 800;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 700px;
+}
+
 .tested-paragraph {
   margin: 1rem 0;
   // 'deep' selector is necessary, as scoped styles don't apply to content inside v-html
@@ -362,6 +375,7 @@ label {
 
 .message {
   margin-top: 1rem;
+  min-height: 100px;
   // height: 50px;
 
   &__text {
@@ -377,7 +391,7 @@ label {
 
 .transcript-container {
   margin-top: 1rem;
-  min-height: 64px;
+  min-height: 100px;
 }
 
 .next-button {
