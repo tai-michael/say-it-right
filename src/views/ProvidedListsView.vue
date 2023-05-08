@@ -1,23 +1,35 @@
 <template>
   <main>
     <!-- <LoadingDots v-if="isLoading" /> -->
-    <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
+    <TransitionAppear>
+      <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
-    <WordChallenge
-      v-else-if="
-        list.status === 'WORD_CHALLENGE_STARTED' || list.status === 'SENTENCE_CHALLENGE_STARTED'
-      "
-      :list="list"
-    />
+      <WordChallenge
+        v-else-if="
+          list.status === 'WORD_CHALLENGE_STARTED' || list.status === 'SENTENCE_CHALLENGE_STARTED'
+        "
+        :list="list"
+      />
+    </TransitionAppear>
 
+    <div v-if="list.status === 'LIST_COMPLETED'" class="message">
+      <div class="message__text">
+        <span>You have completed this list.</span>
+        <span>
+          Challenge yourself with a different
+          <RouterLink to="/overview" class="link">List</RouterLink> or
+          <RouterLink to="/word-review" class="link">Review</RouterLink> the words you've learned!
+        </span>
+      </div>
+    </div>
     <!-- <SentenceChallenge v-else-if="list.status === 'SENTENCE_CHALLENGE_STARTED'" :list="list" /> -->
 
-    <div v-if="store.completedLists.length === store.allLists.length">
+    <!-- <div v-if="store.completedLists.length === store.allLists.length">
       <span
         >You have completed all provided lists. Click on any list in the 'Overview' tab to review
         the list.</span
       >
-    </div>
+    </div> -->
   </main>
 </template>
 
@@ -28,6 +40,7 @@ import type { List } from '@/stores/modules/types/List'
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
 import SentenceChallenge from '@/components/SentenceChallenge.vue'
+import TransitionAppear from '@/components/transitions/TransitionFade.vue'
 
 import { useRoute, useRouter } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
@@ -36,8 +49,7 @@ const router = useRouter()
 const store = useProvidedListsStore()
 // const componentKey = 'provided-lists'
 
-// NOTE the 'Record<string, never>' type represents an empty object with
-// string keys and values of type 'never'
+// @ts-ignore
 const list = ref<List>({})
 
 const showParagraphChallenge = computed(
@@ -74,4 +86,40 @@ onActivated(() => {
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.message {
+  display: flex;
+  justify-content: center;
+  // margin-top: 2rem;
+  min-height: 64px;
+  padding: 0 5rem;
+  // height: 50px;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    span {
+      padding-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--orange-color);
+    }
+  }
+}
+
+.link {
+  color: rgb(84, 191, 226);
+  font-weight: 700;
+}
+
+.link:hover {
+  background-color: none !important;
+}
+
+.fade-appear-from,
+.fade-appear-to {
+  opacity: 0;
+}
+.fade-appear-active {
+  transition: opacity 1s;
+}
+</style>

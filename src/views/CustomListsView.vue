@@ -20,14 +20,28 @@
 
     <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-    <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
+    <TransitionAppear>
+      <ParagraphChallenge v-if="showParagraphChallenge" key="paragraph-challenge" :list="list" />
 
-    <WordChallenge
-      v-else-if="
-        list.status === 'WORD_CHALLENGE_STARTED' || list.status === 'SENTENCE_CHALLENGE_STARTED'
-      "
-      :list="list"
-    />
+      <WordChallenge
+        v-else-if="
+          list.status === 'WORD_CHALLENGE_STARTED' || list.status === 'SENTENCE_CHALLENGE_STARTED'
+        "
+        key="sentence-challenge"
+        :list="list"
+      />
+    </TransitionAppear>
+
+    <div v-if="list.status === 'LIST_COMPLETED'" class="message">
+      <div class="message__text">
+        <span>You have completed this list.</span>
+        <span>
+          Challenge yourself with a different
+          <RouterLink to="/overview" class="link">List</RouterLink> or
+          <RouterLink to="/word-review" class="link">Review</RouterLink> the words you've learned!
+        </span>
+      </div>
+    </div>
 
     <!-- TODO add in WordChallenge and SentenceChallenge -->
   </main>
@@ -42,6 +56,7 @@ import WordChallenge from '@/components/WordChallenge.vue'
 import SentenceChallenge from '@/components/SentenceChallenge.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import LoadingDots from '@/components/LoadingDots.vue'
+import TransitionAppear from '@/components/transitions/TransitionFade.vue'
 
 import { useRoute, useRouter } from 'vue-router'
 import { useCustomListsStore } from '@/stores/index.ts'
