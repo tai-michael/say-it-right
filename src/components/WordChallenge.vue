@@ -1,61 +1,77 @@
 <template>
   <main>
-    <div class="tested-word-container">
-      <div class="tested-word" :class="{ 'word-highlight': highlightActive }">
-        {{ testedWord }}
+    <div class="word-and-sentences">
+      <div class="word-container">
+        <div class="word" :class="{ 'word-highlight': highlightActive }">
+          {{ testedWord }}
+        </div>
+        <PlayAudioIcon @click="play" />
       </div>
-      <PlayAudioIcon @click="play" />
-    </div>
-    <!-- <div class="checkmark-container" v-if="highlightActive">
+      <!-- <div class="checkmark-container" v-if="highlightActive">
       <transition name="fade" mode="out-in" appear>
         <CheckmarkIcon class="checkmark" />
       </transition>
     </div> -->
 
-    <Transition name="fade" mode="in-out">
-      <div v-if="sentenceChallengeActive">
-        <!-- <ul>
+      <TransitionFade>
+        <div v-if="sentenceChallengeActive">
+          <!-- <ul>
         <li v-for="(sentence, index) of sentences" :key="index" class="sentences">
            {{ sentence }}
-        </li>
-      </ul> -->
-        <div class="sentence">
-          <CheckmarkIcon class="checkmark" v-if="checkmarkActive" />
-          <Transition name="fade" mode="out-in">{{ displayedSentence }}</Transition>
+          </li>
+        </ul> -->
+          <TransitionFade>
+            <div :key="testedSentence" class="sentence">
+              <!-- <CheckmarkIcon class="checkmark" v-if="checkmarkActive" /> -->
+              {{ testedSentence }}
+            </div>
+          </TransitionFade>
         </div>
-      </div>
-    </Transition>
+      </TransitionFade>
+    </div>
 
     <div v-if="isRecording" class="transcript-container">
       <!-- <label>Live transcript:</label> -->
       <div>{{ temporaryTranscript }}</div>
     </div>
 
-    <div v-else class="message">
-      <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
-      <div v-else-if="recordingStatus === 'NOTHING_RECORDED'" class="message__text">
-        <span v-if="introductionNeeded"
-          >Let's test your pronunciation of this word
-          {{ wordChallengeActive ? ' ' : 'in sentences' }}.</span
-        >
-        <span>Hold the button and read the {{ wordChallengeActive ? 'word' : 'sentence' }}.</span>
+    <TransitionFade v-else>
+      <div class="message">
+        <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
+        <div v-else-if="recordingStatus === 'NOTHING_RECORDED'" class="message__text">
+          <span v-if="introductionNeeded"
+            >Let's test your pronunciation of this word{{
+              wordChallengeActive ? '' : ' in sentences'
+            }}.</span
+          >
+          <span>Hold the button and read the {{ wordChallengeActive ? 'word' : 'sentence' }}.</span>
+        </div>
+        <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
+          <span
+            >Good job 👍! Now read
+            {{ wordChallengeActive ? 'it just one more time.' : 'the second sentence' }}</span
+          >
+        </div>
+        <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
+          <span
+            >Well done 👍! {{ wordChallengeActive ? 'Now try reading some sentences.' : '' }}</span
+          >
+        </div>
+        <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text-retry">
+          <span>Try again.</span>
+        </div>
+        <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
+          <span>Let's skip this word for now.</span>
+        </div>
+        <div v-else-if="props.list.status === 'LIST_COMPLETED'" class="message__text">
+          <span>You've completed the list. Well done!</span
+          ><span>
+            Challenge yourself with another <RouterLink to="/overview">list</RouterLink> or
+            <RouterLink to="/word-review">Review</RouterLink> the words you've just learned!
+          </span>
+        </div>
       </div>
-      <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
-        <span
-          >Good job! Now read
-          {{ wordChallengeActive ? 'it just one more time.' : 'the second sentence' }}</span
-        >
-      </div>
-      <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
-        <span>Well done! {{ wordChallengeActive ? 'Now try reading some sentences.' : '' }}</span>
-      </div>
-      <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text">
-        <span>Try again.</span>
-      </div>
-      <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
-        <span>Let's skip this word for now.</span>
-      </div>
-    </div>
+    </TransitionFade>
 
     <RecorderButton
       v-if="showRecorderButton"
@@ -76,13 +92,15 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import PlayAudioIcon from '@/assets/images/play-audio.vue'
-import CheckmarkIcon from '@/assets/images/checkmark.vue'
+// import CheckmarkIcon from '@/assets/images/checkmark.vue'
 import RecorderButton from './RecorderButton.vue'
 import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
 import useHardWordLogger from '@/composables/useHardWordLogger'
+import useDelay from '@/composables/useDelay'
 import { metaphone } from 'metaphone'
 import stem from 'wink-porter2-stemmer'
 import { useRoute } from 'vue-router'
@@ -145,18 +163,18 @@ const testedSentence = computed(() => {
   else return ''
 })
 
-const displayedSentence = ref('')
+// const displayedSentence = ref('')
 
-watch(testedSentence, (newValue) => {
-  console.log(newValue)
-  if (newValue === sentences?.value[1])
-    setTimeout(() => {
-      displayedSentence.value = newValue
-    }, 2000)
-  // Adjust the delay as needed
-  else displayedSentence.value = newValue
-  console.log('watcher over')
-})
+// watch(testedSentence, (newValue) => {
+//   console.log(newValue)
+//   if (newValue === sentences?.value[1])
+//     setTimeout(() => {
+//       displayedSentence.value = newValue
+//     }, 1000)
+//   // Adjust the delay as needed
+//   else displayedSentence.value = newValue
+//   console.log('watcher over')
+// })
 
 const testedWordAudioText = computed(
   () => `${testedWords.value[0].slice(0, 1).toUpperCase() + testedWords.value[0].slice(1)}.`
@@ -222,10 +240,11 @@ const isPronouncedCorrectly = ref(false)
 //   else return ''
 // })
 
-const handleFinalTranscript = (transcript: string) => {
+const handleFinalTranscript = async (transcript: string) => {
   isRecording.value = false
   if (!transcript || store.activeList?.listNumber !== props.list.listNumber) return
 
+  console.log(transcript)
   if (wordChallengeActive.value)
     isPronouncedCorrectly.value = checkPronunciationOfWordByItself(transcript)
   else isPronouncedCorrectly.value = checkPronunciationOfWordInSentences(transcript)
@@ -233,10 +252,13 @@ const handleFinalTranscript = (transcript: string) => {
   console.log(isPronouncedCorrectly.value)
 
   if (isPronouncedCorrectly.value) {
-    handleCorrectPronunciation()
+    await handleCorrectPronunciation()
   } else if (storeWord.value.attempts === attemptsLimit.value - 1) {
-    skipWord()
-  } else store.logPronunciationAttempt(testedWord.value)
+    await skipWord()
+  } else {
+    store.logPronunciationAttempt(testedWord.value)
+    introductionNeeded.value = false
+  }
 
   store.updateListsInFirestore()
 }
@@ -258,34 +280,43 @@ const checkPronunciationOfWordByItself = (transcript: string) => {
   return false
 }
 
-const checkmarkActive = ref(false)
+// const checkmarkActive = ref(false)
 
 const checkPronunciationOfWordInSentences = (transcript: string) => {
-  const transcriptWords = transcript.split(' ')
+  finalTranscriptWords.value = transcript.split(' ')
   const testedWordPhoneticCode = getPhoneticCode(testedWord.value)
-  const sentence = testedSentence.value.split(' ')
-  // console.log(transcriptWords)
+  // const sentence = testedSentence.value.split(' ')
   // console.log(testedWordPhoneticCode)
 
-  for (const transcriptWord of transcriptWords) {
+  for (const transcriptWord of finalTranscriptWords.value) {
     const transcriptWordPhoneticCode = metaphone(transcriptWord)
-    // console.log(transcriptWordPhoneticCode)
-    if (testedWordPhoneticCode === transcriptWordPhoneticCode) {
-      console.log('true')
+    if (transcriptWordPhoneticCode === testedWordPhoneticCode) {
+      console.log(transcriptWordPhoneticCode)
+      console.log(testedWordPhoneticCode)
       return true
     }
   }
 
+  // Matches any sequence of characters that are not whitespace or certain punctuation marks, including the punctuation marks themselves
+  const wordRegex = /(?:[^\s.,;:!?"'’“”()[\]{}<>«»]+)|(?:[.,;:!?"'’“”()[\]{}<>«»]+)/g
+  // Splits the sentence into an array of words and punctuation marks, allowing us to ignore punctuation marks when crosschecking for the correct pronunciation below
+  // @ts-ignore
+  const sentenceWords = testedSentence.value.match(wordRegex).map((word) => word.toLowerCase())
+  const testedWordStem = stem(testedWord.value)
+
   // NOTE need this extra check, as sometimes the sentences generated by openAI are modified forms of the tested word (e.g. 'chatted' instead of 'chatting')
-  for (const sentenceWord of sentence) {
+  for (const sentenceWord of sentenceWords) {
     const sentenceWordStem = stem(sentenceWord)
-    for (const transcriptWord of transcriptWords) {
+    for (const transcriptWord of finalTranscriptWords.value) {
       const transcriptWordStem = stem(transcriptWord)
-      // console.log(sentenceWordStem)
-      // console.log(transcriptWordStem)
       if (sentenceWordStem === transcriptWordStem) {
-        // console.log('stem true')
-        return true
+        console.log(sentenceWordStem)
+        console.log(transcriptWordStem)
+        if (sentenceWordStem === testedWordStem) {
+          console.log(sentenceWordStem)
+          console.log(testedWordStem)
+          return true
+        }
       }
     }
   }
@@ -296,13 +327,13 @@ const checkPronunciationOfWordInSentences = (transcript: string) => {
 
 const introductionNeeded = ref(true)
 
-const handleCorrectPronunciation = () => {
+const handleCorrectPronunciation = async () => {
   // NOTE triggers css change
   highlightActive.value = true
-  console.log(highlightActive.value)
+  // console.log(highlightActive.value)
   setTimeout(() => {
     highlightActive.value = false
-    console.log(highlightActive.value)
+    // console.log(highlightActive.value)
   }, 2000)
 
   if (storeWord.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 2) {
@@ -310,41 +341,40 @@ const handleCorrectPronunciation = () => {
     store.softResetAttempts(testedWord.value)
     store.logPronunciationAttemptSuccessful(testedWord.value)
     store.logPronunciationAttempt(testedWord.value)
-    if (sentenceChallengeActive.value) {
-      checkmarkActive.value = true
-      setTimeout(() => {
-        checkmarkActive.value = false
-      }, 2000)
-    }
+    introductionNeeded.value = false
+    // if (sentenceChallengeActive.value) {
+    //   checkmarkActive.value = true
+    //   setTimeout(() => {
+    //     checkmarkActive.value = false
+    //   }, 2000)
+    // }
   } else if (storeWord.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 1) {
     store.logPronunciationAttemptSuccessful(testedWord.value)
     store.logPronunciationAttempt(testedWord.value)
 
-    // await delay(2000)
+    await useDelay(2000)
 
     if (wordChallengeActive.value) {
-      store.setListStatus('SENTENCE_CHALLENGE_STARTED')
-      store.hardResetAttempts(testedWord.value)
+      clearTempAndFinalTranscripts()
       isPronouncedCorrectly.value = false
+      store.hardResetAttempts(testedWord.value)
+      store.setListStatus('SENTENCE_CHALLENGE_STARTED')
     } else {
+      // checkmarkActive.value = true
+      // setTimeout(() => {
+      //   checkmarkActive.value = false
+      // }, 1000)
+
+      if (testedWords.value.length === 1) return store.setListStatus('LIST_COMPLETED')
+      clearTempAndFinalTranscripts()
+      isPronouncedCorrectly.value = false
       testedWords.value = testedWords.value.slice(1)
-      // TODO ask chatGPT if there's any other way. Like if my computed changes, to delay it or anything.
-      // sentences.value = [...props?.list?.words[testedWord.value]?.sentences]
-      if (!testedWords.value.length) return store.setListStatus('LIST_COMPLETED')
       store.setListStatus('WORD_CHALLENGE_STARTED')
     }
 
-    clearTempAndFinalTranscripts()
-    introductionNeeded.value = false
+    // clearTempAndFinalTranscripts()
+    introductionNeeded.value = true
   }
-}
-
-const delay = (duration: number): Promise<void> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve()
-    }, duration)
-  })
 }
 
 // NOTE convert any mistranscribed word to the tested word if they sound the same
@@ -352,16 +382,16 @@ const getPhoneticCode = (word: string) => {
   return metaphone(word)
 }
 
-const skipWord = () => {
+const skipWord = async () => {
   store.logPronunciationAttempt(testedWord.value)
   useHardWordLogger(testedWord.value)
 
-  // await delay(2000)
+  await useDelay(2000)
   // TODO push/add testedWord to new array/object somewhere
   // and add to user's backend data as well (refer to how I replace providedList)
   store.setListStatus('WORD_CHALLENGE_STARTED')
   testedWords.value = testedWords.value.slice(1)
-  finalTranscriptWords.value = []
+  clearTempAndFinalTranscripts()
   introductionNeeded.value = false
 }
 
@@ -391,7 +421,16 @@ const recordingStatus = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.tested-word-container {
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 700px;
+}
+.word-and-sentences {
+  min-height: 140px;
+}
+.word-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -401,7 +440,7 @@ const recordingStatus = computed(() => {
   // position: relative;
 }
 
-.tested-word {
+.word {
   font-size: 24px;
   // Note that transition is applied here rather than in word-highlight
   transition: color 0.2s ease-in-out;
@@ -414,11 +453,12 @@ const recordingStatus = computed(() => {
 .message {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  // margin-top: 2rem;
   min-height: 64px;
   // height: 50px;
 
-  &__text {
+  &__text,
+  &__text-retry {
     display: flex;
     flex-direction: column;
     span {
@@ -427,10 +467,14 @@ const recordingStatus = computed(() => {
       color: var(--orange-color);
     }
   }
+
+  &__text-retry {
+    margin-left: -20px;
+  }
 }
 
 .transcript-container {
-  margin-top: 4rem;
+  // margin-top: 4rem;
   min-height: 64px;
 
   // position: fixed;
@@ -449,7 +493,7 @@ const recordingStatus = computed(() => {
 .sentence {
   display: flex;
   padding: 0 1.5rem;
-  margin-bottom: 1rem;
+  // margin-bottom: 1rem;
   // align-items: center;
 }
 // .checkmark-container {
@@ -463,31 +507,12 @@ const recordingStatus = computed(() => {
 // bottom: 0;
 // }
 
-.checkmark {
-  height: 20px;
-  width: 20px;
-  margin-top: 2px;
-  margin-right: 8px;
-  color: green;
-  transition: opacity 0.2s;
-}
-
-// .fade-enter-active,
-// .fade-leave-active {
+// .checkmark {
+//   height: 20px;
+//   width: 20px;
+//   margin-top: 2px;
+//   margin-right: 8px;
+//   color: green;
 //   transition: opacity 0.2s;
 // }
-
-// .fade-enter,
-// .fade-leave-to {
-//   opacity: 0;
-// }
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
 </style>
