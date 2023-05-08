@@ -21,6 +21,7 @@
           <button @click="authStore.signInUser">Sign In with Google</button>
         </div>
       </div>
+      <!-- TODO add a mic test or something for the user, so that streaming will be more responsive. The recorder seems to be more responsive after its streamed once upon a new load -->
       <HelloWorld msg="Say It Right" @click="router.push({ name: 'home' })" />
       <nav>
         <!-- <RouterLink to="/">CustomLists</RouterLink> -->

@@ -3,9 +3,14 @@
     <!-- <LoadingDots v-if="isLoading" /> -->
     <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
-    <WordChallenge v-else-if="list.status === 'WORD_CHALLENGE_STARTED'" :list="list" />
+    <WordChallenge
+      v-else-if="
+        list.status === 'WORD_CHALLENGE_STARTED' || list.status === 'SENTENCE_CHALLENGE_STARTED'
+      "
+      :list="list"
+    />
 
-    <SentenceChallenge v-else-if="list.status === 'SENTENCE_CHALLENGE_STARTED'" :list="list" />
+    <!-- <SentenceChallenge v-else-if="list.status === 'SENTENCE_CHALLENGE_STARTED'" :list="list" /> -->
 
     <div v-if="store.completedLists.length === store.allLists.length">
       <span
@@ -33,7 +38,7 @@ const store = useProvidedListsStore()
 
 // NOTE the 'Record<string, never>' type represents an empty object with
 // string keys and values of type 'never'
-const list = ref<List | Record<string, never>>({})
+const list = ref<List>({})
 
 const showParagraphChallenge = computed(
   () =>

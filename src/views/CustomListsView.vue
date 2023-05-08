@@ -22,9 +22,12 @@
 
     <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
-    <WordChallenge v-else-if="list.status === 'WORD_CHALLENGE_STARTED'" :list="list" />
-
-    <SentenceChallenge v-else-if="list.status === 'SENTENCE_CHALLENGE_STARTED'" :list="list" />
+    <WordChallenge
+      v-else-if="
+        list.status === 'WORD_CHALLENGE_STARTED' || list.status === 'SENTENCE_CHALLENGE_STARTED'
+      "
+      :list="list"
+    />
 
     <!-- TODO add in WordChallenge and SentenceChallenge -->
   </main>
@@ -52,7 +55,8 @@ const wordsInput = ref('')
 const newlyCreatedParagraph = ref('')
 const submissionError = ref('')
 
-const list = ref<List | Record<string, never>>({})
+// @ts-ignore
+const list = ref<List>({})
 
 const showParagraphChallenge = computed(
   () =>

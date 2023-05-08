@@ -123,6 +123,9 @@ onMounted(() => {
 const temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript: string) => {
+  // NOTE this guard is necessary b/c the recorder cannot be deactivated between views
+  if (store.activeList?.listNumber !== props.list.listNumber) return
+
   temporaryTranscript.value = transcript
 }
 

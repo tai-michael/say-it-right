@@ -9,12 +9,9 @@ export default function useCorrectAndIncorrectWordsFilter(
 ) {
   const store = routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 
-  //NOTE metaphone allows us to get the Phonetic code of a word
-  // it's used below in case a correctly pronounced word is mistranscribed
-  // it also helps if there's an accented word in the paragraph (e.g. café)
   const recordedWords = [...new Set(transcriptString.split(' '))]
-  const testedWordsPhonetic = testedWords.map((word) => metaphone(word))
-  const recordedWordsPhonetic = recordedWords.map((word) => metaphone(word))
+  const testedWordsPhonetic = testedWords.map((word) => getPhoneticCode(word))
+  const recordedWordsPhonetic = recordedWords.map((word) => getPhoneticCode(word))
 
   const correctWords = []
   const incorrectWords = []
@@ -37,4 +34,11 @@ export default function useCorrectAndIncorrectWordsFilter(
   console.log('Correctly pronounced keywords:', correctWords.join(', '))
   console.log('Mispronounced keywords:', incorrectWords.join(', '))
   return { correctWords, incorrectWords }
+}
+
+// NOTE Allows us to get the Phonetic code of a word
+// Useful in case a correctly pronounced word is mistranscribed
+// Also helps if there's an accented word in the paragraph (e.g. café)
+const getPhoneticCode = (word: string) => {
+  return metaphone(word)
 }

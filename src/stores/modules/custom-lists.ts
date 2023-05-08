@@ -76,7 +76,11 @@ export const useCustomListsStore = defineStore('customLists', () => {
     )
   }
 
-  const attemptsLimit = 6
+  const attemptsSuccessfulRequired = computed(() =>
+    activeList.value?.status === 'WORD_CHALLENGE_STARTED' ? 2 : 4
+  )
+
+  const attemptsLimit = computed(() => attemptsSuccessfulRequired.value + 4)
 
   const softResetAttempts = (testedWord: string) => {
     const matchedWord = activeList.value?.words[testedWord]
@@ -84,6 +88,12 @@ export const useCustomListsStore = defineStore('customLists', () => {
       matchedWord.attempts -= 2
       console.log(`reset attempt for ${testedWord}. Total attempts: ${matchedWord?.attempts}`)
     }
+  }
+
+  const hardResetAttempts = (testedWord: string) => {
+    const matchedWord = activeList.value?.words[testedWord]
+    // NOTE 1 is the initial value for all words that have been tested in the ParagraphChallenge
+    if (matchedWord) matchedWord.attempts = 3
   }
 
   // NOTE when user reviews a completed list, simply replace the entire list with its counterpart in the json file, as word attempts would need to be reset too. This also means weak words should definitely be copies rather than references, as references would get reset meaning they'd disappear from the weak/passed words lists
@@ -108,6 +118,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
     untouchedLists,
     completedLists,
     attemptsLimit,
+    attemptsSuccessfulRequired,
 
     setActiveId,
     setListStatus,
@@ -115,6 +126,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful,
     softResetAttempts,
+    hardResetAttempts,
     updateListsInFirestore,
     setParagraph,
     setTestedWordsObj
