@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
-import type { Ref } from 'vue'
+// import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
-import { useRoute } from 'vue-router'
+// import { useRoute } from 'vue-router'
 import { db } from '@/firebaseInit'
 import {
   // collection,
@@ -16,7 +16,7 @@ import type { List } from './types/List'
 import type { WordObject } from './types/Review'
 
 export const useReviewStore = defineStore('review', () => {
-  const route = useRoute()
+  // const route = useRoute()
 
   const allWords = ref<WordObject[]>([])
 

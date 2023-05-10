@@ -3,5 +3,6 @@ export interface WordObject {
   sentences: string[]
   attempts: number
   attemptsSuccessful: number
+  status: 'TESTING_WORD_ONLY' | 'TESTING_SENTENCES'
   created: number
 }
