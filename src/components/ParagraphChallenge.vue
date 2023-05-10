@@ -75,15 +75,15 @@ import RecorderButton from './RecorderButton.vue'
 import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
 import useCorrectAndIncorrectWordsFilter from '@/composables/useCorrectAndIncorrectWordsFilter'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'
-import useCheckIfWordsExistInWordReview from '@/composables/useCheckIfWordsExistInWordReview'
+import useCheckIfWordsExistInReview from '@/composables/useCheckIfWordsExistInReview'
 import { useRoute } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 import { useCustomListsStore } from '@/stores/index.ts'
-import { useWordReviewStore } from '@/stores/index.ts'
+import { useReviewStore } from '@/stores/index.ts'
 
 const route = useRoute()
 const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
-const wordReviewStore = useWordReviewStore()
+const reviewStore = useReviewStore()
 
 const props = defineProps({
   list: { type: Object as PropType<List>, required: true }
@@ -181,10 +181,10 @@ const handleFinalTranscript = async (transcript: string) => {
   // so no need to generate new sentences for those
   if (route.name === 'provided-lists') {
     // NOTE only add words that aren't already in Review to Review
-    const { nonMatchingWords } = useCheckIfWordsExistInWordReview(mispronouncedTestedWords.value)
+    const { nonMatchingWords } = useCheckIfWordsExistInReview(mispronouncedTestedWords.value)
     addWordsToReview(nonMatchingWords, props.list.words)
     store.updateListsInFirestore()
-    wordReviewStore.updateWordReviewInFirestore()
+    reviewStore.updateReviewInFirestore()
   } else {
     const sortedMispronouncedWords = mispronouncedTestedWords.value.sort()
     console.log(sortedMispronouncedWords)
@@ -225,7 +225,7 @@ const addWordsToReview = (
     }
   }
 
-  wordReviewStore.addWords(wordObjectsToAdd)
+  reviewStore.addWords(wordObjectsToAdd)
 }
 
 const highlightCorrectAndIncorrectWords = (

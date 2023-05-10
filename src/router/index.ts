@@ -52,7 +52,7 @@ const router = createRouter({
     {
       path: '/word-review',
       name: 'word-review',
-      component: () => import('@/views/WordReviewView.vue')
+      component: () => import('@/views/ReviewView.vue')
     },
     {
       path: '/overview',

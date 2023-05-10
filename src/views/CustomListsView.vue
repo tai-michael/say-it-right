@@ -51,7 +51,6 @@ import type { List } from '@/stores/modules/types/List'
 
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
-import SentenceChallenge from '@/components/SentenceChallenge.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import LoadingDots from '@/components/LoadingDots.vue'
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'

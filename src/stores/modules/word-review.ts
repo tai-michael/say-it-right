@@ -15,7 +15,7 @@ import { user } from '@/firebaseInit'
 import type { List } from './types/List'
 import type { WordObject } from './types/Review'
 
-export const useWordReviewStore = defineStore('wordReview', () => {
+export const useReviewStore = defineStore('review', () => {
   const route = useRoute()
 
   const allWords = ref<WordObject[]>([])
@@ -28,13 +28,13 @@ export const useWordReviewStore = defineStore('wordReview', () => {
     allWords.value = array
   }
 
-  const updateWordReviewInFirestore = () => {
+  const updateReviewInFirestore = () => {
     if (user.value)
       updateDoc(doc(db, 'users', user.value.uid), {
-        wordReview: allWords.value
+        review: allWords.value
       })
     // sessionStorage.setItem('allProvidedLists', JSON.stringify(allLists.value))
-    console.log('Updated firestore wordReview')
+    console.log('Updated firestore review')
   }
 
   // TODO should maybe make 3 categories or simply a dropdown filter for:
@@ -111,7 +111,7 @@ export const useWordReviewStore = defineStore('wordReview', () => {
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful,
     softResetAttempts,
-    updateWordReviewInFirestore
+    updateReviewInFirestore
     // setTestedWordsObj
   }
 })

@@ -1,5 +1,5 @@
 <template>
-  <h4>Word Review</h4>
+  <h4>Review</h4>
   <main>
     <ul class="list">
       <li class="list__row" v-for="(entry, index) in allWords" :key="index">
@@ -17,9 +17,9 @@
 // import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 // import type { WordObject } from '@/stores/modules/types/Review'
-import { useWordReviewStore } from '@/stores/index.ts'
+import { useReviewStore } from '@/stores/index.ts'
 
-const store = useWordReviewStore()
+const store = useReviewStore()
 const { allWords } = storeToRefs(store)
 </script>
 

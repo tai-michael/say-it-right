@@ -1,4 +1,4 @@
-// Creates word objects with the structure of words in Word Review
+// Creates word objects with the structure of words in Review
 export default function (word: string, sentences: string[]) {
   const wordObj = {
     word,

@@ -37,7 +37,6 @@ import type { List } from '@/stores/modules/types/List'
 
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
-import SentenceChallenge from '@/components/SentenceChallenge.vue'
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'
 
 import { useRoute, useRouter } from 'vue-router'

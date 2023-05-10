@@ -1,7 +1,7 @@
 import useOpenAiSentencesGenerator from '@/composables/useOpenAiSentencesGenerator'
 useWordObjCreator
 import useWordObjCreator from '@/composables/useWordObjCreator'
-import useCheckIfWordsExistInWordReview from '@/composables/useCheckIfWordsExistInWordReview'
+import useCheckIfWordsExistInReview from '@/composables/useCheckIfWordsExistInReview'
 import type { Sentences } from '@/stores/modules/types/Sentences'
 import type { WordObject } from '@/stores/modules/types/Review'
 import type { List } from '@/stores/modules/types/List'
@@ -18,10 +18,10 @@ import {
   documentId,
   getDocs
 } from 'firebase/firestore'
-import { useCustomListsStore, useProvidedListsStore, useWordReviewStore } from '@/stores/index.ts'
+import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
 
 export default async function (words: string[], listNum: number) {
-  const wordReviewStore = useWordReviewStore()
+  const reviewStore = useReviewStore()
   const customListsStore = useCustomListsStore()
   const providedListsStore = useProvidedListsStore()
 
@@ -34,14 +34,14 @@ export default async function (words: string[], listNum: number) {
   // wordsWithSentences.push(...customListsResults.matchingWordObjects)
   // wordsWithoutSentences = customListsResults.nonMatchingWords
 
-  // check if word exists in Word Review. Even though all
-  // words in Word Review are also in sentences, checking
-  // Word Review first might save us a firestore read
+  // check if word exists in Review. Even though all
+  // words in Review are also in sentences, checking
+  // Review first might save us a firestore read
   console.log('checking if word exists in word review')
-  const wordReviewResults = useCheckIfWordsExistInWordReview(words)
-  wordsWithSentences.push(...wordReviewResults.matchingWordObjects)
+  const reviewResults = useCheckIfWordsExistInReview(words)
+  wordsWithSentences.push(...reviewResults.matchingWordObjects)
   // NOTE reassigning instead of pushing is necessary here
-  wordsWithoutSentences = wordReviewResults.nonMatchingWords
+  wordsWithoutSentences = reviewResults.nonMatchingWords
 
   console.log('checking if word exists in provided lists')
   // then check if word exists in providedLists
@@ -84,13 +84,13 @@ export default async function (words: string[], listNum: number) {
     }
   }
 
-  // add any words that don't already exist in Word Review to its store
+  // add any words that don't already exist in Review to its store
   const newWords = wordsWithSentences.filter(
     (wordObj) =>
-      !wordReviewStore.allWords.some((existingWordObj) => existingWordObj.word === wordObj.word)
+      !reviewStore.allWords.some((existingWordObj) => existingWordObj.word === wordObj.word)
   )
-  wordReviewStore.addWords(newWords)
-  wordReviewStore.updateWordReviewInFirestore()
+  reviewStore.addWords(newWords)
+  reviewStore.updateReviewInFirestore()
   // add sentences to matching words in customLists
   const list = customListsStore.allLists.find((list) => list.listNumber === listNum)
   // console.log(list)

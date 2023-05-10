@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
           userName: user.displayName,
           customLists: [],
           providedLists: globalProvidedLists,
-          wordReview: []
+          review: []
         })
       }
 
@@ -61,7 +61,7 @@ export const useAuthStore = defineStore('auth', () => {
       userName: auth.currentUser.displayName,
       customLists: [],
       providedLists: globalProvidedLists,
-      wordReview: []
+      review: []
     })
 
     console.log('Resetted ALL the lists')
@@ -92,14 +92,14 @@ export const useAuthStore = defineStore('auth', () => {
     location.reload()
   }
 
-  const resetWordReview = async () => {
+  const resetReview = async () => {
     console.log('Resetting...')
     if (!auth.currentUser) return
 
     await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-      wordReview: []
+      review: []
     })
-    console.log('Resetted Word review')
+    console.log('Resetted Review')
     location.reload()
   }
 
@@ -114,7 +114,7 @@ export const useAuthStore = defineStore('auth', () => {
     resetAllLists,
     resetCustomLists,
     resetProvidedLists,
-    resetWordReview
+    resetReview
   }
 })
 

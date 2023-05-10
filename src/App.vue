@@ -14,7 +14,7 @@
             <button @click="authStore.resetAllLists">Reset all</button>
             <button @click="authStore.resetCustomLists">Reset Custom lists</button>
             <button @click="authStore.resetProvidedLists">Reset Provided lists</button>
-            <button @click="authStore.resetWordReview">Reset Word review</button>
+            <button @click="authStore.resetReview">Reset Review</button>
           </div>
         </div>
         <div v-else>
@@ -31,7 +31,7 @@
         <RouterLink :to="{ name: 'provided-lists' }" :class="getLinkClass('/provided-lists')"
           >Provided Lists</RouterLink
         >
-        <RouterLink to="/word-review">Word Review</RouterLink>
+        <RouterLink to="/word-review">Review</RouterLink>
         <RouterLink to="/overview">Overview</RouterLink>
         <RouterLink to="/hard-words">Hard Words</RouterLink>
         <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink>
@@ -64,13 +64,13 @@ import {
   useAuthStore,
   useCustomListsStore,
   useProvidedListsStore,
-  useWordReviewStore
+  useReviewStore
 } from '@/stores/index.ts'
 
 const authStore = useAuthStore()
 const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
-const wordReviewStore = useWordReviewStore()
+const reviewStore = useReviewStore()
 
 const router = useRouter()
 
@@ -111,7 +111,7 @@ const fetchBackendData = async () => {
 
     customListsStore.setLists(userDocSnap.data()?.customLists)
     providedListsStore.setLists(userDocSnap.data()?.providedLists)
-    wordReviewStore.setWords(userDocSnap.data()?.wordReview)
+    reviewStore.setWords(userDocSnap.data()?.review)
 
     // NOTE triggers watcher after allLists has been hydrated
     // Adds a new list whenever a new global list is added

@@ -1,9 +1,9 @@
 import useWordObjCreator from '@/composables/useWordObjCreator'
-import { useWordReviewStore } from '@/stores/index.ts'
+import { useReviewStore } from '@/stores/index.ts'
 
-// Word Review will contain all sentences that have been generated for custom lists
+// Review will contain all sentences that have been generated for custom lists
 export default function (submittedWords: string[]) {
-  const store = useWordReviewStore()
+  const store = useReviewStore()
 
   const matchingWordObjects = []
   const nonMatchingWords = []
