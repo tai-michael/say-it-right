@@ -7,7 +7,7 @@
       </div>
       <hr />
 
-      <div v-if="isRecording" class="transcript-container">
+      <div v-if="isRecording" class="transcript">
         <label>Live transcript:</label>
         <div>{{ temporaryTranscriptDisplay }}</div>
       </div>
@@ -49,7 +49,7 @@
         <button
           class="next-button"
           v-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
-          @click="store.setListStatus('WORD_CHALLENGE_STARTED')"
+          @click="store.setListStatus('TESTING_WORD_ONLY')"
         >
           Next
         </button>
@@ -389,7 +389,7 @@ label {
   }
 }
 
-.transcript-container {
+.transcript {
   margin-top: 1rem;
   min-height: 100px;
 }

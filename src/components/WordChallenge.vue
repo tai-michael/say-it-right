@@ -1,9 +1,9 @@
 <template>
   <main>
     <div class="word-and-sentences">
-      <div class="word-container">
+      <div class="word">
         <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
-        <div class="word">
+        <div class="word__text">
           {{ testedWord }}
         </div>
         <PlayAudioIcon @click="play" />
@@ -15,7 +15,7 @@
     </div> -->
 
       <TransitionFade>
-        <div v-if="sentenceChallengeActive">
+        <div v-if="testingSentences">
           <!-- <ul>
         <li v-for="(sentence, index) of sentences" :key="index" class="sentences">
            {{ sentence }}
@@ -33,13 +33,11 @@
 
     <div
       v-if="isRecording"
-      class="transcript-container"
-      :class="[
-        wordChallengeActive ? 'transcript-container__single-word' : 'transcript-multiple-words'
-      ]"
+      class="transcript"
+      :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']"
     >
       <!-- <label>Live transcript:</label> -->
-      <div>{{ temporaryTranscript }}</div>
+      <div class="transcript__text">{{ temporaryTranscript }}</div>
     </div>
 
     <TransitionFade v-else>
@@ -48,21 +46,19 @@
         <div v-else-if="recordingStatus === 'NOTHING_RECORDED'" class="message__text">
           <span v-if="introductionNeeded"
             >Let's test your pronunciation of this word{{
-              wordChallengeActive ? '' : ' in sentences'
+              testingWordOnly ? '' : ' in sentences'
             }}.</span
           >
-          <span>Hold the button and read the {{ wordChallengeActive ? 'word' : 'sentence' }}.</span>
+          <span>Hold the button and read the {{ testingWordOnly ? 'word' : 'sentence' }}.</span>
         </div>
         <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
           <span
             >Good job 👍! Now read
-            {{ wordChallengeActive ? 'it just one more time' : 'the second sentence' }}.</span
+            {{ testingWordOnly ? 'it just one more time' : 'the second sentence' }}.</span
           >
         </div>
         <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
-          <span
-            >Well done 👍! {{ wordChallengeActive ? 'Now try reading some sentences.' : '' }}</span
-          >
+          <span>Well done 👍! {{ testingWordOnly ? 'Now try reading some sentences.' : '' }}</span>
         </div>
         <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text-retry">
           <span>Try again.</span>
@@ -90,7 +86,7 @@
 
     <!-- <button
       v-if="props.list.words[testedWord].attemptsSuccessful === 2"
-      @click="store.setListStatus('SENTENCE_CHALLENGE_STARTED')"
+      @click="store.setListStatus('TESTING_SENTENCES')"
     >
       Next
     </button> -->
@@ -98,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
@@ -148,8 +144,8 @@ onMounted(() => {
   // sentences.value = [...props?.list?.words[testedWord.value]?.sentences]
 })
 
-const wordChallengeActive = computed(() => props.list.status === 'WORD_CHALLENGE_STARTED')
-const sentenceChallengeActive = computed(() => props.list.status === 'SENTENCE_CHALLENGE_STARTED')
+const testingWordOnly = computed(() => props.list.status === 'TESTING_WORD_ONLY')
+const testingSentences = computed(() => props.list.status === 'TESTING_SENTENCES')
 
 const testedWords = ref<string[]>([])
 const testedWord = computed(
@@ -221,7 +217,7 @@ const handleTempTranscriptRender = (transcript: string) => {
   if (store.activeList?.listNumber !== props.list.listNumber) return
 
   // NOTE simply 'return' if I decide not to show transcript for Sentence Challenges
-  if (!wordChallengeActive.value)
+  if (testingSentences.value)
     return (temporaryTranscript.value = transcript.split(' ').slice(-8).join(' '))
 
   temporaryTranscript.value = transcript.split(' ').slice(-1).join(' ')
@@ -237,8 +233,8 @@ const handleTempTranscriptRender = (transcript: string) => {
 
 const finalTranscriptWords = ref<string[]>([])
 const finalTranscriptWord = ref('')
-const highlightActive = ref(false)
 const isPronouncedCorrectly = ref(false)
+// const highlightActive = ref(false)
 // const testedSentence = computed(() => {
 //   if (sentences.value)
 //     return storeWord?.value?.attemptsSuccessful === attemptsSuccessfulRequired.value - 2
@@ -252,7 +248,7 @@ const handleFinalTranscript = async (transcript: string) => {
   if (!transcript || store.activeList?.listNumber !== props.list.listNumber) return
 
   console.log(transcript)
-  if (wordChallengeActive.value)
+  if (testingWordOnly.value)
     isPronouncedCorrectly.value = checkPronunciationOfWordByItself(transcript)
   else isPronouncedCorrectly.value = checkPronunciationOfWordInSentences(transcript)
 
@@ -351,7 +347,7 @@ const handleCorrectPronunciation = async () => {
     store.logPronunciationAttemptSuccessful(testedWord.value)
     store.logPronunciationAttempt(testedWord.value)
     introductionNeeded.value = false
-    // if (sentenceChallengeActive.value) {
+    // if (testingSentences.value) {
     //   checkmarkActive.value = true
     //   setTimeout(() => {
     //     checkmarkActive.value = false
@@ -363,11 +359,11 @@ const handleCorrectPronunciation = async () => {
 
     await useDelay(2000)
 
-    if (wordChallengeActive.value) {
+    if (testingWordOnly.value) {
       clearTempAndFinalTranscripts()
       isPronouncedCorrectly.value = false
       store.hardResetAttempts(testedWord.value)
-      store.setListStatus('SENTENCE_CHALLENGE_STARTED')
+      store.setListStatus('TESTING_SENTENCES')
     } else {
       // checkmarkActive.value = true
       // setTimeout(() => {
@@ -378,7 +374,7 @@ const handleCorrectPronunciation = async () => {
       clearTempAndFinalTranscripts()
       isPronouncedCorrectly.value = false
       testedWords.value = testedWords.value.slice(1)
-      store.setListStatus('WORD_CHALLENGE_STARTED')
+      store.setListStatus('TESTING_WORD_ONLY')
     }
 
     // clearTempAndFinalTranscripts()
@@ -398,7 +394,7 @@ const skipWord = async () => {
   await useDelay(2000)
   // TODO push/add testedWord to new array/object somewhere
   // and add to user's backend data as well (refer to how I replace providedList)
-  store.setListStatus('WORD_CHALLENGE_STARTED')
+  store.setListStatus('TESTING_WORD_ONLY')
   testedWords.value = testedWords.value.slice(1)
   clearTempAndFinalTranscripts()
   introductionNeeded.value = false
@@ -425,7 +421,7 @@ const recordingStatus = computed(() => {
 //   store.incrementSuccessfulAttempts(currentTestedWord.value)
 
 //   // Move to the SentenceTest
-//   store.setListStatus('SENTENCE_CHALLENGE_STARTED')
+//   store.setListStatus('TESTING_SENTENCES')
 // }
 </script>
 
@@ -440,7 +436,7 @@ main {
 .word-and-sentences {
   min-height: 140px;
 }
-.word-container {
+.word {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -448,12 +444,12 @@ main {
   margin-bottom: 2rem;
   // NOTE enable below if I want to include checkmark
   // position: relative;
-}
 
-.word {
-  font-size: 24px;
-  // Note that transition is applied here rather than in word-highlight
-  transition: color 0.2s ease-in-out;
+  &__text {
+    font-size: 24px;
+    // Note that transition is applied here rather than in word-highlight
+    transition: color 0.2s ease-in-out;
+  }
 }
 
 // .word-highlight {
@@ -483,10 +479,11 @@ main {
   }
 }
 
-.transcript-container {
+.transcript {
   // margin-top: 4rem;
   display: flex;
   min-height: 64px;
+  padding: 0 30px;
 
   &__single-word {
     justify-content: center;
@@ -494,8 +491,7 @@ main {
   }
 
   &__multiple-words {
-    justify-content: left;
-    margin-left: 40px;
+    justify-content: none;
   }
   // position: fixed;
   // // top: 0;

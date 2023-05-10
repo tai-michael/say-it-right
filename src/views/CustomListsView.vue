@@ -24,9 +24,7 @@
       <ParagraphChallenge v-if="showParagraphChallenge" key="paragraph-challenge" :list="list" />
 
       <WordChallenge
-        v-else-if="
-          list.status === 'WORD_CHALLENGE_STARTED' || list.status === 'SENTENCE_CHALLENGE_STARTED'
-        "
+        v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
         key="sentence-challenge"
         :list="list"
       />

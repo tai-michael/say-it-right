@@ -35,8 +35,8 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     allLists.value.filter(
       (list) =>
         list.status === 'PARAGRAPH_RECORDING_ENDED' ||
-        list.status === 'WORD_CHALLENGE_STARTED' ||
-        list.status === 'SENTENCE_CHALLENGE_STARTED'
+        list.status === 'TESTING_WORD_ONLY' ||
+        list.status === 'TESTING_SENTENCES'
     )
   )
 
@@ -91,7 +91,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   // }
 
   const attemptsSuccessfulRequired = computed(() =>
-    activeList.value?.status === 'WORD_CHALLENGE_STARTED' ? 2 : 4
+    activeList.value?.status === 'TESTING_WORD_ONLY' ? 2 : 4
   )
 
   const attemptsLimit = computed(() => attemptsSuccessfulRequired.value + 4)

@@ -8,8 +8,8 @@ export interface List {
 export type ListStatus =
   | 'LIST_NOT_STARTED'
   | 'PARAGRAPH_RECORDING_ENDED'
-  | 'WORD_CHALLENGE_STARTED'
-  | 'SENTENCE_CHALLENGE_STARTED'
+  | 'TESTING_WORD_ONLY'
+  | 'TESTING_SENTENCES'
   | 'LIST_COMPLETED'
 
 export interface Words<T> {

@@ -5,9 +5,7 @@
       <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
       <WordChallenge
-        v-else-if="
-          list.status === 'WORD_CHALLENGE_STARTED' || list.status === 'SENTENCE_CHALLENGE_STARTED'
-        "
+        v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
         :list="list"
       />
     </TransitionAppear>
@@ -22,7 +20,7 @@
         </span>
       </div>
     </div>
-    <!-- <SentenceChallenge v-else-if="list.status === 'SENTENCE_CHALLENGE_STARTED'" :list="list" /> -->
+    <!-- <SentenceChallenge v-else-if="list.status === 'TESTING_SENTENCES'" :list="list" /> -->
 
     <!-- <div v-if="store.completedLists.length === store.allLists.length">
       <span
