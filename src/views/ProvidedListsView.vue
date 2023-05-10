@@ -16,7 +16,7 @@
         <span>
           Challenge yourself with a different
           <RouterLink to="/overview" class="link">List</RouterLink> or
-          <RouterLink to="/word-review" class="link">Review</RouterLink> the words you've learned!
+          <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned!
         </span>
       </div>
     </div>

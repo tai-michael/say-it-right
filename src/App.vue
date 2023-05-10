@@ -31,7 +31,7 @@
         <RouterLink :to="{ name: 'provided-lists' }" :class="getLinkClass('/provided-lists')"
           >Provided Lists</RouterLink
         >
-        <RouterLink to="/word-review">Review</RouterLink>
+        <RouterLink to="/review">Review</RouterLink>
         <RouterLink to="/overview">Overview</RouterLink>
         <RouterLink to="/hard-words">Hard Words</RouterLink>
         <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink>

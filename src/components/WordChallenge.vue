@@ -70,7 +70,7 @@
           <span>You've completed the list. Well done!</span
           ><span>
             Challenge yourself with another <RouterLink to="/overview">list</RouterLink> or
-            <RouterLink to="/word-review">Review</RouterLink> the words you've just learned!
+            <RouterLink to="/review">Review</RouterLink> the words you've just learned!
           </span>
         </div>
       </div>

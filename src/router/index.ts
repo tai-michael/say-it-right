@@ -50,8 +50,8 @@ const router = createRouter({
     //   component: () => import('@/components/WordChallenge.vue')
     // }
     {
-      path: '/word-review',
-      name: 'word-review',
+      path: '/review',
+      name: 'review',
       component: () => import('@/views/ReviewView.vue')
     },
     {
