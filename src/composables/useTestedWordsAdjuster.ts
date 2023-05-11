@@ -9,7 +9,7 @@ export default function useTestedWordsAdjuster(
   testedParagraph: string,
   routeName: string | unknown
 ) {
-  const store = routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
+  const store = routeName === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 
   // Matches any sequence of characters that are not whitespace or certain punctuation marks, including the punctuation marks themselves
   const wordRegex = /(?:[^\s.,;:!?"'’“”()[\]{}<>«»]+)|(?:[.,;:!?"'’“”()[\]{}<>«»]+)/g

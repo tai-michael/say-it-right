@@ -69,7 +69,7 @@
         <div v-else-if="props.list.status === 'LIST_COMPLETED'" class="message__text">
           <span>You've completed the list. Well done!</span
           ><span>
-            Challenge yourself with another <RouterLink to="/overview">list</RouterLink> or
+            Challenge yourself with another <RouterLink to="/provided-lists">list</RouterLink> or
             <RouterLink to="/review">Review</RouterLink> the words you've just learned!
           </span>
         </div>
@@ -104,7 +104,7 @@ import { computed, onMounted, ref, toRefs } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import RecorderButton from './RecorderButton.vue'
-import PlayAudioIcon from '@/assets/images/play-audio.vue'
+import PlayAudioIcon from '@/assets/icons/play-audio.vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import { metaphone } from 'metaphone'
 import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'

@@ -1,12 +1,5 @@
 <template>
   <div class="button-container">
-    <!-- <button
-      v-if="clientConnected && !props.challengeStatus.includes('RECORDING_ENDED')"
-      class="recording-btn"
-      @mousedown="startRecording"
-      @touchstart="startRecording"
-      @touchend="stopRecording"
-    > -->
     <!-- TODO try simply disconnecting the client at end of paragraphChallenge so button doesn't show up -->
     <button
       v-if="clientConnected"
@@ -25,7 +18,7 @@
 import { computed, onDeactivated, ref } from 'vue'
 
 import { client, microphone } from '@/speechlyInit.ts'
-import MicIcon from '@/assets/images/mic.vue'
+import MicIcon from '@/assets/icons/mic.vue'
 
 // const props = defineProps({
 //   challengeStatus: { type: String, required: true }

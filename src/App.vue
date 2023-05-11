@@ -6,7 +6,7 @@
       <div style="margin-bottom: 0.7rem">
         <div v-if="isAuthenticated">
           <span style="margin-right: 1rem">Welcome, {{ user?.displayName }}</span>
-          <button @click="authStore.signOutUser">Sign Out</button>
+          <button @click="authStore.signOutUser" class="signout-btn">Sign Out</button>
 
           <!-- TODO for testing purposes only; remove before production -->
           <br />
@@ -21,18 +21,20 @@
           <button @click="authStore.signInUser">Sign In with Google</button>
         </div>
       </div>
-      <!-- TODO add a mic test or something for the user, so that streaming will be more responsive. The recorder seems to be more responsive after its streamed once upon a new load -->
+      <!-- TODO add a mic test or something for the user, so that streaming will be more responsive. The recorder seems to be more responsive after its streamed once after a new load -->
       <HelloWorld msg="Say It Right" @click="router.push({ name: 'home' })" />
       <nav>
         <!-- <RouterLink to="/">CustomLists</RouterLink> -->
         <RouterLink :to="{ name: 'custom-lists' }" :class="getLinkClass('/custom-lists')"
           >Custom Lists</RouterLink
         >
+        <!-- <RouterLink :to="{ name: 'provided-lists' }" :class="getLinkClass('/provided-lists')"
+          >Provided Lists</RouterLink
+        > -->
         <RouterLink :to="{ name: 'provided-lists' }" :class="getLinkClass('/provided-lists')"
           >Provided Lists</RouterLink
         >
         <RouterLink to="/review">Review</RouterLink>
-        <RouterLink to="/overview">Overview</RouterLink>
         <RouterLink to="/hard-words">Hard Words</RouterLink>
         <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink>
       </nav>
@@ -41,7 +43,7 @@
 
   <body>
     <LoadingSpinner v-if="fetchingBackendData" />
-    <div v-else-if="!fetchingBackendData && backendDataFetched">
+    <div v-else-if="!fetchingBackendData && backendDataFetched" class="main-content">
       <router-view v-slot="{ Component }">
         <keep-alive>
           <component :is="Component" :key="$route.fullPath"></component>
@@ -188,6 +190,20 @@ header {
   max-height: 100vh;
 }
 
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-content {
+  width: 100%;
+}
+
+.signout-btn:hover {
+  cursor: pointer;
+}
+
 .logo {
   display: block;
   margin: 0 auto 2rem;
@@ -219,11 +235,6 @@ nav a:first-of-type {
   border: 0;
 }
 
-body {
-  display: flex;
-  justify-content: center;
-}
-
 @media (min-width: 1024px) {
   header {
     display: flex;
@@ -240,6 +251,13 @@ body {
     place-items: flex-start;
     flex-wrap: wrap;
   }
+
+  /* body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+  } */
 
   nav {
     text-align: left;

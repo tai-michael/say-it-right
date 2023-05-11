@@ -69,7 +69,7 @@
         <div v-else-if="props.list.status === 'LIST_COMPLETED'" class="message__text">
           <span>You've completed the list. Well done!</span
           ><span>
-            Challenge yourself with another <RouterLink to="/overview">list</RouterLink> or
+            Challenge yourself with another <RouterLink to="/provided-lists">list</RouterLink> or
             <RouterLink to="/review">Review</RouterLink> the words you've just learned!
           </span>
         </div>
@@ -81,7 +81,6 @@
       @recording-started="handleRecordingStarted"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
-      :challenge-status="props.list.status"
     />
 
     <!-- <button
@@ -98,8 +97,8 @@ import { computed, onMounted, ref } from 'vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
-import PlayAudioIcon from '@/assets/images/play-audio.vue'
-// import CheckmarkIcon from '@/assets/images/checkmark.vue'
+import PlayAudioIcon from '@/assets/icons/play-audio.vue'
+// import CheckmarkIcon from '@/assets/icons/checkmark.vue'
 import RecorderButton from './RecorderButton.vue'
 import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
 import useHardWordLogger from '@/composables/useHardWordLogger'
@@ -112,7 +111,7 @@ import { useCustomListsStore } from '@/stores/index.ts'
 import { storeToRefs } from 'pinia'
 
 const route = useRoute()
-const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
+const store = route.name === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 const { attemptsLimit, attemptsSuccessfulRequired } = storeToRefs(store)
 
 const props = defineProps({
@@ -430,11 +429,15 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 700px;
   min-width: 300px;
 }
 .word-and-sentences {
-  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 2.5rem;
+  height: 130px;
+  margin-bottom: 2rem;
 }
 .word {
   display: flex;
@@ -447,8 +450,8 @@ main {
 
   &__text {
     font-size: 24px;
-    // Note that transition is applied here rather than in word-highlight
-    transition: color 0.2s ease-in-out;
+    // // Note that if I want to highlight the word, the transition is applied here rather than in word-highlight
+    // transition: color 0.2s ease-in-out;
   }
 }
 

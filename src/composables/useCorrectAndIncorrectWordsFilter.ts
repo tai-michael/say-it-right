@@ -7,7 +7,7 @@ export default function useCorrectAndIncorrectWordsFilter(
   transcriptString: string,
   routeName: string | unknown
 ) {
-  const store = routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
+  const store = routeName === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 
   const recordedWords = [...new Set(transcriptString.split(' '))]
   const testedWordsPhonetic = testedWords.map((word) => getPhoneticCode(word))

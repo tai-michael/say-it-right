@@ -35,7 +35,7 @@
         <span>You have completed this list.</span>
         <span>
           Challenge yourself with a different
-          <RouterLink to="/overview" class="link">List</RouterLink> or
+          <RouterLink to="/provided-lists" class="link">List</RouterLink> or
           <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned!
         </span>
       </div>
@@ -133,8 +133,7 @@ function createNewListObjectFromWords(words: string[], allLists: List[], paragra
 onActivated(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
-      // NOTE this creates a direct reactive store reference to the list,
-      // meaning computed properties wouldn't have to rerender needlessly
+      // NOTE this creates a direct reactive store reference to the list, meaning computed properties wouldn't have to rerender needlessly when user navigates to a different view
       if (store.activeList) {
         const listNum = store.activeList.listNumber
         list.value = store.allLists[listNum - 1]

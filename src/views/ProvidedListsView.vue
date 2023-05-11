@@ -1,122 +1,122 @@
 <template>
   <main>
-    <!-- <LoadingDots v-if="isLoading" /> -->
-    <TransitionAppear>
-      <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
+    <div v-if="store.inProgressLists.length" class="list-type">
+      <label>In Progress</label>
+      <div class="list-container">
+        <div v-for="list of store.inProgressLists" :key="list.listNumber">
+          <router-link
+            :to="{ name: 'provided-list', params: { id: list.listNumber } }"
+            class="list"
+          >
+            <div class="list-item">
+              <span>List {{ list.listNumber }}</span>
+              <ListRegular />
+            </div>
+          </router-link>
+        </div>
+      </div>
+      <hr />
+    </div>
 
-      <WordChallenge
-        v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
-        :list="list"
-      />
-    </TransitionAppear>
-
-    <div v-if="list.status === 'LIST_COMPLETED'" class="message">
-      <div class="message__text">
-        <span>You have completed this list.</span>
-        <span>
-          Challenge yourself with a different
-          <RouterLink to="/overview" class="link">List</RouterLink> or
-          <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned!
-        </span>
+    <div v-if="store.untouchedLists.length" class="list-type">
+      <label v-if="anyListStarted">Not Started</label>
+      <div class="list-container">
+        <div v-for="list of store.untouchedLists" :key="list.listNumber">
+          <RouterLink :to="{ name: 'provided-list', params: { id: list.listNumber } }" class="list">
+            <div class="list-item">
+              <span>List {{ list.listNumber }}</span>
+              <ListRegular />
+            </div>
+          </RouterLink>
+        </div>
       </div>
     </div>
-    <!-- <SentenceChallenge v-else-if="list.status === 'TESTING_SENTENCES'" :list="list" /> -->
 
-    <!-- <div v-if="store.completedLists.length === store.allLists.length">
-      <span
-        >You have completed all provided lists. Click on any list in the 'Overview' tab to review
-        the list.</span
-      >
-    </div> -->
+    <div v-if="store.completedLists.length" class="list-type">
+      <hr />
+      <label>Completed</label>
+      <div class="list-container">
+        <div v-for="list of store.completedLists" :key="list.listNumber">
+          <RouterLink :to="{ name: 'provided-list', params: { id: list.listNumber } }" class="list">
+            <div class="list-item">
+              <span>List {{ list.listNumber }}</span>
+              <ListChecked />
+            </div>
+          </RouterLink>
+        </div>
+      </div>
+    </div>
+
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" :key="$route.fullPath"></component>
+      </keep-alive>
+    </router-view>
   </main>
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, ref } from 'vue'
-import type { List } from '@/stores/modules/types/List'
-
-import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
-import WordChallenge from '@/components/WordChallenge.vue'
-import TransitionAppear from '@/components/transitions/TransitionFade.vue'
-
-import { useRoute, useRouter } from 'vue-router'
+import { computed, onMounted } from 'vue'
+import ListChecked from '@/assets/icons/list-checked.vue'
+import ListRegular from '@/assets/icons/list-regular.vue'
 import { useProvidedListsStore } from '@/stores/index.ts'
+import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
+
 const store = useProvidedListsStore()
-// const componentKey = 'provided-lists'
 
-// @ts-ignore
-const list = ref<List>({})
+const anyListStarted = computed(() => store.inProgressLists.length || store.completedLists.length)
 
-const showParagraphChallenge = computed(
-  () =>
-    Object.keys(list.value).length &&
-    (list.value.status === 'LIST_NOT_STARTED' || list.value.status === 'PARAGRAPH_RECORDING_ENDED')
-)
-
-// NOTE onActivated instead of onMounted, as onMounted doesn't trigger
-// for keep-alive components
-onActivated(() => {
-  if (route.params.id) {
-    if (!Object.keys(list.value).length) {
-      // NOTE get direct reactive store reference to the list
-      // means computed properties wouldn't have to rerender needlessly
-      if (store.activeList) {
-        const listIndex = +route.params.id - 1
-        list.value = store.allLists[listIndex]
-      } else {
-        router.push('/not-found')
-        return
-      }
-    }
-    store.setActiveId(+route.params.id)
-  } else if (store.activeId) {
-    router.push({ params: { id: store.activeId } })
-  } else if (store.inProgressLists.length > 0) {
-    router.push({ params: { id: store.inProgressLists[0].listNumber } })
-  } else if (store.untouchedLists.length > 0) {
-    router.push({ params: { id: store.untouchedLists[0].listNumber } })
-  } else {
+onMounted(() => {
+  // check if any parameters were passed in the URL
+  if (route.params.catchAll) {
+    // redirect to error component
+    console.log(route.params)
     router.push('/not-found')
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.message {
+hr {
+  border: none;
+  height: 0.5px;
+  background-color: var(--vt-c-text-dark-2); // gray
+}
+.list-type {
   display: flex;
-  justify-content: center;
-  // margin-top: 2rem;
-  min-height: 64px;
-  padding: 0 5rem;
-  // height: 50px;
+  flex-direction: column;
 
-  &__text {
-    display: flex;
-    flex-direction: column;
-    span {
-      padding-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--orange-color);
+  label {
+    padding-bottom: 1rem;
+    font-weight: 700;
+  }
+  .list-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem 2rem; // row-gap, column-gap
+    // list-style: none;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    .list {
+      color: inherit;
+    }
+    .list:hover {
+      // background-color: transparent;
+      color: white;
+    }
+
+    .list-item {
+      display: flex;
+      flex-direction: column;
     }
   }
 }
 
-.link {
-  color: rgb(84, 191, 226);
-  font-weight: 700;
-}
-
-.link:hover {
-  background-color: none !important;
-}
-
-.fade-appear-from,
-.fade-appear-to {
-  opacity: 0;
-}
-.fade-appear-active {
-  transition: opacity 1s;
+hr {
+  margin: 1.5rem 0;
 }
 </style>

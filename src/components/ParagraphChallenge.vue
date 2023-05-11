@@ -58,10 +58,10 @@
     </div>
 
     <RecorderButton
+      v-if="props.list.status === 'LIST_NOT_STARTED'"
       @recording-started="isRecording = true"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
-      :challenge-status="props.list.status"
     />
   </main>
 </template>
@@ -82,7 +82,7 @@ import { useCustomListsStore } from '@/stores/index.ts'
 import { useReviewStore } from '@/stores/index.ts'
 
 const route = useRoute()
-const store = route.name === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
+const store = route.name === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 const reviewStore = useReviewStore()
 
 const props = defineProps({
@@ -95,7 +95,7 @@ const props = defineProps({
 const isRecording = ref(false)
 const testedParagraph = ref('')
 const testedWordsObj =
-  route.name === 'provided-lists' ? ref<Words<ProvidedWord>>({}) : ref<Words<CustomWord>>({})
+  route.name === 'provided-list' ? ref<Words<ProvidedWord>>({}) : ref<Words<CustomWord>>({})
 const testedWords = ref<string[]>([])
 
 const correctlyPronouncedTestedWords = ref<string[]>([])
@@ -131,7 +131,6 @@ const temporaryTranscript = ref('')
 const handleTempTranscriptRender = (transcript: string) => {
   // NOTE this guard is necessary b/c the recorder cannot be deactivated between views
   if (store.activeList?.listNumber !== props.list.listNumber) return
-
   temporaryTranscript.value = transcript
 }
 
@@ -179,7 +178,7 @@ const handleFinalTranscript = async (transcript: string) => {
 
   // NOTE provided lists all have sentences already,
   // so no need to generate new sentences for those
-  if (route.name === 'provided-lists') {
+  if (route.name === 'provided-list') {
     // NOTE only add words that aren't already in Review to Review
     const { nonMatchingWords } = useCheckIfWordsExistInReview(mispronouncedTestedWords.value)
     addWordsToReview(nonMatchingWords, props.list.words)
@@ -214,7 +213,7 @@ const addWordsToReview = (
 
   for (const mispronouncedWord of mispronouncedWords) {
     if (listWords.hasOwnProperty(mispronouncedWord)) {
-      const wordObject = {
+      const wordObject: WordObject = {
         word: mispronouncedWord,
         sentences: listWords[mispronouncedWord].sentences,
         attempts: 0,
@@ -310,7 +309,7 @@ const recordingStatus = computed(() => {
 <style lang="scss" scoped>
 @media (min-width: 1024px) {
   main {
-    min-height: 100vh;
+    // min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -328,12 +327,13 @@ label {
   font-weight: 800;
 }
 
-.content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 700px;
-}
+// .content {
+//   display: flex;
+//   flex-direction: column;
+//   // justify-content: center;
+//   min-height: 700px;
+//   height: 100%;
+// }
 
 .tested-paragraph {
   margin: 1rem 0;
@@ -397,5 +397,9 @@ label {
 
 .next-button {
   max-width: 50px;
+}
+
+.next-button:hover {
+  cursor: pointer;
 }
 </style>

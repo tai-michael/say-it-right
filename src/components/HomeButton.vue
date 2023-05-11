@@ -13,4 +13,8 @@ const router = useRouter()
 button {
   margin-top: 1rem;
 }
+
+button:hover {
+  cursor: pointer;
+}
 </style>
