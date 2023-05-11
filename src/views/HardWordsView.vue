@@ -4,7 +4,7 @@
     <ol class="list">
       <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">
         <!-- {{ entry.word }}: {{ entry.count }} -->
-        {{ entry.word }}
+        <span>{{ entry.word }}</span>
       </li>
     </ol>
   </main>
@@ -41,11 +41,28 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 main {
-  padding-bottom: 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h4 {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
+}
+
+.list__row {
+  padding: 0 10px;
+
+  span {
+    font-weight: bold;
+    color: #0daf28;
+  }
 }
 
 ol {
@@ -60,7 +77,7 @@ li {
 }
 li::before {
   content: counter(leaderboard) '. ';
-  font-weight: bold;
-  color: #333;
+  // font-weight: bold;
+  color: #838383;
 }
 </style>
