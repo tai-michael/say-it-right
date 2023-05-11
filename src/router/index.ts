@@ -18,9 +18,14 @@ const router = createRouter({
       alias: '/:pathMatch(.*)*'
     },
     {
-      path: '/custom-lists/:id?',
+      path: '/custom-lists',
       name: 'custom-lists',
       component: CustomListsView
+    },
+    {
+      path: '/custom-lists/:id',
+      name: 'custom-list',
+      component: () => import('@/components/CustomList.vue')
     },
     {
       path: '/review',

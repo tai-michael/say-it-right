@@ -1,10 +1,6 @@
 <template>
   <main>
     <!-- <LoadingDots v-if="isLoading" /> -->
-
-    <button @click="router.push({ name: 'provided-lists' })" class="back-button">
-      <GoBack /> Return to lists
-    </button>
     <TransitionAppear>
       <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
@@ -25,6 +21,7 @@
       </div>
     </div>
     <!-- <SentenceChallenge v-else-if="list.status === 'TESTING_SENTENCES'" :list="list" /> -->
+
     <!-- <div v-if="store.completedLists.length === store.allLists.length">
       <span
         >You have completed all provided lists. Click on any list in the 'Provided Lists' tab to review
@@ -41,7 +38,7 @@ import type { List } from '@/stores/modules/types/List'
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'
-import GoBack from '@/assets/icons/go-back.vue'
+
 import { useRoute, useRouter } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 const route = useRoute()
@@ -74,38 +71,19 @@ onActivated(() => {
       }
     }
     store.setActiveId(+route.params.id)
-    // TODO see whether the below condition is necessary
   } else if (store.activeId) {
     router.push({ params: { id: store.activeId } })
-    // } else if (store.inProgressLists.length > 0) {
-    //   router.push({ params: { id: store.inProgressLists[0].listNumber } })
-    // } else if (store.untouchedLists.length > 0) {
-    //   router.push({ params: { id: store.untouchedLists[0].listNumber } })
-    // TODO re-add the below functionality somehow
-    // } else {
-    //   router.push('/not-found')
+  } else if (store.inProgressLists.length > 0) {
+    router.push({ params: { id: store.inProgressLists[0].listNumber } })
+  } else if (store.untouchedLists.length > 0) {
+    router.push({ params: { id: store.untouchedLists[0].listNumber } })
+  } else {
+    router.push('/not-found')
   }
 })
 </script>
 
 <style lang="scss" scoped>
-main {
-  height: 100%;
-}
-.back-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: 0.3rem;
-  padding: 2px 4px;
-  margin-bottom: 2rem;
-  width: 120px;
-}
-
-.back-button:hover {
-  cursor: pointer;
-}
-
 .message {
   display: flex;
   justify-content: center;

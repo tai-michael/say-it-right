@@ -1,10 +1,6 @@
 <template>
   <main>
-    <form
-      v-if="!Object.keys(list).length"
-      class="submit-form"
-      @submit.prevent="submitWords(wordsInput)"
-    >
+    <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
       <div class="input-container">
         <label>Insert up to 7 words separated by spaces or commas:</label>
         <div class="input-field">
@@ -20,64 +16,80 @@
 
     <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-    <TransitionAppear>
-      <ParagraphChallenge v-if="showParagraphChallenge" key="paragraph-challenge" :list="list" />
+    <div v-if="store.inProgressLists.length" class="list-type">
+      <label>In Progress</label>
+      <div class="list-container">
+        <div v-for="list of store.inProgressLists" :key="list.listNumber">
+          <router-link :to="{ name: 'custom-list', params: { id: list.listNumber } }" class="list">
+            <div class="list-item">
+              <span>List {{ list.listNumber }}</span>
+              <ListRegular />
+            </div>
+          </router-link>
+        </div>
+      </div>
+      <hr />
+    </div>
 
-      <WordChallenge
-        v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
-        key="sentence-challenge"
-        :list="list"
-      />
-    </TransitionAppear>
-
-    <div v-if="list.status === 'LIST_COMPLETED'" class="message">
-      <div class="message__text">
-        <span>You have completed this list.</span>
-        <span>
-          Challenge yourself with a different
-          <RouterLink to="/provided-lists" class="link">List</RouterLink> or
-          <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned!
-        </span>
+    <div v-if="store.untouchedLists.length" class="list-type">
+      <label v-if="anyListStarted">New</label>
+      <div class="list-container">
+        <div v-for="list of store.untouchedLists" :key="list.listNumber">
+          <RouterLink :to="{ name: 'custom-list', params: { id: list.listNumber } }" class="list">
+            <div class="list-item">
+              <span>List {{ list.listNumber }}</span>
+              <ListRegular />
+            </div>
+          </RouterLink>
+        </div>
       </div>
     </div>
 
-    <!-- TODO add in WordChallenge and SentenceChallenge -->
+    <div v-if="store.completedLists.length" class="list-type">
+      <hr />
+      <label>Completed</label>
+      <div class="list-container">
+        <div v-for="list of store.completedLists" :key="list.listNumber">
+          <RouterLink :to="{ name: 'custom-list', params: { id: list.listNumber } }" class="list">
+            <div class="list-item">
+              <span>List {{ list.listNumber }}</span>
+              <ListChecked />
+            </div>
+          </RouterLink>
+        </div>
+      </div>
+    </div>
+
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" :key="$route.fullPath"></component>
+      </keep-alive>
+    </router-view>
   </main>
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, ref } from 'vue'
-import type { List } from '@/stores/modules/types/List'
-
-import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
-import WordChallenge from '@/components/WordChallenge.vue'
+import { computed, onMounted, ref } from 'vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
+import type { List } from '@/stores/modules/types/List'
 import LoadingDots from '@/components/LoadingDots.vue'
-import TransitionAppear from '@/components/transitions/TransitionFade.vue'
-
-import { useRoute, useRouter } from 'vue-router'
+import ListChecked from '@/assets/icons/list-checked.vue'
+import ListRegular from '@/assets/icons/list-regular.vue'
 import { useCustomListsStore } from '@/stores/index.ts'
+import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
+
 const store = useCustomListsStore()
-// const componentKey = 'custom-list'
 
-const isLoading = ref(false)
+const anyListStarted = computed(() => store.inProgressLists.length || store.completedLists.length)
+
 const wordsInput = ref('')
-const newlyCreatedParagraph = ref('')
+const isLoading = ref(false)
 const submissionError = ref('')
+const newlyCreatedParagraph = ref('')
 
-// @ts-ignore
-const list = ref<List>({})
-
-const showParagraphChallenge = computed(
-  () =>
-    Object.keys(list.value).length &&
-    (list.value?.status === 'LIST_NOT_STARTED' ||
-      list.value?.status === 'PARAGRAPH_RECORDING_ENDED')
-)
-
-// TODO probably need to add error-handling in here for openai
+// TODO add error-handling in here for openai
 const submitWords = async (words: string) => {
   try {
     if (!words) return (submissionError.value = 'Please enter at least one word')
@@ -101,7 +113,9 @@ const submitWords = async (words: string) => {
     createNewListObjectFromWords(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
 
     await store.updateListsInFirestore()
-    router.push({ params: { id: store.allLists.length } })
+    isLoading.value = false
+    // REVIEW uncomment below if I want to automatically direct the user to a list right after generating it
+    // router.push({ params: { id: store.allLists.length } })
   } catch (err) {
     console.log(err)
     isLoading.value = false
@@ -128,37 +142,26 @@ function createNewListObjectFromWords(words: string[], allLists: List[], paragra
   allLists.push(newListObject)
 }
 
-// NOTE onActivated instead of onMounted, as onMounted doesn't trigger
-// for keep-alive components
-onActivated(() => {
-  if (route.params.id) {
-    if (!Object.keys(list.value).length) {
-      // NOTE this creates a direct reactive store reference to the list, meaning computed properties wouldn't have to rerender needlessly when user navigates to a different view
-      if (store.activeList) {
-        const listNum = store.activeList.listNumber
-        list.value = store.allLists[listNum - 1]
-        isLoading.value = false
-      } else {
-        router.push('/custom-lists')
-        return
-      }
-    }
-    store.setActiveId(+route.params.id)
-  } else if (store.activeId) {
-    router.push({ params: { id: store.activeId } })
-  } else if (store.inProgressLists.length > 0) {
-    router.push({ params: { id: store.inProgressLists[0].listNumber } })
-  } else if (store.untouchedLists.length > 0) {
-    router.push({ params: { id: store.untouchedLists[0].listNumber } })
-  } else {
-    router.push('/custom-lists')
+onMounted(() => {
+  // check if any parameters were passed in the URL
+  if (route.params.catchAll) {
+    // redirect to error component
+    console.log(route.params)
+    router.push('/not-found')
   }
 })
 </script>
 
 <style lang="scss" scoped>
+hr {
+  border: none;
+  height: 0.5px;
+  background-color: var(--vt-c-text-dark-2); // gray
+}
+
 .submit-form {
   display: flex;
+  margin-bottom: 2rem;
   // row-gap: 2rem;
 
   .input-container {
@@ -190,5 +193,41 @@ onActivated(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.list-type {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    padding-bottom: 1rem;
+    font-weight: 700;
+  }
+  .list-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem 2rem; // row-gap, column-gap
+    // list-style: none;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    .list {
+      color: inherit;
+    }
+    .list:hover {
+      // background-color: transparent;
+      color: white;
+    }
+
+    .list-item {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+hr {
+  margin: 1.5rem 0;
 }
 </style>

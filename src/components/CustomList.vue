@@ -1,15 +1,35 @@
 <template>
   <main>
-    <!-- <LoadingDots v-if="isLoading" /> -->
+    <!-- <form
+      v-if="!Object.keys(list).length"
+      class="submit-form"
+      @submit.prevent="submitWords(wordsInput)"
+    >
+      <div class="input-container">
+        <label>Insert up to 7 words separated by spaces or commas:</label>
+        <div class="input-field">
+          <input placeholder="e.g. urban thin kindly" v-model="wordsInput" autofocus />
+          <button type="submit" :disabled="isLoading">Submit</button>
+        </div>
+      </div>
+    </form> -->
 
-    <button @click="router.push({ name: 'provided-lists' })" class="back-button">
+    <button @click="router.push({ name: 'custom-lists' })" class="back-button">
       <GoBack /> Return to lists
     </button>
+
+    <div v-if="isLoading" class="loading-container">
+      <LoadingDots />
+    </div>
+
+    <!-- <div v-if="submissionError" class="error">{{ submissionError }}</div> -->
+
     <TransitionAppear>
-      <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
+      <ParagraphChallenge v-if="showParagraphChallenge" key="paragraph-challenge" :list="list" />
 
       <WordChallenge
         v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
+        key="sentence-challenge"
         :list="list"
       />
     </TransitionAppear>
@@ -18,19 +38,14 @@
       <div class="message__text">
         <span>You have completed this list.</span>
         <span>
-          Challenge yourself with a different
-          <RouterLink to="/provided-lists" class="link">List</RouterLink> or
+          Create or look at another
+          <RouterLink to="/custom-lists" class="link">List</RouterLink> or
           <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned!
         </span>
       </div>
     </div>
-    <!-- <SentenceChallenge v-else-if="list.status === 'TESTING_SENTENCES'" :list="list" /> -->
-    <!-- <div v-if="store.completedLists.length === store.allLists.length">
-      <span
-        >You have completed all provided lists. Click on any list in the 'Provided Lists' tab to review
-        the list.</span
-      >
-    </div> -->
+
+    <!-- TODO add in WordChallenge and SentenceChallenge -->
   </main>
 </template>
 
@@ -40,14 +55,17 @@ import type { List } from '@/stores/modules/types/List'
 
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
+import LoadingDots from '@/components/LoadingDots.vue'
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'
 import GoBack from '@/assets/icons/go-back.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore } from '@/stores/index.ts'
 const route = useRoute()
 const router = useRouter()
-const store = useProvidedListsStore()
-// const componentKey = 'provided-lists'
+const store = useCustomListsStore()
+// const componentKey = 'custom-list'
+
+const isLoading = ref(false)
 
 // @ts-ignore
 const list = ref<List>({})
@@ -55,7 +73,8 @@ const list = ref<List>({})
 const showParagraphChallenge = computed(
   () =>
     Object.keys(list.value).length &&
-    (list.value.status === 'LIST_NOT_STARTED' || list.value.status === 'PARAGRAPH_RECORDING_ENDED')
+    (list.value?.status === 'LIST_NOT_STARTED' ||
+      list.value?.status === 'PARAGRAPH_RECORDING_ENDED')
 )
 
 // NOTE onActivated instead of onMounted, as onMounted doesn't trigger
@@ -63,12 +82,14 @@ const showParagraphChallenge = computed(
 onActivated(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
-      // NOTE get direct reactive store reference to the list
-      // means computed properties wouldn't have to rerender needlessly
+      // NOTE this creates a direct reactive store reference to the list, meaning computed properties wouldn't have to rerender needlessly when user navigates to a different view
       if (store.activeList) {
-        const listIndex = +route.params.id - 1
-        list.value = store.allLists[listIndex]
+        // TODO this stuff is different from ProvidedList's; consider why
+        const listNum = store.activeList.listNumber
+        list.value = store.allLists[listNum - 1]
+        isLoading.value = false
       } else {
+        // router.push('/custom-lists')
         router.push('/not-found')
         return
       }
@@ -83,7 +104,7 @@ onActivated(() => {
     //   router.push({ params: { id: store.untouchedLists[0].listNumber } })
     // TODO re-add the below functionality somehow
     // } else {
-    //   router.push('/not-found')
+    //   router.push('/custom-lists')
   }
 })
 </script>
@@ -101,7 +122,6 @@ main {
   margin-bottom: 2rem;
   width: 120px;
 }
-
 .back-button:hover {
   cursor: pointer;
 }
@@ -141,4 +161,39 @@ main {
 .fade-appear-active {
   transition: opacity 1s;
 }
+
+.loading-container {
+  margin: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// .submit-form {
+//   display: flex;
+//   // row-gap: 2rem;
+
+//   .input-container {
+//     display: flex;
+//     flex-direction: column;
+//     width: 100%;
+
+//     label {
+//       margin-bottom: 0.5rem;
+//     }
+//   }
+//   .input-field {
+//     display: flex;
+
+//     input {
+//       width: 100%;
+//     }
+//   }
+// }
+
+// .error {
+//   margin-top: 1rem;
+//   // color: hsl(2, 65%, 54%);
+//   color: var(--orange-color);
+// }
 </style>

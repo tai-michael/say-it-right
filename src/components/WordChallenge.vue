@@ -284,6 +284,7 @@ const checkPronunciationOfWordByItself = (transcript: string) => {
 
 // const checkmarkActive = ref(false)
 
+// TODO fix this function so it works with a modified word with an accent (e.g. 'cafés' modified by chatGPT into 'café'. Phonetic code would be 'KFS', while transcription would be 'KF'. Stemmer doesn't help b/c it returns accented stem.)
 const checkPronunciationOfWordInSentences = (transcript: string) => {
   finalTranscriptWords.value = transcript.split(' ')
 
@@ -296,7 +297,6 @@ const checkPronunciationOfWordInSentences = (transcript: string) => {
 
 const checkForPhoneticCodeMatch = (transcriptWords: string[]) => {
   const testedWordPhoneticCode = getPhoneticCode(testedWord.value)
-
   for (const transcriptWord of transcriptWords) {
     const transcriptWordPhoneticCode = metaphone(transcriptWord)
     if (transcriptWordPhoneticCode === testedWordPhoneticCode) {
