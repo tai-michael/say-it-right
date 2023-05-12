@@ -1,29 +1,31 @@
 <template>
   <!-- <h4>Review</h4> -->
-  <main>
-    <ul class="list">
-      <li
-        v-for="(entry, index) in allWords"
-        :key="index"
-        @click="selectWord(entry)"
-        class="list__row"
-      >
-        <!-- TODO replace with router-link -->
-        {{ entry.word }}
-      </li>
-    </ul>
-    <hr v-if="Object.keys(allWords).length < 10" />
-    <!-- TODO replace with SingleWordChallenge -->
-    <div class="word-drill">
-      <keep-alive>
-        <WordDrill :word="selectedWord" v-if="selectedWord" :key="selectedWord.word" />
-      </keep-alive>
-    </div>
-  </main>
+  <div class="review">
+    <input type="text" v-model="search" placeholder="Search word" />
+    <main>
+      <ul class="list">
+        <li
+          v-for="(entry, index) in filteredWords"
+          :key="index"
+          @click="selectWord(entry)"
+          class="list__row"
+          :class="{ highlighted: entry === selectedWord }"
+        >
+          <span>{{ entry.word }}</span>
+        </li>
+      </ul>
+      <hr v-if="Object.keys(allWords).length < 10" />
+      <div class="word-drill">
+        <keep-alive>
+          <WordDrill :word="selectedWord" v-if="selectedWord" :key="selectedWord.word" />
+        </keep-alive>
+      </div>
+    </main>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import WordDrill from '@/components/WordDrill.vue'
@@ -41,6 +43,14 @@ const selectWord = (word: WordObject) => {
   localStorage.setItem('selectedWord', word.word)
 }
 
+const search = ref('')
+const filteredWords = computed(() => {
+  if (!search.value) return allWords.value
+  return allWords.value.filter((word) =>
+    word.word.toLowerCase().includes(search.value.toLowerCase())
+  )
+})
+
 onMounted(() => {
   const word = localStorage.getItem('selectedWord')
   if (word) {
@@ -50,6 +60,19 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.review {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  height: 35px;
+  max-width: 450px;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  border-radius: 40px;
+}
+
 main {
   display: flex;
   flex-direction: row;
@@ -60,18 +83,24 @@ h4 {
   margin-bottom: 1.2rem;
 }
 .list {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   line-height: 2;
   li {
     list-style: none;
   }
-  max-height: 280px;
+  height: 280px;
   overflow-y: auto;
   min-width: 140px;
 
   &__row {
     cursor: pointer;
+    span {
+      padding: 5px;
+    }
   }
+}
+.highlighted {
+  background-color: rgb(51, 51, 51);
 }
 .word-drill {
   padding: 2rem 1rem 0.5rem;

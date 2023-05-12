@@ -22,6 +22,8 @@
           <RouterLink to="/provided-lists" class="link">List</RouterLink> or
           <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned!
         </span>
+        <!-- TODO add function that resets the attempts &attemptsSuccessful to 0, sets the list status to 'LIST_NOT_STARTED', and updates list in firestore -->
+        <!-- <span>Alternatively, you can try the challenge again.</span> -->
       </div>
     </div>
     <!-- <SentenceChallenge v-else-if="list.status === 'TESTING_SENTENCES'" :list="list" /> -->
