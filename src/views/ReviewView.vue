@@ -1,19 +1,29 @@
 <template>
   <!-- <h4>Review</h4> -->
   <div class="review">
-    <input type="text" v-model="search" placeholder="Search word" />
+    <input type="text" v-model="search" placeholder="Search for word" />
     <main>
-      <ul class="list">
-        <li
-          v-for="(entry, index) in filteredWords"
-          :key="index"
-          @click="selectWord(entry)"
-          class="list__row"
-          :class="{ highlighted: entry === selectedWord }"
-        >
-          <span>{{ entry.word }}</span>
-        </li>
-      </ul>
+      <div class="list-container">
+        <!-- <label for="sort">Sort by:</label> -->
+        <select id="sort" v-model="sortOrder" class="filter-container">
+          <option value="createdDesc">Most recent</option>
+          <option value="createdAsc">Least recent</option>
+          <option value="wordAsc">A to Z</option>
+          <option value="wordDesc">Z to A</option>
+        </select>
+
+        <ul class="list">
+          <li
+            v-for="(entry, index) in sortedWords"
+            :key="index"
+            @click="selectWord(entry)"
+            class="list__row"
+            :class="{ highlighted: entry === selectedWord }"
+          >
+            <span>{{ entry.word }}</span>
+          </li>
+        </ul>
+      </div>
       <hr v-if="Object.keys(allWords).length < 10" />
       <div class="word-drill">
         <keep-alive>
@@ -44,11 +54,22 @@ const selectWord = (word: WordObject) => {
 }
 
 const search = ref('')
-const filteredWords = computed(() => {
-  if (!search.value) return allWords.value
-  return allWords.value.filter((word) =>
-    word.word.toLowerCase().includes(search.value.toLowerCase())
-  )
+const sortOrder = ref('createdDesc')
+const sortedWords = computed(() => {
+  const words = search.value
+    ? allWords.value.filter((word) => word.word.toLowerCase().includes(search.value.toLowerCase()))
+    : allWords.value
+  switch (sortOrder.value) {
+    case 'createdAsc':
+      return words.sort((a, b) => a.created - b.created)
+    case 'wordAsc':
+      return words.sort((a, b) => a.word.localeCompare(b.word))
+    case 'wordDesc':
+      return words.sort((a, b) => b.word.localeCompare(a.word))
+    default:
+      // this sorts by createdDesc
+      return words.sort((a, b) => b.created - a.created)
+  }
 })
 
 onMounted(() => {
@@ -67,10 +88,19 @@ onMounted(() => {
 
 input {
   height: 35px;
-  max-width: 450px;
+  max-width: 470px;
   margin-bottom: 1rem;
-  padding: 0.8rem;
-  border-radius: 40px;
+  padding: 0.5rem;
+  // border-radius: 40px;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+.filter-container {
+  width: 100%;
 }
 
 main {
@@ -83,7 +113,7 @@ h4 {
   margin-bottom: 1.2rem;
 }
 .list {
-  padding: 0.5rem;
+  padding: 0 0.5rem;
   line-height: 2;
   li {
     list-style: none;

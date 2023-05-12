@@ -177,6 +177,8 @@ hr {
     display: flex;
 
     input {
+      height: 35px;
+      padding: 0.5rem;
       width: 100%;
     }
   }

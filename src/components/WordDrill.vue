@@ -218,9 +218,9 @@ const getPhoneticCode = (word: string) => {
   return metaphone(word)
 }
 
-onMounted(() => {
-  console.log(wordName.value)
-})
+// onMounted(() => {
+//   console.log(wordName.value)
+// })
 </script>
 
 <style lang="scss" scoped>
