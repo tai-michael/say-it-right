@@ -185,6 +185,10 @@ const testedWordAudioText = computed(
   // `${testedWord.value.toUpperCase()}!`
 )
 
+const play = () => {
+  useTextToSpeechConverter(testedWordAudioText.value, 'female', 1)
+}
+
 const showRecorderButton = computed(
   () =>
     storeWord.value?.attemptsSuccessful < attemptsSuccessfulRequired.value &&
@@ -202,12 +206,7 @@ const clearTempAndFinalTranscripts = () => {
   finalTranscriptWords.value = []
 }
 
-const play = () => {
-  useTextToSpeechConverter(testedWordAudioText.value, 'female', 1)
-}
-
 const isRecording = ref(false)
-
 const temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript: string) => {
@@ -273,6 +272,7 @@ const checkPronunciationOfWordByItself = (transcript: string) => {
   const transcribedWordCode = getPhoneticCode(finalTranscriptWord.value)
   const testedWordPhoneticCode = getPhoneticCode(testedWord.value)
 
+  // NOTE convert any mistranscribed word to the tested word if they sound the same
   if (transcribedWordCode === testedWordPhoneticCode) {
     finalTranscriptWord.value = testedWord.value
     console.log('true')
@@ -381,7 +381,6 @@ const handleCorrectPronunciation = async () => {
   }
 }
 
-// NOTE convert any mistranscribed word to the tested word if they sound the same
 const getPhoneticCode = (word: string) => {
   return metaphone(word)
 }

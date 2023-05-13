@@ -1,7 +1,7 @@
 import { db } from '@/firebaseInit'
 import { doc, runTransaction, increment } from 'firebase/firestore'
 
-export default function useHardWordLogger(word: string) {
+export default function (word: string) {
   const wordRef = doc(db, 'hard_word_counts', word)
 
   // Updates the count field of the skipped word

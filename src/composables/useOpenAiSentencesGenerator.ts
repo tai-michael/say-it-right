@@ -6,7 +6,7 @@ import axios from 'axios'
 // May need to create firebase function inside say-it-right project
 // Then initialize the app with it (along with auth / firestore)
 
-export default async function useOpenAiSentencesGenerator(mispronouncedWords: string[]) {
+export default async function (mispronouncedWords: string[]) {
   try {
     const url = import.meta.env.VITE_SENTENCES_GENERATOR_ENDPOINT
     const query = mispronouncedWords.join(', ')
@@ -30,7 +30,7 @@ export default async function useOpenAiSentencesGenerator(mispronouncedWords: st
   }
 }
 
-function extractObjectFromString(jsonString: string) {
+const extractObjectFromString = (jsonString: string) => {
   const jsonRegex = /{.*}/s
   // @ts-ignore
   const fixedString = jsonString.match(jsonRegex)[0]
@@ -39,7 +39,7 @@ function extractObjectFromString(jsonString: string) {
 }
 
 // @ts-ignore
-function filterMatchingWords(dataObject, wordsArray: string[]) {
+const filterMatchingWords = (dataObject, wordsArray: string[]) => {
   const result = wordsArray.reduce((acc, word) => {
     if (dataObject[word]) {
       // @ts-ignore

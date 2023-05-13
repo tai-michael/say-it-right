@@ -7,4 +7,4 @@ export interface WordObject {
   created: number
 }
 
-export type WordStatus = 'TESTING_WORD_ONLY' | 'TESTING_SENTENCES'
+export type WordStatus = 'TESTING_WORD_ONLY' | 'TESTING_SENTENCES' | 'TESTING_COMPLETE'

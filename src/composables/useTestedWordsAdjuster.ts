@@ -4,7 +4,7 @@ import { useCustomListsStore } from '@/stores'
 // NOTE used for useTestedWordsAdjuster composable
 import stem from 'wink-porter2-stemmer'
 
-export default function useTestedWordsAdjuster(
+export default function (
   testedWords: Words<ProvidedWord> | Words<CustomWord>,
   testedParagraph: string,
   routeName: string | unknown

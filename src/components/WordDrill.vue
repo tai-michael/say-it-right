@@ -40,7 +40,7 @@
       <div class="transcript__text">{{ temporaryTranscript }}</div>
     </div>
 
-    <!-- <TransitionFade v-else>
+    <TransitionFade v-else>
       <div class="message">
         <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
         <div v-else-if="recordingStatus === 'NOTHING_RECORDED'" class="message__text">
@@ -63,18 +63,17 @@
         <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text-retry">
           <span>Try again.</span>
         </div>
-        <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
+        <!-- <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
           <span>Let's skip this word for now.</span>
-        </div>
-        <div v-else-if="props.list.status === 'LIST_COMPLETED'" class="message__text">
-          <span>You've completed the list. Well done!</span
-          ><span>
-            Challenge yourself with another <RouterLink to="/provided-lists">list</RouterLink> or
-            <RouterLink to="/review">Review</RouterLink> the words you've just learned!
-          </span>
+        </div> -->
+        <div v-else-if="recordingStatus === 'TESTING_COMPLETE'" class="message__text">
+          <span
+            >Practice with a similar word or
+            <span @click="resetWord" class="retry-word">Retry</span> this word!</span
+          >
         </div>
       </div>
-    </TransitionFade> -->
+    </TransitionFade>
 
     <!-- <RecorderButton
       v-if="showRecorderButton"
@@ -85,6 +84,7 @@
     /> -->
 
     <RecorderButton
+      v-if="showRecorderButton"
       @recording-started="handleRecordingStarted"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
@@ -100,26 +100,55 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, toRefs } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+// import type { Ref } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import RecorderButton from './RecorderButton.vue'
 import PlayAudioIcon from '@/assets/icons/play-audio.vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
-import { metaphone } from 'metaphone'
 import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
+import useCheckPronunciationOfWordByItself from '@/composables/useCheckPronunciationOfWordByItself.ts'
+import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronunciationOfWordInSentences.ts'
+import useDelay from '@/composables/useDelay'
+import { useReviewStore } from '@/stores/index.ts'
+import { metaphone } from 'metaphone'
+
+const store = useReviewStore()
 
 const props = defineProps({
   word: { type: Object as PropType<WordObject>, required: true }
 })
 
-const { word } = toRefs(props)
+// const word: Ref<WordObject | null> = ref(null)
+// NOTE creates a reactive variable
+// const { word } = toRefs(props)
 
-const isRecording = ref(false)
-const temporaryTranscript = ref('')
-const finalTranscriptWords = ref<string[]>([])
+const resetWord = () => {
+  word.value.attempts = 0
+  word.value.attemptsSuccessful = 0
+  word.value.status = 'TESTING_WORD_ONLY'
+}
 
+onMounted(() => {
+  word.value = props.word
+  word.value.attempts = 0
+  word.value.attemptsSuccessful = 0
+  word.value.status = 'TESTING_WORD_ONLY'
+  // TODO maybe set the attempts and attemptsSuccessful to 0 here
+})
+// @ts-ignore
+const word = ref<WordObject>({})
 const wordName = computed(() => word.value.word)
+
+const testingWordOnly = computed(() => word.value.status === 'TESTING_WORD_ONLY')
+const testingSentences = computed(() => word.value.status === 'TESTING_SENTENCES')
+
+const testedSentence = computed(() => {
+  return word.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 2
+    ? word.value.sentences[0]
+    : word.value.sentences[1]
+})
 
 const testedWordAudioText = computed(
   () => `${wordName.value.slice(0, 1).toUpperCase() + wordName.value.slice(1)}.`
@@ -132,6 +161,20 @@ const play = () => {
   useTextToSpeechConverter(testedWordAudioText.value, 'female', 1)
 }
 
+const attemptsSuccessfulRequired = computed(() =>
+  word.value.status === 'TESTING_WORD_ONLY' ? 2 : 4
+)
+
+const showRecorderButton = computed(
+  () =>
+    word.value.attemptsSuccessful < attemptsSuccessfulRequired.value &&
+    (word.value.status === 'TESTING_WORD_ONLY' || word.value.status === 'TESTING_SENTENCES')
+)
+
+const isRecording = ref(false)
+const temporaryTranscript = ref('')
+// REVIEW not sure if I need this in WordDrill
+
 const handleRecordingStarted = () => {
   isRecording.value = true
   // NOTE clears the temporary and final transcripts of any residual transcripts
@@ -143,50 +186,10 @@ const clearTempAndFinalTranscripts = () => {
   finalTranscriptWords.value = []
 }
 
-const handleFinalTranscript = async (transcript: string) => {
-  isRecording.value = false
-  if (!transcript) return
-  console.log(transcript)
-
-  // if (!transcript || store.activeList?.listNumber !== props.list.listNumber) return
-  // console.log(transcript)
-
-  // if (testingWordOnly.value)
-  //   isPronouncedCorrectly.value = checkPronunciationOfWordByItself(transcript)
-  // else isPronouncedCorrectly.value = checkPronunciationOfWordInSentences(transcript)
-
-  // console.log(isPronouncedCorrectly.value)
-
-  // if (isPronouncedCorrectly.value) {
-  //   await handleCorrectPronunciation()
-  // } else if (storeWordName.value.attempts === attemptsLimit.value - 1) {
-  //   await skipWord()
-  // } else {
-  //   store.logPronunciationAttempt(testedWordName.value)
-  //   introductionNeeded.value = false
-  // }
-
-  // store.updateListsInFirestore()
-}
-
-// TODO add these two statuses to the WordObject
-const testingWordOnly = computed(() => word.value.status === 'TESTING_WORD_ONLY')
-const testingSentences = computed(() => word.value.status === 'TESTING_SENTENCES')
-
-const testedSentence = computed(() => {
-  return word.value.sentences[0]
-})
-
-// const testedSentence = computed(() => {
-//   if (sentences.value)
-//     return storeWord?.value?.attemptsSuccessful === attemptsSuccessfulRequired.value - 2
-//       ? sentences?.value[0]
-//       : sentences?.value[1]
-//   else return ''
-// })
-
 const handleTempTranscriptRender = (transcript: string) => {
   // console.log(transcript)
+  // NOTE this guard is necessary b/c the recorder cannot be deactivated between views
+  if (props.word !== word.value) return
 
   // NOTE simply 'return' if I decide not to show transcript for Sentence Challenges
   if (testingSentences.value)
@@ -197,39 +200,124 @@ const handleTempTranscriptRender = (transcript: string) => {
   const transcribedWordCode = getPhoneticCode(temporaryTranscript.value)
   const testedWordPhoneticCode = getPhoneticCode(wordName.value)
   if (transcribedWordCode === testedWordPhoneticCode) temporaryTranscript.value = wordName.value
-
-  // // console.log(transcript)
-  // // NOTE this guard is necessary b/c the recorder cannot be deactivated between views
-  // if (store.activeList?.listNumber !== props.list.listNumber) return
-
-  // // NOTE simply 'return' if I decide not to show transcript for Sentence Challenges
-  // if (testingSentences.value)
-  //   return (temporaryTranscript.value = transcript.split(' ').slice(-8).join(' '))
-
-  // temporaryTranscript.value = transcript.split(' ').slice(-1).join(' ')
-
-  // const transcribedWordCode = getPhoneticCode(temporaryTranscript.value)
-  // const testedWordPhoneticCode = getPhoneticCode(testedWordName.value)
-  // if (transcribedWordCode === testedWordPhoneticCode) temporaryTranscript.value = testedWordName.value
 }
 
-// NOTE convert any mistranscribed word to the tested word if they sound the same
 const getPhoneticCode = (word: string) => {
   return metaphone(word)
 }
 
-// onMounted(() => {
-//   console.log(wordName.value)
-// })
+const finalTranscriptWords = ref<string[]>([])
+const isPronouncedCorrectly = ref(false)
+// const matchingWord = ref('')
+
+const handleFinalTranscript = async (transcript: string) => {
+  isRecording.value = false
+
+  if (!transcript || props.word !== word.value) return
+  console.log(transcript)
+
+  finalTranscriptWords.value = transcript.split(' ')
+
+  if (testingWordOnly.value) {
+    isPronouncedCorrectly.value = useCheckPronunciationOfWordByItself(
+      finalTranscriptWords.value,
+      wordName.value
+    )
+  } else
+    isPronouncedCorrectly.value = useCheckPronunciationOfWordInSentences(
+      finalTranscriptWords.value,
+      wordName.value
+    )
+
+  console.log(isPronouncedCorrectly.value)
+
+  if (isPronouncedCorrectly.value) {
+    await handleCorrectPronunciation()
+    // } else if (storeWord.value.attempts === attemptsLimit.value - 1) {
+    //   await skipWord()
+  } else {
+    store.logPronunciationAttempt(wordName.value)
+    introductionNeeded.value = false
+  }
+
+  store.updateReviewInFirestore()
+}
+
+const introductionNeeded = ref(true)
+
+const handleCorrectPronunciation = async () => {
+  // TODO pass word.value.attemptsSuccessful, attemptsSuccessfulRequired, and wordName as params
+  if (word.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 2) {
+    // NOTE when user answers correctly once, give them a couple more attempts
+    // store.softResetAttempts(wordName.value)
+    store.logPronunciationAttemptSuccessful(wordName.value)
+    store.logPronunciationAttempt(wordName.value)
+    introductionNeeded.value = false
+    // if (testingSentences.value) {
+    //   checkmarkActive.value = true
+    //   setTimeout(() => {
+    //     checkmarkActive.value = false
+    //   }, 2000)
+    // }
+  } else if (word.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 1) {
+    store.logPronunciationAttemptSuccessful(wordName.value)
+    store.logPronunciationAttempt(wordName.value)
+
+    await useDelay(2000)
+
+    // TODO this part is different
+    if (testingWordOnly.value) {
+      clearTempAndFinalTranscripts()
+      isPronouncedCorrectly.value = false
+      // store.hardResetAttempts(wordName.value)
+      // store.setWordStatus(word.value, 'TESTING_SENTENCES')
+      word.value.status = 'TESTING_SENTENCES'
+    } else {
+      // TODO this part is different
+      clearTempAndFinalTranscripts()
+      // REVIEW not sure if below line is needed
+      isPronouncedCorrectly.value = false
+      // store.setWordStatus(word.value, 'TESTING_COMPLETE')
+      word.value.status = 'TESTING_COMPLETE'
+    }
+
+    introductionNeeded.value = true
+  }
+}
+
+const recordingStatus = computed(() => {
+  if (word.value.status === 'TESTING_COMPLETE') return 'TESTING_COMPLETE'
+  if (isRecording.value) return 'IS_CURRENTLY_RECORDING'
+  if (!finalTranscriptWords.value.length) return 'NOTHING_RECORDED'
+
+  // const { attempts, attemptsSuccessful } = storeWord.value
+
+  if (
+    isPronouncedCorrectly.value &&
+    word.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 1
+  )
+    return 'PRONOUNCED_CORRECTLY_ONCE'
+  if (
+    isPronouncedCorrectly.value &&
+    word.value.attemptsSuccessful === attemptsSuccessfulRequired.value
+  )
+    return 'PRONOUNCED_CORRECTLY_TWICE'
+  // if (attempts === attemptsLimit.value && attemptsSuccessful < attemptsSuccessfulRequired.value)
+  //   return 'SKIPPING_WORD'
+  return 'PRONOUNCED_INCORRECTLY'
+})
 </script>
 
 <style lang="scss" scoped>
 main {
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important;
   justify-content: center;
   // min-height: 700px;
   min-width: 300px;
+  padding: 2rem 1rem 0.5rem;
+  min-width: 380px;
+  max-width: 380px;
 }
 .word-and-sentences {
   min-height: 140px;
@@ -309,6 +397,12 @@ main {
   padding: 0 1.5rem;
   // margin-bottom: 1rem;
   // align-items: center;
+}
+
+.retry-word {
+  text-decoration: underline;
+  color: var(--green-color) !important;
+  cursor: pointer;
 }
 // .checkmark-container {
 // display: flex;

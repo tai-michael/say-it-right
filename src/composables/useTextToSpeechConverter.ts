@@ -1,8 +1,4 @@
-export default async function useTextToSpeechConverter(
-  text: string,
-  gender = 'female',
-  stability = 0.75
-) {
+export default async function (text: string, gender = 'female', stability = 0.75) {
   try {
     // Use this particular female voice ('Bella') for sentence/paragraph playback, as it sounds more natural than the others
     let voiceId = ''

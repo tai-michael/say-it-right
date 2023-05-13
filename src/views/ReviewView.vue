@@ -5,7 +5,7 @@
     <main>
       <div class="list-container">
         <!-- <label for="sort">Sort by:</label> -->
-        <select id="sort" v-model="sortOrder" class="filter-container">
+        <select id="sort" v-model="sortOrder" class="sort-container">
           <option value="createdDesc">Most recent</option>
           <option value="createdAsc">Least recent</option>
           <option value="wordAsc">A to Z</option>
@@ -25,11 +25,11 @@
         </ul>
       </div>
       <hr v-if="Object.keys(allWords).length < 10" />
-      <div class="word-drill">
-        <keep-alive>
-          <WordDrill :word="selectedWord" v-if="selectedWord" :key="selectedWord.word" />
-        </keep-alive>
-      </div>
+      <!-- <div class="word-drill"> -->
+      <keep-alive>
+        <WordDrill :word="selectedWord" v-if="selectedWord" :key="selectedWord.word" />
+      </keep-alive>
+      <!-- </div> -->
     </main>
   </div>
 </template>
@@ -99,7 +99,7 @@ input {
   flex-direction: column;
   row-gap: 0.5rem;
 }
-.filter-container {
+.sort-container {
   width: 100%;
 }
 
@@ -107,14 +107,16 @@ main {
   display: flex;
   flex-direction: row;
 }
+
 h4 {
   display: flex;
   justify-content: center;
   margin-bottom: 1.2rem;
 }
 .list {
-  padding: 0 0.5rem;
-  line-height: 2;
+  padding-left: 0;
+  padding-right: 0.5rem;
+  line-height: 2.1;
   li {
     list-style: none;
   }
@@ -132,11 +134,7 @@ h4 {
 .highlighted {
   background-color: rgb(51, 51, 51);
 }
-.word-drill {
-  padding: 2rem 1rem 0.5rem;
-  min-width: 380px;
-  max-width: 380px;
-}
+
 ::-webkit-scrollbar {
   width: 12px;
 }

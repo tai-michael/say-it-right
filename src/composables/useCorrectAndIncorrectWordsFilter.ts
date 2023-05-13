@@ -2,7 +2,7 @@ import { useProvidedListsStore } from '@/stores'
 import { useCustomListsStore } from '@/stores'
 import { metaphone } from 'metaphone'
 
-export default function useCorrectAndIncorrectWordsFilter(
+export default function (
   testedWords: string[],
   transcriptString: string,
   routeName: string | unknown

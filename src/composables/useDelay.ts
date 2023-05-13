@@ -1,4 +1,4 @@
-export default function useDelay(duration: number): Promise<void> {
+export default function (duration: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve()
