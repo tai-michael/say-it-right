@@ -20,7 +20,7 @@ import {
 } from 'firebase/firestore'
 import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
 
-export default async function (words: string[], listNum: number) {
+export default async function (words: string[], listNum?: number) {
   const reviewStore = useReviewStore()
   const customListsStore = useCustomListsStore()
   const providedListsStore = useProvidedListsStore()
@@ -65,6 +65,7 @@ export default async function (words: string[], listNum: number) {
       // need to sort because words in WordChallenge are sorted too,
       // so I need the first word to have its sentence generated ASAP
       const sortedNonMatchingWords = firestoreResults.nonMatchingWords.sort()
+      // TODO add new param to the composable and argument here so that it uses a different openAI endpoint, which I'll also need to create
       const generatedSentencesObj = await useOpenAiSentencesGenerator(sortedNonMatchingWords)
       // console.log(generatedSentencesObj)
 
@@ -91,6 +92,8 @@ export default async function (words: string[], listNum: number) {
   )
   reviewStore.addWords(newWords)
   reviewStore.updateReviewInFirestore()
+  if (!listNum) return
+
   // add sentences to matching words in customLists
   const list = customListsStore.allLists.find((list) => list.listNumber === listNum)
   // console.log(list)

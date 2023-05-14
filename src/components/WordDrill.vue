@@ -15,6 +15,19 @@
     </div> -->
 
       <TransitionFade>
+        <div v-if="recordingStatus === 'TESTING_COMPLETE'">
+          <div v-if="relatedWords" class="related-words-container">
+            <LoadingDots v-if="isLoading || !relatedWords.length" />
+            <div v-else class="related-words">
+              <div v-for="(word, index) of relatedWords" :key="index">
+                <span @click="handleRelatedWordClick(word)" class="related-word">{{ word }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </TransitionFade>
+
+      <TransitionFade>
         <div v-if="testingSentences">
           <!-- <ul>
         <li v-for="(sentence, index) of sentences" :key="index" class="sentences">
@@ -67,10 +80,8 @@
           <span>Let's skip this word for now.</span>
         </div> -->
         <div v-else-if="recordingStatus === 'TESTING_COMPLETE'" class="message__text">
-          <span
-            >Practice with a similar word or
-            <span @click="resetWord" class="retry-word">Retry</span> this word!</span
-          >
+          <span>Practice with a similar word!</span>
+          <span>Or <span @click="resetWord" class="retry-word">Retry</span> this word.</span>
         </div>
       </div>
     </TransitionFade>
@@ -100,25 +111,33 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, defineEmits } from 'vue'
 // import type { Ref } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import RecorderButton from './RecorderButton.vue'
 import PlayAudioIcon from '@/assets/icons/play-audio.vue'
+import LoadingDots from '@/components/LoadingDots.vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
 import useCheckPronunciationOfWordByItself from '@/composables/useCheckPronunciationOfWordByItself.ts'
 import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronunciationOfWordInSentences.ts'
+import useOpenAiRelatedWordsGenerator from '@/composables/useOpenAiRelatedWordsGenerator.ts'
+import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage.ts'
 import useDelay from '@/composables/useDelay'
 import { useReviewStore } from '@/stores/index.ts'
 import { metaphone } from 'metaphone'
+import { storeToRefs } from 'pinia'
 
 const store = useReviewStore()
 
 const props = defineProps({
   word: { type: Object as PropType<WordObject>, required: true }
 })
+
+const relatedWords = ref<string[]>([...props.word.related_words])
+
+const emits = defineEmits(['related-word-clicked'])
 
 // const word: Ref<WordObject | null> = ref(null)
 // NOTE creates a reactive variable
@@ -132,9 +151,7 @@ const resetWord = () => {
 
 onMounted(() => {
   word.value = props.word
-  word.value.attempts = 0
-  word.value.attemptsSuccessful = 0
-  word.value.status = 'TESTING_WORD_ONLY'
+  resetWord()
   // TODO maybe set the attempts and attemptsSuccessful to 0 here
 })
 // @ts-ignore
@@ -226,7 +243,8 @@ const handleFinalTranscript = async (transcript: string) => {
   } else
     isPronouncedCorrectly.value = useCheckPronunciationOfWordInSentences(
       finalTranscriptWords.value,
-      wordName.value
+      wordName.value,
+      testedSentence.value
     )
 
   console.log(isPronouncedCorrectly.value)
@@ -272,6 +290,12 @@ const handleCorrectPronunciation = async () => {
       // store.hardResetAttempts(wordName.value)
       // store.setWordStatus(word.value, 'TESTING_SENTENCES')
       word.value.status = 'TESTING_SENTENCES'
+      introductionNeeded.value = true
+
+      if (relatedWords.value.length > 0) return
+      relatedWords.value = await useOpenAiRelatedWordsGenerator(wordName.value)
+      store.addRelatedWords(wordName.value, relatedWords.value)
+      store.updateReviewInFirestore()
     } else {
       // TODO this part is different
       clearTempAndFinalTranscripts()
@@ -279,10 +303,17 @@ const handleCorrectPronunciation = async () => {
       isPronouncedCorrectly.value = false
       // store.setWordStatus(word.value, 'TESTING_COMPLETE')
       word.value.status = 'TESTING_COMPLETE'
+      introductionNeeded.value = true
     }
-
-    introductionNeeded.value = true
   }
+}
+
+const isLoading = ref(false)
+const handleRelatedWordClick = async (relatedWord: string) => {
+  isLoading.value = true
+  await useSentencesCreationAndStorage([relatedWord])
+  isLoading.value = false
+  emits('related-word-clicked', relatedWord)
 }
 
 const recordingStatus = computed(() => {
@@ -314,13 +345,17 @@ main {
   flex-direction: column !important;
   justify-content: center;
   // min-height: 700px;
-  min-width: 300px;
   padding: 2rem 1rem 0.5rem;
   min-width: 380px;
-  max-width: 380px;
+  // height: 300px;
 }
 .word-and-sentences {
-  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 0.5rem;
+  height: 140px;
+  margin-bottom: 2rem;
 }
 .word {
   display: flex;
@@ -333,8 +368,8 @@ main {
 
   &__text {
     font-size: 24px;
-    // Note that transition is applied here rather than in word-highlight
-    transition: color 0.2s ease-in-out;
+    // // Note that if I want to highlight the word, the transition is applied here rather than in word-highlight
+    // transition: color 0.2s ease-in-out;
   }
 }
 
@@ -397,6 +432,23 @@ main {
   padding: 0 1.5rem;
   // margin-bottom: 1rem;
   // align-items: center;
+}
+
+.related-words-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  margin-top: 1rem;
+  .related-words {
+    display: flex;
+    flex-direction: row;
+    column-gap: 4rem;
+  }
+  .related-word {
+    color: var(--green-color) !important;
+    cursor: pointer;
+    font-weight: 700;
+  }
 }
 
 .retry-word {

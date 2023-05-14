@@ -15,7 +15,9 @@ export default async function (mispronouncedWords: string[]) {
     console.log(response)
     const content = response?.data?.choices[0]?.message?.content
     console.log(content)
-
+    if (!content) {
+      throw new Error('No content found in response')
+    }
     // Take only string portion between first and last curly bracers
     const sentencesObject = extractObjectFromString(content)
     console.log(sentencesObject)

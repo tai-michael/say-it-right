@@ -23,6 +23,7 @@ export const useReviewStore = defineStore('review', () => {
     allWords.value.push(...array)
   }
 
+  // used to set all Review words during mounted in App.vue
   const setWords = (array: WordObject[]) => {
     allWords.value = array
   }
@@ -74,21 +75,27 @@ export const useReviewStore = defineStore('review', () => {
     )
   }
 
-  const attemptsLimit = 6
-
-  const softResetAttempts = (testedWord: string) => {
+  const addRelatedWords = (testedWord: string, relatedWords: string[]) => {
     const matchedWord = allWords.value.find((word) => word.word === testedWord)
-    if (matchedWord && matchedWord.attempts >= attemptsLimit - 2) {
-      matchedWord.attempts -= 2
-      console.log(`reset attempt for ${testedWord}. Total attempts: ${matchedWord?.attempts}`)
-    }
+    if (matchedWord) matchedWord.related_words = relatedWords
   }
 
-  const hardResetAttempts = (testedWord: string) => {
-    const matchedWord = allWords.value.find((word) => word.word === testedWord)
-    // NOTE 1 is the initial value for all words that have been tested in the ParagraphChallenge
-    if (matchedWord) matchedWord.attempts = 3
-  }
+  // NOTE In Review, we don't care about 'attemptsLimits' at all. 'attempts' can be used to render hints.
+  // const attemptsLimit = 6
+
+  // const softResetAttempts = (testedWord: string) => {
+  //   const matchedWord = allWords.value.find((word) => word.word === testedWord)
+  //   if (matchedWord && matchedWord.attempts >= attemptsLimit - 2) {
+  //     matchedWord.attempts -= 2
+  //     console.log(`reset attempt for ${testedWord}. Total attempts: ${matchedWord?.attempts}`)
+  //   }
+  // }
+
+  // const hardResetAttempts = (testedWord: string) => {
+  //   const matchedWord = allWords.value.find((word) => word.word === testedWord)
+  //   // NOTE 1 is the initial value for all words that have been tested in the ParagraphChallenge
+  //   if (matchedWord) matchedWord.attempts = 3
+  // }
 
   // const setTestedWordsObj = (wordsObj: object) => {
   //   if (activeList.value) activeList.value.words = { ...wordsObj }
@@ -101,7 +108,7 @@ export const useReviewStore = defineStore('review', () => {
     inProgressWords,
     untouchedWords,
     masteredWords,
-    attemptsLimit,
+    // attemptsLimit,
 
     addWords,
     setWords,
@@ -109,8 +116,9 @@ export const useReviewStore = defineStore('review', () => {
     setWordStatus,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful,
-    softResetAttempts,
-    hardResetAttempts,
+    addRelatedWords,
+    // softResetAttempts,
+    // hardResetAttempts,
     updateReviewInFirestore
     // setTestedWordsObj
   }

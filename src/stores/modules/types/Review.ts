@@ -5,6 +5,7 @@ export interface WordObject {
   attemptsSuccessful: number
   status: WordStatus
   created: number
+  related_words: string[]
 }
 
 export type WordStatus = 'TESTING_WORD_ONLY' | 'TESTING_SENTENCES' | 'TESTING_COMPLETE'

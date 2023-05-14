@@ -5,14 +5,15 @@
         <label>Insert up to 7 words separated by spaces or commas:</label>
         <div class="input-field">
           <input placeholder="e.g. urban thin kindly" v-model="wordsInput" autofocus />
-          <button type="submit" :disabled="isLoading">Submit</button>
+          <button v-if="isLoading" :disabled="isLoading"><LoadingDots /></button>
+          <button v-else type="submit" :disabled="isLoading">Submit</button>
         </div>
       </div>
     </form>
 
-    <div v-if="isLoading" class="loading-container">
+    <!-- <div v-if="isLoading" class="loading-container">
       <LoadingDots />
-    </div>
+    </div> -->
 
     <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
@@ -180,6 +181,13 @@ hr {
       height: 35px;
       padding: 0.5rem;
       width: 100%;
+    }
+
+    button {
+      width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

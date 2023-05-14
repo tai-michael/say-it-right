@@ -219,7 +219,8 @@ const addWordsToReview = (
         attempts: 0,
         attemptsSuccessful: 0,
         status: 'TESTING_WORD_ONLY',
-        created: Date.now()
+        created: Date.now(),
+        related_words: []
       }
       wordObjectsToAdd.push(wordObject)
     }

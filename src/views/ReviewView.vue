@@ -14,20 +14,25 @@
 
         <ul class="list">
           <li
-            v-for="(entry, index) in sortedWords"
+            v-for="(word, index) in sortedWords"
             :key="index"
-            @click="selectWord(entry)"
+            @click="selectWord(word)"
             class="list__row"
-            :class="{ highlighted: entry === selectedWord }"
+            :class="{ highlighted: word === selectedWord }"
           >
-            <span>{{ entry.word }}</span>
+            <span>{{ word.word }}</span>
           </li>
         </ul>
       </div>
       <hr v-if="Object.keys(allWords).length < 10" />
       <!-- <div class="word-drill"> -->
       <keep-alive>
-        <WordDrill :word="selectedWord" v-if="selectedWord" :key="selectedWord.word" />
+        <WordDrill
+          :word="selectedWord"
+          v-if="selectedWord"
+          :key="selectedWord.word"
+          @related-word-clicked="handleRelatedWordClicked"
+        />
       </keep-alive>
       <!-- </div> -->
     </main>
@@ -51,6 +56,11 @@ const selectedWord: Ref<WordObject | null> = ref(null)
 const selectWord = (word: WordObject) => {
   selectedWord.value = word
   localStorage.setItem('selectedWord', word.word)
+}
+
+const handleRelatedWordClicked = (relatedWord: string) => {
+  const matchedWord = allWords.value.find((word) => word.word === relatedWord)
+  if (matchedWord) selectedWord.value = matchedWord
 }
 
 const search = ref('')
