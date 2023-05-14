@@ -8,7 +8,10 @@ import axios from 'axios'
 
 export default async function (mispronouncedWords: string[]) {
   try {
-    const url = import.meta.env.VITE_SENTENCES_GENERATOR_ENDPOINT
+    const url =
+      mispronouncedWords.length > 1
+        ? import.meta.env.VITE_SENTENCES_GENERATOR_FOR_LIST_ENDPOINT
+        : import.meta.env.VITE_SENTENCES_GENERATOR_FOR_WORD_ENDPOINT
     const query = mispronouncedWords.join(', ')
     const params = { query }
     const response = await axios.get(url, { params })
