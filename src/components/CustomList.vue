@@ -25,16 +25,15 @@
     <!-- <div v-if="submissionError" class="error">{{ submissionError }}</div> -->
 
     <TransitionAppear>
-      <ParagraphChallenge v-if="showParagraphChallenge" key="paragraph-challenge" :list="list" />
+      <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
       <WordChallenge
         v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
-        key="sentence-challenge"
         :list="list"
       />
     </TransitionAppear>
 
-    <div v-if="list.status === 'LIST_COMPLETED'" class="message">
+    <div v-if="list.status === 'LIST_COMPLETE'" class="message">
       <div class="message__text">
         <span>You have completed this list.</span>
         <span>
@@ -44,8 +43,6 @@
         </span>
       </div>
     </div>
-
-    <!-- TODO add in WordChallenge and SentenceChallenge -->
   </main>
 </template>
 

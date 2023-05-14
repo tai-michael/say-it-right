@@ -10,7 +10,7 @@ export type ListStatus =
   | 'PARAGRAPH_RECORDING_ENDED'
   | 'TESTING_WORD_ONLY'
   | 'TESTING_SENTENCES'
-  | 'LIST_COMPLETED'
+  | 'LIST_COMPLETE'
 
 export interface Words<T> {
   [key: string]: T

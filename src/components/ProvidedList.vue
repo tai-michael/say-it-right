@@ -14,7 +14,7 @@
       />
     </TransitionAppear>
 
-    <div v-if="list.status === 'LIST_COMPLETED'" class="message">
+    <div v-if="list.status === 'LIST_COMPLETE'" class="message">
       <div class="message__text">
         <span>You have completed this list.</span>
         <span>

@@ -127,7 +127,7 @@ import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAn
 import useDelay from '@/composables/useDelay'
 import { useReviewStore } from '@/stores/index.ts'
 import { metaphone } from 'metaphone'
-import { storeToRefs } from 'pinia'
+// import { storeToRefs } from 'pinia'
 
 const store = useReviewStore()
 
@@ -152,7 +152,6 @@ const resetWord = () => {
 onMounted(() => {
   word.value = props.word
   resetWord()
-  // TODO maybe set the attempts and attemptsSuccessful to 0 here
 })
 // @ts-ignore
 const word = ref<WordObject>({})
@@ -264,7 +263,6 @@ const handleFinalTranscript = async (transcript: string) => {
 const introductionNeeded = ref(true)
 
 const handleCorrectPronunciation = async () => {
-  // TODO pass word.value.attemptsSuccessful, attemptsSuccessfulRequired, and wordName as params
   if (word.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 2) {
     // NOTE when user answers correctly once, give them a couple more attempts
     // store.softResetAttempts(wordName.value)
@@ -283,7 +281,6 @@ const handleCorrectPronunciation = async () => {
 
     await useDelay(2000)
 
-    // TODO this part is different
     if (testingWordOnly.value) {
       clearTempAndFinalTranscripts()
       isPronouncedCorrectly.value = false
@@ -297,7 +294,6 @@ const handleCorrectPronunciation = async () => {
       store.addRelatedWords(wordName.value, relatedWords.value)
       store.updateReviewInFirestore()
     } else {
-      // TODO this part is different
       clearTempAndFinalTranscripts()
       // REVIEW not sure if below line is needed
       isPronouncedCorrectly.value = false

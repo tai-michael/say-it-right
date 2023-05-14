@@ -6,7 +6,6 @@ export default function (transcriptWords: string[], testedWord: string) {
   const finalTranscriptWord = transcriptWords[transcriptWords.length - 1]
 
   const transcribedWordCode = getPhoneticCode(finalTranscriptWord)
-  // TODO pass wordName as param
   const testedWordPhoneticCode = getPhoneticCode(testedWord)
 
   if (transcribedWordCode === testedWordPhoneticCode) {

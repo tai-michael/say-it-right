@@ -66,7 +66,7 @@
         <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
           <span>Let's skip this word for now.</span>
         </div>
-        <div v-else-if="props.list.status === 'LIST_COMPLETED'" class="message__text">
+        <div v-else-if="props.list.status === 'LIST_COMPLETE'" class="message__text">
           <span>You've completed the list. Well done!</span
           ><span>
             Challenge yourself with another <RouterLink to="/provided-lists">list</RouterLink> or
@@ -101,10 +101,11 @@ import PlayAudioIcon from '@/assets/icons/play-audio.vue'
 // import CheckmarkIcon from '@/assets/icons/checkmark.vue'
 import RecorderButton from './RecorderButton.vue'
 import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
+import useCheckPronunciationOfWordByItself from '@/composables/useCheckPronunciationOfWordByItself.ts'
+import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronunciationOfWordInSentences.ts'
 import useHardWordLogger from '@/composables/useHardWordLogger'
 import useDelay from '@/composables/useDelay'
 import { metaphone } from 'metaphone'
-import stem from 'wink-porter2-stemmer'
 import { useRoute } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 import { useCustomListsStore } from '@/stores/index.ts'
@@ -230,7 +231,6 @@ const handleTempTranscriptRender = (transcript: string) => {
 // )
 
 const finalTranscriptWords = ref<string[]>([])
-const finalTranscriptWord = ref('')
 const isPronouncedCorrectly = ref(false)
 // const highlightActive = ref(false)
 // const testedSentence = computed(() => {
@@ -243,12 +243,23 @@ const isPronouncedCorrectly = ref(false)
 
 const handleFinalTranscript = async (transcript: string) => {
   isRecording.value = false
-  if (!transcript || store.activeList?.listNumber !== props.list.listNumber) return
 
+  if (!transcript || store.activeList?.listNumber !== props.list.listNumber) return
   console.log(transcript)
+
+  finalTranscriptWords.value = transcript.split(' ')
+
   if (testingWordOnly.value)
-    isPronouncedCorrectly.value = checkPronunciationOfWordByItself(transcript)
-  else isPronouncedCorrectly.value = checkPronunciationOfWordInSentences(transcript)
+    isPronouncedCorrectly.value = useCheckPronunciationOfWordByItself(
+      finalTranscriptWords.value,
+      testedWord.value
+    )
+  else
+    isPronouncedCorrectly.value = useCheckPronunciationOfWordInSentences(
+      finalTranscriptWords.value,
+      testedWord.value,
+      testedSentence.value
+    )
 
   console.log(isPronouncedCorrectly.value)
 
@@ -264,71 +275,7 @@ const handleFinalTranscript = async (transcript: string) => {
   store.updateListsInFirestore()
 }
 
-const checkPronunciationOfWordByItself = (transcript: string) => {
-  console.log(transcript)
-  finalTranscriptWords.value = transcript.split(' ')
-  finalTranscriptWord.value = finalTranscriptWords.value[finalTranscriptWords.value.length - 1]
-
-  const transcribedWordCode = getPhoneticCode(finalTranscriptWord.value)
-  const testedWordPhoneticCode = getPhoneticCode(testedWord.value)
-
-  // NOTE convert any mistranscribed word to the tested word if they sound the same
-  if (transcribedWordCode === testedWordPhoneticCode) {
-    finalTranscriptWord.value = testedWord.value
-    console.log('true')
-    return true
-  }
-  console.log('false')
-  return false
-}
-
 // const checkmarkActive = ref(false)
-
-// TODO fix this function so it works with a modified word with an accent (e.g. 'cafés' modified by chatGPT into 'café'. Phonetic code would be 'KFS', while transcription would be 'KF'. Stemmer doesn't help b/c it returns accented stem.)
-const checkPronunciationOfWordInSentences = (transcript: string) => {
-  finalTranscriptWords.value = transcript.split(' ')
-
-  // NOTE it's necessary to check for either matches, as sometimes the right word is mistranscribed (e.g. transcribed as 'board' instead of 'bored'), and other times it gets modified by openAI when placed into a sentence (e.g. becoming 'chatted' instead of 'chatting')
-  return (
-    checkForPhoneticCodeMatch(finalTranscriptWords.value) ||
-    checkForWordStemMatch(finalTranscriptWords.value)
-  )
-}
-
-const checkForPhoneticCodeMatch = (transcriptWords: string[]) => {
-  const testedWordPhoneticCode = getPhoneticCode(testedWord.value)
-  for (const transcriptWord of transcriptWords) {
-    const transcriptWordPhoneticCode = metaphone(transcriptWord)
-    if (transcriptWordPhoneticCode === testedWordPhoneticCode) {
-      console.log(transcriptWordPhoneticCode)
-      console.log(testedWordPhoneticCode)
-      return true
-    }
-  }
-  return false
-}
-
-const checkForWordStemMatch = (transcriptWords: string[]) => {
-  // Matches any sequence of characters that are not whitespace or certain punctuation marks, including the punctuation marks themselves
-  const wordRegex = /(?:[^\s.,;:!?"'’“”()[\]{}<>«»]+)|(?:[.,;:!?"'’“”()[\]{}<>«»]+)/g
-  // Splits the sentence into an array of words and punctuation marks, allowing us to ignore punctuation marks when crosschecking for the correct pronunciation below
-  // @ts-ignore
-  const sentenceWords = testedSentence.value.match(wordRegex).map((word) => word.toLowerCase())
-  const testedWordStem = stem(testedWord.value)
-
-  for (const sentenceWord of sentenceWords) {
-    const sentenceWordStem = stem(sentenceWord)
-
-    const matchesTranscriptWord = transcriptWords.some((transcriptWord) => {
-      const transcriptWordStem = stem(transcriptWord)
-      return sentenceWordStem === transcriptWordStem
-    })
-
-    if (matchesTranscriptWord && sentenceWordStem === testedWordStem) return true
-  }
-  return false
-}
-
 const introductionNeeded = ref(true)
 
 const handleCorrectPronunciation = async () => {
@@ -369,7 +316,7 @@ const handleCorrectPronunciation = async () => {
       //   checkmarkActive.value = false
       // }, 1000)
 
-      if (testedWords.value.length === 1) return store.setListStatus('LIST_COMPLETED')
+      if (testedWords.value.length === 1) return store.setListStatus('LIST_COMPLETE')
       clearTempAndFinalTranscripts()
       isPronouncedCorrectly.value = false
       testedWords.value = testedWords.value.slice(1)
@@ -390,10 +337,11 @@ const skipWord = async () => {
   useHardWordLogger(testedWord.value)
 
   await useDelay(2000)
-  // TODO push/add testedWord to new array/object somewhere
-  // and add to user's backend data as well (refer to how I replace providedList)
-  store.setListStatus('TESTING_WORD_ONLY')
+
   testedWords.value = testedWords.value.slice(1)
+  if (testedWords.value.length > 0) store.setListStatus('TESTING_WORD_ONLY')
+  else store.setListStatus('LIST_COMPLETE')
+
   clearTempAndFinalTranscripts()
   introductionNeeded.value = false
 }
