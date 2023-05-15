@@ -25,9 +25,7 @@
           </div>
           <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
             <span>You pronounced each tested word correctly. Very impressive!</span>
-            <span
-              >Let's test your pronunciation of other words that are commonly mispronounced.</span
-            >
+            <span>Create or look at another list.</span>
           </div>
           <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
             <span>You pronounced only one word incorrectly. Good job!</span>
@@ -48,7 +46,10 @@
 
         <button
           class="next-button"
-          v-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
+          v-if="
+            props.list.status === 'PARAGRAPH_RECORDING_ENDED' &&
+            recordingStatus !== 'ALL_WORDS_CORRECT'
+          "
           @click="store.setListStatus('TESTING_WORD_ONLY')"
         >
           Next

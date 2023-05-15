@@ -2,9 +2,7 @@
   <main>
     <!-- <LoadingDots v-if="isLoading" /> -->
 
-    <button @click="router.push({ name: 'provided-lists' })" class="back-button">
-      <GoBack /> Return to lists
-    </button>
+    <button @click="returnToLists" class="back-button"><GoBack /> Return to lists</button>
     <TransitionAppear>
       <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
@@ -19,7 +17,7 @@
         <span>You have completed this list.</span>
         <span>
           Challenge yourself with a different
-          <RouterLink to="/provided-lists" class="link">List</RouterLink> or
+          <span @click="returnToLists" class="link">List</span> or
           <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned!
         </span>
         <!-- TODO add function that resets the attempts &attemptsSuccessful to 0, sets the list status to 'LIST_NOT_STARTED', and updates list in firestore -->
@@ -59,6 +57,11 @@ const showParagraphChallenge = computed(
     Object.keys(list.value).length &&
     (list.value.status === 'LIST_NOT_STARTED' || list.value.status === 'PARAGRAPH_RECORDING_ENDED')
 )
+
+const returnToLists = () => {
+  router.push({ name: 'provided-lists' })
+  store.setActiveId(null)
+}
 
 // NOTE onActivated instead of onMounted, as onMounted doesn't trigger
 // for keep-alive components
@@ -128,12 +131,13 @@ main {
 }
 
 .link {
-  color: rgb(84, 191, 226);
-  font-weight: 700;
+  color: rgb(84, 191, 226) !important;
+  font-weight: 700 !important;
+  cursor: pointer;
 }
 
 .link:hover {
-  background-color: none !important;
+  background-color: transparent !important;
 }
 
 .fade-appear-from,

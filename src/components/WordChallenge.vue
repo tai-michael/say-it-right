@@ -66,14 +66,6 @@
         <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
           <span>Let's skip this word for now.</span>
         </div>
-        <div v-else-if="props.list.status === 'LIST_COMPLETE'" class="message__text">
-          <span>You've completed the list. Well done!</span
-          ><span>
-            Challenge yourself with another <RouterLink to="/provided-lists">list</RouterLink> or
-            <RouterLink to="/review">Review</RouterLink> the words you've just learned!
-          </span>
-          <!-- <span>You can also <span @click="retryChallenge">try<span> this challenge again.</span> -->
-        </div>
       </div>
     </TransitionFade>
 

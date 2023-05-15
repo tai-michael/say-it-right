@@ -48,7 +48,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     allLists.value.filter((list) => list.status === 'LIST_COMPLETE')
   )
 
-  const setActiveId = (id: number) => {
+  const setActiveId = (id: number | null) => {
     activeId.value = id
   }
 

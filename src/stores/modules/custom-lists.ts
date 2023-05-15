@@ -41,7 +41,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
     allLists.value.filter((list) => list.status === 'LIST_COMPLETE')
   )
 
-  const setActiveId = (id: number): void => {
+  const setActiveId = (id: number | null): void => {
     activeId.value = id
   }
 

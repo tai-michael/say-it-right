@@ -25,13 +25,10 @@
       <HelloWorld msg="Say It Right" @click="router.push({ name: 'home' })" />
       <nav>
         <!-- <RouterLink to="/">CustomLists</RouterLink> -->
-        <RouterLink :to="{ name: 'custom-lists' }" :class="getLinkClass('/custom-lists')"
+        <RouterLink :to="customListRoute" :class="getLinkClass('/custom-lists')"
           >Custom Lists</RouterLink
         >
-        <!-- <RouterLink :to="{ name: 'provided-lists' }" :class="getLinkClass('/provided-lists')"
-          >Provided Lists</RouterLink
-        > -->
-        <RouterLink :to="{ name: 'provided-lists' }" :class="getLinkClass('/provided-lists')"
+        <RouterLink :to="providedListRoute" :class="getLinkClass('/provided-lists')"
           >Provided Lists</RouterLink
         >
         <RouterLink to="/review">Review</RouterLink>
@@ -75,6 +72,18 @@ const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
 
 const router = useRouter()
+
+const customListRoute = computed(() => {
+  return customListsStore.activeId === null
+    ? { name: 'custom-lists' }
+    : { name: 'custom-list', params: { id: customListsStore.activeId } }
+})
+
+const providedListRoute = computed(() => {
+  return providedListsStore.activeId === null
+    ? { name: 'provided-lists' }
+    : { name: 'provided-list', params: { id: providedListsStore.activeId } }
+})
 
 const getLinkClass = (path: string) => {
   const route = useRoute()
