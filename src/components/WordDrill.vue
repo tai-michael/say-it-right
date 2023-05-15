@@ -125,10 +125,13 @@ import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronun
 import useOpenAiRelatedWordsGenerator from '@/composables/useOpenAiRelatedWordsGenerator.ts'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage.ts'
 import useDelay from '@/composables/useDelay'
-import { useReviewStore } from '@/stores/index.ts'
 import { metaphone } from 'metaphone'
+import { useRoute } from 'vue-router'
+import type { WordSource } from '@/stores/modules/types/Review'
+import { useReviewStore } from '@/stores/index.ts'
 // import { storeToRefs } from 'pinia'
 
+const route = useRoute()
 const store = useReviewStore()
 
 const props = defineProps({
@@ -307,7 +310,7 @@ const handleCorrectPronunciation = async () => {
 const isLoading = ref(false)
 const handleRelatedWordClick = async (relatedWord: string) => {
   isLoading.value = true
-  await useSentencesCreationAndStorage([relatedWord])
+  await useSentencesCreationAndStorage([relatedWord], route.name as WordSource)
   isLoading.value = false
   emits('related-word-clicked', relatedWord)
 }

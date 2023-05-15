@@ -10,6 +10,8 @@
           <option value="createdAsc">Least recent</option>
           <option value="wordAsc">A to Z</option>
           <option value="wordDesc">Z to A</option>
+          <option value="sourceCustom">From custom list</option>
+          <option value="sourceProvided">From provided list</option>
         </select>
 
         <ul class="list">
@@ -76,6 +78,11 @@ const sortedWords = computed(() => {
       return words.sort((a, b) => a.word.localeCompare(b.word))
     case 'wordDesc':
       return words.sort((a, b) => b.word.localeCompare(a.word))
+    case 'sourceCustom':
+      return words.filter((word) => word.source === 'custom-list')
+    case 'sourceProvided':
+      return words.filter((word) => word.source === 'provided-list')
+
     default:
       // this sorts by createdDesc
       return words.sort((a, b) => b.created - a.created)

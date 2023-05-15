@@ -3,7 +3,7 @@ useWordObjCreator
 import useWordObjCreator from '@/composables/useWordObjCreator'
 import useCheckIfWordsExistInReview from '@/composables/useCheckIfWordsExistInReview'
 import type { Sentences } from '@/stores/modules/types/Sentences'
-import type { WordObject } from '@/stores/modules/types/Review'
+import type { WordObject, WordSource } from '@/stores/modules/types/Review'
 import type { List } from '@/stores/modules/types/List'
 import { db } from '@/firebaseInit'
 import {
@@ -20,7 +20,7 @@ import {
 } from 'firebase/firestore'
 import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
 
-export default async function (words: string[], listNum?: number) {
+export default async function (words: string[], source: WordSource, listNum?: number) {
   const reviewStore = useReviewStore()
   const customListsStore = useCustomListsStore()
   const providedListsStore = useProvidedListsStore()
@@ -38,14 +38,14 @@ export default async function (words: string[], listNum?: number) {
   // words in Review are also in sentences, checking
   // Review first might save us a firestore read
   console.log('checking if word exists in word review')
-  const reviewResults = useCheckIfWordsExistInReview(words)
+  const reviewResults = useCheckIfWordsExistInReview(words, source)
   wordsWithSentences.push(...reviewResults.matchingWordObjects)
   // NOTE reassigning instead of pushing is necessary here
   wordsWithoutSentences = reviewResults.nonMatchingWords
 
   console.log('checking if word exists in provided lists')
   // then check if word exists in providedLists
-  const providedListsResults = checkIfWordsExistInLists(
+  const providedListsResults = checkIfWordsExistInProvidedLists(
     wordsWithoutSentences,
     providedListsStore.allLists
   )
@@ -55,7 +55,7 @@ export default async function (words: string[], listNum?: number) {
   // if not, check if sentences exist in firestore
   if (wordsWithoutSentences.length > 0) {
     console.log('checking if word exists in firestore')
-    const firestoreResults = await checkIfWordsExistInFirestore(wordsWithoutSentences)
+    const firestoreResults = await checkIfWordsExistInFirestore(wordsWithoutSentences, source)
 
     if (firestoreResults.matchingWordObjects.length)
       wordsWithSentences.push(...firestoreResults.matchingWordObjects)
@@ -77,7 +77,7 @@ export default async function (words: string[], listNum?: number) {
       // convert generated sentences to structure of Review words
       // @ts-ignore
       for (const [word, sentences] of Object.entries(generatedSentencesObj)) {
-        const wordObject = useWordObjCreator(word, sentences)
+        const wordObject = useWordObjCreator(word, sentences, source)
         wordsWithSentences.push(wordObject)
       }
       console.log('finished generating openAI sentences')
@@ -102,7 +102,7 @@ export default async function (words: string[], listNum?: number) {
   customListsStore.updateListsInFirestore()
 }
 
-const checkIfWordsExistInLists = (submittedWords: string[], lists: List[]) => {
+const checkIfWordsExistInProvidedLists = (submittedWords: string[], lists: List[]) => {
   const matchingWordObjects = []
   const nonMatchingWords = []
 
@@ -111,7 +111,11 @@ const checkIfWordsExistInLists = (submittedWords: string[], lists: List[]) => {
     for (const list of lists) {
       for (const word in list.words) {
         if (submittedWord === word) {
-          const wordObject = useWordObjCreator(submittedWord, list.words[word].sentences)
+          const wordObject = useWordObjCreator(
+            submittedWord,
+            list.words[word].sentences,
+            'provided-list'
+          )
           matchingWordObjects.push(wordObject)
           found = true
           break
@@ -129,7 +133,7 @@ const checkIfWordsExistInLists = (submittedWords: string[], lists: List[]) => {
   return { matchingWordObjects, nonMatchingWords }
 }
 
-const checkIfWordsExistInFirestore = async (words: string[]) => {
+const checkIfWordsExistInFirestore = async (words: string[], routeName: WordSource) => {
   const matchingWordObjects: WordObject[] = []
   const nonMatchingWords: string[] = []
 
@@ -140,7 +144,7 @@ const checkIfWordsExistInFirestore = async (words: string[]) => {
   querySnapshot.forEach((doc) => {
     const word = doc.id
     const sentences = doc.data().sentences
-    const wordObject = useWordObjCreator(word, sentences)
+    const wordObject = useWordObjCreator(word, sentences, routeName)
     matchingWordObjects.push(wordObject)
     foundWords.add(word)
   })

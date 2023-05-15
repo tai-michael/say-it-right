@@ -72,6 +72,7 @@
             Challenge yourself with another <RouterLink to="/provided-lists">list</RouterLink> or
             <RouterLink to="/review">Review</RouterLink> the words you've just learned!
           </span>
+          <!-- <span>You can also <span @click="retryChallenge">try<span> this challenge again.</span> -->
         </div>
       </div>
     </TransitionFade>
