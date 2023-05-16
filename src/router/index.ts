@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import CustomListsView from '@/views/CustomListsView.vue'
+import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 // import ProvidedListsView from '@/views/ProvidedListsView.vue'
 
 const router = createRouter({
@@ -20,7 +21,16 @@ const router = createRouter({
     {
       path: '/custom-lists',
       name: 'custom-lists',
-      component: CustomListsView
+      component: CustomListsView,
+      beforeEnter: (to, from, next) => {
+        const customListsStore = useCustomListsStore()
+        const id = customListsStore.activeId
+        if (id) {
+          next({ name: 'custom-list', params: { id } })
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/custom-lists/:id',
@@ -35,7 +45,16 @@ const router = createRouter({
     {
       path: '/provided-lists',
       name: 'provided-lists',
-      component: () => import('@/views/ProvidedListsView.vue')
+      component: () => import('@/views/ProvidedListsView.vue'),
+      beforeEnter: (to, from, next) => {
+        const providedListsStore = useProvidedListsStore()
+        const id = providedListsStore.activeId
+        if (id) {
+          next({ name: 'provided-list', params: { id } })
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/provided-lists/:id',

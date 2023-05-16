@@ -29,10 +29,10 @@
           </router-link>
         </div>
       </div>
-      <hr />
     </div>
 
     <div v-if="store.untouchedLists.length" class="list-type">
+      <hr />
       <label v-if="anyListStarted">New</label>
       <div class="list-container">
         <div v-for="list of store.untouchedLists" :key="list.listNumber">
