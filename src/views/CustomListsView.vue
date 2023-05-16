@@ -124,7 +124,7 @@ const submitWords = async (words: string) => {
   }
 }
 
-function createNewListObjectFromWords(words: string[], allLists: List[], paragraph: string) {
+const createNewListObjectFromWords = (words: string[], allLists: List[], paragraph: string) => {
   const newListObject: List = {
     listNumber: allLists.length + 1,
     status: 'LIST_NOT_STARTED',

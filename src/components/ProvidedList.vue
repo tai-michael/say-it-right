@@ -16,21 +16,15 @@
       <div class="message__text">
         <span>You have completed this list.</span>
         <span>
-          Challenge yourself with a different
-          <span @click="returnToLists" class="link">List</span> or
-          <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned!
-        </span>
-        <!-- TODO add function that resets the attempts &attemptsSuccessful to 0, sets the list status to 'LIST_NOT_STARTED', and updates list in firestore -->
-        <!-- <span>Alternatively, you can try the challenge again.</span> -->
+          We recommend that you <RouterLink to="/review" class="link">Review</RouterLink> the words
+          you've learned!</span
+        >
+        <span
+          >You can also <span @click="returnToLists" class="link">Try</span> a different list</span
+        >
+        <span>Or you can <span @click="store.resetList" class="link">Retry</span> this list</span>
       </div>
     </div>
-    <!-- <SentenceChallenge v-else-if="list.status === 'TESTING_SENTENCES'" :list="list" /> -->
-    <!-- <div v-if="store.completedLists.length === store.allLists.length">
-      <span
-        >You have completed all provided lists. Click on any list in the 'Provided Lists' tab to review
-        the list.</span
-      >
-    </div> -->
   </main>
 </template>
 
@@ -134,10 +128,11 @@ main {
   color: rgb(84, 191, 226) !important;
   font-weight: 700 !important;
   cursor: pointer;
+  transition: 0.4s;
 }
 
 .link:hover {
-  background-color: transparent !important;
+  background-color: hsla(160, 100%, 37%, 0.2);
 }
 
 .fade-appear-from,

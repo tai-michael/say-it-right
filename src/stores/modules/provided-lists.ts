@@ -13,6 +13,7 @@ import {
 } from 'firebase/firestore'
 import { user } from '@/firebaseInit'
 import type { List, ListStatus } from './types/List'
+import useSpanTagsRemover from '@/composables/useSpanTagsRemover'
 
 export const useProvidedListsStore = defineStore('providedLists', () => {
   const route = useRoute()
@@ -119,10 +120,27 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     if (activeList.value) activeList.value.words = { ...wordsObj }
   }
 
-  // const setFinalParagraphTranscript = (transcript) => {
-  //   activeList.value.finalParagraphTranscript = transcript
-  //   console.log(activeList.value.finalParagraphTranscript)
-  // }
+  const resetWords = () => {
+    if (activeList.value) {
+      const words = activeList.value.words
+      Object.keys(words).forEach((word) => {
+        words[word].attempts = 0
+        words[word].attemptsSuccessful = 0
+      })
+    }
+  }
+
+  const resetParagraph = () => {
+    if (activeList.value)
+      activeList.value.paragraph = useSpanTagsRemover(activeList.value.paragraph)
+  }
+
+  const resetList = () => {
+    resetWords()
+    resetParagraph()
+    setListStatus('LIST_NOT_STARTED')
+    updateListsInFirestore()
+  }
 
   const downloadAndExtractGlobalProvidedLists = async () => {
     const querySnapshot = await getDocs(collection(db, 'global_provided_lists'))
@@ -193,6 +211,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     updateListsInFirestore,
     setParagraph,
     setTestedWordsObj,
+    resetList,
     downloadAndExtractGlobalProvidedLists
     // setFinalParagraphTranscript,
   }

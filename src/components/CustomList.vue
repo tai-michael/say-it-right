@@ -35,10 +35,14 @@
       <div class="message__text">
         <span>You have completed this list.</span>
         <span>
-          Create or look at another
-          <span @click="returnToLists" class="link">List</span> or
-          <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned!
-        </span>
+          We recommend that you <RouterLink to="/review" class="link">Review</RouterLink> the words
+          you've learned!</span
+        >
+        <span
+          >You can also <span @click="returnToLists" class="link">Create or Try</span> another
+          list</span
+        >
+        <span>Or you can <span @click="store.resetList" class="link">Retry</span> this list</span>
       </div>
     </div>
   </main>
@@ -149,10 +153,11 @@ main {
   color: rgb(84, 191, 226) !important;
   font-weight: 700 !important;
   cursor: pointer;
+  transition: 0.4s;
 }
 
 .link:hover {
-  background-color: transparent !important;
+  background-color: hsla(160, 100%, 37%, 0.2);
 }
 
 .fade-appear-from,

@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore'
 import { user } from '@/firebaseInit'
 import type { List, ListStatus } from './types/List'
+import useSpanTagsRemover from '@/composables/useSpanTagsRemover'
 
 export const useCustomListsStore = defineStore('customLists', () => {
   const route = useRoute()
@@ -105,6 +106,28 @@ export const useCustomListsStore = defineStore('customLists', () => {
     if (activeList.value) activeList.value.words = { ...wordsObj }
   }
 
+  const resetWords = () => {
+    if (activeList.value) {
+      const words = activeList.value.words
+      Object.keys(words).forEach((word) => {
+        words[word].attempts = 0
+        words[word].attemptsSuccessful = 0
+      })
+    }
+  }
+
+  const resetParagraph = () => {
+    if (activeList.value)
+      activeList.value.paragraph = useSpanTagsRemover(activeList.value.paragraph)
+  }
+
+  const resetList = () => {
+    resetWords()
+    resetParagraph()
+    setListStatus('LIST_NOT_STARTED')
+    updateListsInFirestore()
+  }
+
   // const setFinalParagraphTranscript = (transcript) => {
   //   activeList.value.finalParagraphTranscript = transcript
   //   console.log(activeList.value.finalParagraphTranscript)
@@ -129,7 +152,8 @@ export const useCustomListsStore = defineStore('customLists', () => {
     hardResetAttempts,
     updateListsInFirestore,
     setParagraph,
-    setTestedWordsObj
+    setTestedWordsObj,
+    resetList
     // setFinalParagraphTranscript,
   }
 })
