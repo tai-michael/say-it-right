@@ -33,7 +33,7 @@
     </div>
 
     <div v-if="store.completedLists.length" class="list-type">
-      <hr />
+      <hr v-if="store.inProgressLists.length || store.untouchedLists.length" />
       <label>Completed</label>
       <div class="list-container">
         <div v-for="list of store.completedLists" :key="list.listNumber">

@@ -122,7 +122,7 @@ import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
 import useCheckPronunciationOfWordByItself from '@/composables/useCheckPronunciationOfWordByItself.ts'
 import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronunciationOfWordInSentences.ts'
-import useOpenAiRelatedWordsGenerator from '@/composables/useOpenAiRelatedWordsGenerator.ts'
+import useRelatedWordsCreationAndStorage from '@/composables/useRelatedWordsCreationAndStorage.ts'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage.ts'
 import useDelay from '@/composables/useDelay'
 import { metaphone } from 'metaphone'
@@ -293,7 +293,7 @@ const handleCorrectPronunciation = async () => {
       introductionNeeded.value = true
 
       if (relatedWords.value.length > 0) return
-      relatedWords.value = await useOpenAiRelatedWordsGenerator(wordName.value)
+      relatedWords.value = await useRelatedWordsCreationAndStorage(wordName.value)
       store.addRelatedWords(wordName.value, relatedWords.value)
       store.updateReviewInFirestore()
     } else {
