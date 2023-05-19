@@ -17,48 +17,21 @@
 
     <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-    <div v-if="store.inProgressLists.length" class="list-type">
+    <div v-if="store.inProgressLists.length" class="lists">
       <label>In Progress</label>
-      <div class="list-container">
-        <div v-for="list of store.inProgressLists" :key="list.listNumber">
-          <router-link :to="{ name: 'custom-list', params: { id: list.listNumber } }" class="list">
-            <div class="list-item">
-              <span>List {{ list.listNumber }}</span>
-              <ListRegular />
-            </div>
-          </router-link>
-        </div>
-      </div>
+      <ListLinks :lists="store.inProgressLists" :routeName="'custom-list'" />
     </div>
 
-    <div v-if="store.untouchedLists.length" class="list-type">
+    <div v-if="store.untouchedLists.length" class="lists">
       <hr v-if="store.inProgressLists.length" />
       <label v-if="anyListStarted">New</label>
-      <div class="list-container">
-        <div v-for="list of store.untouchedLists" :key="list.listNumber">
-          <RouterLink :to="{ name: 'custom-list', params: { id: list.listNumber } }" class="list">
-            <div class="list-item">
-              <span>List {{ list.listNumber }}</span>
-              <ListRegular />
-            </div>
-          </RouterLink>
-        </div>
-      </div>
+      <ListLinks :lists="store.untouchedLists" :routeName="'custom-list'" />
     </div>
 
-    <div v-if="store.completedLists.length" class="list-type">
+    <div v-if="store.completedLists.length" class="lists">
       <hr v-if="store.inProgressLists.length || store.untouchedLists.length" />
       <label>Completed</label>
-      <div class="list-container">
-        <div v-for="list of store.completedLists" :key="list.listNumber">
-          <RouterLink :to="{ name: 'custom-list', params: { id: list.listNumber } }" class="list">
-            <div class="list-item">
-              <span>List {{ list.listNumber }}</span>
-              <ListChecked />
-            </div>
-          </RouterLink>
-        </div>
-      </div>
+      <ListLinks :lists="store.completedLists" :routeName="'custom-list'" />
     </div>
 
     <router-view v-slot="{ Component }">
@@ -71,11 +44,10 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import ListLinks from '@/components/ListLinks.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import type { List } from '@/stores/modules/types/List'
 import LoadingDots from '@/components/LoadingDots.vue'
-import ListChecked from '@/assets/icons/list-checked.vue'
-import ListRegular from '@/assets/icons/list-regular.vue'
 import { useCustomListsStore } from '@/stores/index.ts'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
@@ -107,11 +79,10 @@ const submitWords = async (words: string) => {
     // in condition (or just 'return' at end of implementation of
     // single word challenge)
     // Maybe add a 'word' prop to WordChallenge, and use conditions
-    // Ask niark how much % of a code change means new component
 
     newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)
 
-    createNewListObjectFromWords(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
+    createNewListFromWords(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
 
     await store.updateListsInFirestore()
     isLoading.value = false
@@ -124,7 +95,7 @@ const submitWords = async (words: string) => {
   }
 }
 
-const createNewListObjectFromWords = (words: string[], allLists: List[], paragraph: string) => {
+const createNewListFromWords = (words: string[], allLists: List[], paragraph: string) => {
   const newListObject: List = {
     listNumber: allLists.length + 1,
     status: 'LIST_NOT_STARTED',
@@ -205,35 +176,13 @@ hr {
   align-items: center;
 }
 
-.list-type {
+.lists {
   display: flex;
   flex-direction: column;
 
   label {
     padding-bottom: 1rem;
     font-weight: 700;
-  }
-  .list-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem 2rem; // row-gap, column-gap
-    // list-style: none;
-
-    @media (min-width: 1024px) {
-      grid-template-columns: repeat(6, 1fr);
-    }
-    .list {
-      color: inherit;
-    }
-    .list:hover {
-      // background-color: transparent;
-      color: white;
-    }
-
-    .list-item {
-      display: flex;
-      flex-direction: column;
-    }
   }
 }
 
