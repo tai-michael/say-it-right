@@ -81,7 +81,7 @@
         </div> -->
         <div v-else-if="recordingStatus === 'TESTING_COMPLETE'" class="message__text">
           <span>Practice with a similar word!</span>
-          <span>Or <span @click="resetWord" class="retry-word">Retry</span> this word.</span>
+          <span>Or <span @click="resetWord" class="link">Retry</span> this word.</span>
         </div>
       </div>
     </TransitionFade>
@@ -450,7 +450,7 @@ main {
   }
 }
 
-.retry-word {
+.link {
   text-decoration: underline;
   color: var(--green-color) !important;
   cursor: pointer;

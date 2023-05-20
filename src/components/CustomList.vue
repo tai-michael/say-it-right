@@ -1,26 +1,10 @@
 <template>
   <main>
-    <!-- <form
-      v-if="!Object.keys(list).length"
-      class="submit-form"
-      @submit.prevent="submitWords(wordsInput)"
-    >
-      <div class="input-container">
-        <label>Insert up to 7 words separated by spaces or commas:</label>
-        <div class="input-field">
-          <input placeholder="e.g. urban thin kindly" v-model="wordsInput" autofocus />
-          <button type="submit" :disabled="isLoading">Submit</button>
-        </div>
-      </div>
-    </form> -->
-
     <button @click="returnToLists" class="back-button"><GoBack /> Return to lists</button>
 
     <div v-if="isLoading" class="loading-container">
       <LoadingDots />
     </div>
-
-    <!-- <div v-if="submissionError" class="error">{{ submissionError }}</div> -->
 
     <TransitionAppear>
       <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
@@ -81,8 +65,7 @@ const returnToLists = () => {
   store.setActiveId(null)
 }
 
-// NOTE onActivated instead of onMounted, as onMounted doesn't trigger
-// for keep-alive components
+// NOTE onActivated instead of onMounted, as onMounted doesn't trigger for keep-alive components
 onActivated(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
@@ -154,6 +137,7 @@ main {
   font-weight: 700 !important;
   cursor: pointer;
   transition: 0.4s;
+  text-decoration: underline;
 }
 
 .link:hover {

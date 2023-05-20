@@ -127,12 +127,11 @@ onMounted(() => {
   }
 })
 
-// onActivated(() => (finalTranscript.value = ''))
-
+// TODO disable temporaryTranscript and related code in production
 const temporaryTranscript = ref('')
 
 const handleTempTranscriptRender = (transcript: string) => {
-  // NOTE this guard is necessary b/c the recorder cannot be deactivated between views
+  // NOTE this guard is necessary b/c the recorder cannot be deactivated between views. Also, there's a known bug where custom and provided lists with matching numbers (e.g. custom list 1 & provided list 1) will have matching ParagraphChallenge temporary transcripts. We can fix this by adding a routeName prop or something to ParagraphChallenge in Custom/ProvidedList.vue, but since we're removing temporary transcript here in production, we don't care about this bug.
   if (store.activeList?.listNumber !== props.list.listNumber) return
   temporaryTranscript.value = transcript
 }

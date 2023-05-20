@@ -58,7 +58,7 @@ hr {
   flex-direction: column;
 
   label {
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
     font-weight: 700;
   }
 }

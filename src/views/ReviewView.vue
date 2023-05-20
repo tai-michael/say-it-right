@@ -10,8 +10,8 @@
           <option value="createdAsc">Least recent</option>
           <option value="wordAsc">A to Z</option>
           <option value="wordDesc">Z to A</option>
-          <option value="sourceCustom">From custom list</option>
-          <option value="sourceProvided">From provided list</option>
+          <option value="sourceCustom">Custom list words</option>
+          <option value="sourceProvided">Provided list words</option>
         </select>
 
         <ul class="list">

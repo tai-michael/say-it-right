@@ -129,6 +129,7 @@ main {
   font-weight: 700 !important;
   cursor: pointer;
   transition: 0.4s;
+  text-decoration: underline;
 }
 
 .link:hover {
