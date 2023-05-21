@@ -1,55 +1,70 @@
 <template>
-  <main>
-    <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
-      <div class="input-container">
-        <label>Insert up to 7 words separated by spaces or commas:</label>
-        <div class="input-field">
-          <input placeholder="e.g. urban thin kindly" v-model="wordsInput" autofocus />
-          <button v-if="isLoading" :disabled="isLoading"><LoadingDots /></button>
-          <button v-else type="submit" :disabled="isLoading">Submit</button>
+  <ion-page class="mt-16">
+    <ion-content>
+      <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
+        <div class="input-container">
+          <label>Insert up to 7 words separated by spaces or commas:</label>
+          <div class="input-field">
+            <input placeholder="e.g. urban thin kindly" v-model="wordsInput" autofocus />
+            <ion-button v-if="isLoading" :disabled="isLoading"><LoadingDots /></ion-button>
+            <ion-button v-else type="submit" :disabled="isLoading" class="color">Submit</ion-button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
 
-    <!-- <div v-if="isLoading" class="loading-container">
+      <!-- <div v-if="isLoading" class="loading-container">
       <LoadingDots />
     </div> -->
 
-    <div v-if="submissionError" class="error">{{ submissionError }}</div>
+      <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-    <div v-if="store.inProgressLists.length" class="lists">
-      <label>In Progress</label>
-      <ListLinks :lists="store.inProgressLists" :routeName="'custom-list'" />
-    </div>
+      <div v-if="store.inProgressLists.length" class="lists">
+        <label>In Progress</label>
+        <ListLinks :lists="store.inProgressLists" :routeName="'custom-list'" />
+      </div>
 
-    <div v-if="store.untouchedLists.length" class="lists">
-      <hr v-if="store.inProgressLists.length" />
-      <label v-if="anyListStarted">New</label>
-      <ListLinks :lists="store.untouchedLists" :routeName="'custom-list'" />
-    </div>
+      <div v-if="store.untouchedLists.length" class="lists">
+        <hr v-if="store.inProgressLists.length" />
+        <label v-if="anyListStarted">New</label>
+        <ListLinks :lists="store.untouchedLists" :routeName="'custom-list'" />
+      </div>
 
-    <div v-if="store.completedLists.length" class="lists">
-      <hr v-if="store.inProgressLists.length || store.untouchedLists.length" />
-      <label>Completed</label>
-      <ListLinks :lists="store.completedLists" :routeName="'custom-list'" />
-    </div>
+      <div v-if="store.completedLists.length" class="lists">
+        <hr v-if="store.inProgressLists.length || store.untouchedLists.length" />
+        <label>Completed</label>
+        <ListLinks :lists="store.completedLists" :routeName="'custom-list'" />
+      </div>
+    </ion-content>
 
-    <router-view v-slot="{ Component }">
+    <!-- <router-view v-slot="{ Component }">
       <keep-alive>
         <component :is="Component" :key="$route.fullPath"></component>
       </keep-alive>
-    </router-view>
-  </main>
+    </router-view> -->
+  </ion-page>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import LoadingDots from '@/components/LoadingDots.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import ListLinks from '@/components/ListLinks.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import type { List } from '@/stores/modules/types/List'
-import LoadingDots from '@/components/LoadingDots.vue'
 import { useCustomListsStore } from '@/stores/index.ts'
 import { useRoute, useRouter } from 'vue-router'
+import {
+  // IonApp,
+  IonContent,
+  IonPage,
+  IonButton,
+  // IonRouterOutlet,
+  IonRow,
+  IonHeader,
+  IonToolbar,
+  IonTitle
+} from '@ionic/vue'
+
 const route = useRoute()
 const router = useRouter()
 
@@ -129,6 +144,17 @@ hr {
   border: none;
   height: 0.5px;
   background-color: var(--vt-c-text-dark-2); // gray
+}
+
+// ion-button {
+//   --background: #93e9be;
+//   --border-radius: 8px;
+// }
+
+ion-toolbar {
+  --display: flex;
+  --justify-content: space-between;
+  // --background: red;
 }
 
 .submit-form {

@@ -1,10 +1,11 @@
 <template>
   <div>
-    <button @click="router.push({ name: 'home' })">Home</button>
+    <ion-button @click="router.push({ name: 'home' })">Home</ion-button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { IonButton } from '@ionic/vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 </script>

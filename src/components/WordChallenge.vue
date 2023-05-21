@@ -76,12 +76,12 @@
       @temporary-transcript-rendered="handleTempTranscriptRender"
     />
 
-    <!-- <button
+    <!-- <ion-button
       v-if="props.list.words[testedWord].attemptsSuccessful === 2"
       @click="store.setListStatus('TESTING_SENTENCES')"
     >
       Next
-    </button> -->
+    </ion-button> -->
   </main>
 </template>
 

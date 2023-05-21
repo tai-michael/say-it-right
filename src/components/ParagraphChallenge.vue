@@ -1,6 +1,6 @@
 <template>
-  <main>
-    <div class="content">
+  <ion-page>
+    <ion-content class="content">
       <hr />
       <div class="tested-paragraph">
         <p v-html="testedParagraph"></p>
@@ -44,7 +44,7 @@
           </div>
         </div>
 
-        <button
+        <ion-button
           class="next-button"
           v-if="
             props.list.status === 'PARAGRAPH_RECORDING_ENDED' &&
@@ -53,10 +53,10 @@
           @click="store.setListStatus('TESTING_WORD_ONLY')"
         >
           Next
-        </button>
+        </ion-button>
       </div>
       <!-- <RouterLink to="/provided-lists/word-test">Next</RouterLink> -->
-    </div>
+    </ion-content>
 
     <RecorderButton
       v-if="props.list.status === 'LIST_NOT_STARTED'"
@@ -64,15 +64,17 @@
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
     />
-  </main>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
+import { IonPage, IonContent } from '@ionic/vue'
 import type { PropType } from 'vue'
 import type { List, CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import type { WordObject } from '@/stores/modules/types/Review'
 import RecorderButton from './RecorderButton.vue'
+import { IonButton } from '@ionic/vue'
 import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
 import useCorrectAndIncorrectWordsFilter from '@/composables/useCorrectAndIncorrectWordsFilter'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'

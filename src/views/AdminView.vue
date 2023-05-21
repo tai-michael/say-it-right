@@ -2,8 +2,8 @@
   <div v-if="authStore.signedInAsAdmin">
     <div class="upload">
       <label>Upload core lists to firestore:</label>
-      <button @click="uploadCoreLists(coreLists)" :disabled="isLoading">Upload</button>
-      <!-- <button @click="uploadList(newList)">Upload new list</button> -->
+      <ion-button @click="uploadCoreLists(coreLists)" :disabled="isLoading">Upload</ion-button>
+      <!-- <ion-button @click="uploadList(newList)">Upload new list</ion-button> -->
       <form class="submit-form" @submit.prevent="uploadList">
         <div class="input-container">
           <label>Upload new list to firestore:</label>
@@ -14,7 +14,7 @@
               v-model="listNumOfListToAdd"
               autofocus
             />
-            <button type="submit" :disabled="isLoading">Upload</button>
+            <ion-button type="submit" :disabled="isLoading">Upload</ion-button>
           </div>
         </div>
       </form>
@@ -30,7 +30,7 @@
             v-model="listNumOfListToDel"
             autofocus
           />
-          <button type="submit" :disabled="isLoading">Delete</button>
+          <ion-button type="submit" :disabled="isLoading">Delete</ion-button>
         </div>
       </div>
     </form>
@@ -40,6 +40,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import coreLists from '@/assets/lists_1-12.json'
+import { IonButton } from '@ionic/vue'
 import { db } from '@/firebaseInit'
 import { deleteDoc, doc, collection, setDoc, writeBatch } from 'firebase/firestore'
 import { useRouter } from 'vue-router'

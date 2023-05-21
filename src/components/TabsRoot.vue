@@ -1,28 +1,63 @@
 <template>
-  <ion-app>
-    <ion-header>
-      <ion-toolbar class="flex">
-        <ion-row class="w-full items-center justify-between pr-4">
-          <ion-title>{{ title }}</ion-title>
-          <DarkModeToggle />
-        </ion-row>
-      </ion-toolbar>
-    </ion-header>
-    <LoadingSpinner v-if="fetchingBackendData" />
-    <div v-else-if="!fetchingBackendData && backendDataFetched">
+  <ion-page>
+    <ion-tabs>
+      <!-- <ion-router-outlet>
+        <LoadingSpinner v-if="fetchingBackendData" />
+        <div v-else-if="!fetchingBackendData && backendDataFetched" class="main-content">
+          <router-view v-slot="{ Component }">
+            <keep-alive>
+              <component :is="Component" :key="$route.fullPath"></component>
+            </keep-alive>
+          </router-view>
+        </div>
+        <div v-else>(Sign up or Intro display/message)</div>
+      </ion-router-outlet> -->
       <ion-router-outlet></ion-router-outlet>
-    </div>
-    <div v-else>(Sign up or Intro display/message)</div>
-  </ion-app>
+      <ion-tab-bar slot="bottom">
+        <!-- <RouterLink to="/custom-lists" :class="getLinkClass('/custom-lists')"
+          >Custom Lists</RouterLink
+        >
+        <RouterLink to="/provided-lists" :class="getLinkClass('/provided-lists')"
+          >Provided Lists</RouterLink
+        >
+        <RouterLink to="/review">Review</RouterLink>
+        <RouterLink to="/hard-words">Hard Words</RouterLink>
+        <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink> -->
+        <ion-tab-button tab="custom-list" href="/custom-lists">
+          <ion-icon :icon="playCircle" />
+          <ion-label>Custom Lists</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="provided-lists" href="/provided-lists">
+          <ion-icon :icon="radio" />
+          <ion-label>Provided Lists</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="review" href="/review">
+          <ion-icon :icon="library" />
+          <ion-label>Review</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="hard-words" href="/hard-words">
+          <ion-icon :icon="search" />
+          <ion-label>Hard Words</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, onMounted, watch, watchEffect } from 'vue'
-import Example from '@/components/Example.vue'
-import HelloWorld from './components/HelloWorld.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import DarkModeToggle from './components/DarkModeToggle.vue'
-import { IonApp, IonRouterOutlet, IonHeader, IonToolbar, IonTitle, IonRow } from '@ionic/vue'
+import {
+  IonPage,
+  IonRouterOutlet,
+  IonTabs,
+  IonTabBar,
+  IonTabButton,
+  IonLabel,
+  IonIcon
+} from '@ionic/vue'
 import { playCircle, radio, library, search } from 'ionicons/icons'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
@@ -40,21 +75,12 @@ const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
 
-const route = useRoute()
 const router = useRouter()
-const title = ref(route.meta.title || 'Custom Lists')
 
-watch(
-  () => route.meta.title,
-  (newVal) => {
-    title.value = newVal as string
-  }
-)
-
-const getLinkClass = (path: string) => {
-  const route = useRoute()
-  return route.path.startsWith(path) ? 'router-link-exact-active' : ''
-}
+// const getLinkClass = (path: string) => {
+//   const route = useRoute()
+//   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
+// }
 
 const fetchingBackendData = ref(false)
 const backendDataFetched = ref(false)
@@ -159,91 +185,4 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
-/* #container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-} */
-
-/* header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.main-content {
-  width: 100%;
-}
-
-.signout-btn:hover {
-  cursor: pointer;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 16px;
-  text-align: center;
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 0.8rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-} */
-</style>
+<style scoped></style>

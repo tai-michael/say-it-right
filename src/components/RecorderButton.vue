@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import { computed, onDeactivated, ref } from 'vue'
-
 import { client, microphone } from '@/speechlyInit.ts'
 import MicIcon from '@/assets/icons/mic.vue'
 
@@ -108,6 +107,9 @@ client.onSegmentChange((segment) => {
   z-index: 50;
 
   .recording-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 80px;
     height: 80px;
     border-radius: 50%;

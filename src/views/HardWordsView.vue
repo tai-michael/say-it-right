@@ -1,17 +1,20 @@
 <template>
-  <main>
-    <h4>Top 10 Hardest Words For Users</h4>
-    <ol class="list">
-      <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">
-        <!-- {{ entry.word }}: {{ entry.count }} -->
-        <span>{{ entry.word }}</span>
-      </li>
-    </ol>
-  </main>
+  <ion-page class="mt-16">
+    <ion-content>
+      <h4>Top 10 Hardest Words For Users</h4>
+      <ol class="list">
+        <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">
+          <!-- {{ entry.word }}: {{ entry.count }} -->
+          <span>{{ entry.word }}</span>
+        </li>
+      </ol>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue'
 import { db } from '@/firebaseInit'
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore'
 

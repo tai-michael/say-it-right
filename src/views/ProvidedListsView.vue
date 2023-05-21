@@ -1,31 +1,34 @@
 <template>
-  <main>
-    <div v-if="store.inProgressLists.length" class="lists">
-      <label>In Progress</label>
-      <ListLinks :lists="store.inProgressLists" :routeName="'provided-list'" />
-    </div>
+  <ion-page class="mt-16">
+    <ion-content>
+      <div v-if="store.inProgressLists.length" class="lists">
+        <label>In Progress</label>
+        <ListLinks :lists="store.inProgressLists" :routeName="'provided-list'" />
+      </div>
 
-    <div v-if="store.untouchedLists.length" class="lists">
-      <hr v-if="store.inProgressLists.length" />
-      <label v-if="anyListStarted">Not Started</label>
-      <ListLinks :lists="store.untouchedLists" :routeName="'provided-list'" />
-    </div>
+      <div v-if="store.untouchedLists.length" class="lists">
+        <hr v-if="store.inProgressLists.length" />
+        <label v-if="anyListStarted">Not Started</label>
+        <ListLinks :lists="store.untouchedLists" :routeName="'provided-list'" />
+      </div>
 
-    <div v-if="store.completedLists.length" class="lists">
-      <hr v-if="store.inProgressLists.length || store.untouchedLists.length" />
-      <label>Completed</label>
-      <ListLinks :lists="store.completedLists" :routeName="'provided-list'" />
-    </div>
+      <div v-if="store.completedLists.length" class="lists">
+        <hr v-if="store.inProgressLists.length || store.untouchedLists.length" />
+        <label>Completed</label>
+        <ListLinks :lists="store.completedLists" :routeName="'provided-list'" />
+      </div>
 
-    <router-view v-slot="{ Component }">
+      <!-- <router-view v-slot="{ Component }">
       <keep-alive>
         <component :is="Component" :key="$route.fullPath"></component>
       </keep-alive>
-    </router-view>
-  </main>
+    </router-view> -->
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue'
 import { computed, onMounted } from 'vue'
 import ListLinks from '@/components/ListLinks.vue'
 import { useProvidedListsStore } from '@/stores/index.ts'

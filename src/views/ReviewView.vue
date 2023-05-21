@@ -1,48 +1,53 @@
 <template>
   <!-- <h4>Review</h4> -->
-  <div class="review">
-    <input type="text" v-model="search" placeholder="Search for word" />
-    <main>
-      <div class="list-container">
-        <!-- <label for="sort">Sort by:</label> -->
-        <select id="sort" v-model="sortOrder" class="sort-container">
-          <option value="createdDesc">Most recent</option>
-          <option value="createdAsc">Least recent</option>
-          <option value="wordAsc">A to Z</option>
-          <option value="wordDesc">Z to A</option>
-          <option value="sourceCustom">Custom list words</option>
-          <option value="sourceProvided">Provided list words</option>
-        </select>
+  <ion-page class="mt-16">
+    <ion-content>
+      <div class="review">
+        <input type="text" v-model="search" placeholder="Search for word" />
+        <main>
+          <div class="list-container">
+            <!-- <label for="sort">Sort by:</label> -->
+            <select id="sort" v-model="sortOrder" class="sort-container">
+              <option value="createdDesc">Most recent</option>
+              <option value="createdAsc">Least recent</option>
+              <option value="wordAsc">A to Z</option>
+              <option value="wordDesc">Z to A</option>
+              <option value="sourceCustom">Custom list words</option>
+              <option value="sourceProvided">Provided list words</option>
+            </select>
 
-        <ul class="list">
-          <li
-            v-for="(word, index) in sortedWords"
-            :key="index"
-            @click="selectWord(word)"
-            class="list__row"
-            :class="{ highlighted: word === selectedWord }"
-          >
-            <span>{{ word.word }}</span>
-          </li>
-        </ul>
+            <ul class="list">
+              <li
+                v-for="(word, index) in sortedWords"
+                :key="index"
+                @click="selectWord(word)"
+                class="list__row"
+                :class="{ highlighted: word === selectedWord }"
+              >
+                <span>{{ word.word }}</span>
+              </li>
+            </ul>
+          </div>
+          <hr v-if="Object.keys(allWords).length < 10" />
+          <!-- <div class="word-drill"> -->
+          <keep-alive>
+            <WordDrill
+              :word="selectedWord"
+              v-if="selectedWord"
+              :key="selectedWord.word"
+              @related-word-clicked="handleRelatedWordClicked"
+            />
+          </keep-alive>
+          <!-- </div> -->
+        </main>
       </div>
-      <hr v-if="Object.keys(allWords).length < 10" />
-      <!-- <div class="word-drill"> -->
-      <keep-alive>
-        <WordDrill
-          :word="selectedWord"
-          v-if="selectedWord"
-          :key="selectedWord.word"
-          @related-word-clicked="handleRelatedWordClicked"
-        />
-      </keep-alive>
-      <!-- </div> -->
-    </main>
-  </div>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue'
 import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import WordDrill from '@/components/WordDrill.vue'

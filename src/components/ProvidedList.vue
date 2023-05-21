@@ -1,41 +1,46 @@
 <template>
-  <main>
+  <ion-page>
     <!-- <LoadingDots v-if="isLoading" /> -->
 
-    <button @click="returnToLists" class="back-button"><GoBack /> Return to lists</button>
-    <TransitionAppear>
-      <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
+    <!-- <ion-button @click="returnToLists" class="back-button"><GoBack /> Return to lists</ion-button> -->
+    <ion-button @click="returnToLists" class="back-button"><GoBack /></ion-button>
+    <ion-content>
+      <TransitionAppear>
+        <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
-      <WordChallenge
-        v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
-        :list="list"
-      />
-    </TransitionAppear>
+        <WordChallenge
+          v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
+          :list="list"
+        />
+      </TransitionAppear>
 
-    <div v-if="list.status === 'LIST_COMPLETE'" class="message">
-      <div class="message__text">
-        <span>You have completed this list.</span>
-        <span>
-          We recommend that you <RouterLink to="/review" class="link">Review</RouterLink> the words
-          you've learned!</span
-        >
-        <span
-          >You can also <span @click="returnToLists" class="link">Try</span> a different list</span
-        >
-        <span>Or you can <span @click="store.resetList" class="link">Retry</span> this list</span>
+      <div v-if="list.status === 'LIST_COMPLETE'" class="message">
+        <div class="message__text">
+          <span>You have completed this list.</span>
+          <span>
+            We recommend that you <RouterLink to="/review" class="link">Review</RouterLink> the
+            words you've learned!</span
+          >
+          <span
+            >You can also <span @click="returnToLists" class="link">Try</span> a different
+            list</span
+          >
+          <span>Or you can <span @click="store.resetList" class="link">Retry</span> this list</span>
+        </div>
       </div>
-    </div>
-  </main>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, ref } from 'vue'
+import { computed, onActivated, onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
-
+import { IonPage, IonContent } from '@ionic/vue'
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'
 import GoBack from '@/assets/icons/go-back.vue'
+import { IonButton } from '@ionic/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 const route = useRoute()
@@ -59,7 +64,7 @@ const returnToLists = () => {
 
 // NOTE onActivated instead of onMounted, as onMounted doesn't trigger
 // for keep-alive components
-onActivated(() => {
+onMounted(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
       // NOTE get direct reactive store reference to the list
@@ -98,7 +103,7 @@ main {
   column-gap: 0.3rem;
   padding: 2px 4px;
   margin-bottom: 2rem;
-  width: 120px;
+  width: 80px;
 }
 
 .back-button:hover {
