@@ -12,7 +12,7 @@
         </div>
         <div v-else>(Sign up or Intro display/message)</div>
       </ion-router-outlet> -->
-      <ion-router-outlet></ion-router-outlet>
+      <ion-router-outlet :animation="customAnimation"></ion-router-outlet>
       <ion-tab-bar slot="bottom">
         <!-- <RouterLink to="/custom-lists" :class="getLinkClass('/custom-lists')"
           >Custom Lists</RouterLink
@@ -49,6 +49,9 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, watch, watchEffect } from 'vue'
+import { customEnterAnimation } from '@/components/transitions/CustomEnterAnimation'
+import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
+
 import {
   IonPage,
   IonRouterOutlet,
@@ -75,7 +78,14 @@ const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
 
+const route = useRoute()
 const router = useRouter()
+
+const customAnimation = computed(() =>
+  route.name === 'custom-list' || route.name === 'provided-list'
+    ? customLeaveAnimation
+    : customEnterAnimation
+)
 
 // const getLinkClass = (path: string) => {
 //   const route = useRoute()

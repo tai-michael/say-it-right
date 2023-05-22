@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page class="mt-16">
     <!-- <LoadingDots v-if="isLoading" /> -->
 
     <!-- <ion-button @click="returnToLists" class="back-button"><GoBack /> Return to lists</ion-button> -->

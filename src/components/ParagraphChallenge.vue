@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page class="mt-16">
     <ion-content class="content">
       <hr />
       <div class="tested-paragraph">
