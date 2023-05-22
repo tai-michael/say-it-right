@@ -1,6 +1,6 @@
 <template>
-  <ion-page class="mt-16">
-    <ion-content>
+  <ion-page>
+    <ion-content class="ion-padding">
       <h4>Top 10 Hardest Words For Users</h4>
       <ol class="list">
         <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">

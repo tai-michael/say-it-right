@@ -6,21 +6,22 @@
         <DarkModeToggle slot="end" />
       </ion-toolbar>
     </ion-header>
-    <LoadingSpinner v-if="fetchingBackendData" />
-    <div v-else-if="!fetchingBackendData && backendDataFetched">
-      <ion-router-outlet></ion-router-outlet>
-    </div>
-    <div v-else>(Sign up or Intro display/message)</div>
+    <ion-content class="ion-padding">
+      <LoadingSpinner v-if="fetchingBackendData" />
+      <div v-else-if="!fetchingBackendData && backendDataFetched">
+        <ion-router-outlet></ion-router-outlet>
+      </div>
+      <div v-else>(Sign up or Intro display/message)</div>
+    </ion-content>
   </ion-app>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, onMounted, watch, watchEffect } from 'vue'
-import Example from '@/components/Example.vue'
 import HelloWorld from './components/HelloWorld.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import DarkModeToggle from './components/DarkModeToggle.vue'
-import { IonApp, IonRouterOutlet, IonHeader, IonToolbar, IonTitle } from '@ionic/vue'
+import { IonApp, IonContent, IonRouterOutlet, IonHeader, IonToolbar, IonTitle } from '@ionic/vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'

@@ -1,6 +1,6 @@
 <template>
-  <ion-page class="mt-16">
-    <ion-content>
+  <ion-page>
+    <ion-content class="ion-padding">
       <div v-if="store.inProgressLists.length" class="lists">
         <label>In Progress</label>
         <ListLinks :lists="store.inProgressLists" :routeName="'provided-list'" />

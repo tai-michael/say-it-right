@@ -1,5 +1,5 @@
 <template>
-  <ion-page class="mt-16">
+  <ion-page>
     <!-- <ion-button @click="returnToLists" class="back-button"><GoBack /> Return to lists</ion-button> -->
     <ion-button
       @click="returnToLists"
@@ -8,7 +8,7 @@
       :router-animation="customLeaveAnimation"
       ><GoBack
     /></ion-button>
-    <ion-content>
+    <ion-content class="ion-padding">
       <div v-if="isLoading" class="loading-container">
         <LoadingDots />
       </div>

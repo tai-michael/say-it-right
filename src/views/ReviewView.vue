@@ -1,7 +1,7 @@
 <template>
   <!-- <h4>Review</h4> -->
-  <ion-page class="mt-16">
-    <ion-content>
+  <ion-page>
+    <ion-content class="ion-padding">
       <div class="review">
         <input type="text" v-model="search" placeholder="Search for word" />
         <main>

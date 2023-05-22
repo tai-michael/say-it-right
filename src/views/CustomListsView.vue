@@ -1,6 +1,6 @@
 <template>
-  <ion-page class="mt-16">
-    <ion-content>
+  <ion-page>
+    <ion-content class="ion-padding">
       <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
         <div class="input-container">
           <label>Insert up to 7 words separated by spaces or commas:</label>

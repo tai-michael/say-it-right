@@ -1,10 +1,10 @@
 <template>
-  <ion-page class="mt-16">
+  <ion-page>
     <!-- <LoadingDots v-if="isLoading" /> -->
 
     <!-- <ion-button @click="returnToLists" class="back-button"><GoBack /> Return to lists</ion-button> -->
     <ion-button @click="returnToLists" class="back-button"><GoBack /></ion-button>
-    <ion-content>
+    <ion-content class="ion-padding">
       <TransitionAppear>
         <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 

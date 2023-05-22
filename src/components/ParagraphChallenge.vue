@@ -1,6 +1,6 @@
 <template>
-  <ion-page class="mt-16">
-    <ion-content class="content">
+  <ion-page>
+    <ion-content class="ion-padding">
       <hr />
       <div class="tested-paragraph">
         <p v-html="testedParagraph"></p>
