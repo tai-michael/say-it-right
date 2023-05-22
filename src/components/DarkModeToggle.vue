@@ -1,11 +1,15 @@
 <template>
-  <ion-icon :icon="isDarkModeEnabled ? moon : sunny" class="mr-2"></ion-icon>
-  <ion-toggle @ionChange="toggleDarkMode"></ion-toggle>
+  <ion-icon
+    @click="toggleDarkMode"
+    :icon="isDarkModeEnabled ? sunny : moon"
+    class="text-xl pr-1 cursor-pointer"
+    aria-label="Switch between dark and light mode"
+  ></ion-icon>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { IonToggle, IonIcon } from '@ionic/vue'
+import { IonIcon } from '@ionic/vue'
 import { moon, sunny } from 'ionicons/icons'
 
 const isDarkModeEnabled = ref(false)

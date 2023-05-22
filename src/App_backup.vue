@@ -1,26 +1,129 @@
 <template>
   <ion-app>
-    <ion-header>
-      <ion-toolbar class="flex">
-        <ion-title>{{ title }}</ion-title>
-        <DarkModeToggle slot="end" />
-      </ion-toolbar>
-    </ion-header>
-    <LoadingSpinner v-if="fetchingBackendData" />
-    <div v-else-if="!fetchingBackendData && backendDataFetched">
-      <ion-router-outlet></ion-router-outlet>
-    </div>
-    <div v-else>(Sign up or Intro display/message)</div>
+    <ion-page>
+      <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
+
+      <ion-header :translucent="true">
+        <ion-toolbar>
+          <ion-title>Home</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content :fullscreen="true">
+        <ion-header collapse="condense">
+          <ion-toolbar>
+            <ion-title size="large">Blank</ion-title>
+          </ion-toolbar>
+        </ion-header>
+
+        <div id="container">
+          <!-- <strong>Ready to create an app?</strong> -->
+          <div class="wrapper">
+            <div style="margin-bottom: 0.7rem">
+              <div v-if="isAuthenticated">
+                <span style="margin-right: 1rem">Welcome, {{ user?.displayName }}</span>
+                <ion-button @click="authStore.signOutUser" class="signout-btn">Sign Out</ion-button>
+
+                <DarkModeToggle />
+                <!-- TODO for testing purposes only; remove before production -->
+                <br />
+                <!-- <div style="display: flex; column-gap: 0.5rem; margin-top: 0.5rem">
+                  <button @click="authStore.resetAllLists">Reset all</button>
+                  <button @click="authStore.resetCustomLists">Reset Custom lists</button>
+                  <button @click="authStore.resetProvidedLists">Reset Provided lists</button>
+                  <button @click="authStore.resetReview">Reset Review</button>
+                </div> -->
+              </div>
+              <div v-else>
+                <button @click="authStore.signInUser">Sign In with Google</button>
+              </div>
+            </div>
+            <!-- TODO add a mic test or something for the user, so that streaming will be more responsive. The recorder seems to be more responsive after its streamed once after a new load -->
+            <HelloWorld msg="Say It Right" @click="router.push({ name: 'home' })" />
+            <ion-tabs>
+              <!-- <ion-router-outlet>
+                <LoadingSpinner v-if="fetchingBackendData" />
+                <div v-else-if="!fetchingBackendData && backendDataFetched" class="main-content">
+                  <router-view v-slot="{ Component }">
+                    <keep-alive>
+                      <component :is="Component" :key="$route.fullPath"></component>
+                    </keep-alive>
+                  </router-view>
+                </div>
+                <div v-else>(Sign up or Intro display/message)</div>
+              </ion-router-outlet> -->
+              <ion-router-outlet></ion-router-outlet>
+              <ion-tab-bar slot="bottom">
+                <!-- <RouterLink to="/custom-lists" :class="getLinkClass('/custom-lists')"
+                  >Custom Lists</RouterLink
+                >
+                <RouterLink to="/provided-lists" :class="getLinkClass('/provided-lists')"
+                  >Provided Lists</RouterLink
+                >
+                <RouterLink to="/review">Review</RouterLink>
+                <RouterLink to="/hard-words">Hard Words</RouterLink>
+                <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink> -->
+                <ion-tab-button tab="custom-lists" href="/custom-lists">
+                  <ion-icon :icon="playCircle" />
+                  <ion-label>Custom Lists</ion-label>
+                </ion-tab-button>
+
+                <ion-tab-button tab="provided-lists" href="/provided-lists">
+                  <ion-icon :icon="radio" />
+                  <ion-label>Provided Lists</ion-label>
+                </ion-tab-button>
+
+                <ion-tab-button tab="review" href="/review">
+                  <ion-icon :icon="library" />
+                  <ion-label>Review</ion-label>
+                </ion-tab-button>
+
+                <ion-tab-button tab="hard-words" href="/hard-words">
+                  <ion-icon :icon="search" />
+                  <ion-label>Hard Words</ion-label>
+                </ion-tab-button>
+              </ion-tab-bar>
+            </ion-tabs>
+          </div>
+
+          <!-- <body>
+            <LoadingSpinner v-if="fetchingBackendData" />
+            <div v-else-if="!fetchingBackendData && backendDataFetched" class="main-content">
+              <router-view v-slot="{ Component }">
+                <keep-alive>
+                  <component :is="Component" :key="$route.fullPath"></component>
+                </keep-alive>
+              </router-view>
+            </div>
+            <div v-else>(Sign up or Intro display/message)</div>
+          </body> -->
+        </div>
+      </ion-content>
+    </ion-page>
   </ion-app>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, onMounted, watch, watchEffect } from 'vue'
-import Example from '@/components/Example.vue'
 import HelloWorld from './components/HelloWorld.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import DarkModeToggle from './components/DarkModeToggle.vue'
-import { IonApp, IonRouterOutlet, IonHeader, IonToolbar, IonTitle } from '@ionic/vue'
+import {
+  IonApp,
+  IonContent,
+  IonPage,
+  IonButton,
+  IonRouterOutlet,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonTabs,
+  IonTabBar,
+  IonTabButton,
+  IonLabel,
+  IonIcon
+} from '@ionic/vue'
+import { playCircle, radio, library, search } from 'ionicons/icons'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
@@ -37,21 +140,12 @@ const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
 
-const route = useRoute()
 const router = useRouter()
-const title = ref(route.meta.title || 'Custom Lists')
 
-watch(
-  () => route.meta.title,
-  (newVal) => {
-    title.value = newVal as string
-  }
-)
-
-// const getLinkClass = (path: string) => {
-//   const route = useRoute()
-//   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
-// }
+const getLinkClass = (path: string) => {
+  const route = useRoute()
+  return route.path.startsWith(path) ? 'router-link-exact-active' : ''
+}
 
 const fetchingBackendData = ref(false)
 const backendDataFetched = ref(false)

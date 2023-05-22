@@ -39,14 +39,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, onMounted, ref, inject } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
 import LoadingDots from '@/components/LoadingDots.vue'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
 import { IonButton, IonPage, IonContent } from '@ionic/vue'
-import TransitionAppear from '@/components/transitions/TransitionFade.vue'
+// import TransitionAppear from '@/components/transitions/TransitionFade.vue'
 import GoBack from '@/assets/icons/go-back.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCustomListsStore } from '@/stores/index.ts'
@@ -68,18 +68,7 @@ const showParagraphChallenge = computed(
 )
 
 const returnToLists = () => {
-  router.push({
-    name: 'custom-lists',
-    transition: {
-      name: 'custom-transition',
-      duration: 500,
-      easing: 'cubic-bezier(0.36,0.66,0.04,1)',
-      enterFrom: 'translateX(-100%)',
-      enterTo: 'translateX(0)',
-      leaveFrom: 'translateX(0)',
-      leaveTo: 'translateX(100%)'
-    }
-  })
+  router.push({ name: 'custom-lists' })
   store.setActiveId(null)
 }
 
