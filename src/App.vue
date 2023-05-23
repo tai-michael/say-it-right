@@ -2,8 +2,9 @@
   <ion-app>
     <ion-header>
       <ion-toolbar class="flex">
-        <ion-title>{{ title }}</ion-title>
+        <ion-title v-if="backendDataFetched">{{ toolbarTitle }}</ion-title>
         <DarkModeToggle slot="end" />
+        <ion-progress-bar type="indeterminate" v-if="isLoading"></ion-progress-bar>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
@@ -17,11 +18,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch, watchEffect } from 'vue'
+import { computed, ref, onMounted, watch, watchEffect, inject } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import DarkModeToggle from './components/DarkModeToggle.vue'
-import { IonApp, IonContent, IonRouterOutlet, IonHeader, IonToolbar, IonTitle } from '@ionic/vue'
+import {
+  IonApp,
+  IonContent,
+  IonRouterOutlet,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonProgressBar
+} from '@ionic/vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
@@ -33,6 +42,7 @@ import {
   useReviewStore
 } from '@/stores/index.ts'
 
+const isLoading = inject('isLoading')
 const authStore = useAuthStore()
 const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
@@ -40,12 +50,16 @@ const reviewStore = useReviewStore()
 
 const route = useRoute()
 const router = useRouter()
-const title = ref(route.meta.title || 'Custom Lists')
+const routeTitle = ref(route.meta.title || 'Custom Lists')
+const activeListNum = computed(
+  () => customListsStore?.activeList?.listNumber || providedListsStore?.activeList?.listNumber || ''
+)
+const toolbarTitle = computed(() => `${routeTitle.value} ${activeListNum.value}`)
 
 watch(
   () => route.meta.title,
   (newVal) => {
-    title.value = newVal as string
+    routeTitle.value = newVal as string
   }
 )
 
