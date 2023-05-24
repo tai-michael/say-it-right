@@ -23,12 +23,12 @@
         <RouterLink to="/review">Review</RouterLink>
         <RouterLink to="/hard-words">Hard Words</RouterLink>
         <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink> -->
-        <ion-tab-button tab="custom-list" href="/custom-lists">
+        <ion-tab-button tab="custom-list" :href="customListsPath">
           <ion-icon :icon="playCircle" />
           <ion-label>Custom Lists</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="provided-lists" href="/provided-lists">
+        <ion-tab-button tab="provided-lists" :href="providedListsPath">
           <ion-icon :icon="radio" />
           <ion-label>Provided Lists</ion-label>
         </ion-tab-button>
@@ -86,6 +86,16 @@ const customAnimation = computed(() =>
     ? customLeaveAnimation
     : customEnterAnimation
 )
+
+const customListsPath = computed(() => {
+  const id = customListsStore.activeId
+  return id ? `/custom-lists/${id}` : '/custom-lists'
+})
+
+const providedListsPath = computed(() => {
+  const id = providedListsStore.activeId
+  return id ? `/provided-lists/${id}` : '/provided-lists'
+})
 
 // const getLinkClass = (path: string) => {
 //   const route = useRoute()

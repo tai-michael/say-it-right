@@ -1,5 +1,6 @@
 <template>
   <ion-page>
+    <TheHeader>Provided Lists</TheHeader>
     <ion-content class="ion-padding">
       <div v-if="store.inProgressLists.length" class="lists">
         <label>In Progress</label>
@@ -28,7 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue'
+import TheHeader from '@/components/TheHeader.vue'
+import { IonPage, IonContent } from '@ionic/vue'
 import { computed, onMounted } from 'vue'
 import ListLinks from '@/components/ListLinks.vue'
 import { useProvidedListsStore } from '@/stores/index.ts'

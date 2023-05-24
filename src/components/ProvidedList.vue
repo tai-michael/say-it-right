@@ -1,9 +1,9 @@
 <template>
   <ion-page>
-    <!-- <LoadingDots v-if="isLoading" /> -->
+    <TheHeader :show-back-button="true" @back-button-clicked="returnToLists"
+      >Provided List {{ list.listNumber }}</TheHeader
+    >
 
-    <!-- <ion-button @click="returnToLists" class="back-button"><GoBack /> Return to lists</ion-button> -->
-    <ion-button @click="returnToLists" class="back-button"><GoBack /></ion-button>
     <ion-content class="ion-padding">
       <TransitionAppear>
         <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
@@ -33,14 +33,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import { IonPage, IonContent } from '@ionic/vue'
+import TheHeader from '@/components/TheHeader.vue'
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'
-import GoBack from '@/assets/icons/go-back.vue'
-import { IonButton } from '@ionic/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 const route = useRoute()
@@ -58,8 +57,8 @@ const showParagraphChallenge = computed(
 )
 
 const returnToLists = () => {
-  router.push({ name: 'provided-lists' })
   store.setActiveId(null)
+  router.push({ name: 'provided-lists' })
 }
 
 // NOTE onActivated instead of onMounted, as onMounted doesn't trigger

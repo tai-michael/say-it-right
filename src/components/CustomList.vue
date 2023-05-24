@@ -1,18 +1,10 @@
 <template>
   <ion-page>
-    <!-- <ion-button @click="returnToLists" class="back-button"><GoBack /> Return to lists</ion-button> -->
-    <ion-button
-      @click="returnToLists"
-      class="back-button"
-      router-direction="back"
-      :router-animation="customLeaveAnimation"
-      ><GoBack
-    /></ion-button>
-    <ion-content class="ion-padding">
-      <div v-if="isLoading" class="loading-container">
-        <LoadingDots />
-      </div>
+    <TheHeader :show-back-button="true" @back-button-clicked="returnToLists"
+      >Custom List {{ list.listNumber }}</TheHeader
+    >
 
+    <ion-content class="ion-padding">
       <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
       <WordChallenge
@@ -41,21 +33,17 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
+import TheHeader from '@/components/TheHeader.vue'
 import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
 import WordChallenge from '@/components/WordChallenge.vue'
-import LoadingDots from '@/components/LoadingDots.vue'
-import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
-import { IonButton, IonPage, IonContent } from '@ionic/vue'
+import { IonPage, IonContent } from '@ionic/vue'
 // import TransitionAppear from '@/components/transitions/TransitionFade.vue'
-import GoBack from '@/assets/icons/go-back.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCustomListsStore } from '@/stores/index.ts'
 const route = useRoute()
 const router = useRouter()
 const store = useCustomListsStore()
 // const componentKey = 'custom-list'
-
-const isLoading = ref(false)
 
 // @ts-ignore
 const list = ref<List>({})
@@ -68,8 +56,8 @@ const showParagraphChallenge = computed(
 )
 
 const returnToLists = () => {
-  router.push({ name: 'custom-lists' })
   store.setActiveId(null)
+  router.push({ name: 'custom-lists' })
 }
 
 // NOTE onActivated instead of onMounted, as onMounted doesn't trigger for keep-alive components
@@ -85,7 +73,6 @@ onMounted(() => {
         // TODO this stuff is different from ProvidedList's; consider why
         const listNum = store.activeList.listNumber
         list.value = store.allLists[listNum - 1]
-        isLoading.value = false
       } else {
         // router.push('/custom-lists')
         router.push('/not-found')
@@ -110,17 +97,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 main {
   height: 100%;
-}
-.back-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: 0.3rem;
-  padding: 2px 4px;
-  width: 80px;
-}
-.back-button:hover {
-  cursor: pointer;
 }
 
 .message {

@@ -1,14 +1,20 @@
 <template>
   <ion-page>
+    <TheHeader :is-loading="isLoading">Custom Lists</TheHeader>
     <ion-content class="ion-padding">
       <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
         <div class="input-container">
           <label>Insert up to 7 words separated by spaces or commas:</label>
-          <div class="input-field">
-            <input placeholder="e.g. urban thin kindly" v-model="wordsInput" autofocus />
-            <ion-button v-if="isLoading" :disabled="isLoading"><LoadingDots /></ion-button>
-            <ion-button v-else type="submit" :disabled="isLoading" class="color">Submit</ion-button>
-          </div>
+          <ion-searchbar
+            :search-icon="createOutline"
+            placeholder="  e.g. urban thin kindly"
+            v-model="wordsInput"
+            :disabled="isLoading"
+            autofocus
+            animated="true"
+          ></ion-searchbar>
+          <!-- <ion-button v-if="isLoading" ><LoadingDots /></ion-button>
+          <ion-button v-else type="submit" :disabled="isLoading" class="color">Submit</ion-button> -->
         </div>
       </form>
 
@@ -45,25 +51,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import LoadingDots from '@/components/LoadingDots.vue'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import { computed, onMounted, ref, provide } from 'vue'
+import { createOutline } from 'ionicons/icons'
+// import LoadingDots from '@/components/LoadingDots.vue'
+import TheHeader from '@/components/TheHeader.vue'
 import ListLinks from '@/components/ListLinks.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import type { List } from '@/stores/modules/types/List'
 import { useCustomListsStore } from '@/stores/index.ts'
 import { useRoute, useRouter } from 'vue-router'
-import {
-  // IonApp,
-  IonContent,
-  IonPage,
-  IonButton,
-  // IonRouterOutlet,
-  IonRow,
-  IonHeader,
-  IonToolbar,
-  IonTitle
-} from '@ionic/vue'
+import { IonContent, IonPage, IonSearchbar } from '@ionic/vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -74,6 +71,7 @@ const anyListStarted = computed(() => store.inProgressLists.length || store.comp
 
 const wordsInput = ref('')
 const isLoading = ref(false)
+// provide('isLoading', isLoading)
 const submissionError = ref('')
 const newlyCreatedParagraph = ref('')
 
@@ -100,6 +98,7 @@ const submitWords = async (words: string) => {
     createNewListFromWords(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
 
     await store.updateListsInFirestore()
+    wordsInput.value = ''
     isLoading.value = false
     // REVIEW uncomment below if I want to automatically direct the user to a list right after generating it
     // router.push({ params: { id: store.allLists.length } })
