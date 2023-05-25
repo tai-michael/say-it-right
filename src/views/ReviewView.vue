@@ -1,12 +1,88 @@
 <template>
-  <!-- <h4>Review</h4> -->
   <ion-page>
-    <ion-content class="ion-padding">
+    <TheHeader>
+      <template #list>
+        <ion-item
+          :button="true"
+          :detail="false"
+          id="select-words"
+          class="tw-max-h-8 tw-p-0 tw-m-0 tw-flex !tw-justify-center !tw-items-center tw-text-center"
+        >
+          <ion-label class="tw-max-h-8 tw-p-0 tw-m-0">Choose a word to review</ion-label>
+        </ion-item>
+      </template>
+    </TheHeader>
+
+    <ion-content>
+      <!-- <div class="word-drill"> -->
+      <keep-alive>
+        <WordDrill
+          :word="selectedWord"
+          v-if="selectedWord"
+          :key="selectedWord.word"
+          @related-word-clicked="handleRelatedWordClicked"
+        />
+      </keep-alive>
+      <!-- </div> -->
+    </ion-content>
+
+    <ion-modal trigger="select-words" ref="modal">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="end">
+            <ion-button @click="modal.$el.dismiss()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Choose a word</ion-title>
+          <!-- <ion-buttons slot="end">
+            <ion-button @click="confirmChanges()">Done</ion-button>
+          </ion-buttons> -->
+        </ion-toolbar>
+        <ion-toolbar>
+          <ion-searchbar type="text" v-model="search" placeholder="Search"></ion-searchbar>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content color="light" class="ion-padding">
+        <!-- <main> -->
+
+        <div class="tw-pl-4 tw-pr-4">
+          <!-- <label for="sort">Sort by:</label> -->
+          <select
+            id="sort"
+            v-model="sortOrder"
+            :inset="true"
+            class="tw-w-full tw-h-8 tw-rounded-lg"
+          >
+            <option value="createdDesc">Newest</option>
+            <option value="createdAsc">Oldest</option>
+            <option value="wordAsc">A to Z</option>
+            <option value="wordDesc">Z to A</option>
+            <option value="sourceCustom">Source: Custom list words</option>
+            <option value="sourceProvided">Source: Provided list words</option>
+          </select>
+        </div>
+
+        <ion-list id="modal-list" :inset="true" class="tw-mt-2">
+          <ion-item
+            v-for="(word, index) in sortedWords"
+            :key="index"
+            @click="selectWord(word)"
+            :class="{ highlighted: word === selectedWord }"
+          >
+            <span>{{ word.word }}</span>
+          </ion-item>
+        </ion-list>
+        <!-- <hr v-if="Object.keys(allWords).length < 10" /> -->
+        <!-- </main> -->
+      </ion-content>
+    </ion-modal>
+
+    <!-- This will be for desktop view -->
+    <!-- <ion-content class="ion-padding">
       <div class="review">
-        <input type="text" v-model="search" placeholder="Search for word" />
         <main>
           <div class="list-container">
-            <!-- <label for="sort">Sort by:</label> -->
+             <label for="sort">Sort by:</label>
             <select id="sort" v-model="sortOrder" class="sort-container">
               <option value="createdDesc">Most recent</option>
               <option value="createdAsc">Least recent</option>
@@ -29,7 +105,6 @@
             </ul>
           </div>
           <hr v-if="Object.keys(allWords).length < 10" />
-          <!-- <div class="word-drill"> -->
           <keep-alive>
             <WordDrill
               :word="selectedWord"
@@ -38,16 +113,29 @@
               @related-word-clicked="handleRelatedWordClicked"
             />
           </keep-alive>
-          <!-- </div> -->
         </main>
       </div>
-    </ion-content>
+    </ion-content> -->
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue'
+import TheHeader from '@/components/TheHeader.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import {
+  IonHeader,
+  IonToolbar,
+  IonPage,
+  IonSearchbar,
+  IonContent,
+  IonModal,
+  IonItem,
+  IonTitle,
+  IonLabel,
+  IonButtons,
+  IonButton
+} from '@ionic/vue'
 import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import WordDrill from '@/components/WordDrill.vue'
@@ -59,10 +147,12 @@ const store = useReviewStore()
 const { allWords } = storeToRefs(store)
 
 const selectedWord: Ref<WordObject | null> = ref(null)
+const modal = ref(null)
 
 const selectWord = (word: WordObject) => {
   selectedWord.value = word
   localStorage.setItem('selectedWord', word.word)
+  if (modal.value) modal.value.$el.dismiss()
 }
 
 const handleRelatedWordClicked = (relatedWord: string) => {
@@ -121,13 +211,10 @@ input {
   flex-direction: column;
   row-gap: 0.5rem;
 }
-.sort-container {
-  width: 100%;
-}
 
 main {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 h4 {
@@ -142,9 +229,9 @@ h4 {
   li {
     list-style: none;
   }
-  height: 280px;
+  // height: 280px;
   overflow-y: auto;
-  min-width: 140px;
+  // min-width: 140px;
 
   &__row {
     cursor: pointer;
@@ -154,7 +241,7 @@ h4 {
   }
 }
 .highlighted {
-  background-color: rgb(51, 51, 51);
+  background-color: rgb(112, 247, 130);
 }
 
 ::-webkit-scrollbar {

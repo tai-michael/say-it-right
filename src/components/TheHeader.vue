@@ -1,6 +1,7 @@
 <template>
   <ion-header>
     <ion-toolbar>
+      <slot name="list"></slot>
       <button
         v-if="props.showBackButton"
         @click="$emit('back-button-clicked')"

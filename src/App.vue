@@ -1,7 +1,10 @@
 <template>
   <ion-app>
     <ion-content class="ion-padding">
-      <div v-if="fetchingBackendData" class="flex justify-center items-center min-h-screen">
+      <div
+        v-if="fetchingBackendData"
+        class="tw-flex tw-justify-center tw-items-center tw-min-h-screen"
+      >
         <LoadingSpinner />
       </div>
       <div v-else>
