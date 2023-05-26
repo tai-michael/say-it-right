@@ -5,7 +5,7 @@
         <ion-item
           :button="true"
           :detail="false"
-          id="word-selection"
+          id="word-selection-list"
           class="tw-max-h-8 tw-ml-10 tw-flex tw-text-center tw-rounded-lg"
         >
           <ion-label class="tw-max-h-8 tw-p-0 tw-m-0">Choose a word to review</ion-label>
@@ -14,7 +14,6 @@
     </TheHeader>
 
     <ion-content>
-      <!-- <div class="word-drill"> -->
       <keep-alive>
         <WordDrill
           :word="selectedWord"
@@ -23,10 +22,9 @@
           @related-word-clicked="handleRelatedWordClicked"
         />
       </keep-alive>
-      <!-- </div> -->
     </ion-content>
 
-    <ion-modal trigger="word-selection" ref="modal">
+    <ion-modal trigger="word-selection-list" ref="modal">
       <WordSelectModal
         @dismiss-modal="modal.$el.dismiss()"
         @select-word="setWord"

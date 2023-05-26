@@ -33,6 +33,7 @@ main {
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem 2rem; // row-gap, column-gap
   // list-style: none;
+  margin: 0 0.5rem;
   @media (min-width: 1024px) {
     grid-template-columns: repeat(6, 1fr);
   }
@@ -43,7 +44,7 @@ main {
 }
 .list-link:hover {
   // background-color: transparent;
-  color: white;
+  color: rgb(136, 136, 136);
 }
 
 .list-link-content {

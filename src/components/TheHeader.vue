@@ -8,6 +8,8 @@
         router-direction="back"
         :router-animation="customLeaveAnimation"
         slot="start"
+        class="tw-bg-transparent"
+        :class="{ 'dark-mode': isDarkModeEnabled }"
       >
         <ion-icon :icon="arrowBack"></ion-icon>
       </button>
@@ -19,6 +21,7 @@
   </ion-header>
 </template>
 <script setup lang="ts">
+import { inject } from 'vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
 import { IonHeader, IonToolbar, IonTitle, IonIcon, IonProgressBar } from '@ionic/vue'
@@ -31,6 +34,7 @@ const props = defineProps({
     type: Boolean
   }
 })
+const isDarkModeEnabled = inject('isDarkModeEnabled')
 </script>
 <style lang="scss" scoped>
 ion-toolbar {
@@ -46,5 +50,9 @@ button {
     height: 24px;
     width: 24px;
   }
+}
+
+button.dark-mode {
+  color-scheme: dark;
 }
 </style>

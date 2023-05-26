@@ -5,19 +5,14 @@
         <ion-buttons slot="end">
           <ion-button @click="emit('dismissModal')">Cancel</ion-button>
         </ion-buttons>
-        <ion-title>Choose a word</ion-title>
-        <!-- <ion-buttons slot="end">
-        <ion-button @click="confirmChanges()">Done</ion-button>
-      </ion-buttons> -->
+        <!-- <ion-title>Choose a word</ion-title> -->
       </ion-toolbar>
       <ion-toolbar>
         <ion-searchbar type="text" v-model="search" placeholder="Search"></ion-searchbar>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content color="light" class="ion-padding">
-      <!-- <main> -->
-
+    <ion-content class="ion-padding">
       <div class="tw-pl-4 tw-pr-4">
         <!-- <label for="sort">Sort by:</label> -->
         <select id="sort" v-model="sortOrder" :inset="true" class="tw-w-full tw-h-8 tw-rounded-lg">
@@ -35,18 +30,19 @@
           v-for="(word, index) in sortedWords"
           :key="index"
           @click="chooseWord(word)"
-          :class="{ highlighted: word === selectedWord }"
+          :class="{
+            'highlighted-light': word.word === props.selectedWord.word && !isDarkModeEnabled,
+            'highlighted-dark': word.word === props.selectedWord.word && isDarkModeEnabled
+          }"
         >
           <span>{{ word.word }}</span>
         </ion-item>
       </ion-list>
-      <!-- <hr v-if="Object.keys(allWords).length < 10" /> -->
-      <!-- </main> -->
     </ion-content>
   </ion-page>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import {
@@ -65,6 +61,8 @@ const props = defineProps({
   allWords: { type: Array as PropType<WordObject[]>, required: true },
   selectedWord: { type: Object as PropType<WordObject> }
 })
+
+const isDarkModeEnabled = inject('isDarkModeEnabled')
 
 const emit = defineEmits(['selectWord', 'dismissModal'])
 const chooseWord = (word: WordObject) => {
@@ -97,8 +95,13 @@ const sortedWords = computed(() => {
 })
 </script>
 
-<style lange="scss" scoped>
-.highlighted {
-  background-color: rgb(112, 247, 130);
+<style lang="scss" scoped>
+.highlighted-light {
+  --ion-item-background: rgb(230, 230, 230) !important;
+  // padding: 0 0.5rem;
+  // margin-left: 0.5rem;
+}
+.highlighted-dark {
+  --ion-item-background: rgb(54, 54, 54) !important;
 }
 </style>

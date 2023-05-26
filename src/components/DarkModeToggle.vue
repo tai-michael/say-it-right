@@ -2,17 +2,18 @@
   <ion-icon
     @click="toggleDarkMode"
     :icon="isDarkModeEnabled ? sunny : moon"
-    class="text-xl pr-1 cursor-pointer"
+    class="tw-text-xl tw-pr-1 tw-cursor-pointer"
     aria-label="Switch between dark and light mode"
   ></ion-icon>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 import { IonIcon } from '@ionic/vue'
 import { moon, sunny } from 'ionicons/icons'
 
-const isDarkModeEnabled = ref(false)
+// const isDarkModeEnabled = ref(false)
+const isDarkModeEnabled = useLocalStorage('dark-mode', false)
 
 const toggleDarkMode = () => {
   isDarkModeEnabled.value = !isDarkModeEnabled.value

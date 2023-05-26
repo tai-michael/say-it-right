@@ -16,10 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch, watchEffect } from 'vue'
+import { computed, ref, onMounted, provide, watch, watchEffect } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import DarkModeToggle from './components/DarkModeToggle.vue'
+import { useLocalStorage } from '@vueuse/core'
 import { IonApp, IonContent, IonRouterOutlet } from '@ionic/vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user } from '@/firebaseInit'
@@ -50,6 +51,9 @@ const activeListNum = computed(
 
 const fetchingBackendData = ref(false)
 const signedIn = ref(false)
+
+const isDarkModeEnabled = useLocalStorage('dark-mode', false)
+provide('isDarkModeEnabled', isDarkModeEnabled)
 
 const globalListsQuery = computed(() => collection(db, 'global_provided_lists'))
 const globalLists = useFirestore(globalListsQuery)
@@ -147,6 +151,9 @@ onMounted(async () => {
       console.error(`Failed to get user data from firestore: ${err}`)
       fetchingBackendData.value = false
     }
+  }
+  if (isDarkModeEnabled.value) {
+    document.body.classList.add('dark')
   }
 })
 </script>
