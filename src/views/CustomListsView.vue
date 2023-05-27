@@ -55,7 +55,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, provide } from 'vue'
 import { createOutline } from 'ionicons/icons'
-// import LoadingDots from '@/components/LoadingDots.vue'
 import TheHeader from '@/components/TheHeader.vue'
 import ListLinks from '@/components/ListLinks.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
@@ -73,7 +72,6 @@ const anyListStarted = computed(() => store.inProgressLists.length || store.comp
 
 const wordsInput = ref('')
 const isLoading = ref(false)
-// provide('isLoading', isLoading)
 const submissionError = ref('')
 const newlyCreatedParagraph = ref('')
 

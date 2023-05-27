@@ -11,7 +11,7 @@
         class="bg-transparent"
         :class="{ 'dark-mode': isDarkModeEnabled }"
       >
-        <ion-icon :icon="arrowBack"></ion-icon>
+        <ion-icon :icon="chevronBackOutline"></ion-icon>
       </button>
       <ion-title><slot></slot></ion-title>
       <!-- <ion-title><slot name="title">Default Title</slot></ion-title> -->
@@ -25,7 +25,7 @@ import { inject } from 'vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
 import { IonHeader, IonToolbar, IonTitle, IonIcon, IonProgressBar } from '@ionic/vue'
-import { arrowBack } from 'ionicons/icons'
+import { chevronBackOutline } from 'ionicons/icons'
 const props = defineProps({
   showBackButton: {
     type: Boolean

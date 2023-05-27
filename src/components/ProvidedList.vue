@@ -1,45 +1,11 @@
 <template>
-  <ion-page>
-    <TheHeader :show-back-button="true" @back-button-clicked="returnToLists"
-      >Provided List {{ list.listNumber }}</TheHeader
-    >
-
-    <ion-content class="ion-padding">
-      <TransitionAppear>
-        <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
-
-        <WordChallenge
-          v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
-          :list="list"
-        />
-      </TransitionAppear>
-
-      <div v-if="list.status === 'LIST_COMPLETE'" class="message">
-        <div class="message__text">
-          <span>You have completed this list.</span>
-          <span>
-            We recommend that you <RouterLink to="/review" class="link">Review</RouterLink> the
-            words you've learned!</span
-          >
-          <span
-            >You can also <span @click="returnToLists" class="link">Try</span> a different
-            list</span
-          >
-          <span>Or you can <span @click="store.resetList" class="link">Retry</span> this list</span>
-        </div>
-      </div>
-    </ion-content>
-  </ion-page>
+  <ListContent :list="list" route-name="provided-lists" />
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
-import { IonPage, IonContent } from '@ionic/vue'
-import TheHeader from '@/components/TheHeader.vue'
-import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
-import WordChallenge from '@/components/WordChallenge.vue'
-import TransitionAppear from '@/components/transitions/TransitionFade.vue'
+import ListContent from '@/components/ListContent.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 const route = useRoute()
@@ -50,24 +16,12 @@ const store = useProvidedListsStore()
 // @ts-ignore
 const list = ref<List>({})
 
-const showParagraphChallenge = computed(
-  () =>
-    Object.keys(list.value).length &&
-    (list.value.status === 'LIST_NOT_STARTED' || list.value.status === 'PARAGRAPH_RECORDING_ENDED')
-)
-
-const returnToLists = () => {
-  store.setActiveId(null)
-  router.push({ name: 'provided-lists' })
-}
-
 // NOTE onActivated instead of onMounted, as onMounted doesn't trigger
 // for keep-alive components
 onMounted(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
-      // NOTE get direct reactive store reference to the list
-      // means computed properties wouldn't have to rerender needlessly
+      // NOTE creates direct reactive store reference to the list so that computed properties wouldn't have to rerender needlessly when user navigates to a different view
       if (store.activeList) {
         const listIndex = +route.params.id - 1
         list.value = store.allLists[listIndex]
