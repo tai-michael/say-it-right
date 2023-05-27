@@ -13,9 +13,9 @@
     </ion-header>
 
     <ion-content class="ion-padding">
-      <div class="tw-pl-4 tw-pr-4">
+      <div class="pl-4 pr-4">
         <!-- <label for="sort">Sort by:</label> -->
-        <select id="sort" v-model="sortOrder" :inset="true" class="tw-w-full tw-h-8 tw-rounded-lg">
+        <select id="sort" v-model="sortOrder" :inset="true" class="h-8 w-full rounded-lg">
           <option value="createdDesc">Newest</option>
           <option value="createdAsc">Oldest</option>
           <option value="wordAsc">A to Z</option>
@@ -25,15 +25,12 @@
         </select>
       </div>
 
-      <ion-list id="modal-list" :inset="true" class="tw-mt-2">
+      <ion-list id="modal-list" :inset="true" class="mt-2">
         <ion-item
           v-for="(word, index) in sortedWords"
           :key="index"
           @click="chooseWord(word)"
-          :class="{
-            'highlighted-light': word.word === props.selectedWord.word && !isDarkModeEnabled,
-            'highlighted-dark': word.word === props.selectedWord.word && isDarkModeEnabled
-          }"
+          :class="getHighlightedClass(word.word)"
         >
           <span>{{ word.word }}</span>
         </ion-item>
@@ -61,8 +58,6 @@ const props = defineProps({
   allWords: { type: Array as PropType<WordObject[]>, required: true },
   selectedWord: { type: Object as PropType<WordObject> }
 })
-
-const isDarkModeEnabled = inject('isDarkModeEnabled')
 
 const emit = defineEmits(['selectWord', 'dismissModal'])
 const chooseWord = (word: WordObject) => {
@@ -93,15 +88,21 @@ const sortedWords = computed(() => {
       return words.sort((a, b) => b.created - a.created)
   }
 })
+
+const isDarkModeEnabled = inject('isDarkModeEnabled')
+const getHighlightedClass = (word: string) => {
+  if (word === props.selectedWord.word && !isDarkModeEnabled.value) return 'highlighted-light'
+  if (word === props.selectedWord.word && isDarkModeEnabled.value) return 'highlighted-dark'
+}
 </script>
 
 <style lang="scss" scoped>
 .highlighted-light {
-  --ion-item-background: rgb(230, 230, 230) !important;
+  --ion-item-background: rgb(236, 236, 236);
   // padding: 0 0.5rem;
   // margin-left: 0.5rem;
 }
 .highlighted-dark {
-  --ion-item-background: rgb(54, 54, 54) !important;
+  --ion-item-background: rgb(51, 50, 50);
 }
 </style>

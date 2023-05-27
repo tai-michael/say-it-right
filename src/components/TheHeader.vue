@@ -8,7 +8,7 @@
         router-direction="back"
         :router-animation="customLeaveAnimation"
         slot="start"
-        class="tw-bg-transparent"
+        class="bg-transparent"
         :class="{ 'dark-mode': isDarkModeEnabled }"
       >
         <ion-icon :icon="arrowBack"></ion-icon>

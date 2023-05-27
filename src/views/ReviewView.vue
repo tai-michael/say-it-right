@@ -6,9 +6,9 @@
           :button="true"
           :detail="false"
           id="word-selection-list"
-          class="tw-max-h-8 tw-ml-10 tw-flex tw-text-center tw-rounded-lg"
+          class="ml-10 flex max-h-8 rounded-lg text-center"
         >
-          <ion-label class="tw-max-h-8 tw-p-0 tw-m-0">Choose a word to review</ion-label>
+          <ion-label class="m-0 max-h-8 p-0">Choose a word to review</ion-label>
         </ion-item>
       </template>
     </TheHeader>

@@ -24,20 +24,22 @@
 
       <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-      <div v-if="store.inProgressLists.length" class="lists">
+      <div v-if="store.inProgressLists.length" class="flex">
         <label>In Progress</label>
         <ListLinks :lists="store.inProgressLists" :routeName="'custom-list'" />
       </div>
 
-      <div v-if="store.untouchedLists.length" class="lists">
-        <hr v-if="store.inProgressLists.length" />
-        <label v-if="anyListStarted">New</label>
+      <div v-if="store.untouchedLists.length" class="mb-7 flex flex-col">
+        <!-- <hr v-if="store.inProgressLists.length" /> -->
+        <ion-item-divider class="mb-3"
+          ><ion-label v-if="anyListStarted">New</ion-label></ion-item-divider
+        >
         <ListLinks :lists="store.untouchedLists" :routeName="'custom-list'" />
       </div>
 
-      <div v-if="store.completedLists.length" class="lists">
-        <hr v-if="store.inProgressLists.length || store.untouchedLists.length" />
-        <label>Completed</label>
+      <div v-if="store.completedLists.length" class="flex flex-col">
+        <!-- <hr v-if="store.inProgressLists.length || store.untouchedLists.length" /> -->
+        <ion-item-divider class="mb-3"><ion-label>Completed</ion-label></ion-item-divider>
         <ListLinks :lists="store.completedLists" :routeName="'custom-list'" />
       </div>
     </ion-content>
@@ -60,7 +62,7 @@ import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerat
 import type { List } from '@/stores/modules/types/List'
 import { useCustomListsStore } from '@/stores/index.ts'
 import { useRoute, useRouter } from 'vue-router'
-import { IonContent, IonPage, IonSearchbar } from '@ionic/vue'
+import { IonContent, IonPage, IonSearchbar, IonItemDivider, IonLabel } from '@ionic/vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -142,7 +144,7 @@ onMounted(() => {
 hr {
   border: none;
   height: 0.5px;
-  background-color: var(--vt-c-text-dark-2); // gray
+  background-color: rgba(78, 78, 78, 0.623); // gray
 }
 
 // ion-button {
@@ -158,7 +160,7 @@ ion-toolbar {
 
 .submit-form {
   display: flex;
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
   // row-gap: 2rem;
 
   .input-container {
@@ -199,16 +201,6 @@ ion-toolbar {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.lists {
-  display: flex;
-  flex-direction: column;
-
-  label {
-    padding-bottom: 1rem;
-    font-weight: 700;
-  }
 }
 
 hr {

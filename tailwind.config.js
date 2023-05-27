@@ -4,7 +4,7 @@ module.exports = {
   corePlugins: {
     preflight: false
   },
-  prefix: 'tw-',
+  // prefix: 'tw-',
   darkMode: 'media', // or 'media' or 'class'
   theme: {
     extend: {}
