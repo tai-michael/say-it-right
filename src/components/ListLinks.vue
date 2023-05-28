@@ -3,7 +3,7 @@
     <div v-for="list of props.lists" :key="list.listNumber" style="position: relative">
       <ion-card>
         <RouterLink
-          :to="{ name: props.routeName, params: { id: list.listNumber } }"
+          :to="{ name: props.destinationRoute, params: { id: list.listNumber } }"
           class="list-link"
         >
           <ion-card-content class="p-0">
@@ -20,7 +20,7 @@
         </RouterLink>
       </ion-card>
       <ion-icon
-        v-if="props.routeName === 'custom-list'"
+        v-if="props.destinationRoute === 'custom-list'"
         :icon="ellipsisHorizontal"
         class="text-xl mr-2"
         style="position: absolute; top: 26px; right: 8px; padding: 0.7rem"
@@ -33,15 +33,15 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
-import ListChecked from '@/assets/icons/list-checked.vue'
-import ListRegular from '@/assets/icons/list-regular.vue'
 import { ellipsisHorizontal } from 'ionicons/icons'
-import { IonCard, IonToolbar, IonCardContent, IonTitle, IonLabel, IonIcon } from '@ionic/vue'
+import { IonCard, IonToolbar, IonCardContent, IonTitle, IonIcon } from '@ionic/vue'
 // import { listOutline } from 'ionicons/icons'
+// import ListChecked from '@/assets/icons/list-checked.vue'
+// import ListRegular from '@/assets/icons/list-regular.vue'
 
 const props = defineProps({
   lists: { type: Array as PropType<List[]>, required: true },
-  routeName: { type: String, required: true }
+  destinationRoute: { type: String, required: true }
 })
 
 const testFn = () => {
@@ -73,7 +73,7 @@ main {
     // max-height: 600px;
     // overflow: auto;
     margin-left: 1rem;
-    row-gap: 1rem;
+    row-gap: 0.5rem;
 
     &::-webkit-scrollbar {
       width: 14px;
@@ -101,7 +101,7 @@ main {
   grid-gap: 4px 16px;
   padding-left: 0.5rem;
   padding-right: 1.7rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.2rem;
   // overflow might be unnecessary
   overflow: hidden;
   text-overflow: ellipsis;

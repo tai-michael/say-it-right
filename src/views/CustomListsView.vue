@@ -1,10 +1,11 @@
 <template>
   <ion-page>
     <TheHeader :is-loading="isLoading">Custom Lists</TheHeader>
+
     <ion-content class="ion-padding">
       <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
         <div class="input-container">
-          <label>Insert up to 7 words separated by spaces or commas:</label>
+          <label>Enter up to 7 words separated by spaces or commas:</label>
           <ion-searchbar
             :search-icon="createOutline"
             placeholder="  e.g. urban thin kindly"
@@ -18,30 +19,9 @@
         </div>
       </form>
 
-      <!-- <div v-if="isLoading" class="loading-container">
-      <LoadingDots />
-    </div> -->
-
       <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-      <div v-if="store.inProgressLists.length" class="flex">
-        <label>In Progress</label>
-        <ListLinks :lists="store.inProgressLists" :routeName="'custom-list'" />
-      </div>
-
-      <div v-if="store.untouchedLists.length" class="mb-7 flex flex-col">
-        <!-- <hr v-if="store.inProgressLists.length" /> -->
-        <ion-item-divider class="mb-3"
-          ><ion-label v-if="anyListStarted">New</ion-label></ion-item-divider
-        >
-        <ListLinks :lists="store.untouchedLists" :routeName="'custom-list'" />
-      </div>
-
-      <div v-if="store.completedLists.length" class="flex flex-col">
-        <!-- <hr v-if="store.inProgressLists.length || store.untouchedLists.length" /> -->
-        <ion-item-divider class="mb-3"><ion-label>Completed</ion-label></ion-item-divider>
-        <ListLinks :lists="store.completedLists" :routeName="'custom-list'" />
-      </div>
+      <ListCategories :route-name="route.name" />
     </ion-content>
 
     <!-- <router-view v-slot="{ Component }">
@@ -53,22 +33,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, provide } from 'vue'
+import { onMounted, ref } from 'vue'
 import { createOutline } from 'ionicons/icons'
 import TheHeader from '@/components/TheHeader.vue'
-import ListLinks from '@/components/ListLinks.vue'
+import ListCategories from '@/components/ListCategories.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import type { List } from '@/stores/modules/types/List'
 import { useCustomListsStore } from '@/stores/index.ts'
 import { useRoute, useRouter } from 'vue-router'
-import { IonContent, IonPage, IonSearchbar, IonItemDivider, IonLabel } from '@ionic/vue'
+import { IonContent, IonPage, IonSearchbar } from '@ionic/vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const store = useCustomListsStore()
-
-const anyListStarted = computed(() => store.inProgressLists.length || store.completedLists.length)
 
 const wordsInput = ref('')
 const isLoading = ref(false)
@@ -111,7 +89,8 @@ const submitWords = async (words: string) => {
 
 const createNewListFromWords = (words: string[], allLists: List[], paragraph: string) => {
   const newListObject: List = {
-    listNumber: allLists.length + 1,
+    // NOTE if a list gets deleted, this works better than 'allLists.length + 1'
+    listNumber: allLists[allLists.length - 1].listNumber + 1,
     status: 'LIST_NOT_STARTED',
     paragraph: paragraph,
     words: {}
@@ -139,11 +118,12 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-hr {
-  border: none;
-  height: 0.5px;
-  background-color: rgba(78, 78, 78, 0.623); // gray
-}
+// hr {
+//   border: none;
+//   height: 0.5px;
+//   background-color: rgba(78, 78, 78, 0.623); // gray
+//   margin: 1.5rem 0;
+// }
 
 // ion-button {
 //   --background: #93e9be;
@@ -158,7 +138,8 @@ ion-toolbar {
 
 .submit-form {
   display: flex;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+
   // row-gap: 2rem;
 
   .input-container {
@@ -170,22 +151,22 @@ ion-toolbar {
       margin-bottom: 0.5rem;
     }
   }
-  .input-field {
-    display: flex;
+  // .input-field {
+  //   display: flex;
 
-    input {
-      height: 35px;
-      padding: 0.5rem;
-      width: 100%;
-    }
+  //   input {
+  //     height: 35px;
+  //     padding: 0.5rem;
+  //     width: 100%;
+  //   }
 
-    button {
-      width: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
+  //   button {
+  //     width: 100px;
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: center;
+  //   }
+  // }
 }
 
 .error {
@@ -194,14 +175,16 @@ ion-toolbar {
   color: var(--orange-color);
 }
 
-.loading-container {
-  margin: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+// .loading-container {
+//   margin: 1.5rem;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
 
-hr {
-  margin: 1.5rem 0;
+@media (min-width: 1024px) {
+  .submit-form {
+    margin-bottom: 3rem;
+  }
 }
 </style>

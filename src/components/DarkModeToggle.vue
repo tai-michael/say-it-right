@@ -2,7 +2,7 @@
   <ion-icon
     @click="toggleDarkMode"
     :icon="isDarkModeEnabled ? sunny : moon"
-    class="cursor-pointer pr-1 text-xl"
+    class="cursor-pointer text-lg"
     aria-label="Switch between dark and light mode"
   ></ion-icon>
 </template>

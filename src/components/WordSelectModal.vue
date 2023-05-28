@@ -31,6 +31,7 @@
           :key="index"
           @click="chooseWord(word)"
           :class="getHighlightedClass(word.word)"
+          lines="full"
         >
           <span>{{ word.word }}</span>
         </ion-item>
@@ -103,6 +104,6 @@ const getHighlightedClass = (word: string) => {
   // margin-left: 0.5rem;
 }
 .highlighted-dark {
-  --ion-item-background: rgb(51, 50, 50);
+  --ion-item-background: rgb(58, 58, 58);
 }
 </style>

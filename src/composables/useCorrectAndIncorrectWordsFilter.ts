@@ -1,5 +1,5 @@
-import { useProvidedListsStore } from '@/stores'
 import { useCustomListsStore } from '@/stores'
+import { useProvidedListsStore } from '@/stores'
 import { metaphone } from 'metaphone'
 
 export default function (

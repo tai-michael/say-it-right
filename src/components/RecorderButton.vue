@@ -10,6 +10,7 @@
     >
       <!-- {{ isRecording ? 'Recording' : 'Hold to talk' }} -->
       <MicIcon />
+      <!-- <ion-icon :icon="micOutline"></ion-icon> -->
     </button>
   </div>
 </template>
@@ -18,6 +19,8 @@
 import { computed, onDeactivated, ref } from 'vue'
 import { client, microphone } from '@/speechlyInit.ts'
 import MicIcon from '@/assets/icons/mic.vue'
+// import { IonIcon } from '@ionic/vue'
+// import { micOutline } from 'ionicons/icons'
 
 // const props = defineProps({
 //   challengeStatus: { type: String, required: true }
@@ -126,13 +129,11 @@ client.onSegmentChange((segment) => {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none !important;
     // -webkit-user-select: none !important;
+    transition: transform 0.3s;
 
     &:active {
       background-color: #e96c6c;
-      transition: 0.3s;
-      width: 85px;
-      height: 85px;
-      transition: width 0.3s, height 0.3s;
+      transform: scale(1.1);
     }
   }
 }

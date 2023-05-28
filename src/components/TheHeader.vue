@@ -15,7 +15,8 @@
       </button>
       <ion-title><slot></slot></ion-title>
       <!-- <ion-title><slot name="title">Default Title</slot></ion-title> -->
-      <DarkModeToggle slot="end" />
+      <DarkModeToggle slot="end" class="mr-3" />
+      <ion-icon :icon="ellipsisHorizontalSharp" slot="end" class="text-2xl pr-2"></ion-icon>
       <ion-progress-bar type="indeterminate" v-if="isLoading"></ion-progress-bar>
     </ion-toolbar>
   </ion-header>
@@ -25,7 +26,7 @@ import { inject } from 'vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
 import { IonHeader, IonToolbar, IonTitle, IonIcon, IonProgressBar } from '@ionic/vue'
-import { chevronBackOutline } from 'ionicons/icons'
+import { chevronBackOutline, ellipsisHorizontalSharp } from 'ionicons/icons'
 const props = defineProps({
   showBackButton: {
     type: Boolean
