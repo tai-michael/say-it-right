@@ -33,7 +33,6 @@
 import { computed, inject } from 'vue'
 import ListLinks from '@/components/ListLinks.vue'
 import { useCustomListsStore } from '@/stores'
-
 import { useProvidedListsStore } from '@/stores/index.ts'
 import { IonAccordionGroup, IonAccordion, IonItem, IonLabel } from '@ionic/vue'
 const props = defineProps({

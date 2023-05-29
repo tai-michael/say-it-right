@@ -142,6 +142,11 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     updateListsInFirestore()
   }
 
+  const deleteList = (listNum: number) => {
+    const index = allLists.value.findIndex((list) => list.listNumber === listNum)
+    allLists.value.splice(index, 1)
+  }
+
   const downloadAndExtractGlobalProvidedLists = async () => {
     const querySnapshot = await getDocs(collection(db, 'global_provided_lists'))
     const lists = querySnapshot.docs.map((doc) => doc.data())
@@ -212,6 +217,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     setParagraph,
     setTestedWordsObj,
     resetList,
+    deleteList,
     downloadAndExtractGlobalProvidedLists
     // setFinalParagraphTranscript,
   }

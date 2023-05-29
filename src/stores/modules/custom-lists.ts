@@ -128,6 +128,11 @@ export const useCustomListsStore = defineStore('customLists', () => {
     updateListsInFirestore()
   }
 
+  const deleteList = (listNum: number) => {
+    const index = allLists.value.findIndex((list) => list.listNumber === listNum)
+    allLists.value.splice(index, 1)
+  }
+
   // const setFinalParagraphTranscript = (transcript) => {
   //   activeList.value.finalParagraphTranscript = transcript
   //   console.log(activeList.value.finalParagraphTranscript)
@@ -153,7 +158,8 @@ export const useCustomListsStore = defineStore('customLists', () => {
     updateListsInFirestore,
     setParagraph,
     setTestedWordsObj,
-    resetList
+    resetList,
+    deleteList
     // setFinalParagraphTranscript,
   }
 })

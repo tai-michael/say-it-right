@@ -1,40 +1,80 @@
 <template>
   <main>
-    <div v-for="list of props.lists" :key="list.listNumber" style="position: relative">
-      <ion-card>
-        <RouterLink
-          :to="{ name: props.destinationRoute, params: { id: list.listNumber } }"
-          class="list-link"
+    <ion-card v-for="list of props.lists" :key="list.listNumber">
+      <RouterLink
+        :to="{ name: props.destinationRoute, params: { id: list.listNumber } }"
+        class="list-link"
+      >
+        <ion-card-content class="p-0">
+          <ion-toolbar class="flex justify-center items-center">
+            <ion-title class="font-thin">List {{ list.listNumber }}</ion-title>
+            <ion-icon
+              v-if="props.destinationRoute === 'custom-list'"
+              :icon="ellipsisHorizontal"
+              class="text-xl mr-2"
+              slot="end"
+              @click.prevent="openPopover($event, list)"
+            ></ion-icon>
+          </ion-toolbar>
+          <ul class="list">
+            <li class="list__row" v-for="(entry, index) in list.words" :key="index">
+              <!-- {{ entry.word }}: {{ entry.count }} -->
+              <span>{{ index }}</span>
+            </li>
+          </ul>
+        </ion-card-content>
+      </RouterLink>
+    </ion-card>
+    <ion-popover
+      :is-open="popoverOpen"
+      :event="event"
+      @didDismiss="popoverOpen = false"
+      :dismiss-on-select="true"
+      @click="deleteList"
+    >
+      <ion-content class="ion-padding flex items-center text-center">
+        <ion-icon :icon="trashOutline" class="text-xl mr-3 align-middle"></ion-icon
+        ><span class="align-middle mr-3">Delete list</span>
+        <!-- <ion-list>
+        <ion-item :button="true" :detail="false">
+          <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon>Delete list</ion-item
         >
-          <ion-card-content class="p-0">
-            <ion-toolbar class="flex justify-center items-center">
-              <ion-title class="font-thin">List {{ list.listNumber }}</ion-title>
-            </ion-toolbar>
-            <ul class="list">
-              <li class="list__row" v-for="(entry, index) in list.words" :key="index">
-                <!-- {{ entry.word }}: {{ entry.count }} -->
-                <span>{{ index }}</span>
-              </li>
-            </ul>
-          </ion-card-content>
-        </RouterLink>
-      </ion-card>
-      <ion-icon
-        v-if="props.destinationRoute === 'custom-list'"
-        :icon="ellipsisHorizontal"
-        class="text-xl mr-2"
-        style="position: absolute; top: 26px; right: 8px; padding: 0.7rem"
-        @click="testFn()"
-      ></ion-icon>
-    </div>
+        <ion-item :button="true" :detail="false">Option 2</ion-item>
+                  <ion-item :button="true" id="nested-trigger">More options...</ion-item>
+
+                  <ion-popover :dismiss-on-select="true" side="end">
+                    <ion-content>
+                      <ion-list>
+                        <ion-item :button="true" :detail="false">Nested option</ion-item>
+                      </ion-list>
+                    </ion-content>
+                  </ion-popover>
+        </ion-list> -->
+      </ion-content>
+    </ion-popover>
   </main>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
-import { ellipsisHorizontal } from 'ionicons/icons'
-import { IonCard, IonToolbar, IonCardContent, IonTitle, IonIcon } from '@ionic/vue'
+import { ellipsisHorizontal, trashOutline } from 'ionicons/icons'
+import {
+  IonCard,
+  IonToolbar,
+  IonCardContent,
+  IonTitle,
+  IonIcon,
+  IonContent,
+  IonPopover
+  // IonList,
+  // IonItem,
+} from '@ionic/vue'
+import { db, user } from '@/firebaseInit'
+import { doc, updateDoc, arrayRemove } from 'firebase/firestore'
+import { useCustomListsStore } from '@/stores'
+import { useProvidedListsStore } from '@/stores/index.ts'
 // import { listOutline } from 'ionicons/icons'
 // import ListChecked from '@/assets/icons/list-checked.vue'
 // import ListRegular from '@/assets/icons/list-regular.vue'
@@ -44,8 +84,36 @@ const props = defineProps({
   destinationRoute: { type: String, required: true }
 })
 
-const testFn = () => {
-  console.log('clicked')
+const store =
+  props.destinationRoute === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
+
+const deleteList = async () => {
+  try {
+    if (!user.value) throw new Error('User not defined')
+
+    const usersDocRef = doc(db, 'users', user.value.uid)
+    await updateDoc(usersDocRef, {
+      customLists: arrayRemove(selectedList.value)
+    })
+
+    store.deleteList(selectedList.value.listNumber)
+    console.log('list deleted')
+    // trigger the toast
+  } catch (err) {
+    console.log(`Failed to delete list ${err}`)
+  }
+}
+
+// @ts-ignore
+const selectedList = ref<List>({})
+
+const popoverOpen = ref(false)
+const event = ref(null)
+
+const openPopover = (e, list: List) => {
+  event.value = e
+  selectedList.value = list
+  popoverOpen.value = true
 }
 </script>
 
