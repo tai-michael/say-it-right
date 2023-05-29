@@ -37,6 +37,7 @@ auth.onAuthStateChanged((user) => {
       // remove mode option to use platform-specific styles
       .use(IonicVue, {
         mode: 'ios'
+        // mode: 'md'
       })
       .use(router)
     app.mount('#app')

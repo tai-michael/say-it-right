@@ -26,15 +26,15 @@
       </RouterLink>
     </ion-card>
     <ion-popover
-      :is-open="popoverOpen"
+      :is-open="isPopoverOpen"
       :event="event"
-      @didDismiss="popoverOpen = false"
+      @didDismiss="isPopoverOpen = false"
       :dismiss-on-select="true"
       @click="deleteList"
     >
       <ion-content class="ion-padding flex items-center text-center">
-        <ion-icon :icon="trashOutline" class="text-xl mr-3 align-middle"></ion-icon
-        ><span class="align-middle mr-3">Delete list</span>
+        <ion-icon :icon="trashOutline" class="text-xl mr-2 align-middle"></ion-icon
+        ><span class="align-middle mr-4">Delete list</span>
         <!-- <ion-list>
         <ion-item :button="true" :detail="false">
           <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon>Delete list</ion-item
@@ -87,6 +87,8 @@ const props = defineProps({
 const store =
   props.destinationRoute === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 
+const emit = defineEmits(['listDeleted'])
+
 const deleteList = async () => {
   try {
     if (!user.value) throw new Error('User not defined')
@@ -98,6 +100,7 @@ const deleteList = async () => {
 
     store.deleteList(selectedList.value.listNumber)
     console.log('list deleted')
+    emit('listDeleted')
     // trigger the toast
   } catch (err) {
     console.log(`Failed to delete list ${err}`)
@@ -107,13 +110,13 @@ const deleteList = async () => {
 // @ts-ignore
 const selectedList = ref<List>({})
 
-const popoverOpen = ref(false)
+const isPopoverOpen = ref(false)
 const event = ref(null)
 
 const openPopover = (e, list: List) => {
   event.value = e
   selectedList.value = list
-  popoverOpen.value = true
+  isPopoverOpen.value = true
 }
 </script>
 

@@ -21,7 +21,14 @@
 
       <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-      <ListCategories :route-name="route.name" />
+      <ListCategories :route-name="route.name" @list-deleted="setToastOpen(true)" />
+
+      <ion-toast
+        :is-open="isToastOpen"
+        message="List deleted"
+        :duration="3000"
+        @didDismiss="setToastOpen(false)"
+      ></ion-toast>
     </ion-content>
 
     <!-- <router-view v-slot="{ Component }">
@@ -41,7 +48,7 @@ import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerat
 import type { List } from '@/stores/modules/types/List'
 import { useCustomListsStore } from '@/stores/index.ts'
 import { useRoute, useRouter } from 'vue-router'
-import { IonContent, IonPage, IonSearchbar } from '@ionic/vue'
+import { IonContent, IonPage, IonSearchbar, IonToast } from '@ionic/vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -107,6 +114,11 @@ const createNewListFromWords = (words: string[], allLists: List[], paragraph: st
   allLists.push(newListObject)
 }
 
+const isToastOpen = ref(false)
+const setToastOpen = (state: boolean) => {
+  isToastOpen.value = state
+}
+
 onMounted(() => {
   // check if any parameters were passed in the URL
   if (route.params.catchAll) {
@@ -134,6 +146,11 @@ ion-toolbar {
   --display: flex;
   --justify-content: space-between;
   // --background: red;
+}
+
+ion-toast {
+  --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+  font-size: 15px;
 }
 
 .submit-form {

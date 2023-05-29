@@ -5,7 +5,11 @@
         <ion-label>In Progress</ion-label>
       </ion-item>
       <div slot="content">
-        <ListLinks :lists="store.inProgressLists" :destination-route="destinationRoute" />
+        <ListLinks
+          :lists="store.inProgressLists"
+          :destination-route="destinationRoute"
+          @listDeleted="$emit('listDeleted')"
+        />
       </div>
     </ion-accordion>
     <ion-accordion value="new" v-if="store.untouchedLists.length">
@@ -15,7 +19,11 @@
         }}</ion-label>
       </ion-item>
       <div slot="content">
-        <ListLinks :lists="store.untouchedLists" :destination-route="destinationRoute" />
+        <ListLinks
+          :lists="store.untouchedLists"
+          :destination-route="destinationRoute"
+          @listDeleted="$emit('listDeleted')"
+        />
       </div>
     </ion-accordion>
     <ion-accordion value="completed" v-if="store.completedLists.length">
@@ -23,7 +31,11 @@
         <ion-label>Completed</ion-label>
       </ion-item>
       <div slot="content">
-        <ListLinks :lists="store.completedLists" :destination-route="destinationRoute" />
+        <ListLinks
+          :lists="store.completedLists"
+          :destination-route="destinationRoute"
+          @listDeleted="$emit('listDeleted')"
+        />
       </div>
     </ion-accordion>
   </ion-accordion-group>

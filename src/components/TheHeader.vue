@@ -42,6 +42,7 @@ ion-toolbar {
   display: flex;
   max-height: 44px;
   padding: 0 0.2rem;
+  align-items: center;
 }
 button {
   display: flex;
