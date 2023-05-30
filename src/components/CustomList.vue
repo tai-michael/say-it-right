@@ -20,11 +20,11 @@ const list = ref<List>({})
 onMounted(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
-      // NOTE creates direct reactive store reference to the list so that computed properties wouldn't have to rerender needlessly when user navigates to a different view
       if (store.activeList) {
-        // TODO this stuff is different from ProvidedList's; consider why
-        const listNum = store.activeList.listNumber
-        list.value = store.allLists[listNum - 1]
+        // NOTE creates direct reactive store reference to the list so that computed properties wouldn't have to rerender needlessly when user navigates to a different view. Update: might not be applicable anymore.
+        // const listNum = store.activeList.listNumber
+        // list.value = store.allLists[listNum - 1]
+        list.value = store.activeList
       } else {
         // router.push('/custom-lists')
         router.push('/not-found')

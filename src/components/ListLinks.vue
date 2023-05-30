@@ -32,7 +32,7 @@
       :dismiss-on-select="true"
       @click="deleteList"
     >
-      <ion-content class="ion-padding flex items-center text-center">
+      <ion-content class="ion-padding flex items-center text-center cursor-pointer">
         <ion-icon :icon="trashOutline" class="text-xl mr-2 align-middle"></ion-icon
         ><span class="align-middle mr-4">Delete list</span>
         <!-- <ion-list>
@@ -136,15 +136,19 @@ main {
   display: flex;
   flex-wrap: wrap;
   // align-content: flex-start; /* Optional: aligns items to the top */
-  // justify-content: center;
+  justify-content: center;
+  margin-top: 0.75rem;
   margin-bottom: 1.5rem;
   column-gap: 1rem;
 
   @media all and (min-width: 648px) {
     // max-height: 600px;
     // overflow: auto;
-    margin-left: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 2.5rem;
+    margin-left: 2.5rem;
     row-gap: 0.5rem;
+    justify-content: left;
 
     &::-webkit-scrollbar {
       width: 14px;
@@ -154,6 +158,10 @@ main {
       background-color: var(--ion-color-light, #f4f5f8);
     }
   }
+}
+
+ion-card {
+  margin: 12px 12px;
 }
 
 .list-link {

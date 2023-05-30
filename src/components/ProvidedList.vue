@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import ListContent from '@/components/ListContent.vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -21,10 +21,11 @@ const list = ref<List>({})
 onMounted(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
-      // NOTE creates direct reactive store reference to the list so that computed properties wouldn't have to rerender needlessly when user navigates to a different view
       if (store.activeList) {
-        const listIndex = +route.params.id - 1
-        list.value = store.allLists[listIndex]
+        // NOTE creates direct reactive store reference to the list so that computed properties wouldn't have to rerender needlessly when user navigates to a different view. Update: might not be applicable anymore.
+        // const listIndex = +route.params.id - 1
+        // list.value = store.allLists[listIndex]
+        list.value = store.activeList
       } else {
         router.push('/not-found')
         return
