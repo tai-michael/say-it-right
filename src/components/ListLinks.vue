@@ -161,7 +161,8 @@ main {
 }
 
 ion-card {
-  margin: 12px 12px;
+  // default: 24px 16px
+  margin: 18px 12px;
 }
 
 .list-link {
@@ -177,7 +178,7 @@ ion-card {
   width: 280px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-gap: 4px 16px;
+  grid-gap: 4px 12px;
   padding-left: 0.5rem;
   padding-right: 1.7rem;
   padding-bottom: 0.2rem;

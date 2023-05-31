@@ -12,7 +12,8 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
+    <ion-content class="ion-padding" ref="content">
+      <div ref="scrollTrigger" class="scroll-trigger"></div>
       <div class="pl-4 pr-4">
         <!-- <label for="sort">Sort by:</label> -->
         <select id="sort" v-model="sortOrder" :inset="true" class="h-8 w-full rounded-lg">
@@ -37,12 +38,20 @@
         </ion-item>
       </ion-list>
     </ion-content>
+
+    <ion-fab vertical="bottom" horizontal="end">
+      <!-- For the button to work in this modal, v-if="isVisible" needs to be placed below rather than in ion-fab above -->
+      <ion-fab-button @click="scrollToTop" aria-label="Scroll to top" v-if="isVisible">
+        <ion-icon :icon="arrowUp"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
   </ion-page>
 </template>
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+import { computed, inject, ref, onMounted, onUnmounted } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
+import { arrowUp } from 'ionicons/icons'
 import {
   IonHeader,
   IonToolbar,
@@ -53,8 +62,12 @@ import {
   IonItem,
   IonTitle,
   IonButtons,
-  IonButton
+  IonButton,
+  IonFab,
+  IonFabButton,
+  IonIcon
 } from '@ionic/vue'
+
 const props = defineProps({
   allWords: { type: Array as PropType<WordObject[]>, required: true },
   selectedWord: { type: Object as PropType<WordObject> }
@@ -95,6 +108,28 @@ const getHighlightedClass = (word: string) => {
   if (word === props.selectedWord.word && !isDarkModeEnabled.value) return 'highlighted-light'
   if (word === props.selectedWord.word && isDarkModeEnabled.value) return 'highlighted-dark'
 }
+
+const isVisible = ref(false)
+const scrollTrigger = ref<HTMLElement | null>(null)
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    isVisible.value = !entry.isIntersecting
+  })
+})
+
+const content = ref<HTMLElement | null>(null)
+const scrollToTop = () => {
+  // @ts-ignore
+  if (content.value) content.value.$el.scrollToTop(500)
+}
+
+onMounted(() => {
+  if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
+})
+
+onUnmounted(() => {
+  observer.disconnect()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -103,7 +138,13 @@ const getHighlightedClass = (word: string) => {
   // padding: 0 0.5rem;
   // margin-left: 0.5rem;
 }
-.highlighted-dark {
-  --ion-item-background: rgb(58, 58, 58);
+.scroll-trigger {
+  height: 800px;
+  position: absolute;
+  visibility: hidden;
+
+  @media (min-width: 1024px) {
+    height: 2400px;
+  }
 }
 </style>

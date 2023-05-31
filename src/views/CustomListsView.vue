@@ -2,7 +2,9 @@
   <ion-page>
     <TheHeader :is-loading="isLoading">Custom Lists</TheHeader>
 
-    <ion-content class="ion-padding">
+    <ion-content class="ion-padding" ref="content">
+      <div ref="scrollTrigger" class="scroll-trigger"></div>
+
       <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
         <div class="input-container">
           <label>Enter up to 7 words separated by spaces or commas:</label>
@@ -31,6 +33,11 @@
       ></ion-toast>
     </ion-content>
 
+    <ion-fab vertical="bottom" horizontal="end">
+      <ion-fab-button @click="scrollToTop" aria-label="Scroll to top" v-if="isVisible">
+        <ion-icon :icon="arrowUp"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
     <!-- <router-view v-slot="{ Component }">
       <keep-alive>
         <component :is="Component" :key="$route.fullPath"></component>
@@ -40,7 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { createOutline } from 'ionicons/icons'
 import TheHeader from '@/components/TheHeader.vue'
 import ListCategories from '@/components/ListCategories.vue'
@@ -48,7 +56,18 @@ import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerat
 import type { List } from '@/stores/modules/types/List'
 import { useCustomListsStore } from '@/stores/index.ts'
 import { useRoute, useRouter } from 'vue-router'
-import { IonContent, IonPage, IonSearchbar, IonToast } from '@ionic/vue'
+import {
+  IonContent,
+  IonPage,
+  IonSearchbar,
+  IonToast,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  onIonViewWillEnter,
+  onIonViewWillLeave
+} from '@ionic/vue'
+import { arrowUp } from 'ionicons/icons'
 
 const route = useRoute()
 const router = useRouter()
@@ -119,6 +138,20 @@ const setToastOpen = (state: boolean) => {
   isToastOpen.value = state
 }
 
+const isVisible = ref(false)
+const scrollTrigger = ref<HTMLElement | null>(null)
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    isVisible.value = !entry.isIntersecting
+  })
+})
+
+const content = ref<HTMLElement | null>(null)
+const scrollToTop = () => {
+  // @ts-ignore
+  if (content.value) content.value.$el.scrollToTop(500)
+}
+
 onMounted(() => {
   // check if any parameters were passed in the URL
   if (route.params.catchAll) {
@@ -126,6 +159,15 @@ onMounted(() => {
     console.log(route.params)
     router.push('/not-found')
   }
+})
+
+// NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals
+onIonViewWillEnter(() => {
+  if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
+})
+
+onIonViewWillLeave(() => {
+  observer.disconnect()
 })
 </script>
 
@@ -190,6 +232,16 @@ ion-toast {
   margin-top: 1rem;
   // color: hsl(2, 65%, 54%);
   color: var(--orange-color);
+}
+
+.scroll-trigger {
+  height: 800px;
+  position: absolute;
+  visibility: hidden;
+
+  @media (min-width: 1024px) {
+    height: 2400px;
+  }
 }
 
 // .loading-container {
