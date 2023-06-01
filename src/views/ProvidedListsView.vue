@@ -17,7 +17,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import TheHeader from '@/components/TheHeader.vue'
 import ListCategories from '@/components/ListCategories.vue'
 import {
@@ -27,9 +26,7 @@ import {
   IonFabButton,
   IonIcon,
   onIonViewWillEnter,
-  onIonViewDidEnter,
-  onIonViewWillLeave,
-  onIonViewDidLeave
+  onIonViewWillLeave
 } from '@ionic/vue'
 import { arrowUp } from 'ionicons/icons'
 import { useRoute, useRouter } from 'vue-router'

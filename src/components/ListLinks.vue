@@ -30,7 +30,7 @@
       :event="event"
       @didDismiss="isPopoverOpen = false"
       :dismiss-on-select="true"
-      @click="deleteList"
+      @click="setAlertOpen(true)"
     >
       <ion-content class="ion-padding flex items-center text-center cursor-pointer">
         <ion-icon :icon="trashOutline" class="text-xl mr-2 align-middle"></ion-icon
@@ -52,6 +52,13 @@
         </ion-list> -->
       </ion-content>
     </ion-popover>
+    <ion-alert
+      :is-open="isAlertOpen"
+      class="custom-alert"
+      header="Are you sure?"
+      :buttons="alertButtons"
+      @didDismiss="setAlertOpen(false)"
+    ></ion-alert>
   </main>
 </template>
 
@@ -67,7 +74,8 @@ import {
   IonTitle,
   IonIcon,
   IonContent,
-  IonPopover
+  IonPopover,
+  IonAlert
   // IonList,
   // IonItem,
 } from '@ionic/vue'
@@ -87,8 +95,32 @@ const props = defineProps({
 const store =
   props.destinationRoute === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 
-const emit = defineEmits(['listDeleted'])
+// @ts-ignore
+const selectedList = ref<List>({})
 
+const isPopoverOpen = ref(false)
+const event = ref(null)
+const openPopover = (e, list: List) => {
+  event.value = e
+  selectedList.value = list
+  isPopoverOpen.value = true
+}
+
+const isAlertOpen = ref(false)
+const setAlertOpen = (state: boolean) => {
+  isAlertOpen.value = state
+}
+const alertButtons = [
+  {
+    text: 'Cancel'
+  },
+  {
+    text: 'Delete',
+    handler: () => deleteList()
+  }
+]
+
+const emit = defineEmits(['listDeleted'])
 const deleteList = async () => {
   try {
     if (!user.value) throw new Error('User not defined')
@@ -105,18 +137,6 @@ const deleteList = async () => {
   } catch (err) {
     console.log(`Failed to delete list ${err}`)
   }
-}
-
-// @ts-ignore
-const selectedList = ref<List>({})
-
-const isPopoverOpen = ref(false)
-const event = ref(null)
-
-const openPopover = (e, list: List) => {
-  event.value = e
-  selectedList.value = list
-  isPopoverOpen.value = true
 }
 </script>
 
@@ -200,5 +220,9 @@ ul {
 }
 li {
   // margin-bottom: 4px; /* Increase the gap between rows */
+}
+
+ion-alert.custom-alert {
+  // --backdrop-opacity: 0.7;
 }
 </style>

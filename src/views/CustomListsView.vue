@@ -48,7 +48,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { createOutline } from 'ionicons/icons'
 import TheHeader from '@/components/TheHeader.vue'
 import ListCategories from '@/components/ListCategories.vue'
