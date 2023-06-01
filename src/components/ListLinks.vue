@@ -81,8 +81,7 @@ import {
 } from '@ionic/vue'
 import { db, user } from '@/firebaseInit'
 import { doc, updateDoc, arrayRemove } from 'firebase/firestore'
-import { useCustomListsStore } from '@/stores'
-import { useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 // import { listOutline } from 'ionicons/icons'
 // import ListChecked from '@/assets/icons/list-checked.vue'
 // import ListRegular from '@/assets/icons/list-regular.vue'
@@ -95,9 +94,9 @@ const props = defineProps({
 const store =
   props.destinationRoute === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 
+// Code for popover
 // @ts-ignore
 const selectedList = ref<List>({})
-
 const isPopoverOpen = ref(false)
 const event = ref(null)
 const openPopover = (e, list: List) => {
@@ -106,6 +105,7 @@ const openPopover = (e, list: List) => {
   isPopoverOpen.value = true
 }
 
+// Code for alert
 const isAlertOpen = ref(false)
 const setAlertOpen = (state: boolean) => {
   isAlertOpen.value = state
@@ -218,10 +218,10 @@ ul {
   font-size: 16px;
   padding-bottom: 2px;
 }
+
 li {
   // margin-bottom: 4px; /* Increase the gap between rows */
 }
-
 ion-alert.custom-alert {
   // --backdrop-opacity: 0.7;
 }

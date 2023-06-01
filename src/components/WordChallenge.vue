@@ -100,8 +100,7 @@ import useHardWordLogger from '@/composables/useHardWordLogger'
 import useDelay from '@/composables/useDelay'
 import { metaphone } from 'metaphone'
 import { useRoute } from 'vue-router'
-import { useProvidedListsStore } from '@/stores/index.ts'
-import { useCustomListsStore } from '@/stores/index.ts'
+import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import { storeToRefs } from 'pinia'
 
 const route = useRoute()

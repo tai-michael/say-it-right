@@ -45,8 +45,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import ListLinks from '@/components/ListLinks.vue'
-import { useCustomListsStore } from '@/stores'
-import { useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import { IonAccordionGroup, IonAccordion, IonItem, IonLabel } from '@ionic/vue'
 const props = defineProps({
   routeName: { type: String, required: true }

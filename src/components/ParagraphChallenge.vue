@@ -82,9 +82,7 @@ import useCheckIfWordsExistInReview from '@/composables/useCheckIfWordsExistInRe
 import useWordObjCreator from '@/composables/useWordObjCreator'
 import { useRoute } from 'vue-router'
 import type { WordSource } from '@/stores/modules/types/Review'
-import { useProvidedListsStore } from '@/stores/index.ts'
-import { useCustomListsStore } from '@/stores/index.ts'
-import { useReviewStore } from '@/stores/index.ts'
+import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
 
 const route = useRoute()
 const store = route.name === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
