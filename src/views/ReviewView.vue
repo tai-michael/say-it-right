@@ -28,6 +28,7 @@
       <WordSelectModal
         @dismiss-modal="modal.$el.dismiss()"
         @select-word="setWord"
+        @word-deleted="handleWordDeleted"
         :selected-word="selectedWord"
         :all-words="allWords"
       />
@@ -87,6 +88,7 @@ import WordDrill from '@/components/WordDrill.vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 // import type { WordObject } from '@/stores/modules/types/Review'
 import { useReviewStore } from '@/stores/index.ts'
+// import { useArrayFind } from '@vueuse/core'
 
 const store = useReviewStore()
 const { allWords } = storeToRefs(store)
@@ -104,9 +106,17 @@ const setWord = (word: WordObject) => {
   selectedWord.value = word
 }
 
+const handleWordDeleted = (wordName: string) => {
+  if (wordName !== selectedWord.value?.word) return
+
+  localStorage.setItem('selectedWord', '')
+  selectedWord.value = null
+}
+
 onMounted(() => {
   const word = localStorage.getItem('selectedWord')
   if (word) {
+    // selectedWord.value = useArrayFind(allWords.value, w => w.word === word)
     selectedWord.value = allWords.value.find((w) => w.word === word) ?? null
   }
 })

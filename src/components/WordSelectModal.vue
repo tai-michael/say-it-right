@@ -30,14 +30,70 @@
         <ion-item
           v-for="(word, index) in sortedWords"
           :key="index"
-          @click="chooseWord(word)"
+          button
+          detail="false"
           :class="getHighlightedClass(word.word)"
           lines="full"
         >
-          <span>{{ word.word }}</span>
+          <ion-icon
+            :icon="starOutline"
+            class="text-xl m-0 p-3 pl-4"
+            slot="start"
+            @click="testFn"
+          ></ion-icon>
+
+          <span @click="chooseWord(word)" class="flex items-center w-full h-full">{{
+            word.word
+          }}</span>
+
+          <ion-icon
+            :icon="trashOutline"
+            class="text-lg m-0 p-3 pr-4"
+            slot="end"
+            @click="handleDeleteAlert(word)"
+          ></ion-icon>
         </ion-item>
+
+        <!-- <RecycleScroller
+          class="scroller"
+          :items="sortedWords"
+          :item-size="43"
+          key-field="word"
+          v-slot="{ item }"
+        >
+          <ion-item :class="getHighlightedClass(item.word)" lines="full">
+            <span @click="chooseWord(item)" class="w-full">{{ item.word }}</span>
+            <ion-icon
+              :icon="starOutline"
+              class="text-xl mr-2"
+              slot="end"
+              @click="testFn"
+            ></ion-icon>
+            <ion-icon
+              :icon="trashOutline"
+              class="text-xl"
+              slot="end"
+              @click="deleteWord(item)"
+            ></ion-icon>
+          </ion-item>
+        </RecycleScroller> -->
       </ion-list>
     </ion-content>
+
+    <ion-alert
+      :is-open="isAlertOpen"
+      class="custom-alert"
+      header="Are you sure?"
+      :buttons="alertButtons"
+      @didDismiss="setAlertOpen(false)"
+    ></ion-alert>
+
+    <ion-toast
+      :is-open="isToastOpen"
+      message="Word deleted"
+      :duration="3000"
+      @didDismiss="setToastOpen(false)"
+    ></ion-toast>
 
     <ion-fab vertical="bottom" horizontal="end">
       <!-- For the button to work in this modal, v-if="isVisible" needs to be placed below rather than in ion-fab above -->
@@ -51,7 +107,7 @@
 import { computed, inject, ref, onMounted, onUnmounted } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
-import { arrowUp } from 'ionicons/icons'
+import { arrowUp, starOutline, trashOutline } from 'ionicons/icons'
 import {
   IonHeader,
   IonToolbar,
@@ -65,18 +121,73 @@ import {
   IonButton,
   IonFab,
   IonFabButton,
-  IonIcon
+  IonIcon,
+  IonAlert,
+  IonToast
 } from '@ionic/vue'
+import { db, user } from '@/firebaseInit'
+import { doc, updateDoc, arrayRemove } from 'firebase/firestore'
+import { useReviewStore } from '@/stores/index.ts'
+
+const store = useReviewStore()
 
 const props = defineProps({
   allWords: { type: Array as PropType<WordObject[]>, required: true },
   selectedWord: { type: Object as PropType<WordObject> }
 })
 
-const emit = defineEmits(['selectWord', 'dismissModal'])
+const emit = defineEmits(['selectWord', 'dismissModal', 'wordDeleted'])
 const chooseWord = (word: WordObject) => {
   emit('selectWord', word)
   emit('dismissModal')
+}
+
+const testFn = () => {
+  console.log('test')
+}
+
+// @ts-expect-error
+const wordToDelete = ref<WordObject>({})
+const isAlertOpen = ref(false)
+
+const setAlertOpen = (state: boolean) => {
+  isAlertOpen.value = state
+}
+const handleDeleteAlert = (word: WordObject) => {
+  setAlertOpen(true)
+  wordToDelete.value = word
+}
+const alertButtons = [
+  {
+    text: 'Cancel'
+  },
+  {
+    text: 'Delete',
+    handler: () => deleteWord(wordToDelete.value)
+  }
+]
+
+const deleteWord = async (word: WordObject) => {
+  try {
+    if (!user.value) throw new Error('User not defined')
+
+    const usersDocRef = doc(db, 'users', user.value.uid)
+    await updateDoc(usersDocRef, {
+      review: arrayRemove(word)
+    })
+
+    store.deleteWord(word.word)
+    console.log('word deleted')
+    emit('wordDeleted', word.word)
+    setToastOpen(true)
+  } catch (err) {
+    console.log(`Failed to delete word ${err}`)
+  }
+}
+
+const isToastOpen = ref(false)
+const setToastOpen = (state: boolean) => {
+  isToastOpen.value = state
 }
 
 const search = ref('')
@@ -105,6 +216,7 @@ const sortedWords = computed(() => {
 
 const isDarkModeEnabled = inject('isDarkModeEnabled')
 const getHighlightedClass = (word: string) => {
+  if (!props.selectedWord) return ''
   if (word === props.selectedWord.word && !isDarkModeEnabled.value) return 'highlighted-light'
   if (word === props.selectedWord.word && isDarkModeEnabled.value) return 'highlighted-dark'
 }
@@ -133,10 +245,21 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+ion-item {
+  margin-left: 0px !important;
+  padding-left: 0px !important;
+  --background-hover: rgb(236, 236, 236);
+  --padding-start: 0px;
+  --inner-padding-end: 0px;
+}
+
 .highlighted-light {
   --ion-item-background: rgb(236, 236, 236);
   // padding: 0 0.5rem;
   // margin-left: 0.5rem;
+}
+.highlighted-dark {
+  --ion-item-background: rgb(58, 58, 58);
 }
 .scroll-trigger {
   height: 800px;
@@ -147,4 +270,9 @@ onUnmounted(() => {
     height: 2400px;
   }
 }
+
+// for virtual scroll
+// .scroller {
+//   height: 100%;
+// }
 </style>
