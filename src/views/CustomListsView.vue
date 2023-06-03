@@ -23,7 +23,7 @@
 
       <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-      <ListCategories :route-name="route.name" @list-deleted="setToastOpen(true)" />
+      <ListGroups :route-name="route.name" @list-deleted="setToastOpen(true)" />
 
       <ion-toast
         :is-open="isToastOpen"
@@ -50,7 +50,7 @@
 import { ref, onMounted } from 'vue'
 import { createOutline } from 'ionicons/icons'
 import TheHeader from '@/components/TheHeader.vue'
-import ListCategories from '@/components/ListCategories.vue'
+import ListGroups from '@/components/ListGroups.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import type { List } from '@/stores/modules/types/List'
 import { useCustomListsStore } from '@/stores/index.ts'

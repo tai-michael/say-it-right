@@ -32,9 +32,9 @@
       :dismiss-on-select="true"
       @click="setAlertOpen(true)"
     >
-      <ion-content class="ion-padding flex items-center text-center cursor-pointer">
-        <ion-icon :icon="trashOutline" class="text-xl mr-2 align-middle"></ion-icon
-        ><span class="align-middle mr-4">Delete list</span>
+      <div class="flex items-center text-center justify-center cursor-pointer pb-4 pt-4">
+        <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
+        ><span class="mr-2">Delete list</span>
         <!-- <ion-list>
         <ion-item :button="true" :detail="false">
           <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon>Delete list</ion-item
@@ -50,7 +50,7 @@
                     </ion-content>
                   </ion-popover>
         </ion-list> -->
-      </ion-content>
+      </div>
     </ion-popover>
     <ion-alert
       :is-open="isAlertOpen"
@@ -224,5 +224,9 @@ li {
 }
 ion-alert.custom-alert {
   // --backdrop-opacity: 0.7;
+}
+
+ion-popover {
+  --width: 160px;
 }
 </style>

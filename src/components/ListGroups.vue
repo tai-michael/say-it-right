@@ -5,7 +5,7 @@
         <ion-label>In Progress</ion-label>
       </ion-item>
       <div slot="content">
-        <ListLinks
+        <ListCards
           :lists="store.inProgressLists"
           :destination-route="destinationRoute"
           @listDeleted="$emit('listDeleted')"
@@ -20,7 +20,7 @@
         <ion-label v-if="anyListStarted">Not Started</ion-label>
       </ion-item>
       <div slot="content">
-        <ListLinks
+        <ListCards
           :lists="store.untouchedLists"
           :destination-route="destinationRoute"
           @listDeleted="$emit('listDeleted')"
@@ -32,7 +32,7 @@
         <ion-label>Completed</ion-label>
       </ion-item>
       <div slot="content">
-        <ListLinks
+        <ListCards
           :lists="store.completedLists"
           :destination-route="destinationRoute"
           @listDeleted="$emit('listDeleted')"
@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import ListLinks from '@/components/ListLinks.vue'
+import ListCards from '@/components/ListCards.vue'
 import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import { IonAccordionGroup, IonAccordion, IonItem, IonLabel } from '@ionic/vue'
 const props = defineProps({

@@ -4,7 +4,7 @@
 
     <ion-content class="ion-padding" ref="content">
       <div ref="scrollTrigger" class="scroll-trigger"></div>
-      <ListCategories :route-name="route.name" />
+      <ListGroups :route-name="route.name" />
     </ion-content>
 
     <ion-fab vertical="bottom" horizontal="end">
@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
-import ListCategories from '@/components/ListCategories.vue'
+import ListGroups from '@/components/ListGroups.vue'
 import {
   IonContent,
   IonPage,
