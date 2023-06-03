@@ -10,6 +10,7 @@ export default function (word: string, sentences: string[], source: WordSource) 
     attemptsSuccessful: 0,
     created: Date.now(),
     status: 'TESTING_WORD_ONLY',
+    bookmarked: false,
     source
   }
   console.log(wordObj)

@@ -21,6 +21,7 @@
           <option value="createdAsc">Oldest</option>
           <option value="wordAsc">A to Z</option>
           <option value="wordDesc">Z to A</option>
+          <option value="bookmarked">Bookmarked</option>
           <option value="sourceCustom">Source: Custom list words</option>
           <option value="sourceProvided">Source: Provided list words</option>
         </select>
@@ -32,14 +33,14 @@
           :key="index"
           button
           detail="false"
-          :class="getHighlightedClass(word.word)"
+          :class="getSelectedWordHighlight(word.word)"
           lines="full"
         >
           <ion-icon
-            :icon="starOutline"
+            :icon="`${word.bookmarked ? star : starOutline}`"
             class="text-xl m-0 p-3 pl-4"
             slot="start"
-            @click="testFn"
+            @click="handleBookmark(word)"
           ></ion-icon>
 
           <span @click="chooseWord(word)" class="flex items-center w-full h-full">{{
@@ -61,7 +62,7 @@
           key-field="word"
           v-slot="{ item }"
         >
-          <ion-item :class="getHighlightedClass(item.word)" lines="full">
+          <ion-item :class="getSelectedWordHighlight(item.word)" lines="full">
             <span @click="chooseWord(item)" class="w-full">{{ item.word }}</span>
             <ion-icon
               :icon="starOutline"
@@ -107,7 +108,7 @@
 import { computed, inject, ref, onMounted, onUnmounted } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
-import { arrowUp, starOutline, trashOutline } from 'ionicons/icons'
+import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
 import {
   IonHeader,
   IonToolbar,
@@ -142,12 +143,13 @@ const chooseWord = (word: WordObject) => {
   emit('dismissModal')
 }
 
-const testFn = () => {
-  console.log('test')
+const handleBookmark = (word: WordObject) => {
+  store.toggleBookmark(word)
+  store.updateReviewInFirestore()
+  console.log('Word bookmarked')
 }
 
-// @ts-expect-error
-const wordToDelete = ref<WordObject>({})
+const wordToDelete = ref<WordObject | null>(null)
 const isAlertOpen = ref(false)
 
 const setAlertOpen = (state: boolean) => {
@@ -163,6 +165,7 @@ const alertButtons = [
   },
   {
     text: 'Delete',
+    // @ts-ignore
     handler: () => deleteWord(wordToDelete.value)
   }
 ]
@@ -180,6 +183,7 @@ const deleteWord = async (word: WordObject) => {
     console.log('word deleted')
     emit('wordDeleted', word.word)
     setToastOpen(true)
+    wordToDelete.value = null
   } catch (err) {
     console.log(`Failed to delete word ${err}`)
   }
@@ -203,6 +207,9 @@ const sortedWords = computed(() => {
       return words.sort((a, b) => a.word.localeCompare(b.word))
     case 'wordDesc':
       return words.sort((a, b) => b.word.localeCompare(a.word))
+    // REVIEW consider sorting these by alphabetical order rather than creation date
+    case 'bookmarked':
+      return words.filter((word) => word.bookmarked === true)
     case 'sourceCustom':
       return words.filter((word) => word.source === 'custom-list')
     case 'sourceProvided':
@@ -215,10 +222,10 @@ const sortedWords = computed(() => {
 })
 
 const isDarkModeEnabled = inject('isDarkModeEnabled')
-const getHighlightedClass = (word: string) => {
+const getSelectedWordHighlight = (word: string) => {
   if (!props.selectedWord) return ''
-  if (word === props.selectedWord.word && !isDarkModeEnabled.value) return 'highlighted-light'
-  if (word === props.selectedWord.word && isDarkModeEnabled.value) return 'highlighted-dark'
+  if (word === props.selectedWord.word && !isDarkModeEnabled.value) return 'light-selected'
+  if (word === props.selectedWord.word && isDarkModeEnabled.value) return 'dark-selected'
 }
 
 const isVisible = ref(false)
@@ -248,17 +255,16 @@ onUnmounted(() => {
 ion-item {
   margin-left: 0px !important;
   padding-left: 0px !important;
-  --background-hover: rgb(236, 236, 236);
   --padding-start: 0px;
   --inner-padding-end: 0px;
 }
 
-.highlighted-light {
+.light-selected {
   --ion-item-background: rgb(236, 236, 236);
   // padding: 0 0.5rem;
   // margin-left: 0.5rem;
 }
-.highlighted-dark {
+.dark-selected {
   --ion-item-background: rgb(58, 58, 58);
 }
 .scroll-trigger {

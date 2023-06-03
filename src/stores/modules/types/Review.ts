@@ -6,6 +6,7 @@ export interface WordObject {
   attemptsSuccessful: number
   created: number
   status: WordStatus
+  bookmarked: boolean
   source: WordSource
 }
 
