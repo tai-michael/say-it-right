@@ -3,9 +3,9 @@ import { auth, db, user } from '@/firebaseInit'
 import {
   // createUserWithEmailAndPassword,
   // signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  getAdditionalUserInfo,
-  signInWithPopup,
+  // GoogleAuthProvider,
+  // getAdditionalUserInfo,
+  // signInWithPopup,
   signOut
 } from 'firebase/auth'
 import {
@@ -21,33 +21,35 @@ import { useProvidedListsStore } from '@/stores'
 export const useAuthStore = defineStore('auth', () => {
   const providedListsStore = useProvidedListsStore()
 
-  const signInUser = async () => {
-    try {
-      const result = await signInWithPopup(auth, new GoogleAuthProvider())
-      const user = auth.currentUser
+  // NOTE Using firebaseUI instead
+  // const signInUser = async () => {
+  //   try {
+  //     const result = await signInWithPopup(auth, new GoogleAuthProvider())
+  //     const user = auth.currentUser
 
-      // NOTE if it's user's first time logging in, send provided lists from backend
-      if (user && getAdditionalUserInfo(result)?.isNewUser) {
-        const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+  //     // NOTE if it's user's first time logging in, send provided lists from backend
+  //     if (user && getAdditionalUserInfo(result)?.isNewUser) {
+  //       const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
 
-        await setDoc(doc(db, 'users', user.uid), {
-          userName: user.displayName,
-          customLists: [],
-          providedLists: globalProvidedLists,
-          review: []
-        })
-      }
+  //       await setDoc(doc(db, 'users', user.uid), {
+  //         userName: user.displayName,
+  //         customLists: [],
+  //         providedLists: globalProvidedLists,
+  //         review: []
+  //       })
+  //     }
 
-      // NOTE after reload, lists will be hydrated in App.vue
-      location.reload()
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  //     console.log('user signed in')
+  //     // NOTE after reload, lists will be hydrated in App.vue
+  //     // location.reload()
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
 
   const signOutUser = () => {
     signOut(auth)
-    location.reload()
+    // location.reload()
   }
 
   // TODO for testing purposes only; remove before production
@@ -107,9 +109,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     signedInAsAdmin,
-
-    signInUser,
     signOutUser,
+    // signInUser,
 
     resetAllLists,
     resetCustomLists,

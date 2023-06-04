@@ -5,24 +5,24 @@
         <LoadingSpinner />
       </div>
       <div v-else>
-        <ion-router-outlet></ion-router-outlet>
-        <div v-if="!signedIn">(Sign up or Intro display/message)</div>
+        <ion-router-outlet v-if="signedIn"></ion-router-outlet>
+        <SignInView v-else />
       </div>
     </ion-content>
   </ion-app>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, provide, watch, watchEffect } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import { computed, ref, provide, watch, watchEffect } from 'vue'
+import SignInView from '@/views/SignInView.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import DarkModeToggle from './components/DarkModeToggle.vue'
+// import DarkModeToggle from './components/DarkModeToggle.vue'
 import { useLocalStorage } from '@vueuse/core'
 import { IonApp, IonContent, IonRouterOutlet } from '@ionic/vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
-import { db, isAuthenticated, user } from '@/firebaseInit'
+import { db, isAuthenticated, user, auth } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
-import { collection, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore'
 import {
   useAuthStore,
   useCustomListsStore,
@@ -64,6 +64,21 @@ const fetchBackendData = async () => {
     const userProvidedList = ref(userDocSnap.data()?.providedLists)
     console.log('Fetched user data from firestore')
     // console.log(userDocSnap.data())
+
+    // NOTE if it's user's first time logging in, send provided lists from backend
+    if (!userProvidedList.value) {
+      console.log('hydrating provided lists')
+      userProvidedList.value = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+
+      await setDoc(usersDocRef, {
+        userName: user.value.displayName,
+        customLists: [],
+        providedLists: userProvidedList.value,
+        review: []
+      })
+
+      userDocSnap = await getDoc(usersDocRef)
+    }
 
     // NOTE adds any new lists to backend user lists when App starts
     if (globalLists.value && globalLists.value.length > userProvidedList.value.length) {
@@ -127,6 +142,20 @@ const extractNewLists = (newArray, oldArray) => {
   return newItems
 }
 
+auth.onAuthStateChanged(async () => {
+  if (isDarkModeEnabled.value) {
+    document.body.classList.add('dark')
+  }
+
+  if (!isAuthenticated.value) return (signedIn.value = false)
+
+  fetchingBackendData.value = true
+  await fetchBackendData()
+  fetchingBackendData.value = false
+  signedIn.value = true
+  console.log('Fetched backend data')
+})
+
 // if (newVal && newVal.length > providedListsStore.allLists.length) {
 //   for (let i = providedListsStore.allLists.length; i < newVal.length; i++) {
 //     const newList = JSON.parse(JSON.stringify(newVal[i]))
@@ -136,23 +165,6 @@ const extractNewLists = (newArray, oldArray) => {
 //   }
 //   // console.log(providedListsStore.allLists)
 // }
-
-onMounted(async () => {
-  if (isAuthenticated.value) {
-    try {
-      fetchingBackendData.value = true
-      await fetchBackendData()
-      fetchingBackendData.value = false
-      signedIn.value = true
-    } catch (err) {
-      console.error(`Failed to get user data from firestore: ${err}`)
-      fetchingBackendData.value = false
-    }
-  }
-  if (isDarkModeEnabled.value) {
-    document.body.classList.add('dark')
-  }
-})
 </script>
 
 <style scoped>

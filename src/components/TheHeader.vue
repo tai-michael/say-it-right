@@ -20,7 +20,7 @@
       <ion-icon
         :icon="ellipsisHorizontalSharp"
         slot="end"
-        class="text-2xl pr-2"
+        class="text-2xl pr-2 cursor-pointer"
         @click.prevent="openPopover($event)"
       ></ion-icon>
 
@@ -87,6 +87,8 @@ import {
 } from '@ionic/vue'
 import { isAuthenticated } from '@/firebaseInit'
 import { useAuthStore } from '@/stores/index.ts'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const store = useAuthStore()
 
@@ -108,12 +110,18 @@ const authButtonConfig = computed(() => {
     }
   } else {
     return {
-      onClick: store.signInUser,
+      onClick: testFn,
       icon: logInOutline,
       text: 'Sign in'
     }
   }
 })
+
+// possibly replace store.signInUser with below, or delete it
+const testFn = () => {
+  router.push('/sign-in')
+  // store.signInUser()
+}
 
 const isDarkModeEnabled = inject('isDarkModeEnabled')
 const toggleDarkMode = () => {

@@ -3,6 +3,9 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import { auth } from './firebaseInit'
+import VueVirtualScroller from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 import { IonicVue } from '@ionic/vue'
 
@@ -24,8 +27,6 @@ import '@ionic/vue/css/text-transformation.css'
 import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
 
-import { auth } from './firebaseInit'
-
 let app: ReturnType<typeof createApp>
 
 // NOTE necessary for clearing the state after user logs out
@@ -39,7 +40,9 @@ auth.onAuthStateChanged((user) => {
         mode: 'ios'
         // mode: 'md'
       })
+      .use(VueVirtualScroller)
       .use(router)
+
     app.mount('#app')
   }
 })

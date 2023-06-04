@@ -19,12 +19,14 @@
     "@vueuse/firebase": "^10.0.2",
     "axios": "^1.3.6",
     "firebase": "^9.19.1",
+    "firebaseui": "^6.0.2",
     "format-duration": "^3.0.2",
     "metaphone": "^2.0.1",
     "pinia": "^2.0.32",
     "typescript": "^5.0.4",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
+    "vue-virtual-scroller": "^2.0.0-beta.8",
     "wink-porter2-stemmer": "^2.0.1"
   },
   "devDependencies": {

@@ -84,6 +84,12 @@ const routes: Array<RouteRecordRaw> = [
         // }
       },
       {
+        path: '/sign-in',
+        name: 'sign-in',
+        // meta: { requiresAuth: true },
+        component: () => import('@/views/SignInView.vue')
+      },
+      {
         path: 'admin',
         name: 'admin',
         component: () => import('@/views/AdminView.vue')
