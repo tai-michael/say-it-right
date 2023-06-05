@@ -24,9 +24,10 @@
     border-radius: 50%;
   }
   .spinner.material::after {
-    border-top: 3px solid #298eec;
-    border-left: 3px solid #298eec;
-    border-bottom: 3px solid #298eec;
+    // border-top: 3px solid #298eec;
+    border-top: 3px solid #25c7b1;
+    border-left: 3px solid #25c7b1;
+    border-bottom: 3px solid #25c7b1;
     border-right: 3px solid rgba(255, 255, 255, 0);
     animation: spinner 0.6s linear infinite;
   }

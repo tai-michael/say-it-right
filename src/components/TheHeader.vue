@@ -63,7 +63,7 @@
   </ion-header>
 </template>
 <script setup lang="ts">
-import { ref, computed, inject } from 'vue'
+import { ref, computed, inject, watch, useSlots } from 'vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
 import {
@@ -100,6 +100,19 @@ const props = defineProps({
     type: Boolean
   }
 })
+
+// const slots = defineSlots()
+
+// const title = computed(() => {
+//   return slots.default()[0].children
+// })
+
+// watch(
+//   () => title.value,
+//   (newTitle) => {
+//     document.title = newTitle
+//   }
+// )
 
 const authButtonConfig = computed(() => {
   if (isAuthenticated.value) {

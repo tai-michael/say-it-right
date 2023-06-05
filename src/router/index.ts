@@ -5,6 +5,7 @@ import CustomListsView from '@/views/CustomListsView.vue'
 import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 // import ProvidedListsView from '@/views/ProvidedListsView.vue'
 import TabsRoot from '@/components/TabsRoot.vue'
+import { user } from '@/firebaseInit'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -15,9 +16,9 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: TabsRoot,
-    // meta: {
-    //   title: 'Custom Lists'
-    // },
+    meta: {
+      title: 'Custom Lists'
+    },
     redirect: { name: 'custom-lists' },
     children: [
       {
@@ -37,26 +38,26 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'custom-lists/:id',
         name: 'custom-list',
-        component: () => import('@/components/CustomList.vue')
-        // meta: {
-        //   title: 'Custom List'
-        // }
+        component: () => import('@/components/CustomList.vue'),
+        meta: {
+          title: 'Custom List'
+        }
       },
       {
         path: 'review',
         name: 'review',
-        component: () => import('@/views/ReviewView.vue')
-        // meta: {
-        //   title: 'Review'
-        // }
+        component: () => import('@/views/ReviewView.vue'),
+        meta: {
+          title: 'Review'
+        }
       },
       {
         path: 'provided-lists',
         name: 'provided-lists',
         component: () => import('@/views/ProvidedListsView.vue'),
-        // meta: {
-        //   title: 'Provided Lists'
-        // },
+        meta: {
+          title: 'Provided Lists'
+        },
         beforeEnter: (to, from, next) => {
           const providedListsStore = useProvidedListsStore()
           const id = providedListsStore.activeId
@@ -70,32 +71,42 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'provided-lists/:id',
         name: 'provided-list',
-        component: () => import('@/components/ProvidedList.vue')
-        // meta: {
-        //   title: 'Provided List'
-        // }
+        component: () => import('@/components/ProvidedList.vue'),
+        meta: {
+          title: 'Provided List'
+        }
       },
       {
         path: 'hard-words',
         name: 'hard-words',
-        component: () => import('@/views/HardWordsView.vue')
-        // meta: {
-        //   title: 'Hard Words'
-        // }
+        component: () => import('@/views/HardWordsView.vue'),
+        meta: {
+          title: 'Hard Words'
+        }
       },
       {
         path: '/sign-in',
         name: 'sign-in',
         // meta: { requiresAuth: true },
-        component: () => import('@/views/SignInView.vue')
+        component: () => import('@/views/SignInView.vue'),
+        meta: {
+          title: 'Sign In'
+        },
+        beforeEnter: (to, from, next) => {
+          if (user.value) {
+            next(from.path)
+          } else {
+            next()
+          }
+        }
       },
       {
         path: 'admin',
         name: 'admin',
-        component: () => import('@/views/AdminView.vue')
-        // meta: {
-        //   title: 'Admin'
-        // }
+        component: () => import('@/views/AdminView.vue'),
+        meta: {
+          title: 'Admin'
+        }
       }
     ]
   },
@@ -103,9 +114,9 @@ const routes: Array<RouteRecordRaw> = [
     path: '/not-found',
     name: 'not-found',
     component: () => import('@/views/NotFoundView.vue'),
-    // meta: {
-    //   title: 'Page Not Found'
-    // },
+    meta: {
+      title: 'Page Not Found'
+    },
     // NOTE match any path that does not match an existing route
     alias: '/:pathMatch(.*)*'
   }

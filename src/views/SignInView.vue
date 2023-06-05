@@ -2,7 +2,9 @@
   <ion-page>
     <ion-content>
       <div class="text-center">
-        <div class="mt-10 mb-10 text-teal-600 text-3xl">Say It Right</div>
+        <div class="mt-20 mb-10 text-3xl flex justify-center gap-3 items-end logo">
+          <img :src="image" class="w-11 h-11" /> Say It Right
+        </div>
       </div>
       <div id="firebaseui-auth-container"></div>
     </ion-content>
@@ -16,6 +18,7 @@ import firebase from 'firebase/compat/app'
 import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
 import { IonPage, IonContent } from '@ionic/vue'
+import image from '@/assets/logo.png'
 
 onMounted(() => {
   const uiConfig = {
@@ -49,6 +52,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
+.logo {
+  color: #25c7b1;
+}
+
 // NOTE see https://github.com/firebase/firebaseui-web/issues/121
 
 .mdl-card .firebaseui-callback-indicator-container {
@@ -67,21 +74,21 @@ onMounted(() => {
   margin-top: 20px;
 }
 
-div.mdl-progress::after {
-  display: block;
-  color: #48a1ff;
-  margin: 50px auto;
-  content: 'Authenticating...';
-  text-align: center;
-}
+// div.mdl-progress::after {
+//   display: block;
+//   color: #48a1ff;
+//   margin: 50px auto;
+//   content: 'Authenticating...';
+//   text-align: center;
+// }
 
 .mdl-progress > .progressbar {
-  background-color: #48a1ff !important;
+  background-color: #25c7b1 !important;
 }
 
 .mdl-progress > .bufferbar {
   background-image: linear-gradient(90deg, hsla(0, 0%, 100%, 0.7), hsla(0, 0%, 100%, 0.7)),
-    linear-gradient(90deg, #48a1ff, #48a1ff) !important;
+    linear-gradient(90deg, #25c7b1, #25c7b1) !important;
   z-index: 0;
   left: 0;
 }
@@ -89,7 +96,7 @@ div.mdl-progress::after {
 .mdl-progress:not(.mdl-progress--indeterminate) > .auxbar,
 .mdl-progress:not(.mdl-progress__indeterminate) > .auxbar {
   background-image: linear-gradient(90deg, hsla(0, 0%, 100%, 0.9), hsla(0, 0%, 100%, 0.9)),
-    linear-gradient(90deg, #48a1ff, #48a1ff) !important;
+    linear-gradient(90deg, #25c7b1, #25c7b1) !important;
 }
 
 // .firebaseui-idp-button {

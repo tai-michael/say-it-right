@@ -24,7 +24,7 @@
     "metaphone": "^2.0.1",
     "pinia": "^2.0.32",
     "typescript": "^5.0.4",
-    "vue": "^3.2.47",
+    "vue": "^3.3.4",
     "vue-router": "^4.1.6",
     "vue-virtual-scroller": "^2.0.0-beta.8",
     "wink-porter2-stemmer": "^2.0.1"

@@ -1,9 +1,6 @@
 <template>
   <ion-page>
-    <TheHeader :show-back-button="true" @back-button-clicked="returnToLists"
-      >{{ routeName === 'provided-lists' ? 'Provided List' : 'Custom List' }}
-      {{ list.listNumber }}</TheHeader
-    >
+    <TheHeader :show-back-button="true" @back-button-clicked="returnToLists">{{ title }}</TheHeader>
 
     <ion-content class="ion-padding">
       <TransitionAppear>
@@ -65,6 +62,13 @@ const returnToLists = () => {
   store.setActiveId(null)
   router.push({ name: routeName.value })
 }
+
+const title = computed(
+  () =>
+    `${routeName.value === 'provided-lists' ? 'Provided List' : 'Custom List'} ${
+      list.value.listNumber
+    }`
+)
 </script>
 
 <style lang="scss" scoped>
