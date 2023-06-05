@@ -157,7 +157,6 @@ main {
   flex-wrap: wrap;
   // align-content: flex-start; /* Optional: aligns items to the top */
   justify-content: center;
-  margin-top: 0.75rem;
   margin-bottom: 1.5rem;
   column-gap: 1rem;
 

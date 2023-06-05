@@ -1,5 +1,13 @@
 <template>
-  <ion-accordion-group :multiple="true" :value="['inProgress', 'new', 'completed']">
+  <div v-if="noListStarted">
+    <ListCards
+      :lists="store.untouchedLists"
+      :destination-route="destinationRoute"
+      @listDeleted="$emit('listDeleted')"
+    />
+  </div>
+
+  <ion-accordion-group v-else :multiple="true" :value="['inProgress', 'new', 'completed']">
     <ion-accordion value="inProgress" v-if="store.inProgressLists.length">
       <ion-item slot="header" lines="none">
         <ion-label>In Progress</ion-label>
@@ -14,10 +22,10 @@
     </ion-accordion>
     <ion-accordion value="new" v-if="store.untouchedLists.length">
       <ion-item slot="header" lines="none">
-        <!-- <ion-label v-if="anyListStarted">{{
+        <!-- <ion-label v-if="noListStarted">{{
           props.routeName === 'provided-lists' ? 'Not Started' : 'New'
         }}</ion-label> -->
-        <ion-label v-if="anyListStarted">Not Started</ion-label>
+        <ion-label>Not Started</ion-label>
       </ion-item>
       <div slot="content">
         <ListCards
@@ -53,7 +61,7 @@ const props = defineProps({
 
 const store = props.routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
 const destinationRoute = props.routeName === 'provided-lists' ? 'provided-list' : 'custom-list'
-const anyListStarted = computed(() => store.inProgressLists.length || store.completedLists.length)
+const noListStarted = computed(() => !store.inProgressLists.length && !store.completedLists.length)
 
 // const isDarkModeEnabled = inject('isDarkModeEnabled')
 // // @ts-ignore
@@ -65,6 +73,7 @@ const anyListStarted = computed(() => store.inProgressLists.length || store.comp
 //   --color: red;
 // }
 ion-accordion ion-item[slot='header'] {
+  margin-bottom: 0.5rem;
   // --border-color: white;
   // border-bottom: 1px;
   // NOTE note specifying the border-style part results in no border
