@@ -1,15 +1,17 @@
 <template>
   <ion-page>
     <TheHeader>
+      <div class="desktop-view">Review</div>
       <template #list>
-        <ion-item
-          :button="true"
+        <!-- <ion-button :detail="false" id="word-selection-list" class="ml-11 mr-5 max-h-8"> -->
+        <!-- <ion-label class="m-0 max-h-8 pl-3 pr-3">Choose a word to review</ion-label> -->
+        <ion-button
           :detail="false"
           id="word-selection-list"
-          class="ml-10 flex max-h-8 rounded-lg text-center"
+          class="ml-12 mr-4 flex max-h-8 mobile-view"
         >
-          <ion-label class="m-0 max-h-8 p-0">Choose a word to review</ion-label>
-        </ion-item>
+          <ion-label class="m-0 max-h-8">Choose a word to review</ion-label>
+        </ion-button>
       </template>
     </TheHeader>
 
@@ -24,7 +26,7 @@
       </keep-alive>
     </ion-content>
 
-    <ion-modal trigger="word-selection-list" ref="modal">
+    <ion-modal trigger="word-selection-list" ref="modal" class="mobile-view">
       <WordSelectModal
         @dismiss-modal="modal.$el.dismiss()"
         @select-word="setWord"
@@ -34,6 +36,14 @@
       />
     </ion-modal>
 
+    <WordSelectModal
+      @dismiss-modal="modal.$el.dismiss()"
+      @select-word="setWord"
+      @word-deleted="handleWordDeleted"
+      :selected-word="selectedWord"
+      :all-words="allWords"
+      class="desktop-view__select"
+    />
     <!-- This will be for desktop view -->
     <!-- <ion-content class="ion-padding">
       <div class="review">
@@ -81,7 +91,16 @@ import { computed, onMounted, ref } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
 import WordSelectModal from '@/components/WordSelectModal.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
-import { IonHeader, IonToolbar, IonPage, IonContent, IonModal, IonItem, IonLabel } from '@ionic/vue'
+import {
+  IonHeader,
+  IonToolbar,
+  IonPage,
+  IonContent,
+  IonModal,
+  IonItem,
+  IonButton,
+  IonLabel
+} from '@ionic/vue'
 import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import WordDrill from '@/components/WordDrill.vue'
@@ -123,6 +142,30 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@media only screen and (min-width: 768px) {
+  .desktop-view {
+    display: block;
+
+    &__select {
+      width: 300px;
+      margin-top: 0.75rem;
+    }
+  }
+  .mobile-view {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .desktop-view {
+    display: none;
+
+    &__select {
+      display: none;
+    }
+  }
+}
+
 .review {
   display: flex;
   flex-direction: column;
