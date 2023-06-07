@@ -1,20 +1,22 @@
 <template>
   <main>
-    <ion-card v-for="list of props.lists" :key="list.listNumber">
+    <ion-card v-for="list of props.lists" :key="list.listNumber" class="flex">
       <RouterLink
         :to="{ name: props.destinationRoute, params: { id: list.listNumber } }"
         class="list-link"
       >
         <ion-card-content class="p-0">
-          <ion-toolbar class="flex justify-center items-center">
+          <ion-toolbar>
             <ion-title class="font-thin">List {{ list.listNumber }}</ion-title>
-            <ion-icon
+            <button
               v-if="props.destinationRoute === 'custom-list'"
-              :icon="ellipsisHorizontal"
-              class="text-xl mr-2"
               slot="end"
+              class="text-xl"
+              :class="{ 'dark-mode': isDarkModeEnabled }"
               @click.prevent="openPopover($event, list)"
-            ></ion-icon>
+            >
+              <ion-icon :icon="ellipsisHorizontal"></ion-icon>
+            </button>
           </ion-toolbar>
           <ul class="list">
             <li class="list__row" v-for="(entry, index) in list.words" :key="index">
@@ -63,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import { ellipsisHorizontal, trashOutline } from 'ionicons/icons'
@@ -93,6 +95,8 @@ const props = defineProps({
 
 const store =
   props.destinationRoute === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
+
+const isDarkModeEnabled = inject('isDarkModeEnabled')
 
 // Code for popover
 // @ts-ignore
@@ -182,6 +186,39 @@ main {
 ion-card {
   // default: 24px 16px
   margin: 18px 12px;
+}
+
+ion-toolbar {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  button {
+    display: flex;
+    // padding: 0.5rem 0.75rem;
+    padding: 0.75rem 0.75rem;
+    background-color: transparent;
+    transition: background-color 0.3s;
+
+    // ion-icon {
+    //   height: 24px;
+    //   width: 24px;
+    // }
+  }
+
+  button:hover {
+    background-color: rgb(240, 240, 240);
+  }
+
+  button.dark-mode {
+    color-scheme: dark;
+  }
+
+  button.dark-mode:hover,
+  button.dark-mode:active {
+    background-color: rgb(39, 39, 39);
+  }
 }
 
 .list-link {

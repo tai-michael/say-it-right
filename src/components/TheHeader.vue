@@ -8,7 +8,6 @@
         router-direction="back"
         :router-animation="customLeaveAnimation"
         slot="start"
-        class="bg-transparent"
         :class="{ 'dark-mode': isDarkModeEnabled }"
       >
         <ion-icon :icon="chevronBackOutline"></ion-icon>
@@ -17,12 +16,15 @@
       <!-- <ion-title><slot name="title">Default Title</slot></ion-title> -->
 
       <!-- <DarkModeToggle slot="end" class="mr-3" /> -->
-      <ion-icon
+      <button
         :icon="ellipsisHorizontalSharp"
         slot="end"
-        class="text-2xl pr-2 cursor-pointer"
+        class="text-2xl"
+        :class="{ 'dark-mode': isDarkModeEnabled }"
         @click.prevent="openPopover($event)"
-      ></ion-icon>
+      >
+        <ion-icon :icon="ellipsisHorizontalSharp"></ion-icon>
+      </button>
 
       <ion-progress-bar type="indeterminate" v-if="isLoading"></ion-progress-bar>
     </ion-toolbar>
@@ -157,27 +159,39 @@ const openPopover = (e) => {
 </script>
 <style lang="scss" scoped>
 ion-toolbar {
-  display: flex;
-  max-height: 44px;
-  padding: 0 0.2rem;
-  align-items: center;
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  button {
+    display: flex;
+    padding: 0.55rem 0.75rem;
+    background-color: transparent;
+    transition: background-color 0.3s;
+
+    ion-icon {
+      height: 24px;
+      width: 24px;
+    }
+  }
+
+  button:hover,
+  button:active {
+    background-color: rgb(240, 240, 240);
+  }
+
+  button.dark-mode {
+    color-scheme: dark;
+  }
+
+  button.dark-mode:hover,
+  button.dark-mode:active {
+    background-color: rgb(39, 39, 39);
+  }
 }
 
 // ion-item {
 //   --inner-padding-bottom: 2px;
 // }
-
-button {
-  display: flex;
-  padding: 0 0.3rem;
-
-  ion-icon {
-    height: 24px;
-    width: 24px;
-  }
-}
-
-button.dark-mode {
-  color-scheme: dark;
-}
 </style>
