@@ -102,7 +102,7 @@ client.onSegmentChange((segment) => {
   left: 0;
   right: 0;
   max-height: 100vh;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
 
   display: flex;
   flex-direction: row;

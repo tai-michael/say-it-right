@@ -1,62 +1,71 @@
 <template>
   <ion-page>
-    <ion-content class="ion-padding">
-      <hr />
-      <div class="tested-paragraph">
-        <p v-html="testedParagraph"></p>
+    <div class="flex flex-col h-full">
+      <div class="p-4 bg-blue-200 flex flex-col w-full items-center">
+        <div class="font-bold">
+          <!-- <span v-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'">Recording complete</span>
+        <span v-else>Hold the button and read the paragraph</span> -->
+          <span>Hold the button and speak this paragraph</span>
+        </div>
+
+        <!-- <hr /<span>> -->
+        <ion-card class="ml-0.5 mr-0.5 mt-3 mb-1 pl-5 pr-5 max-w-xs">
+          <div class="tested-paragraph">
+            <p v-html="testedParagraph"></p>
+          </div>
+        </ion-card>
+        <!-- <hr /> -->
       </div>
-      <hr />
 
       <div v-if="isRecording" class="transcript">
         <label>Live transcript:</label>
         <div>{{ temporaryTranscriptDisplay }}</div>
       </div>
 
-      <div v-else class="message">
-        <div>
-          <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
-          <div v-else-if="recordingStatus === 'NO_WORDS_RECORDED'" class="message__text">
+      <div v-else class="bg-blue-300 flex w-full h-full justify-center items-center">
+        <div class="message">
+          <div>
+            <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
+            <!-- <div v-else-if="recordingStatus === 'NO_WORDS_RECORDED'" class="message__text">
             <span>Let's start by testing your pronunciation.</span>
             <span>Hold the button and read the paragraph.</span>
+          </div> -->
+            <div v-else-if="recordingStatus === 'FEW_WORD_RECORDED'" class="message__text">
+              <span>You didn't record enough words. Please try again.</span>
+              <span>Remember to hold the button while recording.</span>
+            </div>
+            <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
+              <span>You pronounced each tested word correctly. Very impressive!</span>
+              <span>Create or look at another list.</span>
+            </div>
+            <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
+              <span>You mispronounced only one word. Good job!</span>
+              <span>Let's practice pronouncing this word.</span>
+            </div>
+            <div v-else-if="recordingStatus === 'MOST_WORDS_CORRECT'" class="message__text">
+              <span>You did pretty well! However, these words were mispronounced.</span>
+              <span>Let's practice pronouncing these words.</span>
+            </div>
+            <div v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'" class="message__text">
+              <span>These words were mispronounced.</span>
+              <span>Let's practice them.</span>
+            </div>
           </div>
-          <div v-else-if="recordingStatus === 'FEW_WORD_RECORDED'" class="message__text">
-            <span>You didn't record enough words. Please try again.</span>
-            <span>Remember to hold the button while recording!</span>
-          </div>
-          <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
-            <span>You pronounced each tested word correctly. Very impressive!</span>
-            <span>Create or look at another list.</span>
-          </div>
-          <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
-            <span>You pronounced only one word incorrectly. Good job!</span>
-            <span>Next, let's practice pronouncing this word.</span>
-          </div>
-          <div v-else-if="recordingStatus === 'MOST_WORDS_CORRECT'" class="message__text">
-            <span
-              >You did pretty well! However, these highlighted words were not pronounced
-              correctly.</span
-            >
-            <span>Next, let's practice pronouncing these words.</span>
-          </div>
-          <div v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'" class="message__text">
-            <span>These highlighted words were not pronounced correctly.</span>
-            <span>Next, let's practice pronouncing these words.</span>
-          </div>
-        </div>
 
-        <ion-button
-          class="next-button"
-          v-if="
-            props.list.status === 'PARAGRAPH_RECORDING_ENDED' &&
-            recordingStatus !== 'ALL_WORDS_CORRECT'
-          "
-          @click="store.setListStatus('TESTING_WORD_ONLY')"
-        >
-          Next
-        </ion-button>
+          <ion-button
+            class="next-button"
+            v-if="
+              props.list.status === 'PARAGRAPH_RECORDING_ENDED' &&
+              recordingStatus !== 'ALL_WORDS_CORRECT'
+            "
+            @click="store.setListStatus('TESTING_WORD_ONLY')"
+          >
+            Next
+          </ion-button>
+        </div>
       </div>
       <!-- <RouterLink to="/provided-lists/word-test">Next</RouterLink> -->
-    </ion-content>
+    </div>
 
     <RecorderButton
       v-if="props.list.status === 'LIST_NOT_STARTED'"
@@ -69,7 +78,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
-import { IonPage, IonContent } from '@ionic/vue'
+import { IonPage, IonContent, IonCard } from '@ionic/vue'
 import type { PropType } from 'vue'
 import type { List, CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import type { WordObject } from '@/stores/modules/types/Review'
@@ -323,15 +332,15 @@ const recordingStatus = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@media (min-width: 1024px) {
-  main {
-    // min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    // align-items: center;
-  }
-}
+// @media (min-width: 1024px) {
+//   main {
+//     // min-height: 100vh;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     // align-items: center;
+//   }
+// }
 
 hr {
   border: none;
@@ -352,7 +361,12 @@ label {
 // }
 
 .tested-paragraph {
-  margin: 1rem 0;
+  font-size: 1rem;
+  line-height: 26px;
+  // margin: 0.5rem 0;
+  p {
+    // margin: 0.5rem;
+  }
   // 'deep' selector is necessary, as scoped styles don't apply to content inside v-html
   &:deep(.incorrect),
   &:deep(.correct) {
@@ -361,7 +375,7 @@ label {
 
   &:deep(.incorrect) {
     // The fourth 0 sets the highlight to fully transparent. Using rgba, which allows the setting of transparency, keeps the text fully visible.
-    background-color: rgba(255, 0, 0, 0);
+    background-color: rgba(200, 0, 0, 0);
     // the forwards tested word keeps the final animation state
     animation: fadeInRed 0.5s ease-in-out forwards;
   }
@@ -373,10 +387,10 @@ label {
 
   @keyframes fadeInRed {
     0% {
-      background-color: rgba(255, 0, 0, 0);
+      background-color: rgba(200, 0, 0, 0);
     }
     100% {
-      background-color: rgba(255, 0, 0, 1);
+      background-color: rgba(200, 0, 0, 1);
     }
   }
 
@@ -390,16 +404,25 @@ label {
   }
 }
 
+ion-page {
+  --height: 100%;
+}
+
 .message {
-  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  // max-width: 340px;
   min-height: 100px;
   // height: 50px;
+  // padding: 1rem 1rem 1.2rem;
 
   &__text {
     display: flex;
     flex-direction: column;
+    margin-left: 0.1rem;
     span {
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.25rem;
       font-weight: 600;
       color: var(--orange-color);
     }
@@ -412,7 +435,10 @@ label {
 }
 
 .next-button {
-  max-width: 50px;
+  // max-width: 50px;
+  max-height: 44px;
+  display: flex;
+  text-transform: uppercase;
 }
 
 .next-button:hover {
