@@ -8,7 +8,6 @@
         router-direction="back"
         :router-animation="customLeaveAnimation"
         slot="start"
-        :class="{ 'dark-mode': isDarkModeEnabled }"
       >
         <ion-icon :icon="chevronBackOutline"></ion-icon>
       </button>
@@ -20,7 +19,6 @@
         :icon="ellipsisHorizontalSharp"
         slot="end"
         class="text-2xl"
-        :class="{ 'dark-mode': isDarkModeEnabled }"
         @click.prevent="openPopover($event)"
       >
         <ion-icon :icon="ellipsisHorizontalSharp"></ion-icon>
@@ -138,6 +136,7 @@ const testFn = () => {
   // store.signInUser()
 }
 
+// see https://ionicframework.com/docs/theming/dark-mode for application
 const isDarkModeEnabled = inject('isDarkModeEnabled')
 const toggleDarkMode = () => {
   isDarkModeEnabled.value = !isDarkModeEnabled.value
@@ -164,9 +163,19 @@ ion-toolbar {
   --padding-top: 0;
   --padding-bottom: 0;
 
+  --background: #31928c;
+
+  ion-icon {
+    color: rgb(231, 253, 243);
+  }
+
+  ion-title {
+    --color: rgb(231, 253, 243);
+  }
+
   button {
     display: flex;
-    padding: 0.55rem 0.75rem;
+    padding: 0.6rem 0.75rem;
     background-color: transparent;
     transition: background-color 0.3s;
 
@@ -178,15 +187,28 @@ ion-toolbar {
 
   button:hover,
   button:active {
-    background-color: rgb(240, 240, 240);
+    // background-color: rgb(240, 240, 240);
+    background-color: #3bb3ac;
+  }
+}
+
+body.dark ion-toolbar {
+  --background: black;
+
+  ion-icon {
+    color: rgb(196, 196, 196);
   }
 
-  button.dark-mode {
+  ion-title {
+    --color: rgb(196, 196, 196);
+  }
+
+  button {
     color-scheme: dark;
   }
 
-  button.dark-mode:hover,
-  button.dark-mode:active {
+  button:hover,
+  button:active {
     background-color: rgb(39, 39, 39);
   }
 }

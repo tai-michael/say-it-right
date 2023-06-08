@@ -99,15 +99,17 @@ client.onSegmentChange((segment) => {
   position: fixed;
   box-sizing: border-box;
   bottom: 0;
-  left: 0;
+  left: 1;
   right: 0;
   max-height: 100vh;
-  padding-bottom: 1rem;
+  // padding-bottom: 1rem;
+  margin: -0.75rem;
+  margin-right: -1rem;
 
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  z-index: 50;
+  // justify-content: center;
+  z-index: 10000;
 
   .recording-btn {
     display: flex;

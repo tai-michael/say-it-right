@@ -1,30 +1,32 @@
 <template>
   <ion-page>
-    <div class="flex flex-col h-full">
-      <div class="p-4 bg-blue-200 flex flex-col w-full items-center">
-        <div class="font-bold">
+    <div class="flex flex-col h-full justify-between">
+      <main class="p-4 flex flex-col w-full h-full items-center justify-center">
+        <div class="instructions">
           <!-- <span v-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'">Recording complete</span>
         <span v-else>Hold the button and read the paragraph</span> -->
           <span>Hold the button and speak this paragraph</span>
         </div>
 
-        <!-- <hr /<span>> -->
-        <ion-card class="ml-0.5 mr-0.5 mt-3 mb-1 pl-5 pr-5 max-w-xs">
-          <div class="tested-paragraph">
+        <!-- REVIEW mb-3 might be better -->
+        <ion-card class="ml-0.5 mr-0.5 mb-3 pl-5 pr-5 max-w-xs">
+          <div class="tested-paragraph sm:!leading-8">
             <p v-html="testedParagraph"></p>
           </div>
         </ion-card>
-        <!-- <hr /> -->
-      </div>
+      </main>
 
       <div v-if="isRecording" class="transcript">
         <label>Live transcript:</label>
         <div>{{ temporaryTranscriptDisplay }}</div>
       </div>
 
-      <div v-else class="bg-blue-300 flex w-full h-full justify-center items-center">
+      <div
+        v-else
+        class="message-container flex w-full h-full max-h-80 justify-center items-start pt-10"
+      >
         <div class="message">
-          <div>
+          <div class="pb-2 sm:pb-5">
             <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
             <!-- <div v-else-if="recordingStatus === 'NO_WORDS_RECORDED'" class="message__text">
             <span>Let's start by testing your pronunciation.</span>
@@ -53,7 +55,6 @@
           </div>
 
           <ion-button
-            class="next-button"
             v-if="
               props.list.status === 'PARAGRAPH_RECORDING_ENDED' &&
               recordingStatus !== 'ALL_WORDS_CORRECT'
@@ -342,30 +343,29 @@ const recordingStatus = computed(() => {
 //   }
 // }
 
-hr {
-  border: none;
-  height: 0.5px;
-  background-color: var(--vt-c-text-dark-2); // gray
+ion-page {
+  --height: 100%;
 }
 
-label {
-  font-weight: 800;
+.instructions {
+  font-weight: 600;
 }
 
-// .content {
-//   display: flex;
-//   flex-direction: column;
-//   // justify-content: center;
-//   min-height: 700px;
-//   height: 100%;
-// }
+ion-card {
+  --background: #eef9f8;
+}
 
 .tested-paragraph {
   font-size: 1rem;
+  color: rgb(19, 19, 19);
+  // font-family: Arial;
+  // font-family: Verdana;
+  // REVIEW use 24px line-height if not enough space for long msgs
   line-height: 26px;
   // margin: 0.5rem 0;
   p {
-    // margin: 0.5rem;
+    margin: 0.5rem 0.25;
+    // text-align: justify;
   }
   // 'deep' selector is necessary, as scoped styles don't apply to content inside v-html
   &:deep(.incorrect),
@@ -404,8 +404,22 @@ label {
   }
 }
 
-ion-page {
-  --height: 100%;
+.message-container {
+  background-color: #8ed6ce;
+}
+
+main {
+  background-color: #b9e5e1;
+}
+
+hr {
+  border: none;
+  height: 0.5px;
+  background-color: var(--vt-c-text-dark-2); // gray
+}
+
+label {
+  font-weight: 800;
 }
 
 .message {
@@ -416,6 +430,7 @@ ion-page {
   min-height: 100px;
   // height: 50px;
   // padding: 1rem 1rem 1.2rem;
+  padding: 0 1rem;
 
   &__text {
     display: flex;
@@ -434,14 +449,43 @@ ion-page {
   min-height: 100px;
 }
 
-.next-button {
+ion-button {
+  --background: #287671;
+  --background-hover: #31928c;
   // max-width: 50px;
   max-height: 44px;
   display: flex;
   text-transform: uppercase;
+  color: rgb(231, 253, 243);
 }
 
 .next-button:hover {
   cursor: pointer;
+}
+
+body.dark {
+  main {
+    background-color: rgb(41, 41, 41);
+  }
+
+  .message-container {
+    background-color: rgb(19, 19, 19);
+  }
+
+  ion-card {
+    --background: #1c1c1d;
+  }
+
+  .instructions,
+  .tested-paragraph,
+  .message__text {
+    color: rgb(196, 196, 196);
+  }
+
+  ion-button {
+    --background: #414141;
+    --background-hover: #4e4e4e;
+    color: rgb(196, 196, 196);
+  }
 }
 </style>
