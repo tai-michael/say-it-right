@@ -111,6 +111,12 @@ client.onSegmentChange((segment) => {
   // justify-content: center;
   z-index: 10000;
 
+  @media (min-width: 639px) {
+    left: 0;
+    bottom: 2rem;
+    justify-content: center;
+  }
+
   .recording-btn {
     display: flex;
     justify-content: center;

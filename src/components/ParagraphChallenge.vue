@@ -23,32 +23,46 @@
 
       <div
         v-else
-        class="message-container flex w-full h-full max-h-80 justify-center items-start pt-10"
+        class="message-container w-full h-full max-h-80 flex justify-center items-start pt-5 sm:items-start sm:pt-10"
       >
         <div class="message">
-          <div class="pb-2 sm:pb-5">
+          <div class="sm:pb-5">
             <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
             <!-- <div v-else-if="recordingStatus === 'NO_WORDS_RECORDED'" class="message__text">
             <span>Let's start by testing your pronunciation.</span>
             <span>Hold the button and read the paragraph.</span>
           </div> -->
             <div v-else-if="recordingStatus === 'FEW_WORD_RECORDED'" class="message__text">
-              <span>You didn't record enough words. Please try again.</span>
-              <span>Remember to hold the button while recording.</span>
+              <span>Please try again. You didn't record enough words.</span>
+              <span>Remember to hold the recording button.</span>
             </div>
             <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
-              <span>You pronounced each tested word correctly. Very impressive!</span>
-              <span>Create or look at another list.</span>
+              <span>Very impressive! You pronounced each tested word correctly.</span>
+              <span>You can create or look at another list.</span>
             </div>
             <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
-              <span>You mispronounced only one word. Good job!</span>
-              <span>Let's practice pronouncing this word.</span>
+              <span>Good job! You mispronounced only one word.</span>
+              <span>Let's practice it.</span>
             </div>
             <div v-else-if="recordingStatus === 'MOST_WORDS_CORRECT'" class="message__text">
               <span>You did pretty well! However, these words were mispronounced.</span>
-              <span>Let's practice pronouncing these words.</span>
+              <span>Let's practice them.</span>
             </div>
-            <div v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'" class="message__text">
+            <div
+              v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'"
+              class="message__text flex gap-y-2"
+            >
+              <!-- <span>Please try again. You didn't record enough words.</span>
+              <span>Remember to hold the recording button.</span> -->
+
+              <!-- <span>Very impressive! You pronounced each tested word correctly.</span>
+              <span>You can create or look at another list.</span> -->
+
+              <!-- <span>Good job! You mispronounced only one word.</span>
+              <span>Let's practice it.</span> -->
+
+              <!-- <span>You did pretty well! However, these words were mispronounced.</span>
+              <span>Let's practice them.</span> -->
               <span>These words were mispronounced.</span>
               <span>Let's practice them.</span>
             </div>
@@ -425,9 +439,9 @@ label {
 .message {
   display: flex;
   flex-direction: column;
-  row-gap: 0.5rem;
+  row-gap: 0.75rem;
   // max-width: 340px;
-  min-height: 100px;
+  // min-height: 100px;
   // height: 50px;
   // padding: 1rem 1rem 1.2rem;
   padding: 0 1rem;
@@ -437,7 +451,7 @@ label {
     flex-direction: column;
     margin-left: 0.1rem;
     span {
-      padding-bottom: 0.25rem;
+      // padding-bottom: 0.25rem;
       font-weight: 600;
       color: var(--orange-color);
     }
@@ -450,8 +464,10 @@ label {
 }
 
 ion-button {
-  --background: #287671;
-  --background-hover: #31928c;
+  // --background: #287671;
+  // --background-hover: #31928c;
+  --background: #31928c;
+  --background-hover: #36a19c;
   // max-width: 50px;
   max-height: 44px;
   display: flex;

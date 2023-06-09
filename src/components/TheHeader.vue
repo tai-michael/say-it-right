@@ -163,7 +163,7 @@ ion-toolbar {
   --padding-top: 0;
   --padding-bottom: 0;
 
-  --background: #31928c;
+  --background: #287671;
 
   ion-icon {
     color: rgb(231, 253, 243);
@@ -188,7 +188,7 @@ ion-toolbar {
   button:hover,
   button:active {
     // background-color: rgb(240, 240, 240);
-    background-color: #3bb3ac;
+    background-color: #31928c;
   }
 }
 
