@@ -171,6 +171,14 @@ onMounted(() => {
   flex-direction: column;
 }
 
+ion-button {
+  // --background: #b9e5e1;
+  --background: #dcf2f0;
+  // --background: #8ed6ce;
+  // --color: #287671;
+  --color: #163d3a;
+}
+
 input {
   height: 35px;
   max-width: 470px;

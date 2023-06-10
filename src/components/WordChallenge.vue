@@ -1,73 +1,93 @@
 <template>
-  <main>
-    <div class="word-and-sentences">
-      <div class="word">
-        <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
-        <div class="word__text">
-          {{ testedWord }}
-        </div>
-        <PlayAudioIcon @click="play" />
-      </div>
-      <!-- <div class="checkmark-container" v-if="highlightActive">
-      <transition name="fade" mode="out-in" appear>
-        <CheckmarkIcon class="checkmark" />
-      </transition>
-    </div> -->
-
-      <TransitionFade>
-        <div v-if="testingSentences">
-          <!-- <ul>
-        <li v-for="(sentence, index) of sentences" :key="index" class="sentences">
-           {{ sentence }}
-          </li>
-        </ul> -->
+  <ion-page>
+    <div class="flex flex-col h-full justify-between">
+      <!-- <main class="p-4 flex flex-col w-full h-full min-h-[60%] items-center justify-center gap-y-4"> -->
+      <main class="p-3 flex flex-col w-full h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
+        <div class="instructions">
           <TransitionFade>
-            <div :key="testedSentence" class="sentence">
-              <!-- <CheckmarkIcon class="checkmark" v-if="checkmarkActive" /> -->
-              {{ testedSentence }}
-            </div>
+            <!-- Using conditional so that the transition works -->
+            <span v-if="testingWordOnly">Speak the word</span>
+            <span v-else>Speak the sentence</span>
           </TransitionFade>
         </div>
-      </TransitionFade>
-    </div>
 
-    <div
-      v-if="isRecording"
-      class="transcript"
-      :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']"
-    >
-      <!-- <label>Live transcript:</label> -->
-      <div class="transcript__text">{{ temporaryTranscript }}</div>
-    </div>
+        <ion-card class="max-w-xs mt-7 pr-2 pl-2">
+          <div class="word-container">
+            <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
+            <!-- NOTE a key is needed for transition in a computed property, but is unneeded if there's a conditional -->
+            <TransitionFade>
+              <div :key="testedWord" class="word">
+                {{ testedWord }}
+              </div>
+            </TransitionFade>
+            <PlayAudioIcon @click="play" />
+          </div>
+          <!-- <div class="checkmark-container" v-if="highlightActive">
+            <transition name="fade" mode="out-in" appear>
+              <CheckmarkIcon class="checkmark" />
+            </transition>
+          </div> -->
+        </ion-card>
 
-    <TransitionFade v-else>
-      <div class="message">
-        <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
-        <div v-else-if="recordingStatus === 'NOTHING_RECORDED'" class="message__text">
-          <span v-if="introductionNeeded"
-            >Let's test your pronunciation of this word{{
-              testingWordOnly ? '' : ' in sentences'
-            }}.</span
-          >
-          <span>Hold the button and read the {{ testingWordOnly ? 'word' : 'sentence' }}.</span>
-        </div>
-        <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
-          <span
-            >Good job 👍! Now read
-            {{ testingWordOnly ? 'it just one more time' : 'the second sentence' }}.</span
-          >
-        </div>
-        <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
-          <span>Well done 👍! {{ testingWordOnly ? 'Now try reading some sentences.' : '' }}</span>
-        </div>
-        <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text-retry">
-          <span>Try again.</span>
-        </div>
-        <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
-          <span>Let's skip this word for now.</span>
-        </div>
+        <!-- <TransitionFade class="mb-3">
+          <div :key="testedSentence" class="sentence">
+            {{ testedSentence }}
+          </div>
+        </TransitionFade> -->
+
+        <TransitionFade>
+          <div v-if="testingSentences">
+            <ion-card class="p-5 max-w-xs mt-3 mb-4">
+              <TransitionFade>
+                <div :key="testedSentence" class="sentence">
+                  {{ testedSentence }}
+                </div>
+              </TransitionFade>
+            </ion-card>
+          </div>
+        </TransitionFade>
+      </main>
+
+      <div class="message-container w-full h-full max-h-80 pt-10 pl-5 pr-5">
+        <!-- TODO remove transition below depending on user feedback; IMO, transitions make it feel smoother but also slower -->
+        <TransitionFade>
+          <div v-if="isRecording" class="transcript">
+            <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
+            <div class="transcript__text">
+              <label v-if="!testingWordOnly">Spoken Words:</label>
+              <span>
+                {{
+                  `${testingWordOnly ? 'Spoken Words:' : ''} ${
+                    temporaryTranscript.length > 0 ? '“' : ''
+                  }${temporaryTranscript}${temporaryTranscript.length > 0 ? '”' : ''}`
+                }}</span
+              >
+            </div>
+          </div>
+
+          <div v-else class="message">
+            <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
+            <div v-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
+              <span>Good job! 👍</span>
+              <span>
+                Now read
+                {{ testingWordOnly ? 'it just one more time' : 'the second sentence' }}</span
+              >
+            </div>
+            <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
+              <span>Well done! 👍</span>
+              <span>{{ testingWordOnly ? 'Now try reading some sentences' : '' }}</span>
+            </div>
+            <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text">
+              <span>Try again</span>
+            </div>
+            <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message">
+              <span>Let's skip this word for now</span>
+            </div>
+          </div>
+        </TransitionFade>
       </div>
-    </TransitionFade>
+    </div>
 
     <RecorderButton
       v-if="showRecorderButton"
@@ -82,7 +102,7 @@
     >
       Next
     </ion-button> -->
-  </main>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
@@ -102,6 +122,7 @@ import { metaphone } from 'metaphone'
 import { useRoute } from 'vue-router'
 import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import { storeToRefs } from 'pinia'
+import { IonPage, IonCard } from '@ionic/vue'
 
 const route = useRoute()
 const store = route.name === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
@@ -261,14 +282,13 @@ const handleFinalTranscript = async (transcript: string) => {
     await skipWord()
   } else {
     store.logPronunciationAttempt(testedWord.value)
-    introductionNeeded.value = false
+    // introductionNeeded.value = false
   }
 
   store.updateListsInFirestore()
 }
 
-// const checkmarkActive = ref(false)
-const introductionNeeded = ref(true)
+// const introductionNeeded = ref(true)
 
 const handleCorrectPronunciation = async () => {
   // // NOTE triggers css change
@@ -279,19 +299,7 @@ const handleCorrectPronunciation = async () => {
   //   // console.log(highlightActive.value)
   // }, 1500)
 
-  if (storeWord.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 2) {
-    // NOTE when user answers correctly once, give them a couple more attempts
-    store.softResetAttempts(testedWord.value)
-    store.logPronunciationAttemptSuccessful(testedWord.value)
-    store.logPronunciationAttempt(testedWord.value)
-    introductionNeeded.value = false
-    // if (testingSentences.value) {
-    //   checkmarkActive.value = true
-    //   setTimeout(() => {
-    //     checkmarkActive.value = false
-    //   }, 2000)
-    // }
-  } else if (storeWord.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 1) {
+  if (storeWord.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 1) {
     store.logPronunciationAttemptSuccessful(testedWord.value)
     store.logPronunciationAttempt(testedWord.value)
 
@@ -314,9 +322,21 @@ const handleCorrectPronunciation = async () => {
       testedWords.value = testedWords.value.slice(1)
       store.setListStatus('TESTING_WORD_ONLY')
     }
-
     // clearTempAndFinalTranscripts()
-    introductionNeeded.value = true
+    // introductionNeeded.value = true
+  } else {
+    // NOTE when user answers correctly once, give them a couple more attempts
+    store.softResetAttempts(testedWord.value)
+    store.logPronunciationAttemptSuccessful(testedWord.value)
+    store.logPronunciationAttempt(testedWord.value)
+    console.log(testedWord.value)
+    // introductionNeeded.value = false
+    // if (testingSentences.value) {
+    //   checkmarkActive.value = true
+    //   setTimeout(() => {
+    //     checkmarkActive.value = false
+    //   }, 2000)
+    // }
   }
 }
 
@@ -335,7 +355,7 @@ const skipWord = async () => {
   else store.setListStatus('LIST_COMPLETE')
 
   clearTempAndFinalTranscripts()
-  introductionNeeded.value = false
+  // introductionNeeded.value = false
 }
 
 const recordingStatus = computed(() => {
@@ -348,7 +368,7 @@ const recordingStatus = computed(() => {
     return 'PRONOUNCED_CORRECTLY_ONCE'
   if (isPronouncedCorrectly.value && attemptsSuccessful === attemptsSuccessfulRequired.value)
     return 'PRONOUNCED_CORRECTLY_TWICE'
-  if (attempts === attemptsLimit.value && attemptsSuccessful < attemptsSuccessfulRequired.value)
+  if (attempts >= attemptsLimit.value && attemptsSuccessful < attemptsSuccessfulRequired.value)
     return 'SKIPPING_WORD'
   return 'PRONOUNCED_INCORRECTLY'
 })
@@ -364,113 +384,95 @@ const recordingStatus = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+ion-page {
+  --height: 100%;
+}
+
 main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 300px;
+  background-color: #b9e5e1;
 }
-.word-and-sentences {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 2.5rem;
-  height: 130px;
-  margin-bottom: 2rem;
+
+.instructions,
+.message__text {
+  font-weight: 600;
+  color: rgb(65, 65, 65);
 }
-.word {
+
+ion-card {
+  --background: #eef9f8;
+}
+
+.word-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   column-gap: 0.5rem;
-  margin-bottom: 2rem;
-  // NOTE enable below if I want to include checkmark
-  // position: relative;
+  padding: 1rem 2rem;
 
-  &__text {
+  .word {
     font-size: 24px;
-    // // Note that if I want to highlight the word, the transition is applied here rather than in word-highlight
-    // transition: color 0.2s ease-in-out;
   }
 }
 
-// .word-highlight {
-//   color: green;
-// }
+.sentence {
+  font-size: 16px;
+}
+
+.message-container {
+  background-color: #8ed6ce;
+}
 
 .message {
   display: flex;
+  align-items: start;
   justify-content: center;
-  // margin-top: 2rem;
-  min-height: 64px;
-  // height: 50px;
 
-  &__text,
-  &__text-retry {
+  &__text {
     display: flex;
     flex-direction: column;
-    span {
-      padding-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--orange-color);
-    }
-  }
-
-  &__text-retry {
-    margin-left: -40px;
+    row-gap: 0.75rem;
+    font-weight: 600;
   }
 }
 
 .transcript {
-  // margin-top: 4rem;
-  display: flex;
-  min-height: 64px;
-  padding: 0 30px;
+  padding-left: 30px;
+  padding-right: 30px;
 
-  &__single-word {
-    justify-content: center;
-    margin-left: -40px;
+  &__text {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.75rem;
   }
-
-  &__multiple-words {
-    justify-content: none;
-  }
-  // position: fixed;
-  // // top: 0;
-  // left: 0;
-  // right: 0;
-  // // bottom: 1;
-  // max-height: 100vh;
-  // // padding: 3rem 0 0 0;
-  // margin: 1rem 2rem;
-  // // NOTE Probably needs to be lower, but test this first
-  // max-width: 500px;
-  // // z-index: 10;
 }
 
-.sentence {
-  display: flex;
-  padding: 0 1.5rem;
-  // margin-bottom: 1rem;
-  // align-items: center;
-}
-// .checkmark-container {
-// display: flex;
-// justify-content: center;
-// align-items: center;
-// position: absolute;
-// top: 0;
-// left: 0;
-// right: 0;
-// bottom: 0;
-// }
+body.dark {
+  main {
+    background-color: rgb(34, 34, 34);
+  }
 
-// .checkmark {
-//   height: 20px;
-//   width: 20px;
-//   margin-top: 2px;
-//   margin-right: 8px;
-//   color: green;
-//   transition: opacity 0.2s;
-// }
+  .message-container {
+    background-color: rgb(26, 26, 26);
+  }
+
+  ion-card {
+    --background: rgb(46, 46, 46);
+  }
+
+  .instructions,
+  .word,
+  .sentence,
+  .transcript__text,
+  .message__text {
+    // color: rgb(225, 225, 225);
+    color: rgb(206, 206, 206);
+  }
+
+  // ion-button {
+  //   --background: #414141;
+  //   --background-hover: #4e4e4e;
+  //   color: rgb(206, 206, 206);
+  // }
+}
 </style>
