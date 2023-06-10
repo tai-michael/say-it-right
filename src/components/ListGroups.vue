@@ -100,4 +100,17 @@ ion-accordion ion-item[slot='header'] {
   top: 0;
   z-index: 10;
 }
+
+body.dark {
+  ion-accordion ion-item[slot='header'] {
+    // margin-bottom: 0.5rem;
+    // --border-color: white;
+    // border-bottom: 1px;
+    --border-color: rgb(26, 26, 26);
+    // NOTE note specifying the border-style part results in no border
+    border-bottom: 4mm groove rgb(133, 133, 133);
+    --background: rgb(26, 26, 26);
+    --color: rgb(196, 196, 196);
+  }
+}
 </style>

@@ -431,7 +431,7 @@ ion-card {
   &__text {
     display: flex;
     flex-direction: column;
-    row-gap: 0.75rem;
+    row-gap: 0.5rem;
     font-weight: 600;
   }
 }
@@ -466,13 +466,13 @@ body.dark {
   .transcript__text,
   .message__text {
     // color: rgb(225, 225, 225);
-    color: rgb(206, 206, 206);
+    color: rgb(196, 196, 196);
   }
 
   // ion-button {
   //   --background: #414141;
   //   --background-hover: #4e4e4e;
-  //   color: rgb(206, 206, 206);
+  //   color: rgb(196, 196, 196);
   // }
 }
 </style>

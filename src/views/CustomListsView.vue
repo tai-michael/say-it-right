@@ -247,6 +247,18 @@ ion-toast {
   }
 }
 
+body.dark {
+  ion-content {
+    --background: rgb(26, 26, 26);
+  }
+
+  .input-container {
+    label {
+      color: rgb(196, 196, 196);
+    }
+  }
+}
+
 // .loading-container {
 //   margin: 1.5rem;
 //   display: flex;

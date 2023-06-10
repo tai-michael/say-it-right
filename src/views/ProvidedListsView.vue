@@ -81,6 +81,13 @@ ion-content {
     height: 2400px;
   }
 }
+
+body.dark {
+  ion-content {
+    --background: rgb(26, 26, 26);
+  }
+}
+
 // hr {
 //   border: none;
 //   height: 0.5px;

@@ -268,4 +268,20 @@ ion-alert.custom-alert {
 ion-popover {
   --width: 160px;
 }
+
+body.dark {
+  main {
+    background: rgb(26, 26, 26);
+  }
+
+  ion-toolbar {
+    --background: rgb(34, 34, 34);
+    --color: rgb(196, 196, 196);
+  }
+
+  ion-card {
+    --background: rgb(46, 46, 46);
+    --color: rgb(196, 196, 196);
+  }
+}
 </style>
