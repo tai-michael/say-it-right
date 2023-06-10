@@ -1,4 +1,5 @@
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { auth, db, user } from '@/firebaseInit'
 import {
   // createUserWithEmailAndPassword,
@@ -20,7 +21,7 @@ import { useProvidedListsStore } from '@/stores'
 
 export const useAuthStore = defineStore('auth', () => {
   const providedListsStore = useProvidedListsStore()
-
+  const router = useRouter()
   // NOTE Using firebaseUI instead
   // const signInUser = async () => {
   //   try {
@@ -49,6 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const signOutUser = () => {
     signOut(auth)
+    router.push('/')
     // location.reload()
   }
 
