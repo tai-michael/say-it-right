@@ -88,5 +88,11 @@ const providedListsPath = computed(() => {
 <style lang="scss" scoped>
 ion-tab-bar {
   --background: rgb(231, 253, 243);
+  // --background: #b9e5e1;
+  --background: #dcf2f0;
+}
+
+body.dark ion-tab-bar {
+  --background: #141414;
 }
 </style>

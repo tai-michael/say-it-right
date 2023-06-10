@@ -161,14 +161,15 @@ main {
   flex-wrap: wrap;
   // align-content: flex-start; /* Optional: aligns items to the top */
   justify-content: center;
-  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
   column-gap: 1rem;
+  background: #eef9f8;
 
   @media all and (min-width: 648px) {
     // max-height: 600px;
     // overflow: auto;
     margin-top: 1rem;
-    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
     margin-left: 2.5rem;
     row-gap: 0.5rem;
     justify-content: left;
@@ -193,6 +194,8 @@ ion-toolbar {
   --padding-end: 0;
   --padding-top: 0;
   --padding-bottom: 0;
+  --background: #b9e5e1;
+  // --background: #8ed6ce;
 
   button {
     display: flex;

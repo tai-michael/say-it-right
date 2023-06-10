@@ -68,6 +68,10 @@ onIonViewWillLeave(() => {
 </script>
 
 <style lang="scss" scoped>
+ion-content {
+  --background: #eef9f8;
+}
+
 .scroll-trigger {
   height: 800px;
   position: absolute;

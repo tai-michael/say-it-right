@@ -2,7 +2,7 @@
   <ion-page>
     <TheHeader :show-back-button="true" @back-button-clicked="returnToLists">{{ title }}</TheHeader>
 
-    <ion-content class="ion-padding">
+    <ion-content>
       <TransitionAppear>
         <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 

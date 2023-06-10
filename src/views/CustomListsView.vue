@@ -183,6 +183,10 @@ onIonViewWillLeave(() => {
 //   --border-radius: 8px;
 // }
 
+ion-content {
+  --background: #eef9f8;
+}
+
 ion-toolbar {
   --display: flex;
   --justify-content: space-between;

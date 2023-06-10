@@ -52,6 +52,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
+ion-content {
+  --background: #eef9f8;
+}
+
 .logo {
   color: #25c7b1;
 }

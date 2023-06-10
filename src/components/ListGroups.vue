@@ -72,16 +72,26 @@ const noListStarted = computed(() => !store.inProgressLists.length && !store.com
 //   --background: red;
 //   --color: red;
 // }
-ion-accordion ion-item[slot='header'] {
-  margin-bottom: 0.5rem;
-  // --border-color: white;
-  // border-bottom: 1px;
-  // NOTE note specifying the border-style part results in no border
-  border-bottom: 4mm groove rgba(211, 220, 50, 0.6);
-}
-
 ion-accordion-group {
   padding: 0 !important;
+}
+
+ion-accordion {
+  margin-top: 0.5rem;
+}
+
+ion-accordion:first-child {
+  margin-top: 0;
+}
+
+ion-accordion ion-item[slot='header'] {
+  // margin-bottom: 0.5rem;
+  // --border-color: white;
+  // border-bottom: 1px;
+  --border-color: #eef9f8;
+  // NOTE note specifying the border-style part results in no border
+  border-bottom: 4mm groove #b9e5e1;
+  --background: #eef9f8;
 }
 
 .sticky-header {

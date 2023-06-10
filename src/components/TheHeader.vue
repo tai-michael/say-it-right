@@ -163,14 +163,18 @@ ion-toolbar {
   --padding-top: 0;
   --padding-bottom: 0;
 
-  --background: #287671;
+  // --background: #8ed6ce;
+  // --background: #3bb3ac;
+  --background: #36a39c;
+  // --background: #31928c;
 
   ion-icon {
     color: rgb(231, 253, 243);
   }
 
   ion-title {
-    --color: rgb(231, 253, 243);
+    // --color: rgb(231, 253, 243);
+    --color: white;
   }
 
   button {
@@ -188,12 +192,12 @@ ion-toolbar {
   button:hover,
   button:active {
     // background-color: rgb(240, 240, 240);
-    background-color: #31928c;
+    background-color: #3bb3ac;
   }
 }
 
 body.dark ion-toolbar {
-  --background: black;
+  --background: #141414;
 
   ion-icon {
     color: rgb(196, 196, 196);
@@ -203,13 +207,9 @@ body.dark ion-toolbar {
     --color: rgb(196, 196, 196);
   }
 
-  button {
-    color-scheme: dark;
-  }
-
   button:hover,
   button:active {
-    background-color: rgb(39, 39, 39);
+    background-color: rgb(32, 32, 32);
   }
 }
 
