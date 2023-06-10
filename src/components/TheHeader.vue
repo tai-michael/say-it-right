@@ -123,17 +123,15 @@ const authButtonConfig = computed(() => {
     }
   } else {
     return {
-      onClick: testFn,
+      onClick: signInUser,
       icon: logInOutline,
       text: 'Sign in'
     }
   }
 })
 
-// possibly replace store.signInUser with below, or delete it
-const testFn = () => {
+const signInUser = () => {
   router.push('/sign-in')
-  // store.signInUser()
 }
 
 // see https://ionicframework.com/docs/theming/dark-mode for application

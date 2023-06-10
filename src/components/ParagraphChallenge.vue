@@ -366,7 +366,7 @@ main {
 .instructions,
 .message__text {
   font-weight: 600;
-  color: rgb(65, 65, 65);
+  color: rgb(80, 80, 80);
 }
 
 ion-card {

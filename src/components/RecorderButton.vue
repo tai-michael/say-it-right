@@ -7,6 +7,7 @@
       @mousedown="startRecording"
       @touchstart="startRecording"
       @touchend="stopRecording"
+      ref="recorderButton"
     >
       <!-- {{ isRecording ? 'Recording' : 'Hold to talk' }} -->
       <MicIcon />
@@ -16,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onDeactivated, ref } from 'vue'
+import { computed, onMounted, onUnmounted, onDeactivated, ref } from 'vue'
 import { client, microphone } from '@/speechlyInit.ts'
 import MicIcon from '@/assets/icons/mic.vue'
 // import { IonIcon } from '@ionic/vue'
@@ -25,6 +26,23 @@ import MicIcon from '@/assets/icons/mic.vue'
 // const props = defineProps({
 //   challengeStatus: { type: String, required: true }
 // })
+
+// NOTE prevents right-click from triggering on hold when using Chrome devtools.
+// See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
+const recorderButton = ref(null)
+onMounted(() => {
+  const disableContextMenu = (e) => {
+    e.preventDefault()
+  }
+
+  if (recorderButton.value)
+    recorderButton.value.addEventListener('contextmenu', disableContextMenu, true)
+
+  onUnmounted(() => {
+    if (recorderButton.value)
+      recorderButton.value.removeEventListener('contextmenu', disableContextMenu, true)
+  })
+})
 
 const finalTranscript = ref('')
 const temporaryTranscript = ref('')
@@ -111,7 +129,9 @@ client.onSegmentChange((segment) => {
   // justify-content: center;
   z-index: 10000;
 
-  @media (min-width: 639px) {
+  // TODO test if 500px is enough to trigger for tablets
+  // @media (min-width: 639px) {
+  @media (min-width: 500px) {
     left: 0;
     bottom: 2rem;
     justify-content: center;
@@ -139,8 +159,12 @@ client.onSegmentChange((segment) => {
     // -webkit-user-select: none !important;
     transition: transform 0.3s;
 
+    &:hover,
     &:active {
-      background-color: #e96c6c;
+      background-color: #e65757;
+    }
+
+    &:active {
       transform: scale(1.1);
     }
   }

@@ -2,13 +2,10 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons slot="end">
+        <ion-searchbar type="text" v-model="search" placeholder="Search"></ion-searchbar>
+        <ion-buttons slot="end" class="pt-2.5 pl-0 mobile-view">
           <ion-button @click="emit('dismissModal')">Cancel</ion-button>
         </ion-buttons>
-        <!-- <ion-title>Choose a word</ion-title> -->
-      </ion-toolbar>
-      <ion-toolbar>
-        <ion-searchbar type="text" v-model="search" placeholder="Search"></ion-searchbar>
       </ion-toolbar>
     </ion-header>
 
@@ -252,13 +249,57 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+ion-header {
+  display: flex;
+  align-items: center;
+}
+
+// ion-toolbar {
+//   // --background: #8ed6ce;
+//   // --background: #b9e5e1;
+// }
+
+ion-searchbar {
+  padding-top: 15px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+@media only screen and (min-width: 768px) {
+  .mobile-view {
+    display: none;
+  }
+}
+
+ion-content {
+  --background: #b9e5e1;
+  // --background: #dcf2f0;
+  @media (min-width: 639px) {
+    --background: white;
+  }
+}
+
+select {
+  padding-left: 5px;
+}
+
+body.dark {
+  ion-content {
+    --background: rgb(26, 26, 26);
+  }
+
+  select {
+    background: rgb(46, 46, 46);
+    border-color: rgb(65, 65, 65);
+  }
+}
+
 ion-item {
   margin-left: 0px !important;
   padding-left: 0px !important;
   --padding-start: 0px;
   --inner-padding-end: 0px;
 }
-
 .light-selected {
   --ion-item-background: rgb(236, 236, 236);
   // padding: 0 0.5rem;

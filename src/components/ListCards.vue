@@ -168,9 +168,9 @@ main {
   @media all and (min-width: 648px) {
     // max-height: 600px;
     // overflow: auto;
-    margin-top: 1rem;
+    padding-top: 1rem;
     padding-bottom: 2.5rem;
-    margin-left: 2.5rem;
+    padding-left: 2.5rem;
     row-gap: 0.5rem;
     justify-content: left;
 
@@ -195,6 +195,7 @@ ion-toolbar {
   --padding-top: 0;
   --padding-bottom: 0;
   --background: #b9e5e1;
+  // --background: #a4ded8;
   // --background: #8ed6ce;
 
   button {

@@ -1,90 +1,115 @@
 <template>
-  <main>
-    <div class="word-and-sentences">
-      <div class="word">
-        <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
-        <div class="word__text">
-          {{ wordName }}
-        </div>
-        <PlayAudioIcon @click="play" />
-      </div>
-      <!-- <div class="checkmark-container" v-if="highlightActive">
-      <transition name="fade" mode="out-in" appear>
-        <CheckmarkIcon class="checkmark" />
-      </transition>
-    </div> -->
-
-      <TransitionFade>
-        <div v-if="recordingStatus === 'TESTING_COMPLETE'">
-          <div v-if="relatedWords" class="related-words-container">
-            <LoadingDots v-if="isLoading || !relatedWords.length" />
-            <div v-else class="related-words">
-              <div v-for="(word, index) of relatedWords" :key="index">
-                <span @click="handleRelatedWordClick(word)" class="related-word">{{ word }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </TransitionFade>
-
-      <TransitionFade>
-        <div v-if="testingSentences">
-          <!-- <ul>
-        <li v-for="(sentence, index) of sentences" :key="index" class="sentences">
-           {{ sentence }}
-          </li>
-        </ul> -->
+  <ion-page>
+    <div class="flex flex-col h-full justify-between">
+      <main class="p-3 flex flex-col w-full h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
+        <div class="instructions">
           <TransitionFade>
-            <div :key="testedSentence" class="sentence">
-              <!-- <CheckmarkIcon class="checkmark" v-if="checkmarkActive" /> -->
-              {{ testedSentence }}
-            </div>
+            <!-- Using conditional so that the transition works -->
+            <span v-if="testingWordOnly">Speak this word</span>
+            <span v-else-if="recordingStatus === 'TESTING_COMPLETE'"></span>
+            <span v-else>Speak this sentence</span>
           </TransitionFade>
         </div>
-      </TransitionFade>
-    </div>
 
-    <div
-      v-if="isRecording"
-      class="transcript"
-      :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']"
-    >
-      <!-- <label>Live transcript:</label> -->
-      <div class="transcript__text">{{ temporaryTranscript }}</div>
-    </div>
+        <ion-card class="max-w-xs mt-7 pr-2 pl-2">
+          <div class="word-container">
+            <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
+            <TransitionFade>
+              <div :key="wordName" class="word">
+                {{ wordName }}
+              </div>
+            </TransitionFade>
+            <PlayAudioIcon @click="play" />
+          </div>
+          <!-- <div class="checkmark-container" v-if="highlightActive">
+            <transition name="fade" mode="out-in" appear>
+              <CheckmarkIcon class="checkmark" />
+            </transition>
+          </div> -->
+        </ion-card>
 
-    <TransitionFade v-else>
-      <div class="message">
-        <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
-        <div v-else-if="recordingStatus === 'NOTHING_RECORDED'" class="message__text">
-          <span v-if="introductionNeeded"
-            >Let's test your pronunciation of this word{{
-              testingWordOnly ? '' : ' in sentences'
-            }}.</span
-          >
-          <span>Hold the button and read the {{ testingWordOnly ? 'word' : 'sentence' }}.</span>
-        </div>
-        <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
-          <span
-            >Good job 👍! Now read
-            {{ testingWordOnly ? 'it just one more time' : 'the second sentence' }}.</span
-          >
-        </div>
-        <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
-          <span>Well done 👍! {{ testingWordOnly ? 'Now try reading some sentences.' : '' }}</span>
-        </div>
-        <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text-retry">
-          <span>Try again.</span>
-        </div>
-        <!-- <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
-          <span>Let's skip this word for now.</span>
-        </div> -->
-        <div v-else-if="recordingStatus === 'TESTING_COMPLETE'" class="message__text">
-          <span>Practice with a similar word!</span>
-          <span>Or <span @click="resetWord" class="link">Retry</span> this word.</span>
-        </div>
+        <TransitionFade>
+          <div v-if="testingSentences">
+            <!-- <ul>
+            <li v-for="(sentence, index) of sentences" :key="index" class="sentences">
+               {{ sentence }}
+              </li>
+            </ul> -->
+            <ion-card class="p-5 max-w-xs mt-3 mb-4">
+              <TransitionFade>
+                <div :key="testedSentence" class="sentence">
+                  {{ testedSentence }}
+                </div>
+              </TransitionFade>
+            </ion-card>
+          </div>
+
+          <div v-else-if="recordingStatus === 'TESTING_COMPLETE'">
+            <!-- <TransitionFade> -->
+            <div v-if="relatedWords" class="related-words-container">
+              <LoadingDots v-if="isLoading || !relatedWords.length" class="mt-9 mb-4" />
+              <div v-else>
+                <!-- <TransitionFade> -->
+                <ion-card class="flex p-5 pl-3 pr-3 max-w-xs mt-3 mb-4">
+                  <div class="related-words">
+                    <div v-for="(word, index) of relatedWords" :key="index">
+                      <span @click="handleRelatedWordClick(word)" class="related-word">{{
+                        word
+                      }}</span>
+                    </div>
+                  </div>
+                </ion-card>
+                <!-- </TransitionFade> -->
+              </div>
+            </div>
+            <!-- </TransitionFade> -->
+          </div>
+        </TransitionFade>
+      </main>
+
+      <div class="message-container w-full h-full max-h-80 pt-10 pl-5 pr-5">
+        <TransitionFade>
+          <div v-if="isRecording" class="transcript sm:flex sm:justify-center">
+            <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
+            <div class="transcript__text">
+              <label v-if="!testingWordOnly">Spoken Words:</label>
+              <span>
+                {{
+                  `${testingWordOnly ? 'Spoken Words:' : ''} ${
+                    temporaryTranscript.length > 0 ? '“' : ''
+                  }${temporaryTranscript}${temporaryTranscript.length > 0 ? '”' : ''}`
+                }}</span
+              >
+            </div>
+          </div>
+
+          <div v-else class="message">
+            <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
+            <div v-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
+              <span>Good job! 👍</span>
+              <span>
+                Now read
+                {{ testingWordOnly ? 'it just one more time' : 'the second sentence' }}</span
+              >
+            </div>
+            <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
+              <span>Well done! 👍</span>
+              <span>{{ testingWordOnly ? 'Now try reading some sentences' : '' }}</span>
+            </div>
+            <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text">
+              <span>Try again</span>
+            </div>
+            <!-- <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message">
+              <span>Let's skip this word for now</span>
+            </div> -->
+            <div v-else-if="recordingStatus === 'TESTING_COMPLETE'" class="message__text">
+              <span>Practice with a similar word!</span>
+              <span>Or <span @click="resetWord" class="link">Retry</span> this word.</span>
+            </div>
+          </div>
+        </TransitionFade>
       </div>
-    </TransitionFade>
+    </div>
 
     <!-- <RecorderButton
       v-if="showRecorderButton"
@@ -107,7 +132,7 @@
     >
       Next
     </ion-button> -->
-  </main>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
@@ -129,6 +154,7 @@ import { metaphone } from 'metaphone'
 import { useRoute } from 'vue-router'
 import type { WordSource } from '@/stores/modules/types/Review'
 import { useReviewStore } from '@/stores/index.ts'
+import { IonPage, IonCard } from '@ionic/vue'
 // import { storeToRefs } from 'pinia'
 
 const route = useRoute()
@@ -257,13 +283,13 @@ const handleFinalTranscript = async (transcript: string) => {
     //   await skipWord()
   } else {
     store.logPronunciationAttempt(wordName.value)
-    introductionNeeded.value = false
+    // introductionNeeded.value = false
   }
 
   store.updateReviewInFirestore()
 }
 
-const introductionNeeded = ref(true)
+// const introductionNeeded = ref(true)
 
 const handleCorrectPronunciation = async () => {
   if (word.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 2) {
@@ -271,7 +297,7 @@ const handleCorrectPronunciation = async () => {
     // store.softResetAttempts(wordName.value)
     store.logPronunciationAttemptSuccessful(wordName.value)
     store.logPronunciationAttempt(wordName.value)
-    introductionNeeded.value = false
+    // introductionNeeded.value = false
     // if (testingSentences.value) {
     //   checkmarkActive.value = true
     //   setTimeout(() => {
@@ -290,7 +316,7 @@ const handleCorrectPronunciation = async () => {
       // store.hardResetAttempts(wordName.value)
       // store.setWordStatus(word.value, 'TESTING_SENTENCES')
       word.value.status = 'TESTING_SENTENCES'
-      introductionNeeded.value = true
+      // introductionNeeded.value = true
 
       if (relatedWords.value.length > 0) return
       relatedWords.value = await useRelatedWordsCreationAndStorage(wordName.value)
@@ -302,7 +328,7 @@ const handleCorrectPronunciation = async () => {
       isPronouncedCorrectly.value = false
       // store.setWordStatus(word.value, 'TESTING_COMPLETE')
       word.value.status = 'TESTING_COMPLETE'
-      introductionNeeded.value = true
+      // introductionNeeded.value = true
     }
   }
 }
@@ -339,139 +365,142 @@ const recordingStatus = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+ion-page {
+  --height: 100%;
+}
+
 main {
-  display: flex;
-  flex-direction: column !important;
-  justify-content: center;
-  // min-height: 700px;
-  padding: 2rem 1rem 0.5rem;
-  min-width: 380px;
-  // height: 300px;
+  background-color: #b9e5e1;
+
+  // @media only screen and (min-width: 768px) {
+  //   padding-left: 300px !important;
+  // }
 }
-.word-and-sentences {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 0.5rem;
-  height: 140px;
-  margin-bottom: 2rem;
+
+.instructions {
+  height: 19px;
 }
-.word {
+
+.instructions,
+.message__text,
+.related-word {
+  font-weight: 600;
+  color: rgb(80, 80, 80);
+}
+
+ion-card {
+  --background: #eef9f8;
+}
+
+.word-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   column-gap: 0.5rem;
-  margin-bottom: 2rem;
-  // NOTE enable below if I want to include checkmark
-  // position: relative;
+  padding: 1rem 2rem;
 
-  &__text {
+  .word {
     font-size: 24px;
-    // // Note that if I want to highlight the word, the transition is applied here rather than in word-highlight
-    // transition: color 0.2s ease-in-out;
   }
 }
 
-// .word-highlight {
-//   color: green;
-// }
+.sentence {
+  font-size: 16px;
+}
+
+.message-container {
+  background-color: #8ed6ce;
+}
 
 .message {
   display: flex;
+  align-items: start;
   justify-content: center;
-  // margin-top: 2rem;
-  min-height: 64px;
-  // height: 50px;
 
-  &__text,
-  &__text-retry {
+  &__text {
     display: flex;
     flex-direction: column;
-    span {
-      padding-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--orange-color);
-    }
-  }
-
-  &__text-retry {
-    margin-left: -40px;
+    row-gap: 0.5rem;
+    font-weight: 600;
   }
 }
 
 .transcript {
-  // margin-top: 4rem;
-  display: flex;
-  min-height: 64px;
-  padding: 0 30px;
+  padding-left: 30px;
+  padding-right: 30px;
 
-  &__single-word {
-    justify-content: center;
-    margin-left: -40px;
+  &__text {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.75rem;
   }
-
-  &__multiple-words {
-    justify-content: none;
-  }
-  // position: fixed;
-  // // top: 0;
-  // left: 0;
-  // right: 0;
-  // // bottom: 1;
-  // max-height: 100vh;
-  // // padding: 3rem 0 0 0;
-  // margin: 1rem 2rem;
-  // // NOTE Probably needs to be lower, but test this first
-  // max-width: 500px;
-  // // z-index: 10;
-}
-
-.sentence {
-  display: flex;
-  padding: 0 1.5rem;
-  // margin-bottom: 1rem;
-  // align-items: center;
 }
 
 .related-words-container {
   display: flex;
-  flex-direction: column;
-  row-gap: 2rem;
+  // flex-direction: column;
+  // row-gap: 2rem;
   margin-top: 1rem;
+
   .related-words {
     display: flex;
     flex-direction: row;
-    column-gap: 4rem;
+    // justify-content: space-between;
+    // column-gap: 2.5rem;
+    // padding: 0 0.75rem;
   }
   .related-word {
-    color: var(--green-color) !important;
+    // color: var(--green-color) !important;
+    padding: 1rem;
+    text-decoration: underline;
+    font-size: 16px;
     cursor: pointer;
     font-weight: 700;
+
+    &:hover {
+      color: #709af5;
+    }
   }
 }
 
 .link {
   text-decoration: underline;
-  color: var(--green-color) !important;
+  // color: var(--green-color) !important;
   cursor: pointer;
-}
-// .checkmark-container {
-// display: flex;
-// justify-content: center;
-// align-items: center;
-// position: absolute;
-// top: 0;
-// left: 0;
-// right: 0;
-// bottom: 0;
-// }
 
-// .checkmark {
-//   height: 20px;
-//   width: 20px;
-//   margin-top: 2px;
-//   margin-right: 8px;
-//   color: green;
-//   transition: opacity 0.2s;
-// }
+  &:hover {
+    color: #709af5;
+  }
+}
+
+body.dark {
+  main {
+    background-color: rgb(34, 34, 34);
+  }
+
+  .message-container {
+    background-color: rgb(26, 26, 26);
+  }
+
+  ion-card {
+    --background: rgb(46, 46, 46);
+  }
+
+  .instructions,
+  .word,
+  .sentence,
+  .related-word,
+  .transcript__text,
+  .message__text {
+    // color: rgb(225, 225, 225);
+    color: rgb(196, 196, 196);
+  }
+
+  // ion-button {
+  //   --background: #414141;
+  //   --background-hover: #4e4e4e;
+  //   color: rgb(196, 196, 196);
+  // }
+}
 </style>

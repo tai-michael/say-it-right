@@ -6,8 +6,8 @@
         <div class="instructions">
           <TransitionFade>
             <!-- Using conditional so that the transition works -->
-            <span v-if="testingWordOnly">Speak the word</span>
-            <span v-else>Speak the sentence</span>
+            <span v-if="testingWordOnly">Speak this word</span>
+            <span v-else>Speak this sentence</span>
           </TransitionFade>
         </div>
 
@@ -51,7 +51,7 @@
       <div class="message-container w-full h-full max-h-80 pt-10 pl-5 pr-5">
         <!-- TODO remove transition below depending on user feedback; IMO, transitions make it feel smoother but also slower -->
         <TransitionFade>
-          <div v-if="isRecording" class="transcript">
+          <div v-if="isRecording" class="transcript sm:flex sm:justify-center">
             <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
             <div class="transcript__text">
               <label v-if="!testingWordOnly">Spoken Words:</label>
@@ -81,7 +81,7 @@
             <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text">
               <span>Try again</span>
             </div>
-            <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message">
+            <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
               <span>Let's skip this word for now</span>
             </div>
           </div>
@@ -395,7 +395,7 @@ main {
 .instructions,
 .message__text {
   font-weight: 600;
-  color: rgb(65, 65, 65);
+  color: rgb(80, 80, 80);
 }
 
 ion-card {

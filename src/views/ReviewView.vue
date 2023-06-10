@@ -8,9 +8,9 @@
         <ion-button
           :detail="false"
           id="word-selection-list"
-          class="ml-12 mr-4 flex max-h-8 mobile-view"
+          class="ml-14 mr-4 flex max-h-8 mobile-view"
         >
-          <ion-label class="m-0 max-h-8">Choose a word to review</ion-label>
+          <ion-label class="m-0 max-h-8">Click to choose word</ion-label>
         </ion-button>
       </template>
     </TheHeader>
@@ -148,7 +148,7 @@ onMounted(() => {
 
     &__select {
       width: 300px;
-      margin-top: 0.75rem;
+      margin-top: 2.75rem;
     }
   }
   .mobile-view {
@@ -173,10 +173,30 @@ onMounted(() => {
 
 ion-button {
   // --background: #b9e5e1;
-  --background: #dcf2f0;
+  --background: #f0fffd;
   // --background: #8ed6ce;
+  --background-activated: #dfeceb;
+  --background-focused: #dfeceb;
+
+  &:hover {
+    --background: #dfeceb;
+  }
   // --color: #287671;
-  --color: #163d3a;
+  --color: rgb(80, 80, 80);
+  --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.35);
+}
+
+body.dark ion-button {
+  --background: rgb(196, 196, 196);
+
+  --background-activated: rgb(221, 221, 221);
+  --background-focused: rgb(221, 221, 221);
+
+  &:hover {
+    --background: rgb(221, 221, 221);
+  }
+
+  --color: rgb(32, 32, 32);
 }
 
 input {
