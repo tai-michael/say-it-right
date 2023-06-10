@@ -8,7 +8,7 @@
           <span>Hold the button and speak this paragraph</span>
         </div>
 
-        <!-- REVIEW mb-3 might be better -->
+        <!-- :class="[testedParagraph.length > 350 ? '!leading-6' : '']" -->
         <ion-card class="ml-0.5 mr-0.5 mb-3 pl-5 pr-5 max-w-xs">
           <div class="tested-paragraph sm:!leading-8">
             <p v-html="testedParagraph"></p>
@@ -16,29 +16,26 @@
         </ion-card>
       </main>
 
-      <div v-if="isRecording" class="transcript">
-        <label>Live transcript:</label>
-        <div>{{ temporaryTranscriptDisplay }}</div>
-      </div>
-
       <div
-        v-else
         class="message-container w-full h-full max-h-80 flex justify-center items-start pt-5 sm:items-start sm:pt-10"
       >
-        <div class="message">
+        <div v-if="isRecording" class="transcript">
+          <!-- TODO maybe replace this with a sound wave animation -->
+          <div>Recording...</div>
+          <!-- <label>Spoken Words:</label>
+        <div>{{ temporaryTranscriptDisplay }}</div> -->
+        </div>
+
+        <div v-else class="message">
           <div class="sm:pb-5">
-            <div v-if="recordingStatus === 'IS_CURRENTLY_RECORDING'"></div>
-            <!-- <div v-else-if="recordingStatus === 'NO_WORDS_RECORDED'" class="message__text">
-            <span>Let's start by testing your pronunciation.</span>
-            <span>Hold the button and read the paragraph.</span>
-          </div> -->
-            <div v-else-if="recordingStatus === 'FEW_WORD_RECORDED'" class="message__text">
-              <span>Please try again. You didn't record enough words.</span>
-              <span>Remember to hold the recording button.</span>
+            <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
+            <div v-else-if="recordingStatus === 'FEW_WORDS_RECORDED'" class="message__text">
+              <span>You didn't record enough words.</span>
+              <span>Try again, and remember to hold the recording button.</span>
             </div>
             <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
-              <span>Very impressive! You pronounced each tested word correctly.</span>
-              <span>You can create or look at another list.</span>
+              <span>Excellent! You pronounced each tested word correctly.</span>
+              <span>Next, create or try another list.</span>
             </div>
             <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
               <span>Good job! You mispronounced only one word.</span>
@@ -63,6 +60,7 @@
 
               <!-- <span>You did pretty well! However, these words were mispronounced.</span>
               <span>Let's practice them.</span> -->
+
               <span>These words were mispronounced.</span>
               <span>Let's practice them.</span>
             </div>
@@ -330,12 +328,12 @@ const recordingStatus = computed(() => {
   // NOTE list status is needed b/c finalTranscript is not stored in backend;
   // allows for correct message upon reloading page
   else if (!finalTranscript.value.length && props.list.status === 'LIST_NOT_STARTED')
-    return 'NO_WORDS_RECORDED'
+    return 'NOTHING_RECORDED'
   else if (
     finalTranscript.value.split(' ').length <= 10 &&
     props.list.status === 'LIST_NOT_STARTED'
   )
-    return 'FEW_WORD_RECORDED'
+    return 'FEW_WORDS_RECORDED'
   else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length)
     return 'ALL_WORDS_CORRECT'
   else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length - 1)
@@ -361,8 +359,14 @@ ion-page {
   --height: 100%;
 }
 
-.instructions {
+main {
+  background-color: #b9e5e1;
+}
+
+.instructions,
+.message__text {
   font-weight: 600;
+  color: rgb(65, 65, 65);
 }
 
 ion-card {
@@ -374,7 +378,6 @@ ion-card {
   color: rgb(19, 19, 19);
   // font-family: Arial;
   // font-family: Verdana;
-  // REVIEW use 24px line-height if not enough space for long msgs
   line-height: 26px;
   // margin: 0.5rem 0;
   p {
@@ -418,28 +421,26 @@ ion-card {
   }
 }
 
+// hr {
+//   border: none;
+//   height: 0.5px;
+//   background-color: var(--vt-c-text-dark-2); // gray
+// }
+
+// label {
+//   font-weight: 800;
+// }
+
 .message-container {
   background-color: #8ed6ce;
-}
-
-main {
-  background-color: #b9e5e1;
-}
-
-hr {
-  border: none;
-  height: 0.5px;
-  background-color: var(--vt-c-text-dark-2); // gray
-}
-
-label {
-  font-weight: 800;
+  // align-content: space-around !important;
+  // align-content: space-between !important;
 }
 
 .message {
   display: flex;
   flex-direction: column;
-  row-gap: 0.75rem;
+  // row-gap: 0.75rem;
   // max-width: 340px;
   // min-height: 100px;
   // height: 50px;
@@ -449,18 +450,20 @@ label {
   &__text {
     display: flex;
     flex-direction: column;
+    row-gap: 0.75rem;
     margin-left: 0.1rem;
+
     span {
       // padding-bottom: 0.25rem;
+      // color: var(--orange-color);
       font-weight: 600;
-      color: var(--orange-color);
     }
   }
 }
 
 .transcript {
-  margin-top: 1rem;
-  min-height: 100px;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 ion-button {
@@ -468,40 +471,40 @@ ion-button {
   // --background-hover: #31928c;
   --background: #31928c;
   --background-hover: #36a19c;
+  --background-activated: #36a19c;
+
   // max-width: 50px;
-  max-height: 44px;
   display: flex;
+  margin: 1rem 0;
+  max-height: 44px;
   text-transform: uppercase;
   color: rgb(231, 253, 243);
 }
 
-.next-button:hover {
-  cursor: pointer;
-}
-
 body.dark {
   main {
-    background-color: rgb(41, 41, 41);
+    background-color: rgb(34, 34, 34);
   }
 
   .message-container {
-    background-color: rgb(19, 19, 19);
+    background-color: rgb(26, 26, 26);
   }
 
   ion-card {
-    --background: #1c1c1d;
+    --background: rgb(46, 46, 46);
   }
 
   .instructions,
   .tested-paragraph,
   .message__text {
-    color: rgb(196, 196, 196);
+    color: rgb(206, 206, 206);
   }
 
   ion-button {
     --background: #414141;
     --background-hover: #4e4e4e;
-    color: rgb(196, 196, 196);
+    --background-activated: #4e4e4e;
+    color: rgb(206, 206, 206);
   }
 }
 </style>
