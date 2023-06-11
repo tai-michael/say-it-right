@@ -2,8 +2,8 @@
   <ion-page>
     <TheHeader>The Hardest Words</TheHeader>
     <div class="h-full flex flex-col align-middle items-center">
-      <ion-label class="m-5 ion-padding"
-        >Top 10 hardest words based on user-collected data:</ion-label
+      <ion-label class="m-5 ion-padding leading-6"
+        >Top 10 hardest words based on data collected from users:</ion-label
       >
       <ion-card class="m-0 p-1 pl-2 pr-2">
         <ol class="list">
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
-import { IonPage, IonLabel } from '@ionic/vue'
+import { IonPage, IonLabel, IonCard } from '@ionic/vue'
 import { db } from '@/firebaseInit'
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore'
 

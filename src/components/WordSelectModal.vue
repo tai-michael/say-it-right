@@ -52,6 +52,7 @@
           ></ion-icon>
         </ion-item>
 
+        <div v-if="sortedWords.length === 0" class="pl-2.5 pt-2.5 pb-2.5">(No results)</div>
         <!-- <RecycleScroller
           class="scroller"
           :items="sortedWords"
@@ -176,11 +177,15 @@ const deleteWord = async (word: WordObject) => {
       review: arrayRemove(word)
     })
 
-    store.deleteWord(word.word)
-    console.log('word deleted')
+    // NOTE this delay makes the deletion more obvious to users
+    setTimeout(() => {
+      store.deleteWord(word.word)
+    }, 500)
+
     emit('wordDeleted', word.word)
     setToastOpen(true)
     wordToDelete.value = null
+    console.log('word deleted')
   } catch (err) {
     console.log(`Failed to delete word ${err}`)
   }
@@ -260,9 +265,10 @@ ion-header {
 // }
 
 ion-searchbar {
-  padding-top: 15px;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 4px;
 }
 
 @media only screen and (min-width: 768px) {

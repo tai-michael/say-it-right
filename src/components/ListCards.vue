@@ -11,7 +11,7 @@
             <button
               v-if="props.destinationRoute === 'custom-list'"
               slot="end"
-              class="text-xl"
+              class="menu-button text-xl"
               :class="{ 'dark-mode': isDarkModeEnabled }"
               @click.prevent="openPopover($event, list)"
             >
@@ -212,7 +212,7 @@ ion-toolbar {
   }
 
   button:hover {
-    background-color: rgb(240, 240, 240);
+    background-color: rgb(199, 243, 239);
   }
 
   button.dark-mode {
