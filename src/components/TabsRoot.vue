@@ -24,22 +24,22 @@
         <RouterLink to="/hard-words">Hard Words</RouterLink>
         <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink> -->
         <ion-tab-button tab="custom-list" :href="customListsPath">
-          <ion-icon :icon="playCircle" />
+          <ion-icon :icon="personCircle" />
           <ion-label>Custom Lists</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="provided-lists" :href="providedListsPath">
-          <ion-icon :icon="radio" />
+          <ion-icon :icon="folder" />
           <ion-label>Provided Lists</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="review" href="/review" v-if="reviewStore.allWords.length > 0">
-          <ion-icon :icon="library" />
+          <ion-icon :icon="time" />
           <ion-label>Review</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="hard-words" href="/hard-words">
-          <ion-icon :icon="search" />
+          <ion-icon :icon="trophy" />
           <ion-label>Hard Words</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
@@ -51,7 +51,7 @@
 import { computed } from 'vue'
 import { customEnterAnimation } from '@/components/transitions/CustomEnterAnimation'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
-import { playCircle, radio, library, search } from 'ionicons/icons'
+import { personCircle, folder, time, trophy } from 'ionicons/icons'
 import {
   IonPage,
   IonRouterOutlet,
