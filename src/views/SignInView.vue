@@ -56,6 +56,12 @@ ion-content {
   --background: #eef9f8;
 }
 
+body.dark {
+  ion-content {
+    --background: rgb(26, 26, 26);
+  }
+}
+
 .logo {
   color: #25c7b1;
 }
@@ -90,18 +96,18 @@ ion-content {
   background-color: #25c7b1 !important;
 }
 
-.mdl-progress > .bufferbar {
-  background-image: linear-gradient(90deg, hsla(0, 0%, 100%, 0.7), hsla(0, 0%, 100%, 0.7)),
-    linear-gradient(90deg, #25c7b1, #25c7b1) !important;
-  z-index: 0;
-  left: 0;
-}
+// .mdl-progress > .bufferbar {
+//   background-image: linear-gradient(90deg, hsla(0, 0%, 100%, 0.7), hsla(0, 0%, 100%, 0.7)),
+//     linear-gradient(90deg, #25c7b1, #25c7b1) !important;
+//   z-index: 0;
+//   left: 0;
+// }
 
-.mdl-progress:not(.mdl-progress--indeterminate) > .auxbar,
-.mdl-progress:not(.mdl-progress__indeterminate) > .auxbar {
-  background-image: linear-gradient(90deg, hsla(0, 0%, 100%, 0.9), hsla(0, 0%, 100%, 0.9)),
-    linear-gradient(90deg, #25c7b1, #25c7b1) !important;
-}
+// .mdl-progress:not(.mdl-progress--indeterminate) > .auxbar,
+// .mdl-progress:not(.mdl-progress__indeterminate) > .auxbar {
+//   background-image: linear-gradient(90deg, hsla(0, 0%, 100%, 0.9), hsla(0, 0%, 100%, 0.9)),
+//     linear-gradient(90deg, #25c7b1, #25c7b1) !important;
+// }
 
 // .firebaseui-idp-button {
 //   background-color: #6294ff !important;
