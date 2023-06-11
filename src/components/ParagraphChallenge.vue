@@ -378,7 +378,8 @@ ion-card {
   color: rgb(19, 19, 19);
   // font-family: Arial;
   // font-family: Verdana;
-  line-height: 26px;
+  line-height: 24px;
+  // line-height: 26px;
   // margin: 0.5rem 0;
   p {
     margin: 0.5rem 0.25;

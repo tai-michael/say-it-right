@@ -100,7 +100,7 @@ body.dark {
 
 //   label {
 //     padding-bottom: 1rem;
-//     font-weight: 700;
+//     font-weight: 600;
 //   }
 // }
 </style>

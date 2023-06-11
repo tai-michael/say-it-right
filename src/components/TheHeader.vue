@@ -192,6 +192,12 @@ ion-toolbar {
     // background-color: rgb(240, 240, 240);
     background-color: #3bb3ac;
   }
+
+  ion-progress-bar {
+    --background: #a5bbfa;
+    // --progress-background: #3d8bff;
+    --progress-background: #4255ff;
+  }
 }
 
 body.dark ion-toolbar {

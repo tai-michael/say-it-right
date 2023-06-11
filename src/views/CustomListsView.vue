@@ -108,14 +108,15 @@ const submitWords = async (words: string) => {
   } catch (err) {
     console.log(err)
     isLoading.value = false
-    submissionError.value = 'Oops! Something went wrong. Please try again'
+    submissionError.value = 'Oops! Something went wrong. Please try again.'
   }
 }
 
 const createNewListFromWords = (words: string[], allLists: List[], paragraph: string) => {
   const newListObject: List = {
-    // NOTE if a list gets deleted, this works better than 'allLists.length + 1'
-    listNumber: allLists[allLists.length - 1].listNumber + 1,
+    // NOTE if a list gets deleted, the first works better than 'allLists.length + 1'
+    listNumber:
+      allLists.length > 0 ? allLists[allLists.length - 1].listNumber + 1 : allLists.length + 1,
     status: 'LIST_NOT_STARTED',
     paragraph: paragraph,
     words: {}

@@ -85,7 +85,7 @@ main {
 
 .link {
   color: rgb(84, 191, 226) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   cursor: pointer;
   transition: 0.4s;
   text-decoration: underline;

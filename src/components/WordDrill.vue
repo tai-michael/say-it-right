@@ -382,8 +382,7 @@ main {
 }
 
 .instructions,
-.message__text,
-.related-word {
+.message__text {
   font-weight: 600;
   color: rgb(80, 80, 80);
 }
@@ -451,26 +450,22 @@ ion-card {
     // padding: 0 0.75rem;
   }
   .related-word {
-    // color: var(--green-color) !important;
     padding: 1rem;
-    text-decoration: underline;
     font-size: 16px;
-    cursor: pointer;
-    font-weight: 700;
-
-    &:hover {
-      color: #709af5;
-    }
+    font-weight: 600;
   }
 }
 
-.link {
+.link,
+.related-word {
   text-decoration: underline;
-  // color: var(--green-color) !important;
   cursor: pointer;
+  color: rgb(84, 150, 226);
+  transition: 0.2s;
 
   &:hover {
-    color: #709af5;
+    // background-color: hsla(202, 100%, 37%, 0.1);
+    color: rgb(126, 185, 253);
   }
 }
 
@@ -490,7 +485,6 @@ body.dark {
   .instructions,
   .word,
   .sentence,
-  .related-word,
   .transcript__text,
   .message__text {
     // color: rgb(225, 225, 225);
