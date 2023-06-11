@@ -10,22 +10,26 @@
           v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
           :list="list"
         />
-      </TransitionAppear>
 
-      <div v-if="list.status === 'LIST_COMPLETE'" class="message">
-        <div class="message__text">
-          <span>You have completed this list.</span>
-          <span>
-            We recommend that you <RouterLink to="/review" class="link">Review</RouterLink> the
-            words you've learned!</span
-          >
-          <span
-            >You can also <span @click="returnToLists" class="link">Create or Try</span> another
-            list</span
-          >
-          <span>Or you can <span @click="store.resetList" class="link">Retry</span> this list</span>
+        <div v-else-if="list.status === 'LIST_COMPLETE'" class="message ion-padding">
+          <div class="message__text flex flex-col">
+            <span class="mb-5">You've completed this list!</span>
+            <span class="mb-4">You can: </span>
+            <ul>
+              <li>
+                <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned
+              </li>
+              <li>
+                <span @click="returnToLists" class="link">
+                  {{ `${routeName === 'custom-lists' ? 'Create or' : ''}` }} Try</span
+                >
+                another list
+              </li>
+              <li>Or <span @click="store.resetList" class="link">Retry</span> this list</li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </TransitionAppear>
     </ion-content>
   </ion-page>
 </template>
@@ -76,31 +80,42 @@ const title = computed(
   display: flex;
   justify-content: center;
   // margin-top: 2rem;
-  min-height: 64px;
-  padding: 0 5rem;
+  // min-height: 64px;
+  margin-top: 2rem;
   // height: 50px;
+  // font-weight: 600;
+  color: rgb(80, 80, 80);
 
-  &__text {
-    display: flex;
-    flex-direction: column;
-    span {
-      padding-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--orange-color);
-    }
+  li:not(:last-child) {
+    padding-bottom: 2rem;
+  }
+
+  // &__text {
+  //   display: flex;
+  //   flex-direction: column;
+  //   row-gap: 1rem;
+  //   span {
+  //   }
+  // }
+}
+
+body.dark {
+  .message {
+    color: rgb(196, 196, 196);
   }
 }
 
 .link {
-  color: rgb(84, 191, 226) !important;
-  font-weight: 700 !important;
+  color: rgb(84, 150, 226);
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.4s;
+  transition: 0.3s;
   text-decoration: underline;
-}
 
-.link:hover {
-  background-color: hsla(160, 100%, 37%, 0.2);
+  &:hover {
+    // background-color: hsla(202, 100%, 37%, 0.1);
+    color: rgb(126, 185, 253);
+  }
 }
 
 .fade-appear-from,
