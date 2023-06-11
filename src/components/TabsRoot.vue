@@ -33,7 +33,7 @@
           <ion-label>Provided Lists</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="review" href="/review">
+        <ion-tab-button tab="review" href="/review" v-if="reviewStore.allWords.length > 0">
           <ion-icon :icon="library" />
           <ion-label>Review</ion-label>
         </ion-tab-button>
@@ -61,12 +61,13 @@ import {
   IonLabel,
   IonIcon
 } from '@ionic/vue'
-import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
+const reviewStore = useReviewStore()
 
 const customAnimation = computed(() =>
   route.name === 'custom-list' || route.name === 'provided-list'

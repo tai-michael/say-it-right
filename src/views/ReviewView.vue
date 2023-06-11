@@ -18,11 +18,18 @@
     <ion-content>
       <keep-alive>
         <WordDrill
-          :word="selectedWord"
           v-if="selectedWord"
+          :word="selectedWord"
           :key="selectedWord.word"
           @related-word-clicked="handleRelatedWordClicked"
         />
+        <div
+          v-else
+          class="instructions flex flex-col h-full w-full justify-center align-middle items-center gap-y-3 p-2 font-semibold"
+        >
+          <span class="max-w-xs text-center"> Review words you've mispronounced. </span>
+          <span class="max-w-xs text-center">Choose a word and begin practicing!</span>
+        </div>
       </keep-alive>
     </ion-content>
 
@@ -186,17 +193,31 @@ ion-button {
   --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.35);
 }
 
-body.dark ion-button {
-  --background: rgb(196, 196, 196);
+.instructions {
+  color: rgb(80, 80, 80);
+}
 
-  --background-activated: rgb(221, 221, 221);
-  --background-focused: rgb(221, 221, 221);
+body.dark {
+  ion-button {
+    --background: rgb(196, 196, 196);
 
-  &:hover {
-    --background: rgb(221, 221, 221);
+    --background-activated: rgb(221, 221, 221);
+    --background-focused: rgb(221, 221, 221);
+
+    &:hover {
+      --background: rgb(221, 221, 221);
+    }
+
+    --color: rgb(32, 32, 32);
   }
 
-  --color: rgb(32, 32, 32);
+  ion-content {
+    --background: rgb(26, 26, 26);
+  }
+
+  .instructions {
+    color: rgb(196, 196, 196);
+  }
 }
 
 input {

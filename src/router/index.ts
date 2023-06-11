@@ -16,15 +16,15 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: TabsRoot,
-    meta: {
-      title: 'Custom Lists'
-    },
     redirect: { name: 'custom-lists' },
     children: [
       {
         path: 'custom-lists',
         name: 'custom-lists',
         component: CustomListsView,
+        meta: {
+          title: 'Custom Lists'
+        },
         beforeEnter: (to, from, next) => {
           const customListsStore = useCustomListsStore()
           const id = customListsStore.activeId

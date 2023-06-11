@@ -5,7 +5,7 @@
         <LoadingSpinner />
       </div>
       <div v-else>
-        <ion-router-outlet v-if="signedIn" id="main-content"></ion-router-outlet>
+        <ion-router-outlet v-if="signedIn"></ion-router-outlet>
         <SignInView v-else />
       </div>
     </ion-content>
@@ -157,9 +157,7 @@ auth.onAuthStateChanged(async () => {
   // NOTE necessary b/c of ionic bug with vue router
   // See https://forum.ionicframework.com/t/ion-page-invisible-class-not-being-removed-navigating-in-between-pages-video/162114/10
   nextTick(() => {
-    document
-      .querySelector('#main-content .ion-page.ion-page-invisible')
-      ?.classList.remove('ion-page-invisible')
+    document.querySelector('div.ion-page')?.classList.remove('ion-page-invisible')
   })
 
   console.log('Fetched backend data')

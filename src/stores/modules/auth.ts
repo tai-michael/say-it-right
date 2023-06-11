@@ -51,6 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
   const signOutUser = () => {
     signOut(auth)
     router.push('/')
+    localStorage.setItem('selectedWord', '')
     // location.reload()
   }
 
