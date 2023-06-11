@@ -1,63 +1,28 @@
 <template>
-  <header>
-    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
-
-    <div class="wrapper">
-      <div style="margin-bottom: 0.7rem">
-        <div v-if="isAuthenticated">
-          <span style="margin-right: 1rem">Welcome, {{ user?.displayName }}</span>
-          <button @click="authStore.signOutUser" class="signout-btn">Sign Out</button>
-
-          <!-- TODO for testing purposes only; remove before production -->
-          <br />
-          <div style="display: flex; column-gap: 0.5rem; margin-top: 0.5rem">
-            <button @click="authStore.resetAllLists">Reset all</button>
-            <button @click="authStore.resetCustomLists">Reset Custom lists</button>
-            <button @click="authStore.resetProvidedLists">Reset Provided lists</button>
-            <button @click="authStore.resetReview">Reset Review</button>
-          </div>
-        </div>
-        <div v-else>
-          <button @click="authStore.signInUser">Sign In with Google</button>
-        </div>
+  <ion-app>
+    <ion-content class="ion-padding">
+      <div v-if="fetchingBackendData" class="flex min-h-screen items-center justify-center">
+        <LoadingSpinner />
       </div>
-      <!-- TODO add a mic test or something for the user, so that streaming will be more responsive. The recorder seems to be more responsive after its streamed once after a new load -->
-      <HelloWorld msg="Say It Right" @click="router.push({ name: 'home' })" />
-      <nav>
-        <RouterLink to="/custom-lists" :class="getLinkClass('/custom-lists')"
-          >Custom Lists</RouterLink
-        >
-        <RouterLink to="/provided-lists" :class="getLinkClass('/provided-lists')"
-          >Provided Lists</RouterLink
-        >
-        <RouterLink to="/review">Review</RouterLink>
-        <RouterLink to="/hard-words">Hard Words</RouterLink>
-        <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <body>
-    <LoadingSpinner v-if="fetchingBackendData" />
-    <div v-else-if="!fetchingBackendData && backendDataFetched" class="main-content">
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" :key="$route.fullPath"></component>
-        </keep-alive>
-      </router-view>
-    </div>
-    <div v-else>(Sign up or Intro display/message)</div>
-  </body>
+      <div v-else>
+        <ion-router-outlet v-if="signedIn"></ion-router-outlet>
+        <SignInView v-else />
+      </div>
+    </ion-content>
+  </ion-app>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch, watchEffect } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import { computed, ref, provide, watch, watchEffect, nextTick } from 'vue'
+import SignInView from '@/views/SignInView.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+// import DarkModeToggle from './components/DarkModeToggle.vue'
+import { useLocalStorage } from '@vueuse/core'
+import { IonApp, IonContent, IonRouterOutlet } from '@ionic/vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
-import { db, isAuthenticated, user } from '@/firebaseInit'
+import { db, isAuthenticated, user, auth } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
-import { collection, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore'
 import {
   useAuthStore,
   useCustomListsStore,
@@ -70,15 +35,22 @@ const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
 
+const route = useRoute()
 const router = useRouter()
-
-const getLinkClass = (path: string) => {
-  const route = useRoute()
-  return route.path.startsWith(path) ? 'router-link-exact-active' : ''
-}
+const routeTitle = ref(route.meta.title || 'Custom Lists')
+const activeListNum = computed(
+  () => customListsStore?.activeList?.listNumber || providedListsStore?.activeList?.listNumber || ''
+)
+// const getLinkClass = (path: string) => {
+//   const route = useRoute()
+//   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
+// }
 
 const fetchingBackendData = ref(false)
-const backendDataFetched = ref(false)
+const signedIn = ref(false)
+
+const isDarkModeEnabled = useLocalStorage('dark-mode', false)
+provide('isDarkModeEnabled', isDarkModeEnabled)
 
 const globalListsQuery = computed(() => collection(db, 'global_provided_lists'))
 const globalLists = useFirestore(globalListsQuery)
@@ -92,6 +64,21 @@ const fetchBackendData = async () => {
     const userProvidedList = ref(userDocSnap.data()?.providedLists)
     console.log('Fetched user data from firestore')
     // console.log(userDocSnap.data())
+
+    // NOTE if it's user's first time logging in, send provided lists from backend
+    if (!userProvidedList.value) {
+      console.log('hydrating provided lists')
+      userProvidedList.value = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+
+      await setDoc(usersDocRef, {
+        userName: user.value.displayName,
+        customLists: [],
+        providedLists: userProvidedList.value,
+        review: []
+      })
+
+      userDocSnap = await getDoc(usersDocRef)
+    }
 
     // NOTE adds any new lists to backend user lists when App starts
     if (globalLists.value && globalLists.value.length > userProvidedList.value.length) {
@@ -155,6 +142,27 @@ const extractNewLists = (newArray, oldArray) => {
   return newItems
 }
 
+auth.onAuthStateChanged(async () => {
+  if (isDarkModeEnabled.value) {
+    document.body.classList.add('dark')
+  }
+
+  if (!isAuthenticated.value) return (signedIn.value = false)
+
+  fetchingBackendData.value = true
+  await fetchBackendData()
+  fetchingBackendData.value = false
+  signedIn.value = true
+
+  // NOTE necessary b/c of ionic bug with vue router
+  // See https://forum.ionicframework.com/t/ion-page-invisible-class-not-being-removed-navigating-in-between-pages-video/162114/10
+  nextTick(() => {
+    document.querySelector('div.ion-page')?.classList.remove('ion-page-invisible')
+  })
+
+  console.log('Fetched backend data')
+})
+
 // if (newVal && newVal.length > providedListsStore.allLists.length) {
 //   for (let i = providedListsStore.allLists.length; i < newVal.length; i++) {
 //     const newList = JSON.parse(JSON.stringify(newVal[i]))
@@ -164,24 +172,20 @@ const extractNewLists = (newArray, oldArray) => {
 //   }
 //   // console.log(providedListsStore.allLists)
 // }
-
-onMounted(async () => {
-  if (isAuthenticated.value) {
-    try {
-      fetchingBackendData.value = true
-      await fetchBackendData()
-      fetchingBackendData.value = false
-      backendDataFetched.value = true
-    } catch (err) {
-      console.error(`Failed to get user data from firestore: ${err}`)
-      fetchingBackendData.value = false
-    }
-  }
-})
 </script>
 
 <style scoped>
-header {
+/* #container {
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+} */
+
+/* header {
   line-height: 1.5;
   max-height: 100vh;
 }
@@ -248,13 +252,6 @@ nav a:first-of-type {
     flex-wrap: wrap;
   }
 
-  /* body {
-    display: flex;
-    justify-content: center;
-    height: 100vh;
-    width: 100%;
-  } */
-
   nav {
     text-align: left;
     margin-left: -1rem;
@@ -263,5 +260,5 @@ nav a:first-of-type {
     padding: 1rem 0;
     margin-top: 1rem;
   }
-}
+} */
 </style>

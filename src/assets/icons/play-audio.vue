@@ -23,7 +23,11 @@ svg {
   height: 2.3rem;
   width: 2.3rem;
   cursor: pointer;
-  --circle-fill: var(--green-color);
+  --circle-fill: green;
   --speaker-fill: rgb(255, 255, 255);
+}
+
+svg:hover {
+  --circle-fill: rgb(0, 150, 0);
 }
 </style>

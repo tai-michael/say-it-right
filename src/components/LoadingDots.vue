@@ -9,8 +9,9 @@
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #6eaffa;
-  color: #6eaffa;
+  // background-color: #6eaffa;
+  background-color: #25c7b1;
+  color: #25c7b1;
   animation: dot-flashing 1s infinite linear alternate;
   animation-delay: 0.5s;
 }
@@ -26,8 +27,8 @@
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #6eaffa;
-  color: #6eaffa;
+  background-color: #25c7b1;
+  color: #25c7b1;
   animation: dot-flashing 1s infinite alternate;
   animation-delay: 0s;
 }
@@ -36,15 +37,15 @@
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #6eaffa;
-  color: #6eaffa;
+  background-color: #25c7b1;
+  color: #25c7b1;
   animation: dot-flashing 1s infinite alternate;
   animation-delay: 1s;
 }
 
 @keyframes dot-flashing {
   0% {
-    background-color: #6eaffa;
+    background-color: #25c7b1;
   }
   50%,
   100% {

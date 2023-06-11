@@ -7,22 +7,42 @@
       @mousedown="startRecording"
       @touchstart="startRecording"
       @touchend="stopRecording"
+      ref="recorderButton"
     >
       <!-- {{ isRecording ? 'Recording' : 'Hold to talk' }} -->
       <MicIcon />
+      <!-- <ion-icon :icon="micOutline"></ion-icon> -->
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onDeactivated, ref } from 'vue'
-
+import { computed, onMounted, onUnmounted, onDeactivated, ref } from 'vue'
 import { client, microphone } from '@/speechlyInit.ts'
 import MicIcon from '@/assets/icons/mic.vue'
+// import { IonIcon } from '@ionic/vue'
+// import { micOutline } from 'ionicons/icons'
 
 // const props = defineProps({
 //   challengeStatus: { type: String, required: true }
 // })
+
+// NOTE prevents right-click from triggering on hold when using Chrome devtools.
+// See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
+const recorderButton = ref(null)
+onMounted(() => {
+  const disableContextMenu = (e) => {
+    e.preventDefault()
+  }
+
+  if (recorderButton.value)
+    recorderButton.value.addEventListener('contextmenu', disableContextMenu, true)
+
+  onUnmounted(() => {
+    if (recorderButton.value)
+      recorderButton.value.removeEventListener('contextmenu', disableContextMenu, true)
+  })
+})
 
 const finalTranscript = ref('')
 const temporaryTranscript = ref('')
@@ -97,17 +117,30 @@ client.onSegmentChange((segment) => {
   position: fixed;
   box-sizing: border-box;
   bottom: 0;
-  left: 0;
+  left: 1;
   right: 0;
   max-height: 100vh;
-  padding-bottom: 2rem;
+  // padding-bottom: 1rem;
+  margin: -0.75rem;
+  margin-right: -1rem;
 
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  z-index: 50;
+  // justify-content: center;
+  z-index: 10000;
+
+  // TODO test if 500px is enough to trigger for tablets
+  // @media (min-width: 639px) {
+  @media (min-width: 500px) {
+    left: 0;
+    bottom: 2rem;
+    justify-content: center;
+  }
 
   .recording-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 80px;
     height: 80px;
     border-radius: 50%;
@@ -124,13 +157,15 @@ client.onSegmentChange((segment) => {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none !important;
     // -webkit-user-select: none !important;
+    transition: transform 0.3s;
+
+    &:hover,
+    &:active {
+      background-color: #e65757;
+    }
 
     &:active {
-      background-color: #e96c6c;
-      transition: 0.3s;
-      width: 85px;
-      height: 85px;
-      transition: width 0.3s, height 0.3s;
+      transform: scale(1.1);
     }
   }
 }

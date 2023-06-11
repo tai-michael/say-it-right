@@ -1,41 +1,11 @@
 <template>
-  <main>
-    <!-- <LoadingDots v-if="isLoading" /> -->
-
-    <button @click="returnToLists" class="back-button"><GoBack /> Return to lists</button>
-    <TransitionAppear>
-      <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
-
-      <WordChallenge
-        v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
-        :list="list"
-      />
-    </TransitionAppear>
-
-    <div v-if="list.status === 'LIST_COMPLETE'" class="message">
-      <div class="message__text">
-        <span>You have completed this list.</span>
-        <span>
-          We recommend that you <RouterLink to="/review" class="link">Review</RouterLink> the words
-          you've learned!</span
-        >
-        <span
-          >You can also <span @click="returnToLists" class="link">Try</span> a different list</span
-        >
-        <span>Or you can <span @click="store.resetList" class="link">Retry</span> this list</span>
-      </div>
-    </div>
-  </main>
+  <ListContent :list="list" route-name="provided-lists" />
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
-
-import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
-import WordChallenge from '@/components/WordChallenge.vue'
-import TransitionAppear from '@/components/transitions/TransitionFade.vue'
-import GoBack from '@/assets/icons/go-back.vue'
+import ListContent from '@/components/ListContent.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
 const route = useRoute()
@@ -46,27 +16,16 @@ const store = useProvidedListsStore()
 // @ts-ignore
 const list = ref<List>({})
 
-const showParagraphChallenge = computed(
-  () =>
-    Object.keys(list.value).length &&
-    (list.value.status === 'LIST_NOT_STARTED' || list.value.status === 'PARAGRAPH_RECORDING_ENDED')
-)
-
-const returnToLists = () => {
-  router.push({ name: 'provided-lists' })
-  store.setActiveId(null)
-}
-
 // NOTE onActivated instead of onMounted, as onMounted doesn't trigger
 // for keep-alive components
-onActivated(() => {
+onMounted(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
-      // NOTE get direct reactive store reference to the list
-      // means computed properties wouldn't have to rerender needlessly
       if (store.activeList) {
-        const listIndex = +route.params.id - 1
-        list.value = store.allLists[listIndex]
+        // NOTE creates direct reactive store reference to the list so that computed properties wouldn't have to rerender needlessly when user navigates to a different view. Update: might not be applicable anymore.
+        // const listIndex = +route.params.id - 1
+        // list.value = store.allLists[listIndex]
+        list.value = store.activeList
       } else {
         router.push('/not-found')
         return
@@ -98,7 +57,7 @@ main {
   column-gap: 0.3rem;
   padding: 2px 4px;
   margin-bottom: 2rem;
-  width: 120px;
+  width: 80px;
 }
 
 .back-button:hover {
@@ -126,7 +85,7 @@ main {
 
 .link {
   color: rgb(84, 191, 226) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   cursor: pointer;
   transition: 0.4s;
   text-decoration: underline;

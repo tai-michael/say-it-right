@@ -80,6 +80,19 @@ export const useReviewStore = defineStore('review', () => {
     if (matchedWord) matchedWord.related_words = relatedWords
   }
 
+  const toggleBookmark = (word: WordObject) => {
+    if (!word.bookmarked) {
+      word.bookmarked = true
+      return
+    }
+    word.bookmarked = false
+  }
+
+  const deleteWord = (wordName: string) => {
+    const index = allWords.value.findIndex((word) => word.word === wordName)
+    allWords.value.splice(index, 1)
+  }
+
   // NOTE In Review, we don't care about 'attemptsLimits' at all. 'attempts' can be used to render hints.
   // const attemptsLimit = 6
 
@@ -117,6 +130,8 @@ export const useReviewStore = defineStore('review', () => {
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful,
     addRelatedWords,
+    toggleBookmark,
+    deleteWord,
     // softResetAttempts,
     // hardResetAttempts,
     updateReviewInFirestore

@@ -21,6 +21,7 @@ export default {
 
 <style lang="scss" scoped>
 svg {
+  margin-top: 0.1rem;
   height: 2.3rem;
   width: 2.3rem;
 }
