@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-searchbar type="text" v-model="search" placeholder="Search"></ion-searchbar>
-        <ion-buttons slot="end" class="pt-2.5 pl-0 mobile-view">
+        <ion-buttons slot="end" class="mobile-view">
           <ion-button @click="emit('dismissModal')">Cancel</ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -259,16 +259,20 @@ ion-header {
   align-items: center;
 }
 
-// ion-toolbar {
-//   // --background: #8ed6ce;
-//   // --background: #b9e5e1;
-// }
+ion-toolbar {
+  display: flex;
+  ion-buttons,
+  ion-button {
+    height: 100%;
+  }
+  // --background: #8ed6ce;
+  // --background: #b9e5e1;
+}
 
 ion-searchbar {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 16px;
-  padding-right: 4px;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
 }
 
 @media only screen and (min-width: 768px) {

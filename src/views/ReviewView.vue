@@ -1,14 +1,15 @@
 <template>
   <ion-page>
     <TheHeader>
-      <div class="desktop-view">Review</div>
+      <div v-if="!isNarrowScreen">Review</div>
       <template #list>
         <!-- <ion-button :detail="false" id="word-selection-list" class="ml-11 mr-5 max-h-8"> -->
         <!-- <ion-label class="m-0 max-h-8 pl-3 pr-3">Choose a word to review</ion-label> -->
         <ion-button
+          v-if="isNarrowScreen"
           :detail="false"
           id="word-selection-list"
-          class="ml-14 mr-4 flex max-h-8 mobile-view"
+          class="ml-14 mr-4 flex max-h-8"
         >
           <ion-label class="m-0 max-h-8">Click to choose word</ion-label>
         </ion-button>
@@ -33,7 +34,7 @@
       </keep-alive>
     </ion-content>
 
-    <ion-modal trigger="word-selection-list" ref="modal" class="mobile-view">
+    <ion-modal v-if="isNarrowScreen" trigger="word-selection-list" ref="modal">
       <WordSelectModal
         @dismiss-modal="modal.$el.dismiss()"
         @select-word="setWord"
@@ -44,13 +45,15 @@
     </ion-modal>
 
     <WordSelectModal
+      v-else
       @dismiss-modal="modal.$el.dismiss()"
       @select-word="setWord"
       @word-deleted="handleWordDeleted"
       :selected-word="selectedWord"
       :all-words="allWords"
-      class="desktop-view__select"
+      class="desktop-modal"
     />
+
     <!-- This will be for desktop view -->
     <!-- <ion-content class="ion-padding">
       <div class="review">
@@ -94,20 +97,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
 import WordSelectModal from '@/components/WordSelectModal.vue'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
-import {
-  IonHeader,
-  IonToolbar,
-  IonPage,
-  IonContent,
-  IonModal,
-  IonItem,
-  IonButton,
-  IonLabel
-} from '@ionic/vue'
+import { IonPage, IonContent, IonModal, IonButton, IonLabel } from '@ionic/vue'
 import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import WordDrill from '@/components/WordDrill.vue'
@@ -118,9 +111,7 @@ import { useReviewStore } from '@/stores/index.ts'
 
 const store = useReviewStore()
 const { allWords } = storeToRefs(store)
-
 const selectedWord: Ref<WordObject | null> = ref(null)
-const modal = ref(null)
 
 const handleRelatedWordClicked = (relatedWord: string) => {
   const matchedWord = allWords.value.find((word) => word.word === relatedWord)
@@ -139,38 +130,34 @@ const handleWordDeleted = (wordName: string) => {
   selectedWord.value = null
 }
 
+const modal = ref(null)
+// NOTE media queries only hide but don't remove elements in the DOM. Removing is necessary to prevent having duplicate modals that cause recursive rendering
+const isNarrowScreen = ref()
+const handleResize = () => {
+  isNarrowScreen.value = window.innerWidth <= 768
+}
+
 onMounted(() => {
   const word = localStorage.getItem('selectedWord')
   if (word) {
     // selectedWord.value = useArrayFind(allWords.value, w => w.word === word)
     selectedWord.value = allWords.value.find((w) => w.word === word) ?? null
   }
+
+  window.addEventListener('resize', handleResize)
+  handleResize()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize)
 })
 </script>
 
 <style lang="scss" scoped>
-@media only screen and (min-width: 768px) {
-  .desktop-view {
-    display: block;
-
-    &__select {
-      width: 300px;
-      margin-top: 2.75rem;
-    }
-  }
-  .mobile-view {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .desktop-view {
-    display: none;
-
-    &__select {
-      display: none;
-    }
-  }
+.desktop-modal {
+  width: 300px;
+  // margin-top: 2.75rem; // ios setting, since ios headers are shorter
+  padding-top: 3.5rem;
 }
 
 .review {
