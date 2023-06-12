@@ -11,24 +11,22 @@
           </TransitionFade>
         </div>
 
-        <div v-if="wordName">
-          <ion-card class="max-w-xs mt-7 pr-2 pl-2">
-            <div class="word-container">
-              <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
-              <TransitionFade>
-                <div :key="wordName" class="word">
-                  {{ wordName }}
-                </div>
-              </TransitionFade>
-              <PlayAudioIcon @click="play" />
-            </div>
-            <!-- <div class="checkmark-container" v-if="highlightActive">
+        <ion-card v-if="wordName" class="max-w-xs mt-7 pr-2 pl-2">
+          <div class="word-container">
+            <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
+            <TransitionFade>
+              <div :key="wordName" class="word">
+                {{ wordName }}
+              </div>
+            </TransitionFade>
+            <PlayAudioIcon @click="play" />
+          </div>
+          <!-- <div class="checkmark-container" v-if="highlightActive">
             <transition name="fade" mode="out-in" appear>
               <CheckmarkIcon class="checkmark" />
             </transition>
           </div> -->
-          </ion-card>
-        </div>
+        </ion-card>
 
         <TransitionFade>
           <div v-if="testingSentences">

@@ -5,7 +5,7 @@
       <ion-label class="m-5 ion-padding leading-6"
         >Top 10 hardest words based on data collected from users:</ion-label
       >
-      <ion-card class="m-0 p-1 pl-2 pr-2">
+      <ion-card v-if="leaderboard" class="m-0 p-1 pl-2 pr-2">
         <ol class="list">
           <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">
             <!-- {{ entry.word }}: {{ entry.count }} -->

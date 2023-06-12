@@ -197,11 +197,15 @@ ion-toolbar {
   --background: #b9e5e1;
   // --background: #a4ded8;
   // --background: #8ed6ce;
+  display: flex;
+  height: 100%;
 
   button {
     display: flex;
+    align-items: center;
+    height: 100%;
     // padding: 0.5rem 0.75rem;
-    padding: 0.75rem 0.75rem;
+    padding: 0 0.75rem;
     background-color: transparent;
     transition: background-color 0.3s;
 

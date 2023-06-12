@@ -174,10 +174,14 @@ ion-toolbar {
     // --color: rgb(231, 253, 243);
     --color: white;
   }
+  display: flex;
+  height: 100%;
 
   button {
     display: flex;
-    padding: 0.6rem 0.75rem;
+    align-items: center;
+    height: 100%;
+    padding: 0 0.75rem;
     background-color: transparent;
     transition: background-color 0.3s;
 
