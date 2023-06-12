@@ -23,13 +23,13 @@
 
       <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-      <ListGroups :route-name="route.name" @list-deleted="setToastOpen(true)" />
+      <ListGroups :route-name="route.name" @list-deleted="setToastOpen('List deleted')" />
 
       <ion-toast
-        :is-open="isToastOpen"
-        message="List deleted"
+        :is-open="toastMessage ? true : false"
+        :message="toastMessage"
         :duration="3000"
-        @didDismiss="setToastOpen(false)"
+        @didDismiss="setToastOpen('')"
       ></ion-toast>
     </ion-content>
 
@@ -103,6 +103,7 @@ const submitWords = async (words: string) => {
     await store.updateListsInFirestore()
     wordsInput.value = ''
     isLoading.value = false
+    setToastOpen('Uploaded list')
     // REVIEW uncomment below if I want to automatically direct the user to a list right after generating it
     // router.push({ params: { id: store.allLists.length } })
   } catch (err) {
@@ -114,9 +115,7 @@ const submitWords = async (words: string) => {
 
 const createNewListFromWords = (words: string[], allLists: List[], paragraph: string) => {
   const newListObject: List = {
-    // NOTE if a list gets deleted, the first works better than 'allLists.length + 1'
-    listNumber:
-      allLists.length > 0 ? allLists[allLists.length - 1].listNumber + 1 : allLists.length + 1,
+    listNumber: allLists.length === 0 ? 1 : allLists[allLists.length - 1].listNumber + 1,
     status: 'LIST_NOT_STARTED',
     paragraph: paragraph,
     words: {}
@@ -133,9 +132,18 @@ const createNewListFromWords = (words: string[], allLists: List[], paragraph: st
   allLists.push(newListObject)
 }
 
-const isToastOpen = ref(false)
-const setToastOpen = (state: boolean) => {
-  isToastOpen.value = state
+const getNextListNumber = (allLists) => {
+  if (allLists.length === 0) {
+    return 1
+  }
+
+  const lastList = allLists[allLists.length - 1]
+  return lastList.listNumber + 1
+}
+
+const toastMessage = ref('')
+const setToastOpen = (message: string) => {
+  toastMessage.value = message
 }
 
 const isVisible = ref(false)
