@@ -175,6 +175,20 @@ auth.onAuthStateChanged(async () => {
 </script>
 
 <style scoped>
+/* Firefox */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
+}
+
+/* Chrome */
+@media (forced-colors: active) {
+  :root {
+    color-scheme: light;
+  }
+}
+
 /* #container {
   text-align: center;
 
