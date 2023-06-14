@@ -13,7 +13,7 @@
       <div ref="scrollTrigger" class="scroll-trigger"></div>
       <div class="pl-4 pr-4">
         <!-- <label for="sort">Sort by:</label> -->
-        <select id="sort" v-model="sortOrder" :inset="true" class="h-8 w-full rounded-lg">
+        <select id="sort" v-model="sortOrder" :inset="true" class="h-8 w-full">
           <option value="createdDesc">Newest</option>
           <option value="createdAsc">Oldest</option>
           <option value="wordAsc">A to Z</option>
@@ -290,7 +290,15 @@ ion-content {
 }
 
 select {
-  padding-left: 5px;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  padding: 0 10px;
+  height: 40px;
+  width: 100%;
+  border: 1px solid #ccc;
+  background-image: url(@/assets/icons/chevron-down-dark.svg);
+  background-position: calc(100% - 8px) center;
+  background-repeat: no-repeat;
 }
 
 body.dark {
@@ -299,8 +307,13 @@ body.dark {
   }
 
   select {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
     background: rgb(46, 46, 46);
-    border-color: rgb(65, 65, 65);
+    border: 1px solid rgb(65, 65, 65);
+    background-image: url(@/assets/icons/chevron-down-light.svg);
+    background-position: calc(100% - 8px) center;
+    background-repeat: no-repeat;
   }
 }
 

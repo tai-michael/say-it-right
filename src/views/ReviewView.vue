@@ -186,13 +186,13 @@ ion-button {
 
 body.dark {
   ion-button {
-    --background: rgb(196, 196, 196);
+    --background: rgb(226, 226, 226);
 
-    --background-activated: rgb(221, 221, 221);
-    --background-focused: rgb(221, 221, 221);
+    --background-activated: rgb(255, 255, 255);
+    --background-focused: rgb(255, 255, 255);
 
     &:hover {
-      --background: rgb(221, 221, 221);
+      --background: rgb(255, 255, 255);
     }
 
     --color: rgb(32, 32, 32);
