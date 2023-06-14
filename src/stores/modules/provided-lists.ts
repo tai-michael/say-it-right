@@ -51,6 +51,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
 
   const setActiveId = (id: number | null) => {
     activeId.value = id
+    console.log(`id set to ${activeId.value}`)
   }
 
   const setListStatus = (status: ListStatus) => {

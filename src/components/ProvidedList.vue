@@ -6,8 +6,13 @@
 import { onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import ListContent from '@/components/ListContent.vue'
+import {
+  onIonViewWillEnter,
+  onIonViewWillLeave // maybe replace history so that it goes to provided lists view? and do similar for all tabs*
+} from '@ionic/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProvidedListsStore } from '@/stores/index.ts'
+
 const route = useRoute()
 const router = useRouter()
 const store = useProvidedListsStore()
@@ -16,17 +21,20 @@ const store = useProvidedListsStore()
 // @ts-ignore
 const list = ref<List>({})
 
-// NOTE onActivated instead of onMounted, as onMounted doesn't trigger
-// for keep-alive components
-onMounted(() => {
+// NOTE need to use this instead of onMounted, as the latter only triggers once, meaning if user navigates with back button to provided lists view, the activeId for the instance will be set to null and never change again
+onIonViewWillEnter(() => {
   if (route.params.id) {
+    console.log(1)
     if (!Object.keys(list.value).length) {
+      console.log(2)
       if (store.activeList) {
+        console.log(3)
         // NOTE creates direct reactive store reference to the list so that computed properties wouldn't have to rerender needlessly when user navigates to a different view. Update: might not be applicable anymore.
         // const listIndex = +route.params.id - 1
         // list.value = store.allLists[listIndex]
         list.value = store.activeList
       } else {
+        console.log(4)
         router.push('/not-found')
         return
       }
@@ -34,6 +42,7 @@ onMounted(() => {
     store.setActiveId(+route.params.id)
     // TODO see whether the below condition is necessary
   } else if (store.activeId) {
+    console.log(0)
     router.push({ params: { id: store.activeId } })
     // } else if (store.inProgressLists.length > 0) {
     //   router.push({ params: { id: store.inProgressLists[0].listNumber } })
@@ -43,6 +52,10 @@ onMounted(() => {
     // } else {
     //   router.push('/not-found')
   }
+})
+
+onIonViewWillLeave(() => {
+  console.log('test')
 })
 </script>
 

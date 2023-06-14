@@ -1,8 +1,8 @@
 // import { createRouter, createWebHistory } from 'vue-router'
 import { createRouter, createWebHistory } from '@ionic/vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import CustomListsView from '@/views/CustomListsView.vue'
-import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+// import CustomListsView from '@/views/CustomListsView.vue'
+// import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 // import ProvidedListsView from '@/views/ProvidedListsView.vue'
 import TabsRoot from '@/components/TabsRoot.vue'
 import { user } from '@/firebaseInit'
@@ -21,19 +21,20 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'custom-lists',
         name: 'custom-lists',
-        component: CustomListsView,
+        component: () => import('@/views/CustomListsView.vue'),
         meta: {
           title: 'Custom Lists'
-        },
-        beforeEnter: (to, from, next) => {
-          const customListsStore = useCustomListsStore()
-          const id = customListsStore.activeId
-          if (id) {
-            next({ name: 'custom-list', params: { id } })
-          } else {
-            next()
-          }
         }
+        // NOTE made redundant by computed routes in TabRoutes component
+        // beforeEnter: (to, from, next) => {
+        //   const customListsStore = useCustomListsStore()
+        //   const id = customListsStore.activeId
+        //   if (id) {
+        //     next({ name: 'custom-list', params: { id } })
+        //   } else {
+        //     next()
+        //   }
+        // }
       },
       {
         path: 'custom-lists/:id',
@@ -57,16 +58,17 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/ProvidedListsView.vue'),
         meta: {
           title: 'Provided Lists'
-        },
-        beforeEnter: (to, from, next) => {
-          const providedListsStore = useProvidedListsStore()
-          const id = providedListsStore.activeId
-          if (id) {
-            next({ name: 'provided-list', params: { id } })
-          } else {
-            next()
-          }
         }
+        // NOTE made redundant by computed routes in TabRoutes component
+        // beforeEnter: (to, from, next) => {
+        //   const providedListsStore = useProvidedListsStore()
+        //   const id = providedListsStore.activeId
+        //   if (id) {
+        //     next({ name: 'provided-list', params: { id } })
+        //   } else {
+        //     next()
+        //   }
+        // }
       },
       {
         path: 'provided-lists/:id',
@@ -132,7 +134,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const title = to.meta.title || 'Custom Lists'
   document.title = title as string
-  next()
+
+  if (window.event.type == 'popstate') {
+    next(false)
+  } else {
+    next()
+  }
 })
 // const router = createRouter({
 //   history: createWebHistory(import.meta.env.BASE_URL),

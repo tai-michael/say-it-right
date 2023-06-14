@@ -6,6 +6,10 @@
 import { onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import ListContent from '@/components/ListContent.vue'
+import {
+  onIonViewWillEnter,
+  onIonViewWillLeave // maybe replace history so that it goes to provided lists view? and do similar for all tabs*
+} from '@ionic/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCustomListsStore } from '@/stores/index.ts'
 const route = useRoute()
@@ -16,8 +20,8 @@ const store = useCustomListsStore()
 // @ts-ignore
 const list = ref<List>({})
 
-// NOTE onActivated instead of onMounted, as onMounted doesn't trigger for keep-alive components
-onMounted(() => {
+// NOTE need to use this instead of onMounted, as the latter only triggers once, meaning if user navigates with back button to custom lists view, the activeId for the instance will be set to null and never change again
+onIonViewWillEnter(() => {
   if (route.params.id) {
     if (!Object.keys(list.value).length) {
       if (store.activeList) {

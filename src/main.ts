@@ -37,10 +37,10 @@ auth.onAuthStateChanged((user) => {
       .use(createPinia())
       // remove mode option to use platform-specific styles
       .use(IonicVue, {
-        mode: 'ios',
+        mode: 'ios'
         // mode: 'md',
-        hardwareBackButton: false,
-        swipeBackEnabled: false
+        // hardwareBackButton: false, // ineffective
+        // swipeBackEnabled: false // need to test on iOS
       })
       .use(VueVirtualScroller)
       .use(router)
