@@ -17,10 +17,11 @@ import {
 } from 'firebase/firestore'
 // import { collection, setDoc } from 'firebase/firestore';
 import { defineStore } from 'pinia'
-import { useProvidedListsStore } from '@/stores'
+import { useCustomListsStore, useProvidedListsStore } from '@/stores'
 
 export const useAuthStore = defineStore('auth', () => {
   const providedListsStore = useProvidedListsStore()
+  const customListsStore = useCustomListsStore()
   const router = useRouter()
   // NOTE Using firebaseUI instead
   // const signInUser = async () => {
@@ -49,9 +50,11 @@ export const useAuthStore = defineStore('auth', () => {
   // }
 
   const signOutUser = () => {
+    providedListsStore.setActiveId(null)
+    customListsStore.setActiveId(null)
+    localStorage.setItem('selectedWord', '')
     signOut(auth)
     router.push('/')
-    localStorage.setItem('selectedWord', '')
     // location.reload()
   }
 

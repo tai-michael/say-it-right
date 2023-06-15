@@ -13,7 +13,7 @@ const refreshTrigger = ref<HTMLElement | null>(null)
 const observerTop = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     isAtTop.value = entry.isIntersecting
-    console.log('isAtTop:', isAtTop.value)
+    // console.log('isAtTop:', isAtTop.value)
   })
 })
 
