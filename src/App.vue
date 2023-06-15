@@ -1,9 +1,6 @@
 <template>
   <ion-app>
     <ion-content class="ion-padding">
-      <ion-refresher slot="fixed" @ionRefresh="handleRefresh()">
-        <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
       <div v-if="fetchingBackendData" class="flex min-h-screen items-center justify-center">
         <LoadingSpinner />
       </div>
@@ -21,8 +18,8 @@ import SignInView from '@/views/SignInView.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 // import DarkModeToggle from './components/DarkModeToggle.vue'
 import { useLocalStorage } from '@vueuse/core'
-import { IonApp, IonContent, IonRouterOutlet, IonRefresher, IonRefresherContent } from '@ionic/vue'
-import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { IonApp, IonContent, IonRouterOutlet } from '@ionic/vue'
+import { useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user, auth } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
 import { collection, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore'
@@ -48,10 +45,6 @@ const activeListNum = computed(
 //   const route = useRoute()
 //   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
 // }
-
-const handleRefresh = () => {
-  location.reload()
-}
 
 const fetchingBackendData = ref(false)
 const signedIn = ref(false)

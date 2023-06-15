@@ -3,6 +3,7 @@
     <TheHeader>Provided Lists</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
+      <PullRefresher />
       <div ref="scrollTrigger" class="scroll-trigger"></div>
       <ListGroups :route-name="route.name" />
     </ion-content>
@@ -18,10 +19,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
+import PullRefresher from '@/components/PullRefresher.vue'
 import ListGroups from '@/components/ListGroups.vue'
 import {
-  IonContent,
   IonPage,
+  IonContent,
   IonFab,
   IonFabButton,
   IonIcon,

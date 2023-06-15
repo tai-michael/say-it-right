@@ -1,21 +1,25 @@
 <template>
   <ion-page class="ion-padding">
-    <main>
-      <div class="flex align-baseline justify-baseline gap-x-2">
-        <ion-icon :icon="sadOutline" class="text-5xl" />
-        <span class="title">404 ERROR</span>
-      </div>
-      <span class="text-center"
-        >Oops! It looks like this page doesn't exist anymore or your link is wrong.
-      </span>
-      <HomeButton />
-    </main>
+    <ion-content>
+      <PullRefresher />
+      <main>
+        <div class="flex align-baseline justify-baseline gap-x-2">
+          <ion-icon :icon="sadOutline" class="text-5xl" />
+          <span class="title">404 ERROR</span>
+        </div>
+        <span class="text-center"
+          >Oops! It looks like this page doesn't exist anymore or your link is wrong.
+        </span>
+        <HomeButton />
+      </main>
+    </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
+import PullRefresher from '@/components/PullRefresher.vue'
 import HomeButton from '@/components/HomeButton.vue'
-import { IonPage } from '@ionic/vue'
+import { IonPage, IonContent } from '@ionic/vue'
 import { IonIcon } from '@ionic/vue'
 import { sadOutline } from 'ionicons/icons'
 </script>

@@ -1,46 +1,50 @@
 <template>
-  <div v-if="authStore.signedInAsAdmin">
-    <div class="upload">
-      <label>Upload core lists to firestore:</label>
-      <ion-button @click="uploadCoreLists(coreLists)" :disabled="isLoading">Upload</ion-button>
-      <!-- <ion-button @click="uploadList(newList)">Upload new list</ion-button> -->
-      <form class="submit-form" @submit.prevent="uploadList">
+  <ion-page>
+    <ion-content>
+      <PullRefresher />
+      <div class="upload" v-if="authStore.signedInAsAdmin">
+        <label>Upload core lists to firestore:</label>
+        <ion-button @click="uploadCoreLists(coreLists)" :disabled="isLoading">Upload</ion-button>
+        <!-- <ion-button @click="uploadList(newList)">Upload new list</ion-button> -->
+        <form class="submit-form" @submit.prevent="uploadList">
+          <div class="input-container">
+            <label>Upload new list to firestore:</label>
+            <div class="input-field">
+              <input
+                placeholder="Enter list number (e.g. 13)"
+                pattern="\d+"
+                v-model="listNumOfListToAdd"
+                autofocus
+              />
+              <ion-button type="submit" :disabled="isLoading">Upload</ion-button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <form class="submit-form" @submit.prevent="deleteList">
         <div class="input-container">
-          <label>Upload new list to firestore:</label>
+          <label>Delete list from firestore:</label>
           <div class="input-field">
             <input
               placeholder="Enter list number (e.g. 13)"
               pattern="\d+"
-              v-model="listNumOfListToAdd"
+              v-model="listNumOfListToDel"
               autofocus
             />
-            <ion-button type="submit" :disabled="isLoading">Upload</ion-button>
+            <ion-button type="submit" :disabled="isLoading">Delete</ion-button>
           </div>
         </div>
       </form>
-    </div>
-
-    <form class="submit-form" @submit.prevent="deleteList">
-      <div class="input-container">
-        <label>Delete list from firestore:</label>
-        <div class="input-field">
-          <input
-            placeholder="Enter list number (e.g. 13)"
-            pattern="\d+"
-            v-model="listNumOfListToDel"
-            autofocus
-          />
-          <ion-button type="submit" :disabled="isLoading">Delete</ion-button>
-        </div>
-      </div>
-    </form>
-  </div>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import PullRefresher from '@/components/PullRefresher.vue'
 import coreLists from '@/assets/lists_1-12.json'
-import { IonButton } from '@ionic/vue'
+import { IonPage, IonContent, IonButton } from '@ionic/vue'
 import { db } from '@/firebaseInit'
 import { deleteDoc, doc, collection, setDoc, writeBatch } from 'firebase/firestore'
 import { useRouter } from 'vue-router'

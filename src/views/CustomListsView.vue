@@ -3,6 +3,7 @@
     <TheHeader :is-loading="isLoading">Custom Lists</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
+      <PullRefresher />
       <div ref="scrollTrigger" class="scroll-trigger"></div>
 
       <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
@@ -50,6 +51,7 @@
 import { ref, onMounted } from 'vue'
 import { createOutline } from 'ionicons/icons'
 import TheHeader from '@/components/TheHeader.vue'
+import PullRefresher from '@/components/PullRefresher.vue'
 import ListGroups from '@/components/ListGroups.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import type { List } from '@/stores/modules/types/List'

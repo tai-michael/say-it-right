@@ -1,26 +1,30 @@
 <template>
   <ion-page>
     <TheHeader>The Hardest Words</TheHeader>
-    <div class="h-full flex flex-col align-middle items-center">
-      <ion-label class="m-5 ion-padding leading-6"
-        >Top 10 hardest words based on data collected from users:</ion-label
-      >
-      <ion-card v-if="leaderboard" class="m-0 p-1 pl-2 pr-2">
-        <ol class="list">
-          <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">
-            <!-- {{ entry.word }}: {{ entry.count }} -->
-            <span>{{ entry.word }}</span>
-          </li>
-        </ol>
-      </ion-card>
-    </div>
+    <ion-content>
+      <PullRefresher />
+      <div class="h-full flex flex-col align-middle items-center">
+        <ion-label class="m-5 ion-padding leading-6"
+          >Top 10 hardest words based on data collected from users:</ion-label
+        >
+        <ion-card v-if="leaderboard" class="m-0 p-1 pl-2 pr-2">
+          <ol class="list">
+            <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">
+              <!-- {{ entry.word }}: {{ entry.count }} -->
+              <span>{{ entry.word }}</span>
+            </li>
+          </ol>
+        </ion-card>
+      </div>
+    </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
-import { IonPage, IonLabel, IonCard } from '@ionic/vue'
+import PullRefresher from '@/components/PullRefresher.vue'
+import { IonPage, IonContent, IonLabel, IonCard } from '@ionic/vue'
 import { db } from '@/firebaseInit'
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore'
 

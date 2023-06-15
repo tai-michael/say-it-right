@@ -1,6 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
+      <PullRefresher />
       <div class="text-center">
         <div class="mt-20 mb-10 text-3xl flex justify-center gap-3 items-end logo">
           <img :src="image" class="w-11 h-11" /> Say It Right
@@ -13,6 +14,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import PullRefresher from '@/components/PullRefresher.vue'
 import { auth } from '@/firebaseInit'
 import firebase from 'firebase/compat/app'
 import * as firebaseui from 'firebaseui'

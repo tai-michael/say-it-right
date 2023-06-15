@@ -17,6 +17,7 @@
     </TheHeader>
 
     <ion-content>
+      <PullRefresher />
       <keep-alive>
         <WordDrill
           v-if="selectedWord"
@@ -99,6 +100,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
+import PullRefresher from '@/components/PullRefresher.vue'
 import WordSelectModal from '@/components/WordSelectModal.vue'
 import { IonPage, IonContent, IonModal, IonButton, IonLabel } from '@ionic/vue'
 import type { Ref } from 'vue'
