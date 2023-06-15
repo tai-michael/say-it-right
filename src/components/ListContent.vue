@@ -25,7 +25,7 @@
                 >
                 another list
               </li>
-              <li>Or <span @click="store.resetList" class="link">Retry</span> this list</li>
+              <li>Or <span @click="handleReset" class="link">Retry</span> this list</li>
             </ul>
           </div>
         </div>
@@ -65,6 +65,20 @@ const showParagraphChallenge = computed(
 const returnToLists = () => {
   store.setActiveId(null)
   router.push({ name: routeName.value })
+}
+
+const handleReset = () => {
+  if (Object.keys(list.value.words).length > 4) store.resetList
+  else {
+    const words = list.value.words
+    Object.keys(words).forEach((word) => {
+      words[word].attempts = 1
+      words[word].attemptsSuccessful = 0
+    })
+
+    store.setListStatus('TESTING_WORD_ONLY')
+    store.updateListsInFirestore()
+  }
 }
 
 const title = computed(

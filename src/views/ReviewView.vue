@@ -29,7 +29,7 @@
           v-else
           class="instructions flex flex-col h-full w-full justify-center align-middle items-center gap-y-3 p-2 font-semibold"
         >
-          <span class="max-w-xs text-center"> Review words you've mispronounced. </span>
+          <span class="max-w-xs text-center">Review words you've mispronounced.</span>
           <span class="max-w-xs text-center">Choose a word and begin practicing!</span>
         </div>
       </keep-alive>

@@ -3,6 +3,7 @@
     <ion-card v-for="list of props.lists" :key="list.listNumber" class="flex">
       <RouterLink
         :to="{ name: props.destinationRoute, params: { id: list.listNumber } }"
+        @click="handleClick(list)"
         class="list-link"
       >
         <ion-card-content class="p-0">
@@ -101,6 +102,17 @@ const isDarkModeEnabled = inject('isDarkModeEnabled')
 // Code for popover
 // @ts-ignore
 const selectedList = ref<List>({})
+
+const handleClick = (list: List) => {
+  if (list.status === 'LIST_NOT_STARTED' && Object.keys(list.words).length < 4) {
+    list.status = 'TESTING_WORD_ONLY'
+    store.updateListsInFirestore()
+    console.log(list)
+  }
+
+  // store.setListStatus('TESTING_WORD_ONLY')
+}
+
 const isPopoverOpen = ref(false)
 const event = ref(null)
 const openPopover = (e, list: List) => {

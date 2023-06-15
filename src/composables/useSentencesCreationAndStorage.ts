@@ -92,14 +92,13 @@ export default async function (words: string[], source: WordSource, listNum?: nu
   )
   reviewStore.addWords(newWords)
   reviewStore.updateReviewInFirestore()
-  if (!listNum) return
 
   // add sentences to matching words in customLists
-  const list = customListsStore.allLists.find((list) => list.listNumber === listNum)
-  // console.log(list)
-
-  if (list) addSentencesToCustomList(wordsWithSentences, list)
-  customListsStore.updateListsInFirestore()
+  if (source === 'custom-list' && listNum) {
+    const list = customListsStore.allLists.find((list) => list.listNumber === listNum)
+    if (list) addSentencesToCustomList(wordsWithSentences, list)
+    // customListsStore.updateListsInFirestore() // this seems redundant, as it's already done in CustomListsView at the end of submitWords
+  } else if (source === 'custom-list' && wordsWithSentences.length < 4) return wordsWithSentences
 }
 
 const checkIfWordsExistInProvidedLists = (submittedWords: string[], lists: List[]) => {

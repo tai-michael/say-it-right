@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content>
+    <ion-content class="ion-padding">
       <PullRefresher />
       <div class="upload" v-if="authStore.signedInAsAdmin">
         <label>Upload core lists to firestore:</label>

@@ -54,7 +54,9 @@ import TheHeader from '@/components/TheHeader.vue'
 import PullRefresher from '@/components/PullRefresher.vue'
 import ListGroups from '@/components/ListGroups.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
+import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'
 import type { List } from '@/stores/modules/types/List'
+import type { WordObject } from '@/stores/modules/types/Review'
 import { useCustomListsStore } from '@/stores/index.ts'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -80,41 +82,6 @@ const isLoading = ref(false)
 const submissionError = ref('')
 const newlyCreatedParagraph = ref('')
 
-// TODO add error-handling in here for openai
-const submitWords = async (words: string) => {
-  try {
-    if (!words) return (submissionError.value = 'Please enter at least one word')
-
-    submissionError.value = ''
-
-    const wordsArray = words.trim().toLowerCase().replace(/^,|,$/g, '').split(/[ ,]+/)
-    const uniqueWordsArray = [...new Set(wordsArray)]
-    if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
-
-    isLoading.value = true
-    // TODO if user enters just one word, do a SingleWordChallenge
-    // instead of a ParagraphChallenge; put below code block in
-    // in condition (or just 'return' at end of implementation of
-    // single word challenge)
-    // Maybe add a 'word' prop to WordChallenge, and use conditions
-
-    newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)
-
-    createNewListFromWords(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
-
-    await store.updateListsInFirestore()
-    wordsInput.value = ''
-    isLoading.value = false
-    setToastOpen('Uploaded list')
-    // REVIEW uncomment below if I want to automatically direct the user to a list right after generating it
-    // router.push({ params: { id: store.allLists.length } })
-  } catch (err) {
-    console.log(err)
-    isLoading.value = false
-    submissionError.value = 'Oops! Something went wrong. Please try again.'
-  }
-}
-
 const createNewListFromWords = (words: string[], allLists: List[], paragraph: string) => {
   const newListObject: List = {
     listNumber: allLists.length === 0 ? 1 : allLists[allLists.length - 1].listNumber + 1,
@@ -134,14 +101,79 @@ const createNewListFromWords = (words: string[], allLists: List[], paragraph: st
   allLists.push(newListObject)
 }
 
-const getNextListNumber = (allLists) => {
-  if (allLists.length === 0) {
-    return 1
+const createNewListWithSentencesOnly = (wordObjects: WordObject[], allLists: List[]) => {
+  const newListObject: List = {
+    listNumber: allLists.length === 0 ? 1 : allLists[allLists.length - 1].listNumber + 1,
+    status: 'LIST_NOT_STARTED',
+    paragraph: '',
+    words: {}
   }
+  console.log(wordObjects)
 
-  const lastList = allLists[allLists.length - 1]
-  return lastList.listNumber + 1
+  wordObjects.forEach((word) => {
+    newListObject.words[word.word] = {
+      sentences: word.sentences,
+      attempts: 1,
+      attemptsSuccessful: 0
+    }
+  })
+  console.log(newListObject)
+
+  allLists.push(newListObject)
 }
+
+// TODO add error-handling in here for openai
+const submitWords = async (words: string) => {
+  try {
+    if (!words) return (submissionError.value = 'Please enter at least one word')
+
+    submissionError.value = ''
+
+    const wordsArray = words.trim().toLowerCase().replace(/^,|,$/g, '').split(/[ ,]+/)
+    const uniqueWordsArray = [...new Set(wordsArray)]
+    if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
+
+    isLoading.value = true
+    // TODO if user enters just one word, do a SingleWordChallenge
+    // instead of a ParagraphChallenge; put below code block in
+    // in condition (or just 'return' at end of implementation of
+    // single word challenge)
+    // Maybe add a 'word' prop to WordChallenge, and use conditions
+
+    if (uniqueWordsArray.length > 4) {
+      newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)
+
+      createNewListFromWords(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
+    } else {
+      const wordsWithSentences = await useSentencesCreationAndStorage(
+        uniqueWordsArray,
+        'custom-list'
+      )
+      console.log(wordsWithSentences)
+      createNewListWithSentencesOnly(wordsWithSentences, store.allLists)
+    }
+    await store.updateListsInFirestore()
+
+    wordsInput.value = ''
+    isLoading.value = false
+    setToastOpen('Uploaded list')
+    // REVIEW uncomment below if I want to automatically direct the user to a list right after generating it
+    // router.push({ params: { id: store.allLists.length } })
+  } catch (err) {
+    console.log(err)
+    isLoading.value = false
+    submissionError.value = 'Oops! Something went wrong. Please try again.'
+  }
+}
+
+// const getNextListNumber = (allLists) => {
+//   if (allLists.length === 0) {
+//     return 1
+//   }
+
+//   const lastList = allLists[allLists.length - 1]
+//   return lastList.listNumber + 1
+// }
 
 const toastMessage = ref('')
 const setToastOpen = (message: string) => {
