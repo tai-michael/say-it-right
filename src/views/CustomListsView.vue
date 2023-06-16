@@ -82,7 +82,7 @@ const isLoading = ref(false)
 const submissionError = ref('')
 const newlyCreatedParagraph = ref('')
 
-const createNewListFromWords = (words: string[], allLists: List[], paragraph: string) => {
+const createListWithParagraph = (words: string[], allLists: List[], paragraph: string) => {
   const newListObject: List = {
     listNumber: allLists.length === 0 ? 1 : allLists[allLists.length - 1].listNumber + 1,
     status: 'LIST_NOT_STARTED',
@@ -101,7 +101,7 @@ const createNewListFromWords = (words: string[], allLists: List[], paragraph: st
   allLists.push(newListObject)
 }
 
-const createNewListWithSentencesOnly = (wordObjects: WordObject[], allLists: List[]) => {
+const createListWithSentences = (wordObjects: WordObject[], allLists: List[]) => {
   const newListObject: List = {
     listNumber: allLists.length === 0 ? 1 : allLists[allLists.length - 1].listNumber + 1,
     status: 'LIST_NOT_STARTED',
@@ -140,17 +140,17 @@ const submitWords = async (words: string) => {
     // single word challenge)
     // Maybe add a 'word' prop to WordChallenge, and use conditions
 
-    if (uniqueWordsArray.length > 4) {
+    if (uniqueWordsArray.length > store.minWordsThreshold) {
       newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)
 
-      createNewListFromWords(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
+      createListWithParagraph(uniqueWordsArray, store.allLists, newlyCreatedParagraph.value)
     } else {
       const wordsWithSentences = await useSentencesCreationAndStorage(
         uniqueWordsArray,
         'custom-list'
       )
       console.log(wordsWithSentences)
-      createNewListWithSentencesOnly(wordsWithSentences, store.allLists)
+      if (wordsWithSentences) createListWithSentences(wordsWithSentences, store.allLists)
     }
     await store.updateListsInFirestore()
 

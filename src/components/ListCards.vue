@@ -97,20 +97,28 @@ const props = defineProps({
 const store =
   props.destinationRoute === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 
+const customListsStore = useCustomListsStore()
+
 const isDarkModeEnabled = inject('isDarkModeEnabled')
 
 // Code for popover
 // @ts-ignore
 const selectedList = ref<List>({})
 
+// NOTE long lists (ones with a paragraph) have the list status changed at the end of the paragraph challenge, but short lists skip the paragraph challenge, meaning their status needs to be manually set
 const handleClick = (list: List) => {
-  if (list.status === 'LIST_NOT_STARTED' && Object.keys(list.words).length < 4) {
-    list.status = 'TESTING_WORD_ONLY'
-    store.updateListsInFirestore()
-    console.log(list)
-  }
+  if (Object.keys(list.words).length > customListsStore.minWordsThreshold) return
+  handleShortListStatusChange(list)
+}
 
-  // store.setListStatus('TESTING_WORD_ONLY')
+const handleShortListStatusChange = (list: List) => {
+  if (list.status !== 'LIST_NOT_STARTED') return
+
+  // setTimeout(() => {
+  list.status = 'TESTING_WORD_ONLY'
+  store.updateListsInFirestore()
+  // console.log(list)
+  // }, 1000)
 }
 
 const isPopoverOpen = ref(false)

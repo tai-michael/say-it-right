@@ -42,6 +42,9 @@ export const useCustomListsStore = defineStore('customLists', () => {
     allLists.value.filter((list) => list.status === 'LIST_COMPLETE')
   )
 
+  // if at or below threshold, sentences instead of paragraph are generated
+  const minWordsThreshold = 4
+
   const setActiveId = (id: number | null): void => {
     activeId.value = id
   }
@@ -145,6 +148,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
     inProgressLists,
     untouchedLists,
     completedLists,
+    minWordsThreshold,
     attemptsLimit,
     attemptsSuccessfulRequired,
 

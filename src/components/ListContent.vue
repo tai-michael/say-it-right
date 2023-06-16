@@ -54,6 +54,7 @@ const props = defineProps({
 const { list, routeName } = toRefs(props)
 
 const store = routeName.value === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
+const customListsStore = useCustomListsStore()
 
 const showParagraphChallenge = computed(
   () =>
@@ -68,17 +69,20 @@ const returnToLists = () => {
 }
 
 const handleReset = () => {
-  if (Object.keys(list.value.words).length > 4) store.resetList
-  else {
-    const words = list.value.words
-    Object.keys(words).forEach((word) => {
-      words[word].attempts = 1
-      words[word].attemptsSuccessful = 0
-    })
+  // NOTE lists containing only sentences need to be reset differently than ones with paragraphs
+  if (Object.keys(list.value.words).length > customListsStore.minWordsThreshold) store.resetList
+  else resetShortList()
+}
 
-    store.setListStatus('TESTING_WORD_ONLY')
-    store.updateListsInFirestore()
-  }
+const resetShortList = () => {
+  const words = list.value.words
+  Object.keys(words).forEach((word) => {
+    words[word].attempts = 1
+    words[word].attemptsSuccessful = 0
+  })
+
+  store.setListStatus('TESTING_WORD_ONLY')
+  store.updateListsInFirestore()
 }
 
 const title = computed(
