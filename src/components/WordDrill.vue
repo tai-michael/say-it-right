@@ -46,13 +46,13 @@
 
           <div v-else-if="recordingStatus === 'TESTING_COMPLETE'">
             <!-- <TransitionFade> -->
-            <div v-if="relatedWords" class="related-words-container">
+            <div v-if="relatedWords" class="flex mt-4">
               <LoadingDots v-if="isLoading || !relatedWords.length" class="mt-9 mb-4" />
               <div v-else>
                 <!-- <TransitionFade> -->
-                <ion-card class="flex p-5 pl-3 pr-3 max-w-xs mt-3 mb-4">
-                  <div class="related-words">
-                    <div v-for="(word, index) of relatedWords" :key="index">
+                <ion-card class="mt-3 mb-4 card min-w-[270px] sm:min-w-[400px]">
+                  <div class="flex pl-2 pr-2">
+                    <div v-for="(word, index) of relatedWords" :key="index" class="w-full">
                       <span @click="handleRelatedWordClick(word)" class="related-word">{{
                         word
                       }}</span>
@@ -136,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, defineEmits } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 // import type { Ref } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
@@ -436,24 +436,12 @@ ion-card {
   }
 }
 
-.related-words-container {
+.related-word {
   display: flex;
-  // flex-direction: column;
-  // row-gap: 2rem;
-  margin-top: 1rem;
-
-  .related-words {
-    display: flex;
-    flex-direction: row;
-    // justify-content: space-between;
-    // column-gap: 2.5rem;
-    // padding: 0 0.75rem;
-  }
-  .related-word {
-    padding: 1rem;
-    font-size: 16px;
-    font-weight: 600;
-  }
+  justify-content: center;
+  padding: 1rem 0.4rem;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .link,
