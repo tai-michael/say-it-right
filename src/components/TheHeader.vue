@@ -33,23 +33,37 @@
       @didDismiss="isPopoverOpen = false"
       :dismiss-on-select="true"
     >
-      <!-- <ion-icon :icon="trashOutline" class="text-xl mr-2 align-middle"></ion-icon
-        ><span class="align-middle mr-4">Delete list</span> -->
-      <ion-list class="pb-2 pt-2 cursor-pointer">
-        <ion-item :button="true" :detail="false" lines="full" @click="authButtonConfig.onClick">
-          <ion-icon :icon="authButtonConfig.icon" class="text-xl mr-2"></ion-icon
-          >{{ authButtonConfig.text }}</ion-item
-        >
+      <ion-list class="pb-2 pt-2">
+        <ion-item :detail="false" lines="full" @click.stop class="cursor-default">
+          <ion-icon :icon="personOutline" class="cursor-pointer text-xl mr-2 ml-[-1px]"></ion-icon>
+          Signed in as {{ user?.displayName }}
+        </ion-item>
 
-        <ion-item :button="true" :detail="false" lines="none" class="pt-1" @click="toggleDarkMode">
+        <ion-item
+          :button="true"
+          :detail="false"
+          lines="full"
+          @click="toggleDarkMode"
+          class="cursor-pointer"
+        >
           <ion-icon
             :icon="isDarkModeEnabled ? sunny : moon"
-            class="cursor-pointer text-lg mr-2"
+            class="text-lg mr-2"
             aria-label="Switch between dark and light mode"
           ></ion-icon
           >{{ isDarkModeEnabled ? 'Turn off darkmode' : 'Turn on darkmode' }}
         </ion-item>
 
+        <ion-item
+          :button="true"
+          :detail="false"
+          lines="none"
+          class="pt-1 cursor-pointer"
+          @click="authButtonConfig.onClick"
+        >
+          <ion-icon :icon="authButtonConfig.icon" class="text-xl mr-2"></ion-icon
+          >{{ authButtonConfig.text }}</ion-item
+        >
         <!-- <ion-item :button="true" id="nested-trigger">More options...</ion-item>
           <ion-popover :dismiss-on-select="true" side="end">
             <ion-content>
@@ -69,10 +83,11 @@ import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimat
 import {
   chevronBackOutline,
   ellipsisHorizontalSharp,
-  logOutOutline,
-  logInOutline,
+  personOutline,
   moon,
-  sunny
+  sunny,
+  logOutOutline,
+  logInOutline
 } from 'ionicons/icons'
 import {
   IonHeader,
@@ -85,7 +100,7 @@ import {
   IonList,
   IonItem
 } from '@ionic/vue'
-import { isAuthenticated } from '@/firebaseInit'
+import { isAuthenticated, user } from '@/firebaseInit'
 import { useAuthStore } from '@/stores/index.ts'
 import { useRouter } from 'vue-router'
 const router = useRouter()
