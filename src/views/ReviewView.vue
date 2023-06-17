@@ -120,7 +120,6 @@ const handleRelatedWordClicked = (relatedWord: string) => {
 }
 
 const setWord = (word: WordObject) => {
-  console.log(3)
   localStorage.setItem('selectedWord', word.word)
   selectedWord.value = word
 }

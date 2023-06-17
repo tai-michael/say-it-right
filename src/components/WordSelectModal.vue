@@ -24,43 +24,22 @@
         </select>
       </div>
 
-      <ion-list id="modal-list" :inset="true" class="mt-2">
-        <!-- <ion-item
-          v-for="(word, index) in sortedWords"
-          :key="index"
-          button
-          detail="false"
-          :class="getSelectedWordHighlight(word.word)"
-          lines="full"
-        >
-          <ion-icon
-            :icon="`${word.bookmarked ? star : starOutline}`"
-            class="text-xl m-0 p-3 pl-4"
-            slot="start"
-            @click="handleBookmark(word)"
-          ></ion-icon>
+      <ion-list id="modal-list" :inset="true" class="mt-2 pt-0 pb-0">
+        <div v-if="sortedWords.length === 0" class="pl-2.5 pt-3.5 pb-3.5">(No results)</div>
 
-          <span @click="chooseWord(word)" class="flex items-center w-full h-full">{{
-            word.word
-          }}</span>
-
-          <ion-icon
-            :icon="trashOutline"
-            class="text-lg m-0 p-3 pr-4"
-            slot="end"
-            @click="handleDeleteAlert(word)"
-          ></ion-icon>
-        </ion-item> -->
-
-        <div v-if="sortedWords.length === 0" class="pl-2.5 pt-2.5 pb-2.5">(No results)</div>
         <RecycleScroller
+          :key="recyclerKey"
           :items="sortedWords"
-          :item-size="43"
-          key-field="word"
+          :item-size="49"
           :buffer="520"
-          v-slot="{ item }"
+          key-field="word"
+          v-slot="{ item, index }"
         >
-          <ion-item button detail="false" :class="getSelectedWordHighlight(item.word)" lines="full">
+          <ion-item
+            button
+            detail="false"
+            :class="[getItemClass(index), getSelectedWordHighlight(item.word)]"
+          >
             <ion-icon
               :icon="`${item.bookmarked ? star : starOutline}`"
               class="text-xl m-0 p-3 pl-4"
@@ -107,7 +86,7 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { computed, inject, ref, onMounted, onUnmounted } from 'vue'
+import { computed, inject, ref, onMounted, onUnmounted, nextTick } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
@@ -141,11 +120,12 @@ const props = defineProps({
 
 const emit = defineEmits(['selectWord', 'dismissModal', 'wordDeleted'])
 const chooseWord = (word: WordObject) => {
-  console.log(1)
   emit('selectWord', word)
   emit('dismissModal')
-  console.log(2)
 }
+
+// NOTE this key is needed for the list to change reactively whenever the order of the list is changed or when a word is deleted from the list
+const recyclerKey = computed(() => `${sortOrder.value}-${sortedWords.value.length}`)
 
 const handleBookmark = (word: WordObject) => {
   store.toggleBookmark(word)
@@ -153,15 +133,9 @@ const handleBookmark = (word: WordObject) => {
   console.log('Word bookmarked')
 }
 
-const wordToDelete = ref<WordObject | null>(null)
 const isAlertOpen = ref(false)
-
 const setAlertOpen = (state: boolean) => {
   isAlertOpen.value = state
-}
-const handleDeleteAlert = (word: WordObject) => {
-  setAlertOpen(true)
-  wordToDelete.value = word
 }
 const alertButtons = [
   {
@@ -174,7 +148,19 @@ const alertButtons = [
   }
 ]
 
+const scroller = ref<HTMLElement | null>(null)
+
+const wordToDelete = ref<WordObject | null>(null)
+const handleDeleteAlert = (word: WordObject) => {
+  setAlertOpen(true)
+  wordToDelete.value = word
+}
 const deleteWord = async (word: WordObject) => {
+  const scrollElement = await content.value.$el.getScrollElement()
+  // Get the current scroll position
+  const scrollPosition = scrollElement.scrollTop
+  console.log(scrollPosition)
+
   try {
     if (!user.value) throw new Error('User not defined')
 
@@ -184,8 +170,13 @@ const deleteWord = async (word: WordObject) => {
     })
 
     // NOTE this delay makes the deletion more obvious to users
-    setTimeout(() => {
+    setTimeout(async () => {
       store.deleteWord(word.word)
+      await nextTick()
+      setTimeout(() => {
+        scrollElement.scrollTo({ top: scrollPosition, behavior: 'auto' })
+      }, 1)
+      // scrollElement.scrollTo({ top: scrollPosition, behavior: 'auto' })
     }, 500)
 
     emit('wordDeleted', word.word)
@@ -236,6 +227,10 @@ const getSelectedWordHighlight = (word: string) => {
   if (word === props.selectedWord.word && isDarkModeEnabled.value) return 'dark-selected'
 }
 
+const getItemClass = (index: number) => {
+  return index === sortedWords.value.length - 1 ? '' : 'item-line'
+}
+
 const isVisible = ref(false)
 const scrollTrigger = ref<HTMLElement | null>(null)
 const observer = new IntersectionObserver((entries) => {
@@ -248,6 +243,10 @@ const content = ref<HTMLElement | null>(null)
 const scrollToTop = () => {
   // @ts-ignore
   if (content.value) content.value.$el.scrollToTop(500)
+  // const scrollElement = await content.value.$el.getScrollElement()
+  // const scrollPosition = scrollElement.scrollTop
+  // console.log(scrollPosition)
+  // scrollElement.scrollTo({ top: scrollPosition, behavior: 'auto' })
 }
 
 onMounted(() => {
@@ -321,6 +320,10 @@ body.dark {
     background-position: calc(100% - 8px) center;
     background-repeat: no-repeat;
   }
+
+  .item-line {
+    border-bottom: 1px solid rgb(64, 64, 64);
+  }
 }
 
 ion-item {
@@ -329,6 +332,11 @@ ion-item {
   --padding-start: 0px;
   --inner-padding-end: 0px;
 }
+
+.item-line {
+  border-bottom: 1px solid rgb(200, 199, 204);
+}
+
 .light-selected {
   --ion-item-background: rgb(236, 236, 236);
   // padding: 0 0.5rem;
