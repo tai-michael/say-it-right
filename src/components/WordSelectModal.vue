@@ -25,7 +25,7 @@
       </div>
 
       <ion-list id="modal-list" :inset="true" class="mt-2">
-        <ion-item
+        <!-- <ion-item
           v-for="(word, index) in sortedWords"
           :key="index"
           button
@@ -50,32 +50,36 @@
             slot="end"
             @click="handleDeleteAlert(word)"
           ></ion-icon>
-        </ion-item>
+        </ion-item> -->
 
         <div v-if="sortedWords.length === 0" class="pl-2.5 pt-2.5 pb-2.5">(No results)</div>
-        <!-- <RecycleScroller
-          class="scroller"
+        <RecycleScroller
           :items="sortedWords"
           :item-size="43"
           key-field="word"
+          :buffer="520"
           v-slot="{ item }"
         >
-          <ion-item :class="getSelectedWordHighlight(item.word)" lines="full">
-            <span @click="chooseWord(item)" class="w-full">{{ item.word }}</span>
+          <ion-item button detail="false" :class="getSelectedWordHighlight(item.word)" lines="full">
             <ion-icon
-              :icon="starOutline"
-              class="text-xl mr-2"
-              slot="end"
-              @click="testFn"
+              :icon="`${item.bookmarked ? star : starOutline}`"
+              class="text-xl m-0 p-3 pl-4"
+              slot="start"
+              @click="handleBookmark(item)"
             ></ion-icon>
+
+            <span @click="chooseWord(item)" class="flex items-center w-full h-full">{{
+              item.word
+            }}</span>
+
             <ion-icon
               :icon="trashOutline"
-              class="text-xl"
+              class="text-lg m-0 p-3 pr-4"
               slot="end"
-              @click="deleteWord(item)"
+              @click="handleDeleteAlert(item)"
             ></ion-icon>
           </ion-item>
-        </RecycleScroller> -->
+        </RecycleScroller>
       </ion-list>
     </ion-content>
 
@@ -137,8 +141,10 @@ const props = defineProps({
 
 const emit = defineEmits(['selectWord', 'dismissModal', 'wordDeleted'])
 const chooseWord = (word: WordObject) => {
+  console.log(1)
   emit('selectWord', word)
   emit('dismissModal')
+  console.log(2)
 }
 
 const handleBookmark = (word: WordObject) => {

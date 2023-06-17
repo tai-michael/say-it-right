@@ -36,7 +36,7 @@
       <ion-list class="pb-2 pt-2">
         <ion-item :detail="false" lines="full" @click.stop class="cursor-default">
           <ion-icon :icon="personOutline" class="cursor-pointer text-xl mr-2 ml-[-1px]"></ion-icon>
-          Signed in as {{ user?.displayName }}
+          Signed in as&nbsp;<span class="font-medium">{{ user?.displayName }}</span>
         </ion-item>
 
         <ion-item

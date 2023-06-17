@@ -5,6 +5,7 @@ import type { RouteRecordRaw } from 'vue-router'
 // import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 // import ProvidedListsView from '@/views/ProvidedListsView.vue'
 import TabsRoot from '@/components/TabsRoot.vue'
+import ReviewView from '@/views/ReviewView.vue'
 import { user } from '@/firebaseInit'
 
 const routes: Array<RouteRecordRaw> = [
@@ -48,6 +49,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'review',
         name: 'review',
         component: () => import('@/views/ReviewView.vue'),
+        // component: ReviewView,
         meta: {
           title: 'Review'
         }
