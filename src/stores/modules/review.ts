@@ -93,6 +93,11 @@ export const useReviewStore = defineStore('review', () => {
     allWords.value.splice(index, 1)
   }
 
+  const savedScrollPosition = ref(0)
+  const saveScrollPosition = (position: number) => {
+    savedScrollPosition.value = position
+  }
+
   // NOTE In Review, we don't care about 'attemptsLimits' at all. 'attempts' can be used to render hints.
   // const attemptsLimit = 6
 
@@ -121,6 +126,7 @@ export const useReviewStore = defineStore('review', () => {
     inProgressWords,
     untouchedWords,
     masteredWords,
+    savedScrollPosition,
     // attemptsLimit,
 
     addWords,
@@ -134,7 +140,8 @@ export const useReviewStore = defineStore('review', () => {
     deleteWord,
     // softResetAttempts,
     // hardResetAttempts,
-    updateReviewInFirestore
+    updateReviewInFirestore,
+    saveScrollPosition
     // setTestedWordsObj
   }
 })

@@ -4,12 +4,12 @@
       <ion-toolbar>
         <ion-searchbar type="text" v-model="search" placeholder="Search"></ion-searchbar>
         <ion-buttons slot="end" class="mobile-view">
-          <ion-button @click="emit('dismissModal')">Cancel</ion-button>
+          <ion-button @click="handleCancel">Cancel</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding" ref="content">
+    <ion-content class="ion-padding" ref="content" id="test">
       <div ref="scrollTrigger" class="scroll-trigger"></div>
       <div class="pl-4 pr-4">
         <!-- <label for="sort">Sort by:</label> -->
@@ -28,18 +28,15 @@
         <div v-if="sortedWords.length === 0" class="pl-2.5 pt-3.5 pb-3.5">(No results)</div>
 
         <RecycleScroller
-          :key="recyclerKey"
+          :key="sortOrder"
           :items="sortedWords"
-          :item-size="49"
+          :item-size="itemHeight"
           :buffer="520"
           key-field="word"
-          v-slot="{ item, index }"
+          v-slot="{ item }"
+          class="pt-2 pb-2"
         >
-          <ion-item
-            button
-            detail="false"
-            :class="[getItemClass(index), getSelectedWordHighlight(item.word)]"
-          >
+          <ion-item button detail="false" :class="getSelectedWordHighlight(item.word)">
             <ion-icon
               :icon="`${item.bookmarked ? star : starOutline}`"
               class="text-xl m-0 p-3 pl-4"
@@ -55,7 +52,7 @@
               :icon="trashOutline"
               class="text-lg m-0 p-3 pr-4"
               slot="end"
-              @click="handleDeleteAlert(item)"
+              @click="handleDeleteAlert(item, $event)"
             ></ion-icon>
           </ion-item>
         </RecycleScroller>
@@ -86,7 +83,7 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { computed, inject, ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { computed, ref, inject, onMounted, onBeforeUnmount, nextTick, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
@@ -98,7 +95,6 @@ import {
   IonContent,
   IonList,
   IonItem,
-  IonTitle,
   IonButtons,
   IonButton,
   IonFab,
@@ -119,13 +115,16 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['selectWord', 'dismissModal', 'wordDeleted'])
-const chooseWord = (word: WordObject) => {
+const chooseWord = async (word: WordObject) => {
+  storeScrollPosition()
   emit('selectWord', word)
   emit('dismissModal')
 }
 
-// NOTE this key is needed for the list to change reactively whenever the order of the list is changed or when a word is deleted from the list
-const recyclerKey = computed(() => `${sortOrder.value}-${sortedWords.value.length}`)
+const handleCancel = () => {
+  storeScrollPosition()
+  emit('dismissModal')
+}
 
 const handleBookmark = (word: WordObject) => {
   store.toggleBookmark(word)
@@ -144,23 +143,18 @@ const alertButtons = [
   {
     text: 'Delete',
     // @ts-ignore
-    handler: () => deleteWord(wordToDelete.value)
+    handler: () => deleteWord(wordToDelete.value, deleteEvent.value)
   }
 ]
 
-const scroller = ref<HTMLElement | null>(null)
-
 const wordToDelete = ref<WordObject | null>(null)
-const handleDeleteAlert = (word: WordObject) => {
+const deleteEvent = ref(null)
+const handleDeleteAlert = (word: WordObject, event) => {
   setAlertOpen(true)
   wordToDelete.value = word
+  deleteEvent.value = event
 }
-const deleteWord = async (word: WordObject) => {
-  const scrollElement = await content.value.$el.getScrollElement()
-  // Get the current scroll position
-  const scrollPosition = scrollElement.scrollTop
-  console.log(scrollPosition)
-
+const deleteWord = async (word: WordObject, event) => {
   try {
     if (!user.value) throw new Error('User not defined')
 
@@ -172,11 +166,11 @@ const deleteWord = async (word: WordObject) => {
     // NOTE this delay makes the deletion more obvious to users
     setTimeout(async () => {
       store.deleteWord(word.word)
-      await nextTick()
-      setTimeout(() => {
-        scrollElement.scrollTo({ top: scrollPosition, behavior: 'auto' })
-      }, 1)
-      // scrollElement.scrollTo({ top: scrollPosition, behavior: 'auto' })
+      if (event) {
+        // NOTE though hacky, this is the only solution I can think of to prevent rerendering the entire list after deleting a word (which is undesirable behavior, as we want to maintain the scroll position)
+        await shiftElementsUp(event)
+        event = null
+      }
     }, 500)
 
     emit('wordDeleted', word.word)
@@ -186,6 +180,35 @@ const deleteWord = async (word: WordObject) => {
   } catch (err) {
     console.log(`Failed to delete word ${err}`)
   }
+}
+
+const itemHeight = 49
+const shiftElementsUp = async (event) => {
+  const removedElement = event.target.parentElement.parentElement
+  const siblingElement = removedElement.nextElementSibling
+  const parentElement = removedElement.parentElement
+
+  removedElement.remove()
+  await nextTick()
+
+  if (siblingElement) {
+    const currentSiblingTransform = siblingElement.style.transform || 'translateY(0px)'
+    console.log(currentSiblingTransform)
+    const newSiblingTransform = `translateY(${
+      parseInt(currentSiblingTransform.replace('translateY(', '').replace('px)', '')) - itemHeight
+    }px)`
+    console.log(newSiblingTransform)
+    siblingElement.style.transform = newSiblingTransform
+    console.log(siblingElement.style)
+  }
+
+  if (parentElement) {
+    const currentParentMinHeight = parentElement.style.minHeight || '0px'
+    const newParentMinHeight = `calc(${currentParentMinHeight} - ${itemHeight}px)`
+    parentElement.style.minHeight = newParentMinHeight
+  }
+
+  event = null
 }
 
 const isToastOpen = ref(false)
@@ -220,6 +243,60 @@ const sortedWords = computed(() => {
   }
 })
 
+const isVisible = ref(false)
+const scrollTrigger = ref<HTMLElement | null>(null)
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    // NOTE to set height at which FAB triggers, refer to '.scroll-trigger'
+    isVisible.value = !entry.isIntersecting
+  })
+})
+
+const content = ref<HTMLElement | null>(null)
+const scrollToTop = async () => {
+  // @ts-ignore
+  if (content.value) content.value.$el.scrollToTop(500)
+}
+
+const storeScrollPosition = async () => {
+  const scrollElement = await content.value.$el.getScrollElement()
+  const scrollPosition = scrollElement.scrollTop
+  store.saveScrollPosition(scrollPosition)
+  console.log(store.savedScrollPosition)
+}
+
+onMounted(async () => {
+  console.log('mounted')
+  if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
+
+  console.log(1)
+  // content.value.$el.scrollToPoint(0, 1000)
+
+  // await nextTick()
+  setTimeout(async () => {
+    content.value.$el.scrollToPoint(0, store.savedScrollPosition)
+
+    // const scrollElement = await content.value.$el.getScrollElement()
+    // scrollElement.scrollTop = store.savedScrollPosition
+  }, 1)
+
+  // NOTE code for triggering rerender for the list upon ANY update of its items
+  // watchEffect(() => {
+  //   return watch(
+  //     sortedWords,
+  //     () => {
+  //       console.log('watcher triggered')
+  //       isUpdating.value = true
+
+  //       setTimeout(() => {
+  //         isUpdating.value = false
+  //       }, 10)
+  //     },
+  //     { deep: true }
+  //   )
+  // })
+})
+
 const isDarkModeEnabled = inject('isDarkModeEnabled')
 const getSelectedWordHighlight = (word: string) => {
   if (!props.selectedWord) return ''
@@ -227,35 +304,18 @@ const getSelectedWordHighlight = (word: string) => {
   if (word === props.selectedWord.word && isDarkModeEnabled.value) return 'dark-selected'
 }
 
-const getItemClass = (index: number) => {
-  return index === sortedWords.value.length - 1 ? '' : 'item-line'
-}
+// const getItemClass = (index: number) => {
+//   return index === sortedWords.value.length - 1 ? '' : 'item-line'
+// }
 
-const isVisible = ref(false)
-const scrollTrigger = ref<HTMLElement | null>(null)
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    isVisible.value = !entry.isIntersecting
-  })
-})
+// const isUpdating = ref()
+// const onUpdate = (startIndex, endIndex, visibleStartIndex, visibleEndIndex) => {
+//   console.log('Update event:', startIndex, endIndex, visibleStartIndex, visibleEndIndex)
+//   console.log('updated length:')
+// }
 
-const content = ref<HTMLElement | null>(null)
-const scrollToTop = () => {
-  // @ts-ignore
-  if (content.value) content.value.$el.scrollToTop(500)
-  // const scrollElement = await content.value.$el.getScrollElement()
-  // const scrollPosition = scrollElement.scrollTop
-  // console.log(scrollPosition)
-  // scrollElement.scrollTo({ top: scrollPosition, behavior: 'auto' })
-}
-
-onMounted(() => {
-  if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
-})
-
-onUnmounted(() => {
-  observer.disconnect()
-})
+// NOTE this key is needed for the list to change reactively whenever the order of the list is changed or when a word is deleted from the list. Currently not using it, as it rerenders the entire list and resets scroll position to top, which is undesirable when deleting a word.
+// const recyclerKey = computed(() => `${sortOrder.value}-${sortedWords.value.length}`)
 </script>
 
 <style lang="scss" scoped>
@@ -286,14 +346,6 @@ ion-searchbar {
   }
 }
 
-ion-content {
-  --background: #b9e5e1;
-  // --background: #dcf2f0;
-  @media (min-width: 639px) {
-    --background: white;
-  }
-}
-
 select {
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
@@ -305,6 +357,25 @@ select {
   background-position: calc(100% - 8px) center;
   background-repeat: no-repeat;
 }
+
+ion-content {
+  --background: #b9e5e1;
+  // --background: #dcf2f0;
+  @media (min-width: 639px) {
+    --background: white;
+  }
+}
+
+ion-item {
+  margin-left: 0px !important;
+  padding-left: 0px !important;
+  --padding-start: 0px;
+  --inner-padding-end: 0px;
+}
+
+// .item-line {
+//   border-bottom: 1px solid rgb(200, 199, 204);
+// }
 
 body.dark {
   ion-content {
@@ -321,20 +392,9 @@ body.dark {
     background-repeat: no-repeat;
   }
 
-  .item-line {
-    border-bottom: 1px solid rgb(64, 64, 64);
-  }
-}
-
-ion-item {
-  margin-left: 0px !important;
-  padding-left: 0px !important;
-  --padding-start: 0px;
-  --inner-padding-end: 0px;
-}
-
-.item-line {
-  border-bottom: 1px solid rgb(200, 199, 204);
+  // .item-line {
+  //   border-bottom: 1px solid rgb(64, 64, 64);
+  // }
 }
 
 .light-selected {
@@ -354,9 +414,4 @@ ion-item {
     height: 2400px;
   }
 }
-
-// for virtual scroll
-// .scroller {
-//   height: 100%;
-// }
 </style>

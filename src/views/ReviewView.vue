@@ -8,7 +8,7 @@
         <ion-button
           v-if="isNarrowScreen"
           :detail="false"
-          id="word-selection-list"
+          @click="isOpen = true"
           class="ml-14 mr-4 flex max-h-8"
         >
           <ion-label class="m-0 max-h-8">Click to choose word</ion-label>
@@ -35,9 +35,9 @@
       </keep-alive>
     </ion-content>
 
-    <ion-modal v-if="isNarrowScreen" trigger="word-selection-list" ref="modal">
+    <ion-modal v-if="isNarrowScreen" :is-open="isOpen">
       <WordSelectModal
-        @dismiss-modal="modal.$el.dismiss()"
+        @dismiss-modal="isOpen = false"
         @select-word="setWord"
         @word-deleted="handleWordDeleted"
         :selected-word="selectedWord"
@@ -131,7 +131,7 @@ const handleWordDeleted = (wordName: string) => {
   selectedWord.value = null
 }
 
-const modal = ref(null)
+const isOpen = ref(false)
 // NOTE media queries only hide but don't remove elements in the DOM. Removing is necessary to prevent having duplicate modals that cause recursive rendering
 const isNarrowScreen = ref()
 const handleResize = () => {
