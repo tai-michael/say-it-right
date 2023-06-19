@@ -83,7 +83,7 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { computed, ref, inject, onMounted, onBeforeUnmount, nextTick, watchEffect } from 'vue'
+import { computed, ref, inject, onMounted, nextTick, watch, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
@@ -265,20 +265,61 @@ const storeScrollPosition = async () => {
   console.log(store.savedScrollPosition)
 }
 
+// watch(
+//   () => content.value,
+//   async (newValue, oldValue) => {
+//     if (isProxy(oldValue) && !isProxy(newValue)) {
+//       console.log(oldValue)
+//       console.log(newValue)
+//       content.value.$el.scrollToPoint(0, store.savedScrollPosition)
+//     }
+//   },
+//   { immediate: true }
+// )
+
+// function isProxy(obj) {
+//   const proxyPrototype = Object.getPrototypeOf(new Proxy({}, {}))
+//   return Object.getPrototypeOf(obj) === proxyPrototype
+// }
+
 onMounted(async () => {
   console.log('mounted')
   if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
 
-  console.log(1)
-  // content.value.$el.scrollToPoint(0, 1000)
-
   // await nextTick()
+  // if (!content.value) return
+  // console.log(content.value)
   setTimeout(async () => {
-    content.value.$el.scrollToPoint(0, store.savedScrollPosition)
+    // console.log(content.value)
+    // content.value.$el.scrollToPoint(0, store.savedScrollPosition)
+    // console.log(content.value)
 
-    // const scrollElement = await content.value.$el.getScrollElement()
-    // scrollElement.scrollTop = store.savedScrollPosition
+    const scrollElement = await content.value.$el.getScrollElement()
+    // console.log(scrollElement)
+    scrollElement.scrollTop = store.savedScrollPosition
   }, 1)
+
+  // console.log(content.value.$el)
+  // console.log(isProxy(content.value))
+  // watch(
+  //   () => content.value,
+  //   async (newValue, oldValue) => {
+  //     if (JSON.stringify(newValue) !== '{}' && JSON.stringify(oldValue) === '{}') {
+  //       console.log(content.value)
+  //       content.value.$el.scrollToPoint(0, store.savedScrollPosition)
+  //       console.log(content.value)
+  //     }
+  //   },
+  //   { immediate: true }
+  // )
+
+  // watchEffect(async () => {
+  //   if (JSON.stringify(content.value) !== '{}') {
+  //     console.log(content.value)
+  //     content.value.$el.scrollToPoint(0, store.savedScrollPosition)
+  //     console.log(content.value)
+  //   }
+  // })
 
   // NOTE code for triggering rerender for the list upon ANY update of its items
   // watchEffect(() => {
