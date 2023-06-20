@@ -94,6 +94,6 @@ ion-tab-bar {
 }
 
 body.dark ion-tab-bar {
-  --background: #141414;
+  --background: rgb(26, 26, 26);
 }
 </style>

@@ -293,7 +293,7 @@ onMounted(async () => {
     // console.log(scrollElement)
     if (!scrollElement) return
     scrollElement.scrollTop = store.savedScrollPosition
-  }, 5)
+  }, 1)
 
   // console.log(content.value.$el)
   // console.log(isProxy(content.value))
@@ -415,15 +415,23 @@ ion-item {
 // }
 
 body.dark {
+  ion-toolbar {
+    --background: rgb(24, 24, 24);
+  }
+
   ion-content {
-    --background: rgb(26, 26, 26);
+    --background: rgb(32, 32, 32);
+  }
+
+  ion-searchbar {
+    --background: rgb(40, 40, 40);
   }
 
   select {
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
-    background: rgb(46, 46, 46);
-    border: 1px solid rgb(65, 65, 65);
+    background: rgb(40, 40, 40);
+    border: 1px solid rgb(50, 50, 50);
     background-image: url(@/assets/icons/chevron-down-light.svg);
     background-position: calc(100% - 8px) center;
     background-repeat: no-repeat;
@@ -440,7 +448,7 @@ body.dark {
   // margin-left: 0.5rem;
 }
 .dark-selected {
-  --ion-item-background: rgb(58, 58, 58);
+  --ion-item-background: rgb(42, 42, 42);
 }
 .scroll-trigger {
   height: 800px;

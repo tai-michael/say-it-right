@@ -292,7 +292,11 @@ ion-toast {
 
 body.dark {
   ion-content {
-    --background: rgb(26, 26, 26);
+    --background: rgb(32, 32, 32);
+  }
+
+  ion-searchbar {
+    --background: rgb(40, 40, 40);
   }
 
   .input-container {

@@ -462,11 +462,11 @@ body.dark {
   }
 
   .message-container {
-    background-color: rgb(26, 26, 26);
+    background-color: rgb(30, 30, 30);
   }
 
   ion-card {
-    --background: rgb(46, 46, 46);
+    --background: rgb(48, 48, 48);
   }
 
   .instructions,

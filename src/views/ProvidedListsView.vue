@@ -86,7 +86,7 @@ ion-content {
 
 body.dark {
   ion-content {
-    --background: rgb(26, 26, 26);
+    --background: rgb(32, 32, 32);
   }
 }
 

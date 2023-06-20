@@ -296,16 +296,17 @@ ion-popover {
 
 body.dark {
   main {
-    background: rgb(26, 26, 26);
+    background: rgb(32, 32, 32);
   }
 
   ion-toolbar {
-    --background: rgb(34, 34, 34);
+    // --background: rgb(34, 34, 34);
+    --background: rgb(40, 40, 40);
     --color: rgb(196, 196, 196);
   }
 
   ion-card {
-    --background: rgb(46, 46, 46);
+    --background: rgb(48, 48, 48);
     --color: rgb(196, 196, 196);
   }
 }

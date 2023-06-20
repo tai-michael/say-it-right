@@ -220,7 +220,7 @@ ion-toolbar {
 }
 
 body.dark ion-toolbar {
-  --background: #141414;
+  --background: rgb(24, 24, 24);
 
   ion-icon {
     color: rgb(196, 196, 196);
