@@ -262,7 +262,6 @@ const storeScrollPosition = async () => {
   const scrollElement = await content.value.$el.getScrollElement()
   const scrollPosition = scrollElement.scrollTop
   store.saveScrollPosition(scrollPosition)
-  console.log(store.savedScrollPosition)
 }
 
 // watch(
@@ -283,21 +282,18 @@ const storeScrollPosition = async () => {
 // }
 
 onMounted(async () => {
-  console.log('mounted')
   if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
 
   // await nextTick()
-  // if (!content.value) return
-  // console.log(content.value)
-  setTimeout(async () => {
-    // console.log(content.value)
-    // content.value.$el.scrollToPoint(0, store.savedScrollPosition)
-    // console.log(content.value)
 
-    const scrollElement = await content.value.$el.getScrollElement()
+  // NOTE allows persistent scroll position
+  setTimeout(async () => {
+    // content.value.$el.scrollToPoint(0, store.savedScrollPosition)
+    const scrollElement = await content.value?.$el?.getScrollElement()
     // console.log(scrollElement)
+    if (!scrollElement) return
     scrollElement.scrollTop = store.savedScrollPosition
-  }, 1)
+  }, 5)
 
   // console.log(content.value.$el)
   // console.log(isProxy(content.value))

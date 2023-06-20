@@ -3,9 +3,14 @@
     <div class="flex flex-col h-full justify-between">
       <main class="p-4 flex flex-col w-full h-full items-center justify-center">
         <div class="instructions">
-          <!-- <span v-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'">Recording complete</span>
-        <span v-else>Hold the button and read the paragraph</span> -->
-          <span>Hold the button and speak this paragraph</span>
+          <TransitionFade>
+            <span v-if="props.list.status === 'LIST_NOT_STARTED'"
+              >Hold the button and speak this paragraph</span
+            >
+            <span v-else-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
+              >Recording complete</span
+            >
+          </TransitionFade>
         </div>
 
         <!-- :class="[testedParagraph.length > 350 ? '!leading-6' : '']" -->
@@ -91,6 +96,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
+import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import { IonPage, IonContent, IonCard } from '@ionic/vue'
 import type { PropType } from 'vue'
 import type { List, CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
@@ -361,6 +367,10 @@ ion-page {
 
 main {
   background-color: #b9e5e1;
+}
+
+.instructions {
+  height: 19px;
 }
 
 .instructions,

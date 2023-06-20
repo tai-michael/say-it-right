@@ -7,7 +7,7 @@
           <TransitionFade>
             <!-- Using conditional so that the transition works -->
             <span v-if="testingWordOnly">Speak this word</span>
-            <span v-else>Speak this sentence</span>
+            <span v-else-if="testingSentences">Speak this sentence</span>
           </TransitionFade>
         </div>
 
@@ -390,6 +390,10 @@ ion-page {
 
 main {
   background-color: #b9e5e1;
+}
+
+.instructions {
+  height: 19px;
 }
 
 .instructions,
