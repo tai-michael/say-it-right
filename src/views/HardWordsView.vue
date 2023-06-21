@@ -108,7 +108,7 @@ body.dark {
   }
 
   ion-card {
-    --background: rgb(48, 48, 48);
+    --background: rgb(42, 42, 42);
     --color: rgb(196, 196, 196);
   }
 }

@@ -35,23 +35,28 @@
       </keep-alive>
     </ion-content>
 
-    <ion-modal v-if="isNarrowScreen" :is-open="isOpen">
-      <WordSelectModal
-        @dismiss-modal="isOpen = false"
-        @select-word="setWord"
-        @word-deleted="handleWordDeleted"
-        :selected-word="selectedWord"
-        :all-words="allWords"
-      />
-    </ion-modal>
+    <!-- NOTE opting not to use ion-modal, as it destroys the modal whenever it's dismissed, meaning the scroll position is reset to top -->
+    <Teleport to="#modals">
+      <TransitionFadeAndSlide>
+        <WordSelectModal
+          v-if="isNarrowScreen"
+          v-show="isOpen"
+          @dismiss-modal="isOpen = false"
+          @select-word="setWord"
+          @word-deleted="handleWordDeleted"
+          :selected-word="selectedWord"
+          :all-words="allWords"
+        />
+      </TransitionFadeAndSlide>
+    </Teleport>
 
     <WordSelectModal
-      v-else
+      v-if="!isNarrowScreen"
       @select-word="setWord"
       @word-deleted="handleWordDeleted"
       :selected-word="selectedWord"
       :all-words="allWords"
-      class="desktop-modal"
+      class="desktop-list"
     />
 
     <!-- This will be for desktop view -->
@@ -101,6 +106,8 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
 import PullRefresher from '@/components/PullRefresher.vue'
 import WordSelectModal from '@/components/WordSelectModal.vue'
+import TransitionFade from '@/components/transitions/TransitionFade.vue'
+import TransitionFadeAndSlide from '@/components/transitions/TransitionFadeAndSlide.vue'
 import { IonPage, IonContent, IonModal, IonButton, IonLabel } from '@ionic/vue'
 import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -155,7 +162,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-.desktop-modal {
+.desktop-list {
   width: 300px;
   // margin-top: 2.75rem; // ios setting, since ios headers are shorter
   padding-top: 3.5rem;

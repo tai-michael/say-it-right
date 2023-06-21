@@ -76,7 +76,6 @@ import {
   IonCardContent,
   IonTitle,
   IonIcon,
-  IonContent,
   IonPopover,
   IonAlert
   // IonList,
@@ -283,12 +282,12 @@ ul {
   padding-bottom: 2px;
 }
 
-li {
-  // margin-bottom: 4px; /* Increase the gap between rows */
-}
-ion-alert.custom-alert {
-  // --backdrop-opacity: 0.7;
-}
+// li {
+//   margin-bottom: 4px; /* Increase the gap between rows */
+// }
+// ion-alert.custom-alert {
+//   --backdrop-opacity: 0.7;
+// }
 
 ion-popover {
   --width: 160px;
@@ -301,7 +300,7 @@ body.dark {
 
   ion-toolbar {
     // --background: rgb(34, 34, 34);
-    --background: rgb(40, 40, 40);
+    --background: rgb(38, 38, 38);
     --color: rgb(196, 196, 196);
   }
 

@@ -1,5 +1,6 @@
 <template>
   <ion-app>
+    <div id="modals"></div>
     <ion-content class="ion-padding">
       <div v-if="fetchingBackendData" class="flex h-full items-center justify-center">
         <LoadingSpinner />
@@ -175,6 +176,10 @@ auth.onAuthStateChanged(async () => {
 </script>
 
 <style scoped>
+#modals {
+  z-index: 99999;
+}
+
 /* Firefox */
 /* @media (prefers-color-scheme: dark) {
   :root {

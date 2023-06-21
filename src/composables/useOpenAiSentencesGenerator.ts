@@ -15,6 +15,13 @@ export default async function (mispronouncedWords: string[]) {
   const query = mispronouncedWords.join(', ')
   const params = { query }
   const response = await axios.get(url, { params })
+  // TODO cut and paste this into new elevenlabs composable
+  // const params = {
+  //   text,
+  //   gender,
+  //   stability
+  // }
+  // const response = await axios.get(url, { params })
   console.log(response)
   const content = response?.data?.choices[0]?.message?.content
   console.log(content)

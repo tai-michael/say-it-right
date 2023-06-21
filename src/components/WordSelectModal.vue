@@ -61,7 +61,6 @@
 
     <ion-alert
       :is-open="isAlertOpen"
-      class="custom-alert"
       header="Are you sure?"
       :buttons="alertButtons"
       @didDismiss="setAlertOpen(false)"
@@ -82,6 +81,7 @@
     </ion-fab>
   </ion-page>
 </template>
+
 <script setup lang="ts">
 import { computed, ref, inject, onMounted, nextTick, watch, watchEffect } from 'vue'
 import type { PropType } from 'vue'
@@ -116,13 +116,11 @@ const props = defineProps({
 
 const emit = defineEmits(['selectWord', 'dismissModal', 'wordDeleted'])
 const chooseWord = async (word: WordObject) => {
-  storeScrollPosition()
   emit('selectWord', word)
   emit('dismissModal')
 }
 
 const handleCancel = () => {
-  storeScrollPosition()
   emit('dismissModal')
 }
 
@@ -166,6 +164,7 @@ const deleteWord = async (word: WordObject, event) => {
     // NOTE this delay makes the deletion more obvious to users
     setTimeout(async () => {
       store.deleteWord(word.word)
+      setToastOpen(true)
       if (event) {
         // NOTE though hacky, this is the only solution I can think of to prevent rerendering the entire list after deleting a word (which is undesirable behavior, as we want to maintain the scroll position)
         await shiftElementsUp(event)
@@ -174,7 +173,6 @@ const deleteWord = async (word: WordObject, event) => {
     }, 500)
 
     emit('wordDeleted', word.word)
-    setToastOpen(true)
     wordToDelete.value = null
     console.log('word deleted')
   } catch (err) {
@@ -193,13 +191,10 @@ const shiftElementsUp = async (event) => {
 
   if (siblingElement) {
     const currentSiblingTransform = siblingElement.style.transform || 'translateY(0px)'
-    console.log(currentSiblingTransform)
     const newSiblingTransform = `translateY(${
       parseInt(currentSiblingTransform.replace('translateY(', '').replace('px)', '')) - itemHeight
     }px)`
-    console.log(newSiblingTransform)
     siblingElement.style.transform = newSiblingTransform
-    console.log(siblingElement.style)
   }
 
   if (parentElement) {
@@ -258,64 +253,8 @@ const scrollToTop = async () => {
   if (content.value) content.value.$el.scrollToTop(500)
 }
 
-const storeScrollPosition = async () => {
-  const scrollElement = await content.value.$el.getScrollElement()
-  const scrollPosition = scrollElement.scrollTop
-  store.saveScrollPosition(scrollPosition)
-}
-
-// watch(
-//   () => content.value,
-//   async (newValue, oldValue) => {
-//     if (isProxy(oldValue) && !isProxy(newValue)) {
-//       console.log(oldValue)
-//       console.log(newValue)
-//       content.value.$el.scrollToPoint(0, store.savedScrollPosition)
-//     }
-//   },
-//   { immediate: true }
-// )
-
-// function isProxy(obj) {
-//   const proxyPrototype = Object.getPrototypeOf(new Proxy({}, {}))
-//   return Object.getPrototypeOf(obj) === proxyPrototype
-// }
-
 onMounted(async () => {
   if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
-
-  // await nextTick()
-
-  // NOTE allows persistent scroll position
-  setTimeout(async () => {
-    // content.value.$el.scrollToPoint(0, store.savedScrollPosition)
-    const scrollElement = await content.value?.$el?.getScrollElement()
-    // console.log(scrollElement)
-    if (!scrollElement) return
-    scrollElement.scrollTop = store.savedScrollPosition
-  }, 1)
-
-  // console.log(content.value.$el)
-  // console.log(isProxy(content.value))
-  // watch(
-  //   () => content.value,
-  //   async (newValue, oldValue) => {
-  //     if (JSON.stringify(newValue) !== '{}' && JSON.stringify(oldValue) === '{}') {
-  //       console.log(content.value)
-  //       content.value.$el.scrollToPoint(0, store.savedScrollPosition)
-  //       console.log(content.value)
-  //     }
-  //   },
-  //   { immediate: true }
-  // )
-
-  // watchEffect(async () => {
-  //   if (JSON.stringify(content.value) !== '{}') {
-  //     console.log(content.value)
-  //     content.value.$el.scrollToPoint(0, store.savedScrollPosition)
-  //     console.log(content.value)
-  //   }
-  // })
 
   // NOTE code for triggering rerender for the list upon ANY update of its items
   // watchEffect(() => {
@@ -356,6 +295,12 @@ const getSelectedWordHighlight = (word: string) => {
 </script>
 
 <style lang="scss" scoped>
+@media only screen and (min-width: 768px) {
+  .mobile-view {
+    display: none;
+  }
+}
+
 ion-header {
   display: flex;
   align-items: center;
@@ -375,12 +320,6 @@ ion-searchbar {
   display: flex;
   justify-content: center;
   padding: 0 1rem;
-}
-
-@media only screen and (min-width: 768px) {
-  .mobile-view {
-    display: none;
-  }
 }
 
 select {
@@ -413,6 +352,14 @@ ion-item {
 // .item-line {
 //   border-bottom: 1px solid rgb(200, 199, 204);
 // }
+
+ion-alert {
+  z-index: 99999 !important;
+}
+
+ion-toast {
+  z-index: 99999 !important;
+}
 
 body.dark {
   ion-toolbar {
