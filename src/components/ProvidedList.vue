@@ -7,6 +7,7 @@ import { onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import ListContent from '@/components/ListContent.vue'
 import {
+  useIonRouter,
   onIonViewWillEnter,
   onIonViewWillLeave // maybe replace history so that it goes to provided lists view? and do similar for all tabs*
 } from '@ionic/vue'
@@ -15,6 +16,7 @@ import { useProvidedListsStore } from '@/stores/index.ts'
 
 const route = useRoute()
 const router = useRouter()
+const ionRouter = useIonRouter()
 const store = useProvidedListsStore()
 // const componentKey = 'provided-lists'
 
@@ -35,7 +37,8 @@ onIonViewWillEnter(() => {
         list.value = store.activeList
       } else {
         console.log(4)
-        router.push('/not-found')
+        // ion router allows custom animation for router push
+        ionRouter.navigate('/not-found', 'none', 'push')
         return
       }
     }

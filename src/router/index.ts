@@ -5,19 +5,16 @@ import type { RouteRecordRaw } from 'vue-router'
 // import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 // import ProvidedListsView from '@/views/ProvidedListsView.vue'
 import TabsRoot from '@/components/TabsRoot.vue'
-import ReviewView from '@/views/ReviewView.vue'
 import { user } from '@/firebaseInit'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'home',
     redirect: '/custom-lists'
   },
   {
     path: '/',
     component: TabsRoot,
-    redirect: { name: 'custom-lists' },
     children: [
       {
         path: 'custom-lists',
@@ -133,11 +130,12 @@ const router = createRouter({
   includeQueryParams: true
 })
 
+// NOTE prevents browser back button from functioning
 router.beforeEach((to, from, next) => {
   const title = to.meta.title || 'Custom Lists'
   document.title = title as string
 
-  if (window.event.type == 'popstate') {
+  if (window.event && window.event.type == 'popstate') {
     next(false)
   } else {
     next()
