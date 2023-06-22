@@ -1,36 +1,15 @@
+import axios from 'axios'
+
 export default async function (text: string, gender = 'female', stability = 0.75) {
   try {
-    // Use this particular female voice ('Bella') for sentence/paragraph playback, as it sounds more natural than the others
-    let voiceId = ''
-    if (gender === 'male') voiceId = 'pNInz6obpgDQGcFmaJgB'
-    else if (gender === 'female') voiceId = 'EXAVITQu4vr4xnSDxMaL'
-
-    const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY
-    const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`
-    // These are the recommended settings by Eleven Labs
-    const voiceSettings = {
-      // Default is 0.75, maximum is 1. Increasing stability makes the voice more consistent between regenerations, but it can also make it sounds a bit monotone. On longer text fragments they recommend lowering this value.
-      stability: stability,
-      // High enhancement boosts overall voice clarity and target speaker similarity. Very high values can cause artifacts, so adjusting this setting to find the optimal value is encouraged.
-      similarity_boost: 0.75
+    const url = import.meta.env.VITE_TEXT_TO_SPEECH_GENERATOR_ENDPOINT
+    const params = {
+      text,
+      gender,
+      stability
     }
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        accept: '*/*',
-        'Content-Type': 'application/json',
-        'xi-api-key': apiKey
-      },
-      body: JSON.stringify({
-        text: text,
-        voice_settings: voiceSettings
-      })
-    })
-
-    if (!response.ok) throw new Error(`Failed to generate audio for '${text}'.`)
-
-    const stream = response.body
+    const response = await axios.get(url, { params, responseType: 'blob' })
+    const stream = response.data.stream()
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const reader = stream!.getReader()
     const audioChunks = []
