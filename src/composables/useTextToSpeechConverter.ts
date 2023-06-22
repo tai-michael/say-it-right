@@ -3,6 +3,8 @@ import axios from 'axios'
 export default async function (text: string, gender = 'female', stability = 0.75) {
   try {
     const url = import.meta.env.VITE_TEXT_TO_SPEECH_GENERATOR_ENDPOINT
+    // Default official 'stability' is 0.75, maximum is 1. Increasing stability makes the voice more consistent between regenerations, but it can also make it sounds a bit monotone. On longer text fragments elevenlabs recommends lowering this value.
+    // To change voices for gender, modify voiceId in cloud function, or modify this composable and the cloud function so that 'gender' in this composable points to a voiceId, and use 'voiceId' rather than 'gender' as a parameter
     const params = {
       text,
       gender,
@@ -21,22 +23,12 @@ export default async function (text: string, gender = 'female', stability = 0.75
       }
       audioChunks.push(value)
     }
+    // Closing the reader is not strictly necessary, as it should be automatically closed after the while loop finishes reading the data
+    await reader.closed
 
     // Combine the audio chunks into a single Blob
     const audioBlob = new Blob(audioChunks)
-
-    // Create an AudioContext and decode the audio data
-    const audioContext = new AudioContext()
-    const audioBuffer = await audioContext.decodeAudioData(await audioBlob.arrayBuffer())
-
-    // Play the audio
-    const audioSource = audioContext.createBufferSource()
-    audioSource.buffer = audioBuffer
-    audioSource.connect(audioContext.destination)
-    audioSource.start(0)
-
-    await reader.closed
-    console.log('Audio stream has ended')
+    return audioBlob
   } catch (error) {
     console.log(error)
   }

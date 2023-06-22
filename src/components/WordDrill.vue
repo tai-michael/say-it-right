@@ -143,7 +143,7 @@ import RecorderButton from './RecorderButton.vue'
 import PlayAudioIcon from '@/assets/icons/play-audio.vue'
 import LoadingDots from '@/components/LoadingDots.vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
-import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
+import useTextToSpeechCreationAndStorage from '@/composables/useTextToSpeechCreationAndStorage.ts'
 import useCheckPronunciationOfWordByItself from '@/composables/useCheckPronunciationOfWordByItself.ts'
 import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronunciationOfWordInSentences.ts'
 import useRelatedWordsCreationAndStorage from '@/composables/useRelatedWordsCreationAndStorage.ts'
@@ -202,7 +202,7 @@ const testedWordAudioText = computed(
 )
 
 const play = () => {
-  useTextToSpeechConverter(testedWordAudioText.value, 'female', 1)
+  useTextToSpeechCreationAndStorage(testedWordAudioText.value, 'female', 1)
 }
 
 const attemptsSuccessfulRequired = computed(() =>

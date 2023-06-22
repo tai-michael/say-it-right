@@ -113,7 +113,7 @@ import type { List } from '@/stores/modules/types/List'
 import PlayAudioIcon from '@/assets/icons/play-audio.vue'
 // import CheckmarkIcon from '@/assets/icons/checkmark.vue'
 import RecorderButton from './RecorderButton.vue'
-import useTextToSpeechConverter from '@/composables/useTextToSpeechConverter.ts'
+import useTextToSpeechCreationAndStorage from '@/composables/useTextToSpeechCreationAndStorage.ts'
 import useCheckPronunciationOfWordByItself from '@/composables/useCheckPronunciationOfWordByItself.ts'
 import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronunciationOfWordInSentences.ts'
 import useHardWordLogger from '@/composables/useHardWordLogger'
@@ -200,7 +200,7 @@ const testedWordAudioText = computed(
 )
 
 const play = () => {
-  useTextToSpeechConverter(testedWordAudioText.value, 'female', 1)
+  useTextToSpeechCreationAndStorage(testedWordAudioText.value, 'female', 1)
 }
 
 const showRecorderButton = computed(
