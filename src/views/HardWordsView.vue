@@ -75,7 +75,8 @@ ion-label {
 
   span {
     // font-weight: 500;
-    color: #287671;
+    // color: #287671;
+    color: rgb(80, 80, 80);
   }
 }
 
