@@ -30,18 +30,22 @@ import MicIcon from '@/assets/icons/mic.vue'
 // NOTE prevents right-click from triggering on hold when using Chrome devtools.
 // See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
 const recorderButton = ref(null)
-onMounted(() => {
+onMounted(async () => {
+  await attachMicrophone()
+  console.log('mic attached')
+
   const disableContextMenu = (e) => {
     e.preventDefault()
   }
 
-  if (recorderButton.value)
+  if (recorderButton.value) {
     recorderButton.value.addEventListener('contextmenu', disableContextMenu, true)
+  }
+})
 
-  onUnmounted(() => {
-    if (recorderButton.value)
-      recorderButton.value.removeEventListener('contextmenu', disableContextMenu, true)
-  })
+onUnmounted(() => {
+  if (recorderButton.value)
+    recorderButton.value.removeEventListener('contextmenu', disableContextMenu, true)
 })
 
 const finalTranscript = ref('')
@@ -68,32 +72,37 @@ const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTran
 
 const startRecording = async (event) => {
   event.preventDefault()
-  // console.log('mousedown/touchstart triggered')
+  console.log('mousedown/touchstart triggered')
 
   if (client.isActive()) return
 
-  await attachMicrophone()
+  // await attachMicrophone()
+  // console.log('mic attached')
   await client.start()
-  // console.log('client.start() finished')
-  // console.log(`client's isActive status: ${client.isActive()}`)
+  console.log('client.start() finished')
+  console.log(`client's isActive status: ${client.isActive()}`)
   emit('recordingStarted')
   // isRecording.value = true
   // NOTE If mouseup happens outside an element (e.g. when user clicks, holds, then releases outside the button), the mouseup event is not captured. That's why I need to add a global event listener for it on the 'window' object.
-  window.addEventListener('mouseup', stopRecording)
+  window.addEventListener('mouseup', handleStopRecording)
 }
 
 const stopRecording = async (event) => {
   event.preventDefault()
-  // console.log('mouseup/touchend triggered')
+  console.log('mouseup/touchend triggered')
 
   if (!client.isActive()) return
 
   await client.stop()
-  // console.log('client stopped')
-  // console.log(`client's isActive status: ${client.isActive()}`)
+  console.log('client stopped')
+  console.log(`client's isActive status: ${client.isActive()}`)
   emit('recordingStopped', finalTranscript.value)
   finalTranscript.value = ''
-  window.removeEventListener('mouseup', stopRecording)
+  window.removeEventListener('mouseup', handleStopRecording)
+}
+
+const handleStopRecording = (event) => {
+  stopRecording(event)
 }
 
 interface Segment {
