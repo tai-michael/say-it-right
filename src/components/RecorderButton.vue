@@ -1,17 +1,21 @@
 <template>
   <div class="button-container">
-    <!-- TODO try simply disconnecting the client at end of paragraphChallenge so button doesn't show up -->
     <button
       v-if="clientConnected"
-      class="recording-btn"
-      @mousedown="startRecording($event)"
-      @touchstart="startRecording($event)"
-      @touchend="stopRecording($event)"
-      ref="recorderButton"
+      class="recording-btn mobile-view"
+      @touchstart="(e) => startRecording(e, true)"
+      @touchend="stopRecording"
+      ref="recorderButtonMobile"
     >
-      <!-- {{ isRecording ? 'Recording' : 'Hold to talk' }} -->
       <MicIcon />
-      <!-- <ion-icon :icon="micOutline"></ion-icon> -->
+    </button>
+
+    <button
+      v-if="clientConnected"
+      class="recording-btn desktop-view"
+      @mousedown="(e) => startRecording(e, false)"
+    >
+      <MicIcon />
     </button>
   </div>
 </template>
@@ -20,17 +24,10 @@
 import { computed, onMounted, onUnmounted, onDeactivated, ref } from 'vue'
 import { client, microphone } from '@/speechlyInit.ts'
 import MicIcon from '@/assets/icons/mic.vue'
-import { BrowserClient } from '@speechly/browser-client'
-// import { IonIcon } from '@ionic/vue'
-// import { micOutline } from 'ionicons/icons'
-
-// const props = defineProps({
-//   challengeStatus: { type: String, required: true }
-// })
 
 // NOTE prevents right-click from triggering on hold when using Chrome devtools.
 // See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
-const recorderButton = ref(null)
+const recorderButtonMobile = ref(null)
 const disableContextMenu = (e) => {
   e.preventDefault()
 }
@@ -38,14 +35,14 @@ onMounted(async () => {
   await attachMicrophone()
   console.log('mic attached')
 
-  if (recorderButton.value) {
-    recorderButton.value.addEventListener('contextmenu', disableContextMenu, true)
+  if (recorderButtonMobile.value) {
+    recorderButtonMobile.value.addEventListener('contextmenu', disableContextMenu, true)
   }
 })
 
 onUnmounted(() => {
-  if (recorderButton.value)
-    recorderButton.value.removeEventListener('contextmenu', disableContextMenu, true)
+  if (recorderButtonMobile.value)
+    recorderButtonMobile.value.removeEventListener('contextmenu', disableContextMenu, true)
 })
 
 const finalTranscript = ref('')
@@ -75,39 +72,36 @@ onDeactivated(() => {
 
 const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])
 
-const startRecording = async (event) => {
-  event.preventDefault()
-  console.log('mousedown/touchstart triggered')
-
+const startRecording = async (e, isMobile) => {
+  // console.log('mousedown/touchstart triggered')
+  // NOTE Need to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
+  if (isMobile) e.target.classList.add('recording-btn-transform')
+  // NOTE If mouseup happens outside an element (e.g. when user clicks, holds, then releases outside the button), the mouseup event is not captured. That's why I need to add a global event listener for it on the 'document' or 'window' object.
+  document.addEventListener('mouseup', handleStopRecording)
   if (client.isActive()) return
 
-  // await attachMicrophone()
-  // console.log('mic attached')
   await client.start()
-  console.log('client.start() finished')
-  console.log(`client's isActive status: ${client.isActive()}`)
+  // console.log('client.start() finished')
+  // console.log(`client's isActive status: ${client.isActive()}`)
   emit('recordingStarted')
-  // isRecording.value = true
-  // NOTE If mouseup happens outside an element (e.g. when user clicks, holds, then releases outside the button), the mouseup event is not captured. That's why I need to add a global event listener for it on the 'window' object.
-  window.addEventListener('mouseup', handleStopRecording)
 }
 
-const stopRecording = async (event) => {
-  event.preventDefault()
-  console.log('mouseup/touchend triggered')
+const stopRecording = async (e) => {
+  // console.log('mouseup/touchend triggered')
+  e.target.classList.remove('recording-btn-transform')
 
   if (!client.isActive()) return
 
   await client.stop()
-  console.log('client stopped')
-  console.log(`client's isActive status: ${client.isActive()}`)
+  // console.log('client stopped')
+  // console.log(`client's isActive status: ${client.isActive()}`)
   emit('recordingStopped', finalTranscript.value)
   finalTranscript.value = ''
-  window.removeEventListener('mouseup', handleStopRecording)
+  document.removeEventListener('mouseup', handleStopRecording)
 }
 
-const handleStopRecording = (event) => {
-  stopRecording(event)
+const handleStopRecording = (e) => {
+  stopRecording(e)
 }
 
 interface Segment {
@@ -182,13 +176,46 @@ client.onSegmentChange((segment) => {
     // -webkit-user-select: none !important;
     transition: transform 0.3s;
 
-    &:hover,
-    &:active {
-      background-color: #e65757;
+    // Triggers for desktops with mouse
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: #e65757;
+      }
+      &:active {
+        transform: scale(1.1);
+      }
     }
+  }
 
-    &:active {
-      transform: scale(1.1);
+  .recording-btn-transform {
+    transform: scale(1.1);
+  }
+
+  .mobile-view {
+    display: none;
+  }
+
+  .desktop-view {
+    display: inline-block;
+  }
+
+  /* Mobile devices */
+  @media screen and (max-width: 767px) {
+    .mobile-view {
+      display: inline-block;
+    }
+    .desktop-view {
+      display: none;
+    }
+  }
+
+  /* Desktop devices */
+  @media screen and (min-width: 768px) {
+    .mobile-view {
+      display: none;
+    }
+    .desktop-view {
+      display: inline-block;
     }
   }
 }
