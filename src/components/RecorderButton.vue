@@ -2,7 +2,7 @@
   <div class="button-container">
     <!-- TODO try simply disconnecting the client at end of paragraphChallenge so button doesn't show up -->
     <button
-      v-if="clientConnected"
+      v-if="micAttached"
       class="recording-btn"
       @mousedown="startRecording($event)"
       @touchstart="startRecording($event)"
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, onDeactivated, ref } from 'vue'
+import { onMounted, onUnmounted, onDeactivated, ref } from 'vue'
 import { client, microphone } from '@/speechlyInit.ts'
 import MicIcon from '@/assets/icons/mic.vue'
 // import { IonIcon } from '@ionic/vue'
@@ -52,7 +52,8 @@ const finalTranscript = ref('')
 const temporaryTranscript = ref('')
 
 // @ts-ignore
-const clientConnected = computed(() => client.decoderOptions.connect === true)
+// const clientConnected = computed(() => client.decoderOptions.connect === true)
+const micAttached = ref(false)
 
 const attachMicrophone = async () => {
   if (microphone.mediaStream) return
@@ -61,6 +62,7 @@ const attachMicrophone = async () => {
   // @ts-ignore
   await client.attach(microphone.mediaStream)
   // console.log('client.attach() finished')
+  micAttached.value = true
 }
 
 // NOTE Resetting the value here is necessary, since I'm currently unable to 'detach' the mic/mediastream/client when I swap between views, meaning finalTranscript and temporaryTranscript in this component carries over to the new view
