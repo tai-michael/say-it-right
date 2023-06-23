@@ -16,6 +16,7 @@
             :disabled="isLoading"
             autofocus
             animated="true"
+            :show-clear-button="clearButtonMode"
           ></ion-searchbar>
           <!-- <ion-button v-if="isLoading" ><LoadingDots /></ion-button>
           <ion-button v-else type="submit" :disabled="isLoading" class="color">Submit</ion-button> -->
@@ -48,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { createOutline } from 'ionicons/icons'
 import TheHeader from '@/components/TheHeader.vue'
 import PullRefresher from '@/components/PullRefresher.vue'
@@ -78,6 +79,9 @@ const router = useRouter()
 const store = useCustomListsStore()
 
 const wordsInput = ref('')
+const clearButtonMode = computed(() => {
+  return isLoading.value ? 'never' : 'focus'
+})
 const isLoading = ref(false)
 const submissionError = ref('')
 const newlyCreatedParagraph = ref('')
@@ -134,11 +138,7 @@ const submitWords = async (words: string) => {
     if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
 
     isLoading.value = true
-    // TODO if user enters just one word, do a SingleWordChallenge
-    // instead of a ParagraphChallenge; put below code block in
-    // in condition (or just 'return' at end of implementation of
-    // single word challenge)
-    // Maybe add a 'word' prop to WordChallenge, and use conditions
+    wordsInput.value = 'Creating list...'
 
     if (uniqueWordsArray.length > store.minWordsThreshold) {
       newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)

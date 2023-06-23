@@ -1,5 +1,7 @@
 <template>
-  <ListContent :list="list" route-name="provided-lists" />
+  <ion-page>
+    <ListContent :list="list" route-name="provided-lists" />
+  </ion-page>
 </template>
 
 <script setup lang="ts">
@@ -7,6 +9,7 @@ import { onMounted, ref } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import ListContent from '@/components/ListContent.vue'
 import {
+  IonPage,
   useIonRouter,
   onIonViewWillEnter,
   onIonViewWillLeave // maybe replace history so that it goes to provided lists view? and do similar for all tabs*
