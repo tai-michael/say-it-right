@@ -2,7 +2,7 @@
   <div class="button-container">
     <!-- TODO try simply disconnecting the client at end of paragraphChallenge so button doesn't show up -->
     <button
-      v-if="micAttached"
+      v-if="clientConnected"
       class="recording-btn"
       @mousedown="startRecording($event)"
       @touchstart="startRecording($event)"
@@ -17,9 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, onDeactivated, ref } from 'vue'
+import { computed, onMounted, onUnmounted, onDeactivated, ref } from 'vue'
 import { client, microphone } from '@/speechlyInit.ts'
 import MicIcon from '@/assets/icons/mic.vue'
+import { BrowserClient } from '@speechly/browser-client'
 // import { IonIcon } from '@ionic/vue'
 // import { micOutline } from 'ionicons/icons'
 
@@ -30,13 +31,12 @@ import MicIcon from '@/assets/icons/mic.vue'
 // NOTE prevents right-click from triggering on hold when using Chrome devtools.
 // See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
 const recorderButton = ref(null)
+const disableContextMenu = (e) => {
+  e.preventDefault()
+}
 onMounted(async () => {
   await attachMicrophone()
   console.log('mic attached')
-
-  const disableContextMenu = (e) => {
-    e.preventDefault()
-  }
 
   if (recorderButton.value) {
     recorderButton.value.addEventListener('contextmenu', disableContextMenu, true)
@@ -52,17 +52,20 @@ const finalTranscript = ref('')
 const temporaryTranscript = ref('')
 
 // @ts-ignore
-// const clientConnected = computed(() => client.decoderOptions.connect === true)
-const micAttached = ref(false)
+const clientConnected = computed(
+  () => client.decoderOptions.connect === true && clientInitialized.value
+)
+
+const clientInitialized = ref(false)
 
 const attachMicrophone = async () => {
-  if (microphone.mediaStream) return
+  console.log(client.initialized)
+  if (microphone.mediaStream) return (clientInitialized.value = client.initialized)
   await microphone.initialize()
   // console.log('microphone.initialize() finished')
   // @ts-ignore
   await client.attach(microphone.mediaStream)
-  // console.log('client.attach() finished')
-  micAttached.value = true
+  clientInitialized.value = client.initialized
 }
 
 // NOTE Resetting the value here is necessary, since I'm currently unable to 'detach' the mic/mediastream/client when I swap between views, meaning finalTranscript and temporaryTranscript in this component carries over to the new view
