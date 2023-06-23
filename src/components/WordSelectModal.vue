@@ -329,6 +329,7 @@ select {
   height: 40px;
   width: 100%;
   border: 1px solid #ccc;
+  background: white;
   background-image: url(@/assets/icons/chevron-down-dark.svg);
   background-position: calc(100% - 8px) center;
   background-repeat: no-repeat;
@@ -377,8 +378,8 @@ body.dark {
   select {
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
-    background: rgb(40, 40, 40);
     border: 1px solid rgb(50, 50, 50);
+    background: rgb(40, 40, 40);
     background-image: url(@/assets/icons/chevron-down-light.svg);
     background-position: calc(100% - 8px) center;
     background-repeat: no-repeat;

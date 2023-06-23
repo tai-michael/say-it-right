@@ -75,7 +75,12 @@ const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTran
 const startRecording = async (e, isMobile) => {
   // console.log('mousedown/touchstart triggered')
   // NOTE Need to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
-  if (isMobile) e.target.classList.add('recording-btn-transform')
+  if (isMobile) {
+    const button = e.target.closest('.recording-btn')
+    if (button) {
+      button.classList.add('recording-btn-transform')
+    }
+  }
   // NOTE If mouseup happens outside an element (e.g. when user clicks, holds, then releases outside the button), the mouseup event is not captured. That's why I need to add a global event listener for it on the 'document' or 'window' object.
   document.addEventListener('mouseup', handleStopRecording)
   if (client.isActive()) return
@@ -88,7 +93,10 @@ const startRecording = async (e, isMobile) => {
 
 const stopRecording = async (e) => {
   // console.log('mouseup/touchend triggered')
-  e.target.classList.remove('recording-btn-transform')
+  const button = e.target.closest('.recording-btn')
+  if (button) {
+    button.classList.remove('recording-btn-transform')
+  }
 
   if (!client.isActive()) return
 
