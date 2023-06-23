@@ -4,9 +4,9 @@
     <button
       v-if="clientConnected"
       class="recording-btn"
-      @mousedown="startRecording"
-      @touchstart="startRecording"
-      @touchend="stopRecording"
+      @mousedown="startRecording($event)"
+      @touchstart="startRecording($event)"
+      @touchend="stopRecording($event)"
       ref="recorderButton"
     >
       <!-- {{ isRecording ? 'Recording' : 'Hold to talk' }} -->
@@ -66,21 +66,30 @@ onDeactivated(() => {
 
 const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])
 
-const startRecording = async () => {
+const startRecording = async (event) => {
+  event.preventDefault()
   // console.log('mousedown/touchstart triggered')
+
+  if (client.isActive()) return
+
   await attachMicrophone()
   await client.start()
   // console.log('client.start() finished')
   // console.log(`client's isActive status: ${client.isActive()}`)
   emit('recordingStarted')
+  // isRecording.value = true
   // NOTE If mouseup happens outside an element (e.g. when user clicks, holds, then releases outside the button), the mouseup event is not captured. That's why I need to add a global event listener for it on the 'window' object.
   window.addEventListener('mouseup', stopRecording)
 }
 
-const stopRecording = async () => {
+const stopRecording = async (event) => {
+  event.preventDefault()
   // console.log('mouseup/touchend triggered')
+
+  if (!client.isActive()) return
+
   await client.stop()
-  // console.log('client is stopped (supposedly)')
+  // console.log('client stopped')
   // console.log(`client's isActive status: ${client.isActive()}`)
   emit('recordingStopped', finalTranscript.value)
   finalTranscript.value = ''
