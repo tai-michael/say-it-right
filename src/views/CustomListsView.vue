@@ -205,7 +205,10 @@ onMounted(() => {
 
 // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals
 onIonViewWillEnter(() => {
-  if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
+  // setTimeout is necessary to prevent fab from showing before the ref element ('scrollTrigger') is mounted
+  setTimeout(() => {
+    if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
+  }, 500)
 })
 
 onIonViewWillLeave(() => {
