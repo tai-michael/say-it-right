@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, inject } from 'vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
@@ -131,6 +131,8 @@ const { attemptsLimit, attemptsSuccessfulRequired } = storeToRefs(store)
 const props = defineProps({
   list: { type: Object as PropType<List>, required: true }
 })
+
+const listEntered = inject('listEntered')
 
 onMounted(() => {
   // console.log(props.list)
@@ -206,7 +208,8 @@ const play = () => {
 const showRecorderButton = computed(
   () =>
     storeWord.value?.attemptsSuccessful < attemptsSuccessfulRequired.value &&
-    storeWord.value?.attempts !== attemptsLimit.value
+    storeWord.value?.attempts !== attemptsLimit.value &&
+    listEntered.value
 )
 
 const handleRecordingStarted = () => {

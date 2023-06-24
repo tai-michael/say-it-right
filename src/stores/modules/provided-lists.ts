@@ -137,10 +137,12 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   }
 
   const resetList = () => {
+    console.log('reset list clicked')
     resetWords()
     resetParagraph()
     setListStatus('LIST_NOT_STARTED')
     updateListsInFirestore()
+    console.log('list reset')
   }
 
   const deleteList = (listNum: number) => {

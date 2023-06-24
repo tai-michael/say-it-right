@@ -1,10 +1,10 @@
 import { BrowserClient, BrowserMicrophone } from '@speechly/browser-client'
 // NOTE maybe put in App.js instead
-import '@speechly/browser-ui/core/push-to-talk-button'
-import '@speechly/browser-ui/core/big-transcript'
-import '@speechly/browser-ui/core/intro-popup'
+// import '@speechly/browser-ui/core/push-to-talk-button'
+// import '@speechly/browser-ui/core/big-transcript'
+// import '@speechly/browser-ui/core/intro-popup'
 
-export const microphone = new BrowserMicrophone()
+// export const microphone = new BrowserMicrophone()
 export const client = new BrowserClient({
   appId: import.meta.env.VITE_SPEECHLY_APP_ID,
   logSegments: false,

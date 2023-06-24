@@ -86,7 +86,7 @@
     </div>
 
     <RecorderButton
-      v-if="props.list.status === 'LIST_NOT_STARTED'"
+      v-if="props.list.status === 'LIST_NOT_STARTED' && listEntered"
       @recording-started="isRecording = true"
       @recording-stopped="handleFinalTranscript"
       @temporary-transcript-rendered="handleTempTranscriptRender"
@@ -95,9 +95,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, inject } from 'vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
-import { IonPage, IonContent, IonCard } from '@ionic/vue'
+import { IonPage, IonCard } from '@ionic/vue'
 import type { PropType } from 'vue'
 import type { List, CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import type { WordObject } from '@/stores/modules/types/Review'
@@ -122,6 +122,8 @@ const props = defineProps({
   // words: { type: Array, required: true }
   // recorderComponentKey: { type: String, required: true }
 })
+
+const listEntered = inject('listEntered')
 
 const isRecording = ref(false)
 const testedParagraph = ref('')

@@ -160,7 +160,8 @@ const route = useRoute()
 const store = useReviewStore()
 
 const props = defineProps({
-  word: { type: Object as PropType<WordObject>, required: true }
+  word: { type: Object as PropType<WordObject>, required: true },
+  reviewEntered: { type: Boolean, required: true }
 })
 
 const relatedWords = ref<string[]>([...props.word.related_words])
@@ -212,7 +213,8 @@ const attemptsSuccessfulRequired = computed(() =>
 const showRecorderButton = computed(
   () =>
     word.value.attemptsSuccessful < attemptsSuccessfulRequired.value &&
-    (word.value.status === 'TESTING_WORD_ONLY' || word.value.status === 'TESTING_SENTENCES')
+    (word.value.status === 'TESTING_WORD_ONLY' || word.value.status === 'TESTING_SENTENCES') &&
+    props.reviewEntered
 )
 
 const isRecording = ref(false)

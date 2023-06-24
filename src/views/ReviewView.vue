@@ -24,6 +24,7 @@
           :word="selectedWord"
           :key="selectedWord.word"
           @related-word-clicked="handleRelatedWordClicked"
+          :reviewEntered="reviewEntered"
         />
         <div
           v-else
@@ -108,7 +109,15 @@ import PullRefresher from '@/components/PullRefresher.vue'
 import WordSelectModal from '@/components/WordSelectModal.vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import TransitionFadeAndSlide from '@/components/transitions/TransitionFadeAndSlide.vue'
-import { IonPage, IonContent, IonModal, IonButton, IonLabel } from '@ionic/vue'
+import {
+  IonPage,
+  IonContent,
+  IonModal,
+  IonButton,
+  IonLabel,
+  onIonViewWillEnter,
+  onIonViewWillLeave
+} from '@ionic/vue'
 import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import WordDrill from '@/components/WordDrill.vue'
@@ -158,6 +167,16 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize)
+})
+
+const reviewEntered = ref()
+onIonViewWillEnter(() => {
+  reviewEntered.value = true
+  console.log('Review entered')
+})
+onIonViewWillLeave(() => {
+  reviewEntered.value = false
+  console.log('Review left')
 })
 </script>
 

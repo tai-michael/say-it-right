@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref, provide } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import ListContent from '@/components/ListContent.vue'
 import {
@@ -16,6 +16,7 @@ import {
 } from '@ionic/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCustomListsStore } from '@/stores/index.ts'
+
 const route = useRoute()
 const router = useRouter()
 const ionRouter = useIonRouter()
@@ -24,6 +25,9 @@ const store = useCustomListsStore()
 
 // @ts-ignore
 const list = ref<List>({})
+
+const listEntered = ref()
+provide('listEntered', listEntered)
 
 // NOTE need to use this instead of onMounted, as the latter only triggers once, meaning if user navigates with back button to custom lists view, the activeId for the instance will be set to null and never change again
 onIonViewWillEnter(() => {
@@ -52,5 +56,13 @@ onIonViewWillEnter(() => {
     // } else {
     //   router.push('/custom-lists')
   }
+
+  listEntered.value = true
+  // console.log(listEntered.value)
+})
+
+onIonViewWillLeave(() => {
+  listEntered.value = false
+  // console.log(listEntered.value)
 })
 </script>
