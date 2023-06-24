@@ -70,7 +70,7 @@ const returnToLists = () => {
 
 const handleReset = () => {
   // NOTE lists containing only sentences need to be reset differently than ones with paragraphs
-  if (Object.keys(list.value.words).length > customListsStore.minWordsThreshold) store.resetList
+  if (Object.keys(list.value.words).length > customListsStore.minWordsThreshold) store.resetList()
   else resetShortList()
 }
 
