@@ -8,7 +8,7 @@
         <ion-button
           v-if="isNarrowScreen"
           :detail="false"
-          @click="isOpen = true"
+          @click="handleOpenModal"
           class="ml-14 mr-4 flex max-h-8"
         >
           <ion-label class="m-0 max-h-8">Click to choose word</ion-label>
@@ -18,7 +18,7 @@
 
     <ion-content>
       <PullRefresher />
-      <keep-alive>
+      <keep-alive v-if="tabMounted">
         <WordDrill
           v-if="selectedWord"
           :word="selectedWord"
@@ -34,13 +34,16 @@
           <span class="max-w-xs text-center">Choose a word and begin practicing!</span>
         </div>
       </keep-alive>
+      <div v-else class="flex h-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
     </ion-content>
 
     <!-- NOTE opting not to use ion-modal, as it destroys the modal whenever it's dismissed, meaning the scroll position is reset to top -->
     <Teleport to="#modals">
       <TransitionFadeAndSlide>
         <WordSelectModal
-          v-if="isNarrowScreen"
+          v-if="isNarrowScreen && tabMounted"
           v-show="isOpen"
           @dismiss-modal="isOpen = false"
           @select-word="setWord"
@@ -104,15 +107,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import TheHeader from '@/components/TheHeader.vue'
 import PullRefresher from '@/components/PullRefresher.vue'
-import WordSelectModal from '@/components/WordSelectModal.vue'
-import TransitionFade from '@/components/transitions/TransitionFade.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TransitionFadeAndSlide from '@/components/transitions/TransitionFadeAndSlide.vue'
+import TheHeader from '@/components/TheHeader.vue'
+import WordSelectModal from '@/components/WordSelectModal.vue'
 import {
   IonPage,
   IonContent,
-  IonModal,
   IonButton,
   IonLabel,
   onIonViewWillEnter,
@@ -147,14 +149,26 @@ const handleWordDeleted = (wordName: string) => {
   selectedWord.value = null
 }
 
+// NOTE Combining v-if and v-show for the modal, because v-if prevents modal from rendering on initial load of the tab, shaving about 500 ms off from the tab's rendering time. Meanwhile, v-show maintains the scroll position of the modal and is more performant for re-toggling.
+const isInitiated = ref(false)
 const isOpen = ref(false)
+const handleOpenModal = () => {
+  isInitiated.value = true
+  isOpen.value = true
+}
 // NOTE media queries only hide but don't remove elements in the DOM. Removing is necessary to prevent having duplicate modals that cause recursive rendering
 const isNarrowScreen = ref()
 const handleResize = () => {
   isNarrowScreen.value = window.innerWidth <= 768
 }
 
+const tabMounted = ref(false)
 onMounted(() => {
+  console.log('Review mounted')
+  setTimeout(() => {
+    tabMounted.value = true
+  }, 1)
+
   const word = localStorage.getItem('selectedWord')
   if (word) {
     // selectedWord.value = useArrayFind(allWords.value, w => w.word === word)
@@ -172,11 +186,11 @@ onBeforeUnmount(() => {
 const reviewEntered = ref()
 onIonViewWillEnter(() => {
   reviewEntered.value = true
-  console.log('Review entered')
+  // console.log('Review entered')
 })
 onIonViewWillLeave(() => {
   reviewEntered.value = false
-  console.log('Review left')
+  // console.log('Review left')
 })
 </script>
 

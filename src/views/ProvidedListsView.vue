@@ -1,11 +1,15 @@
 <template>
+  <!-- <ion-page v-if="!tabMounted">Loading...</ion-page> -->
   <ion-page>
     <TheHeader>Provided Lists</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
       <PullRefresher />
       <div ref="scrollTrigger" class="scroll-trigger"></div>
-      <ListGroups :route-name="route.name" />
+      <ListGroups v-if="tabMounted" :route-name="route.name" />
+      <div v-else class="flex h-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
     </ion-content>
 
     <ion-fab vertical="bottom" horizontal="end">
@@ -18,8 +22,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import TheHeader from '@/components/TheHeader.vue'
 import PullRefresher from '@/components/PullRefresher.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import TheHeader from '@/components/TheHeader.vue'
 import ListGroups from '@/components/ListGroups.vue'
 import {
   IonPage,
@@ -50,6 +55,7 @@ const scrollToTop = () => {
   if (content.value) content.value.$el.scrollToTop(500)
 }
 
+const tabMounted = ref(false)
 onMounted(() => {
   // check if any parameters were passed in the URL
   if (route.params.catchAll) {
@@ -57,6 +63,11 @@ onMounted(() => {
     console.log(route.params)
     router.push('/not-found')
   }
+
+  console.log('Provided Lists mounted')
+  setTimeout(() => {
+    tabMounted.value = true
+  }, 1)
 })
 
 // // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals

@@ -3,7 +3,8 @@
     <TheHeader>The Hardest Words</TheHeader>
     <ion-content>
       <PullRefresher />
-      <div class="h-full flex flex-col align-middle items-center">
+
+      <div v-if="tabMounted" class="h-full flex flex-col align-middle items-center">
         <ion-label class="m-5 ion-padding leading-6"
           >Top 10 hardest words based on data collected from users:</ion-label
         >
@@ -16,21 +17,32 @@
           </ol>
         </ion-card>
       </div>
+
+      <div v-else class="flex h-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import TheHeader from '@/components/TheHeader.vue'
 import PullRefresher from '@/components/PullRefresher.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import TheHeader from '@/components/TheHeader.vue'
 import { IonPage, IonContent, IonLabel, IonCard } from '@ionic/vue'
 import { db } from '@/firebaseInit'
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore'
 
 const leaderboard = ref()
 
+const tabMounted = ref(false)
 onMounted(async () => {
+  console.log('Hard Words mounted')
+  setTimeout(() => {
+    tabMounted.value = true
+  }, 1)
+
   // Get a reference to the hard_word_counts collection
   const wordCountsRef = collection(db, 'hard_word_counts')
 

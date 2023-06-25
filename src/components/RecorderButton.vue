@@ -56,14 +56,14 @@ const disableContextMenu = (e) => {
 
 onMounted(async () => {
   await attachMicrophone()
-  console.log('mic attached')
+  // console.log('mic attached')
 
   if (recorderButtonMobile.value) {
     recorderButtonMobile.value.addEventListener('contextmenu', disableContextMenu, true)
   }
 })
 onUnmounted(() => {
-  console.log('mic unmounted')
+  // console.log('mic unmounted')
   stopMicrophoneStream(microphone.value.mediaStream)
 
   if (recorderButtonMobile.value)

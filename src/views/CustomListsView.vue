@@ -6,26 +6,32 @@
       <PullRefresher />
       <div ref="scrollTrigger" class="scroll-trigger"></div>
 
-      <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
-        <div class="input-container">
-          <label>Enter up to 7 words separated by spaces or commas:</label>
-          <ion-searchbar
-            :search-icon="createOutline"
-            placeholder="  e.g. urban thin kindly"
-            v-model="wordsInput"
-            :disabled="isLoading"
-            autofocus
-            animated="true"
-            :show-clear-button="clearButtonMode"
-          ></ion-searchbar>
-          <!-- <ion-button v-if="isLoading" ><LoadingDots /></ion-button>
+      <div v-if="tabMounted">
+        <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
+          <div class="input-container">
+            <label>Enter up to 7 words separated by spaces or commas:</label>
+            <ion-searchbar
+              :search-icon="createOutline"
+              placeholder="  e.g. urban thin kindly"
+              v-model="wordsInput"
+              :disabled="isLoading"
+              autofocus
+              animated="true"
+              :show-clear-button="clearButtonMode"
+            ></ion-searchbar>
+            <!-- <ion-button v-if="isLoading" ><LoadingDots /></ion-button>
           <ion-button v-else type="submit" :disabled="isLoading" class="color">Submit</ion-button> -->
-        </div>
-      </form>
+          </div>
+        </form>
 
-      <div v-if="submissionError" class="error">{{ submissionError }}</div>
+        <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-      <ListGroups :route-name="route.name" @list-deleted="setToastOpen('List deleted')" />
+        <ListGroups :route-name="route.name" @list-deleted="setToastOpen('List deleted')" />
+      </div>
+
+      <div v-else class="flex h-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
 
       <ion-toast
         :is-open="toastMessage ? true : false"
@@ -51,8 +57,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { createOutline } from 'ionicons/icons'
-import TheHeader from '@/components/TheHeader.vue'
 import PullRefresher from '@/components/PullRefresher.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import TheHeader from '@/components/TheHeader.vue'
 import ListGroups from '@/components/ListGroups.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'
@@ -194,6 +201,7 @@ const scrollToTop = () => {
   if (content.value) content.value.$el.scrollToTop(500)
 }
 
+const tabMounted = ref(false)
 onMounted(() => {
   // check if any parameters were passed in the URL
   if (route.params.catchAll) {
@@ -201,6 +209,10 @@ onMounted(() => {
     console.log(route.params)
     router.push('/not-found')
   }
+
+  setTimeout(() => {
+    tabMounted.value = true
+  }, 1)
 })
 
 // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals
