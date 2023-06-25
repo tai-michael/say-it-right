@@ -135,7 +135,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { ref, computed, inject, onMounted } from 'vue'
 // import type { Ref } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
@@ -160,13 +160,12 @@ const route = useRoute()
 const store = useReviewStore()
 
 const props = defineProps({
-  word: { type: Object as PropType<WordObject>, required: true },
-  reviewEntered: { type: Boolean, required: true }
+  word: { type: Object as PropType<WordObject>, required: true }
 })
 
 const relatedWords = ref<string[]>([...props.word.related_words])
-
 const emits = defineEmits(['related-word-clicked'])
+const reviewEntered = inject('reviewEntered')
 
 // const word: Ref<WordObject | null> = ref(null)
 // NOTE creates a reactive variable
@@ -179,9 +178,11 @@ const resetWord = () => {
 }
 
 onMounted(() => {
+  console.log('Word Drill mounted')
   word.value = props.word
   resetWord()
 })
+
 // @ts-ignore
 const word = ref<WordObject>({})
 const wordName = computed(() => word.value.word)
@@ -201,7 +202,6 @@ const testedWordAudioText = computed(
   // all caps makes it louder
   // `${testedWordName.value.toUpperCase()}!`
 )
-
 const play = () => {
   useTextToSpeechCreationAndStorage(testedWordAudioText.value, 'female', 1)
 }
@@ -214,7 +214,7 @@ const showRecorderButton = computed(
   () =>
     word.value.attemptsSuccessful < attemptsSuccessfulRequired.value &&
     (word.value.status === 'TESTING_WORD_ONLY' || word.value.status === 'TESTING_SENTENCES') &&
-    props.reviewEntered
+    reviewEntered.value
 )
 
 const isRecording = ref(false)

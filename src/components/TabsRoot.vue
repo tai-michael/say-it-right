@@ -28,17 +28,22 @@
           <ion-label>Custom Lists</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="provided-lists" :href="providedListsPath">
+        <ion-tab-button tab="provided-lists" :href="providedListsPath" @click="test">
           <ion-icon :icon="folderOutline" />
           <ion-label>Provided Lists</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="review" href="/review" v-if="reviewStore.allWords.length > 0">
+        <ion-tab-button
+          tab="review"
+          href="/review"
+          v-if="reviewStore.allWords.length > 0"
+          @click="test"
+        >
           <ion-icon :icon="timeOutline" />
           <ion-label>Review</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="hard-words" href="/hard-words">
+        <ion-tab-button tab="hard-words" href="/hard-words" @click="test">
           <ion-icon :icon="trophyOutline" />
           <ion-label>Hard Words</ion-label>
         </ion-tab-button>
@@ -68,6 +73,10 @@ const route = useRoute()
 const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
+
+const test = () => {
+  console.log('Tab clicked')
+}
 
 const customAnimation = computed(() =>
   route.name === 'custom-list' || route.name === 'provided-list'

@@ -24,7 +24,6 @@
           :word="selectedWord"
           :key="selectedWord.word"
           @related-word-clicked="handleRelatedWordClicked"
-          :reviewEntered="reviewEntered"
         />
         <div
           v-else
@@ -106,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, provide } from 'vue'
 import PullRefresher from '@/components/PullRefresher.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TransitionFadeAndSlide from '@/components/transitions/TransitionFadeAndSlide.vue'
@@ -184,6 +183,7 @@ onBeforeUnmount(() => {
 })
 
 const reviewEntered = ref()
+provide('reviewEntered', reviewEntered)
 onIonViewWillEnter(() => {
   reviewEntered.value = true
   // console.log('Review entered')

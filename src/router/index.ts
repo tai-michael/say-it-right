@@ -2,8 +2,12 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 // import CustomListsView from '@/views/CustomListsView.vue'
-// import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+// import CustomList from '@/components/CustomList.vue'
 // import ProvidedListsView from '@/views/ProvidedListsView.vue'
+// import ProvidedList from '@/components/ProvidedList.vue'
+// import ReviewView from '@/views/ReviewView.vue'
+// import HardWordsView from '@/views/HardWordsView.vue'
+// import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import TabsRoot from '@/components/TabsRoot.vue'
 import { user } from '@/firebaseInit'
 
@@ -20,6 +24,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'custom-lists',
         name: 'custom-lists',
         component: () => import('@/views/CustomListsView.vue'),
+        // component: CustomListsView,
         meta: {
           title: 'Custom Lists'
         }
@@ -38,6 +43,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'custom-lists/:id',
         name: 'custom-list',
         component: () => import('@/components/CustomList.vue'),
+        // component: CustomList,
         meta: {
           title: 'Custom List'
         }
@@ -55,6 +61,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'provided-lists',
         name: 'provided-lists',
         component: () => import('@/views/ProvidedListsView.vue'),
+        // component: ProvidedListsView,
         meta: {
           title: 'Provided Lists'
         }
@@ -73,6 +80,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'provided-lists/:id',
         name: 'provided-list',
         component: () => import('@/components/ProvidedList.vue'),
+        // component: ProvidedList,
         meta: {
           title: 'Provided List'
         }
@@ -81,6 +89,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'hard-words',
         name: 'hard-words',
         component: () => import('@/views/HardWordsView.vue'),
+        // component: HardWordsView,
         meta: {
           title: 'Hard Words'
         }
