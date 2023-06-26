@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page v-if="tabMounted">
     <TheHeader>
       <div v-if="!isNarrowScreen">Review</div>
       <template #list>
@@ -18,7 +18,7 @@
 
     <ion-content>
       <PullRefresher />
-      <keep-alive v-if="tabMounted">
+      <keep-alive>
         <WordDrill
           v-if="selectedWord"
           :word="selectedWord"
@@ -33,9 +33,6 @@
           <span class="max-w-xs text-center">Choose a word and begin practicing!</span>
         </div>
       </keep-alive>
-      <div v-else class="flex h-full items-center justify-center">
-        <LoadingSpinner />
-      </div>
     </ion-content>
 
     <!-- NOTE opting not to use ion-modal, as it destroys the modal whenever it's dismissed, meaning the scroll position is reset to top -->
@@ -101,6 +98,12 @@
         </main>
       </div>
     </ion-content> -->
+  </ion-page>
+  <ion-page v-else>
+    <TheHeader />
+    <div class="flex h-full items-center justify-center">
+      <LoadingSpinner />
+    </div>
   </ion-page>
 </template>
 

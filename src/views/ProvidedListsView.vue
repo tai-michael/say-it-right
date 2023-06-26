@@ -1,15 +1,12 @@
 <template>
   <!-- <ion-page v-if="!tabMounted">Loading...</ion-page> -->
-  <ion-page>
+  <ion-page v-if="tabMounted">
     <TheHeader>Provided Lists</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
       <PullRefresher />
       <div ref="scrollTrigger" class="scroll-trigger"></div>
-      <ListGroups v-if="tabMounted" :route-name="route.name" />
-      <div v-else class="flex h-full items-center justify-center">
-        <LoadingSpinner />
-      </div>
+      <ListGroups :route-name="route.name" />
     </ion-content>
 
     <ion-fab vertical="bottom" horizontal="end">
@@ -17,6 +14,13 @@
         <ion-icon :icon="arrowUp"></ion-icon>
       </ion-fab-button>
     </ion-fab>
+  </ion-page>
+
+  <ion-page v-else>
+    <TheHeader>Provided Lists</TheHeader>
+    <div class="flex h-full items-center justify-center">
+      <LoadingSpinner />
+    </div>
   </ion-page>
 </template>
 

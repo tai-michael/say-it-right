@@ -1,12 +1,12 @@
 <template>
-  <ion-page>
+  <ion-page v-if="tabMounted">
     <TheHeader :is-loading="isLoading">Custom Lists</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
       <PullRefresher />
       <div ref="scrollTrigger" class="scroll-trigger"></div>
 
-      <div v-if="tabMounted">
+      <div>
         <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
           <div class="input-container">
             <label>Enter up to 7 words separated by spaces or commas:</label>
@@ -29,10 +29,6 @@
         <ListGroups :route-name="route.name" @list-deleted="setToastOpen('List deleted')" />
       </div>
 
-      <div v-else class="flex h-full items-center justify-center">
-        <LoadingSpinner />
-      </div>
-
       <ion-toast
         :is-open="toastMessage ? true : false"
         :message="toastMessage"
@@ -51,6 +47,13 @@
         <component :is="Component" :key="$route.fullPath"></component>
       </keep-alive>
     </router-view> -->
+  </ion-page>
+
+  <ion-page v-else>
+    <TheHeader>Custom Lists</TheHeader>
+    <div class="flex h-full items-center justify-center">
+      <LoadingSpinner />
+    </div>
   </ion-page>
 </template>
 
