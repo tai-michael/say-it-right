@@ -41,7 +41,7 @@ onMounted(async () => {
   console.log('Hard Words mounted')
   setTimeout(() => {
     tabMounted.value = true
-  }, 1000)
+  }, 500)
 
   // Get a reference to the hard_word_counts collection
   const wordCountsRef = collection(db, 'hard_word_counts')

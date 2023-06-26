@@ -39,7 +39,7 @@
     <Teleport to="#modals">
       <TransitionFadeAndSlide>
         <WordSelectModal
-          v-if="isNarrowScreen && tabMounted"
+          v-if="isNarrowScreen && isInitiated"
           v-show="isOpen"
           @dismiss-modal="isOpen = false"
           @select-word="setWord"
@@ -169,7 +169,7 @@ onMounted(() => {
   console.log('Review mounted')
   setTimeout(() => {
     tabMounted.value = true
-  }, 1000)
+  }, 500)
 
   const word = localStorage.getItem('selectedWord')
   if (word) {
