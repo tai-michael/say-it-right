@@ -3,7 +3,7 @@
   <ion-page v-if="tabMounted">
     <TheHeader>Provided Lists</TheHeader>
 
-    <ion-content class="ion-padding" ref="content">
+    <ion-content class="ion-padding" ref="content" :force-overscroll="false">
       <PullRefresher />
       <div ref="scrollTrigger" class="scroll-trigger"></div>
       <ListGroups :route-name="route.name" />
@@ -25,11 +25,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import PullRefresher from '@/components/PullRefresher.vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
+// import PullRefresher from '@/components/PullRefresher.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TheHeader from '@/components/TheHeader.vue'
-import ListGroups from '@/components/ListGroups.vue'
+// import ListGroups from '@/components/ListGroups.vue'
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
+const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
+// const ListGroups = defineAsyncComponent({
+//   loader: () => import('@/components/ListGroups.vue'),
+//   loadingComponent: LoadingSpinner
+//   // delay: 200
+// })
+
 import {
   IonPage,
   IonContent,
@@ -71,7 +79,7 @@ onMounted(() => {
   console.log('Provided Lists mounted')
   setTimeout(() => {
     tabMounted.value = true
-  }, 500)
+  }, 1000)
 })
 
 // // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals

@@ -18,18 +18,16 @@
         </ion-card>
       </div>
 
-      <div v-else class="flex h-full items-center justify-center">
-        <LoadingSpinner />
-      </div>
+      <LoadingSpinner />
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import PullRefresher from '@/components/PullRefresher.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 import { IonPage, IonContent, IonLabel, IonCard } from '@ionic/vue'
 import { db } from '@/firebaseInit'
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore'

@@ -4,7 +4,7 @@
     <ion-content class="ion-padding">
       <LoadingSpinner v-if="fetchingBackendData" />
       <ion-router-outlet v-else-if="signedIn"></ion-router-outlet>
-      <SignInView v-else />
+      <SignInView v-else-if="!user" />
     </ion-content>
   </ion-app>
 </template>
@@ -126,6 +126,7 @@ const extractNewLists = (newArray, oldArray) => {
   return newItems
 }
 
+const backendDataFetched = ref(false)
 auth.onAuthStateChanged(async () => {
   if (isDarkModeEnabled.value) {
     document.body.classList.add('dark')
@@ -137,8 +138,9 @@ auth.onAuthStateChanged(async () => {
   await fetchBackendData()
   fetchingBackendData.value = false
   signedIn.value = true
+  backendDataFetched.value = true
 
-  // NOTE necessary b/c of ionic bug with vue router
+  // NOTE necessary b/c of ionic bug with vue router.
   // See https://forum.ionicframework.com/t/ion-page-invisible-class-not-being-removed-navigating-in-between-pages-video/162114/10
   nextTick(() => {
     document.querySelector('div.ion-page')?.classList.remove('ion-page-invisible')

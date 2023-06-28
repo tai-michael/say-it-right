@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import PullRefresher from '@/components/PullRefresher.vue'
+import { onMounted, defineAsyncComponent } from 'vue'
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 import { auth } from '@/firebaseInit'
 import firebase from 'firebase/compat/app'
 import * as firebaseui from 'firebaseui'
@@ -23,6 +23,7 @@ import { IonPage, IonContent } from '@ionic/vue'
 import image from '@/assets/logo.png'
 
 onMounted(() => {
+  console.log('Sign in view mounted')
   const uiConfig = {
     // Redirect route; necessary if 'signInSuccessWithAuthResult' set to true
     // signInSuccessUrl: 'http://localhost:4000/custom-lists',

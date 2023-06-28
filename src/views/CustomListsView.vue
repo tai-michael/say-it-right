@@ -51,19 +51,17 @@
 
   <ion-page v-else>
     <TheHeader>Custom Lists</TheHeader>
-    <div class="flex h-full items-center justify-center">
-      <LoadingSpinner />
-    </div>
+    <LoadingSpinner />
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
 import { createOutline } from 'ionicons/icons'
-import PullRefresher from '@/components/PullRefresher.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TheHeader from '@/components/TheHeader.vue'
-import ListGroups from '@/components/ListGroups.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
+const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'
 import type { List } from '@/stores/modules/types/List'
@@ -215,7 +213,7 @@ onMounted(() => {
 
   setTimeout(() => {
     tabMounted.value = true
-  }, 500)
+  }, 1000)
 })
 
 // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals

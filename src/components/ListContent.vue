@@ -1,37 +1,35 @@
 <template>
-  <ion-page>
-    <TheHeader :show-back-button="true" @back-button-clicked="returnToLists">{{ title }}</TheHeader>
+  <TheHeader :show-back-button="true" @back-button-clicked="returnToLists">{{ title }}</TheHeader>
 
-    <ion-content>
-      <TransitionAppear>
-        <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
+  <ion-content>
+    <TransitionAppear>
+      <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
-        <WordChallenge
-          v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
-          :list="list"
-        />
+      <WordChallenge
+        v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
+        :list="list"
+      />
 
-        <div v-else-if="list.status === 'LIST_COMPLETE'" class="message ion-padding">
-          <div class="message__text flex flex-col">
-            <span class="mb-5">You've completed this list!</span>
-            <span class="mb-4">You can: </span>
-            <ul>
-              <li>
-                <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned
-              </li>
-              <li>
-                <span @click="returnToLists" class="link">
-                  {{ `${routeName === 'custom-lists' ? 'Create or' : ''}` }} Try</span
-                >
-                another list
-              </li>
-              <li>Or <span @click="handleReset" class="link">Retry</span> this list</li>
-            </ul>
-          </div>
+      <div v-else-if="list.status === 'LIST_COMPLETE'" class="message ion-padding">
+        <div class="message__text flex flex-col">
+          <span class="mb-5">You've completed this list!</span>
+          <span class="mb-4">You can: </span>
+          <ul>
+            <li>
+              <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned
+            </li>
+            <li>
+              <span @click="returnToLists" class="link">
+                {{ `${routeName === 'custom-lists' ? 'Create or' : ''}` }} Try</span
+              >
+              another list
+            </li>
+            <li>Or <span @click="handleReset" class="link">Retry</span> this list</li>
+          </ul>
         </div>
-      </TransitionAppear>
-    </ion-content>
-  </ion-page>
+      </div>
+    </TransitionAppear>
+  </ion-content>
 </template>
 
 <script setup lang="ts">

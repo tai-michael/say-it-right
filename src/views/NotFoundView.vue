@@ -17,7 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import PullRefresher from '@/components/PullRefresher.vue'
+import { defineAsyncComponent } from 'vue'
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 import HomeButton from '@/components/HomeButton.vue'
 import { IonPage, IonContent } from '@ionic/vue'
 import { IonIcon } from '@ionic/vue'

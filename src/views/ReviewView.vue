@@ -101,19 +101,20 @@
   </ion-page>
   <ion-page v-else>
     <TheHeader />
-    <div class="flex h-full items-center justify-center">
-      <LoadingSpinner />
-    </div>
+    <LoadingSpinner />
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, provide } from 'vue'
-import PullRefresher from '@/components/PullRefresher.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import TransitionFadeAndSlide from '@/components/transitions/TransitionFadeAndSlide.vue'
+import { ref, onMounted, onBeforeUnmount, provide, defineAsyncComponent } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
-import WordSelectModal from '@/components/WordSelectModal.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
+const TransitionFadeAndSlide = defineAsyncComponent(
+  () => import('@/components/transitions/TransitionFadeAndSlide.vue')
+)
+const WordSelectModal = defineAsyncComponent(() => import('@/components/WordSelectModal.vue'))
+const WordDrill = defineAsyncComponent(() => import('@/components/WordDrill.vue'))
 import {
   IonPage,
   IonContent,
@@ -124,9 +125,7 @@ import {
 } from '@ionic/vue'
 import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import WordDrill from '@/components/WordDrill.vue'
 import type { WordObject } from '@/stores/modules/types/Review'
-// import type { WordObject } from '@/stores/modules/types/Review'
 import { useReviewStore } from '@/stores/index.ts'
 // import { useArrayFind } from '@vueuse/core'
 
