@@ -1,6 +1,8 @@
 <template>
-  <div class="spinner">
-    <span class="spinner material"></span>
+  <div class="flex h-full items-center justify-center">
+    <div class="spinner">
+      <span class="spinner material"></span>
+    </div>
   </div>
 </template>
 

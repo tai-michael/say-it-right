@@ -2,13 +2,9 @@
   <ion-app>
     <div id="modals"></div>
     <ion-content class="ion-padding">
-      <div v-if="fetchingBackendData" class="flex h-full items-center justify-center">
-        <LoadingSpinner />
-      </div>
-      <div v-else>
-        <ion-router-outlet v-if="signedIn"></ion-router-outlet>
-        <SignInView v-else />
-      </div>
+      <LoadingSpinner v-if="fetchingBackendData" />
+      <ion-router-outlet v-else-if="signedIn"></ion-router-outlet>
+      <SignInView v-else />
     </ion-content>
   </ion-app>
 </template>
@@ -20,28 +16,15 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue'
 // import DarkModeToggle from './components/DarkModeToggle.vue'
 import { useLocalStorage } from '@vueuse/core'
 import { IonApp, IonContent, IonRouterOutlet } from '@ionic/vue'
-import { useRoute, useRouter } from 'vue-router'
 import { db, isAuthenticated, user, auth } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
 import { collection, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore'
-import {
-  useAuthStore,
-  useCustomListsStore,
-  useProvidedListsStore,
-  useReviewStore
-} from '@/stores/index.ts'
+import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
 
-const authStore = useAuthStore()
 const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
 
-const route = useRoute()
-const router = useRouter()
-const routeTitle = ref(route.meta.title || 'Custom Lists')
-const activeListNum = computed(
-  () => customListsStore?.activeList?.listNumber || providedListsStore?.activeList?.listNumber || ''
-)
 // const getLinkClass = (path: string) => {
 //   const route = useRoute()
 //   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
