@@ -150,10 +150,15 @@ onMounted(() => {
   )
   // TODO Implement hints, which I'll generate with GPT first. (e.g. v-if with attemptsSuccessful < attemptsSuccessfulRequired.value && attempts >= attemptsLimit.value - 3)
 
+  // final condition below filters out words that failed the word challenge (i.e.skipped)
   testedWords.value = Object.keys(mispronouncedParagraphWords).filter(
     (word) =>
       mispronouncedParagraphWords[word].attempts < attemptsLimit.value &&
-      mispronouncedParagraphWords[word].attemptsSuccessful < attemptsSuccessfulRequired.value
+      mispronouncedParagraphWords[word].attemptsSuccessful < attemptsSuccessfulRequired.value &&
+      !(
+        mispronouncedParagraphWords[word].attempts >= 6 &&
+        mispronouncedParagraphWords[word].attemptsSuccessful < 2
+      )
   )
 
   // sentences.value = [...props?.list?.words[testedWord.value]?.sentences]
