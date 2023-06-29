@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <div class="flex flex-col h-full justify-between">
+    <div class="flex flex-col h-full justify-between test">
       <main class="p-4 flex flex-col w-full h-full items-center justify-center">
         <div class="instructions">
           <TransitionFade>

@@ -69,11 +69,23 @@ const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
 
-const customAnimation = computed(() =>
-  route.name === 'custom-list' || route.name === 'provided-list'
-    ? customLeaveAnimation
-    : customEnterAnimation
-)
+const isSafari = computed(() => {
+  return (
+    navigator.vendor.match(/apple/i) &&
+    !navigator.userAgent.match(/crios/i) &&
+    !navigator.userAgent.match(/fxios/i) &&
+    !navigator.userAgent.match(/Opera|OPT\//)
+  )
+})
+
+const customAnimation = computed(() => {
+  if (isSafari.value) {
+    return 'none'
+  } else
+    return route.name === 'custom-list' || route.name === 'provided-list'
+      ? customLeaveAnimation
+      : customEnterAnimation
+})
 
 const customListsPath = computed(() => {
   const id = customListsStore.activeId
@@ -82,7 +94,7 @@ const customListsPath = computed(() => {
 
 const providedListsPath = computed(() => {
   const id = providedListsStore.activeId
-  return id ? `/provided-lists/${id}` : '/provided-lists'
+  return id ? `/provided-list/${id}` : '/provided-lists'
 })
 </script>
 

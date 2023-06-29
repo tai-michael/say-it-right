@@ -26,17 +26,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, defineAsyncComponent } from 'vue'
-// import PullRefresher from '@/components/PullRefresher.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TheHeader from '@/components/TheHeader.vue'
-// import ListGroups from '@/components/ListGroups.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
-// const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
-// const ListGroups = defineAsyncComponent({
-//   loader: () => import('@/components/ListGroups.vue'),
-//   loadingComponent: LoadingSpinner
-//   // delay: 200
-// })
 
 import {
   IonPage,
@@ -49,6 +41,12 @@ import {
 } from '@ionic/vue'
 import { arrowUp } from 'ionicons/icons'
 import { useRoute, useRouter } from 'vue-router'
+// const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
+// const ListGroups = defineAsyncComponent({
+//   loader: () => import('@/components/ListGroups.vue'),
+//   loadingComponent: LoadingSpinner
+//   // delay: 200
+// })
 
 const route = useRoute()
 const router = useRouter()

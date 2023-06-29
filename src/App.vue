@@ -126,7 +126,6 @@ const extractNewLists = (newArray, oldArray) => {
   return newItems
 }
 
-const backendDataFetched = ref(false)
 auth.onAuthStateChanged(async () => {
   if (isDarkModeEnabled.value) {
     document.body.classList.add('dark')
@@ -138,131 +137,29 @@ auth.onAuthStateChanged(async () => {
   await fetchBackendData()
   fetchingBackendData.value = false
   signedIn.value = true
-  backendDataFetched.value = true
+  console.log('Fetched backend data')
 
   // NOTE necessary b/c of ionic bug with vue router.
   // See https://forum.ionicframework.com/t/ion-page-invisible-class-not-being-removed-navigating-in-between-pages-video/162114/10
   nextTick(() => {
     document.querySelector('div.ion-page')?.classList.remove('ion-page-invisible')
+
+    // const nav = document.querySelector('ion-router-outlet') as HTMLIonRouterOutletElement
+    // nav.swipeGesture = false
   })
-
-  console.log('Fetched backend data')
 })
-
-// if (newVal && newVal.length > providedListsStore.allLists.length) {
-//   for (let i = providedListsStore.allLists.length; i < newVal.length; i++) {
-//     const newList = JSON.parse(JSON.stringify(newVal[i]))
-//     // providedListsStore.allLists.push(newList)
-//     console.log(newList)
-//     // console.log('pushed new list to allLists')
-//   }
-//   // console.log(providedListsStore.allLists)
-// }
 </script>
 
 <style scoped>
 #modals {
   z-index: 99999;
 }
+</style>
 
-/* Firefox */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: light;
-  }
-} */
-
-/* Chrome */
-/* @media (forced-colors: active) {
-  :root {
-    color-scheme: light;
-  }
-} */
-
-/* #container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-} */
-
-/* header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
+<style lang="scss">
+html,
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  // NOTE prevents the swipe back and forward gestures on most browsers and Safari 16, released 2022 (See: https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior-x#browser_compatibility)
+  overscroll-behavior-x: none;
 }
-
-.main-content {
-  width: 100%;
-}
-
-.signout-btn:hover {
-  cursor: pointer;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 16px;
-  text-align: center;
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 0.8rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-} */
 </style>

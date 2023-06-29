@@ -39,12 +39,13 @@ auth.onAuthStateChanged((user) => {
       .use(createPinia())
       // remove mode option to use platform-specific styles
       .use(IonicVue, {
-        // mode: 'ios'
-        mode: 'md'
+        // mode: 'ios',
+        mode: 'md',
         // hardwareBackButton: false, // ineffective
-        // swipeBackEnabled: false // need to test on iOS
+        swipeBackEnabled: false // does not disable Safari's built-in swipe to go back, but it will at least prevent ionic's swipe to go back from triggering (if both trigger then there will be buggy behavior)
       })
       .use(VueVirtualScroller)
+      // NOTE eager loading here eliminates lag when navigating between tabs
       .component('ListGroups', ListGroups)
       .component('WordDrill', WordDrill)
       .use(router)

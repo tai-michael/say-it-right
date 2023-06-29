@@ -1,5 +1,5 @@
-// import { createRouter, createWebHistory } from 'vue-router'
 import { createRouter, createWebHistory } from '@ionic/vue-router'
+// import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import CustomListsView from '@/views/CustomListsView.vue'
 // import CustomList from '@/components/CustomList.vue'
@@ -139,17 +139,42 @@ const router = createRouter({
   includeQueryParams: true
 })
 
-// NOTE prevents browser back button from functioning
+const isSafari =
+  navigator.vendor.match(/apple/i) &&
+  !navigator.userAgent.match(/crios/i) &&
+  !navigator.userAgent.match(/fxios/i) &&
+  !navigator.userAgent.match(/Opera|OPT\//)
+
 router.beforeEach((to, from, next) => {
   const title = to.meta.title || 'Custom Lists'
   document.title = title as string
 
-  if (window.event && window.event.type == 'popstate') {
+  if (isSafari) next()
+  // NOTE prevents browser back button from functioning
+  else if (window.event && window.event.type == 'popstate') {
     next(false)
   } else {
     next()
   }
 })
+
+// let isReplacing = false
+
+// router.beforeEach((to, from, next) => {
+//   if (to.path !== from.path) {
+//     if (isReplacing) {
+//       isReplacing = false
+//       next()
+//     } else {
+//       isReplacing = true
+//       next(false) // REVIEW not sure if necessary
+//       router.replace(to.path)
+//     }
+//   } else {
+//     next()
+//   }
+// })
+
 // const router = createRouter({
 //   history: createWebHistory(import.meta.env.BASE_URL),
 //   routes: [
