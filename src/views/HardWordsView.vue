@@ -36,7 +36,7 @@ const leaderboard = ref()
 
 const tabMounted = ref(false)
 onMounted(async () => {
-  console.log('Hard Words mounted')
+  // console.log('Hard Words mounted')
   setTimeout(() => {
     tabMounted.value = true
   }, 500)

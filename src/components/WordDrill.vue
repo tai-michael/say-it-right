@@ -178,7 +178,7 @@ const resetWord = () => {
 }
 
 onMounted(() => {
-  console.log('Word Drill mounted')
+  // console.log('Word Drill mounted')
   word.value = props.word
   resetWord()
 })

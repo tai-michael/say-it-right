@@ -165,7 +165,7 @@ const handleResize = () => {
 
 const tabMounted = ref(false)
 onMounted(() => {
-  console.log('Review mounted')
+  // console.log('Review mounted')
   setTimeout(() => {
     tabMounted.value = true
   }, 500)

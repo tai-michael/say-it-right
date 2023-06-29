@@ -1,7 +1,7 @@
 <template>
   <!-- <ion-page v-if="!tabMounted">Loading...</ion-page> -->
   <ion-page v-if="tabMounted">
-    <TheHeader>Provided Lists</TheHeader>
+    <TheHeader>Premade Lists</TheHeader>
 
     <ion-content class="ion-padding" ref="content" :force-overscroll="false">
       <PullRefresher />
@@ -17,7 +17,7 @@
   </ion-page>
 
   <ion-page v-else>
-    <TheHeader>Provided Lists</TheHeader>
+    <TheHeader>Premade Lists</TheHeader>
     <div class="flex h-full items-center justify-center">
       <LoadingSpinner />
     </div>
@@ -76,7 +76,7 @@ onMounted(() => {
     router.push('/not-found')
   }
 
-  console.log('Provided Lists mounted')
+  // console.log('Provided Lists mounted')
   setTimeout(() => {
     tabMounted.value = true
   }, 500)

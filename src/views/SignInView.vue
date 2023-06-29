@@ -23,7 +23,7 @@ import { IonPage, IonContent } from '@ionic/vue'
 import image from '@/assets/logo.png'
 
 onMounted(() => {
-  console.log('Sign in view mounted')
+  // console.log('Sign in view mounted')
   const uiConfig = {
     // Redirect route; necessary if 'signInSuccessWithAuthResult' set to true
     // signInSuccessUrl: 'http://localhost:4000/custom-lists',

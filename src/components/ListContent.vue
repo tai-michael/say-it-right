@@ -85,7 +85,7 @@ const resetShortList = () => {
 
 const title = computed(
   () =>
-    `${routeName.value === 'provided-lists' ? 'Provided List' : 'Custom List'} ${
+    `${routeName.value === 'provided-lists' ? 'Premade List' : 'Custom List'} ${
       list.value.listNumber
     }`
 )
