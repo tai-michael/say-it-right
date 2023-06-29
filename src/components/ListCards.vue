@@ -298,6 +298,10 @@ body.dark {
     background: rgb(32, 32, 32);
   }
 
+  ion-popover {
+    --background: rgb(32, 32, 32);
+  }
+
   ion-toolbar {
     // --background: rgb(34, 34, 34);
     --background: rgb(38, 38, 38);

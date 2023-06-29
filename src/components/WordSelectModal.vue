@@ -25,7 +25,7 @@
       </div>
 
       <ion-list id="modal-list" :inset="true" class="mt-2 pt-0 pb-0">
-        <div v-if="sortedWords.length === 0" class="pl-2.5 pt-3.5 pb-3.5">(No results)</div>
+        <div v-if="sortedWords.length === 0" class="pl-2.5 pt-3.5">(No results)</div>
 
         <RecycleScroller
           :key="sortOrder"

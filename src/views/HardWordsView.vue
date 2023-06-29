@@ -18,7 +18,7 @@
         </ion-card>
       </div>
 
-      <LoadingSpinner />
+      <LoadingSpinner v-else />
     </ion-content>
   </ion-page>
 </template>
