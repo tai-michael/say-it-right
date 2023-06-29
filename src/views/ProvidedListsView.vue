@@ -31,7 +31,7 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TheHeader from '@/components/TheHeader.vue'
 // import ListGroups from '@/components/ListGroups.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
-const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
+// const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
 // const ListGroups = defineAsyncComponent({
 //   loader: () => import('@/components/ListGroups.vue'),
 //   loadingComponent: LoadingSpinner
@@ -79,7 +79,7 @@ onMounted(() => {
   console.log('Provided Lists mounted')
   setTimeout(() => {
     tabMounted.value = true
-  }, 1000)
+  }, 500)
 })
 
 // // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals

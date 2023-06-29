@@ -213,7 +213,7 @@ onMounted(() => {
 
   setTimeout(() => {
     tabMounted.value = true
-  }, 1000)
+  }, 500)
 })
 
 // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals

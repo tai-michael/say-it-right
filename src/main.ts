@@ -26,6 +26,8 @@ import '@ionic/vue/css/text-alignment.css'
 import '@ionic/vue/css/text-transformation.css'
 import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
+import ListGroups from '@/components/ListGroups.vue'
+import WordDrill from '@/components/WordDrill.vue'
 
 let app: ReturnType<typeof createApp>
 
@@ -43,6 +45,8 @@ auth.onAuthStateChanged((user) => {
         // swipeBackEnabled: false // need to test on iOS
       })
       .use(VueVirtualScroller)
+      .component('ListGroups', ListGroups)
+      .component('WordDrill', WordDrill)
       .use(router)
 
     app.mount('#app')
