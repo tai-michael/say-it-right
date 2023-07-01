@@ -26,7 +26,19 @@
 
         <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
-        <ListGroups :route-name="route.name" @list-deleted="setToastOpen('List deleted')" />
+        <ListGroups
+          v-if="store.allLists.length"
+          :route-name="route.name"
+          @list-deleted="setToastOpen('List deleted')"
+        />
+
+        <div
+          v-else
+          class="instructions flex flex-col h-full w-full mt-32 justify-center align-middle items-center gap-y-3 p-2 font-semibold"
+        >
+          <span class="max-w-xs text-center">Not sure how to say certain words?</span>
+          <span class="max-w-xs text-center">Start by creating a list!</span>
+        </div>
       </div>
 
       <ion-toast
@@ -257,6 +269,16 @@ ion-toast {
   font-size: 15px;
 }
 
+.scroll-trigger {
+  height: 800px;
+  position: absolute;
+  visibility: hidden;
+
+  @media (min-width: 1024px) {
+    height: 2400px;
+  }
+}
+
 .submit-form {
   display: flex;
   margin-bottom: 1.5rem;
@@ -296,14 +318,8 @@ ion-toast {
   color: var(--orange-color);
 }
 
-.scroll-trigger {
-  height: 800px;
-  position: absolute;
-  visibility: hidden;
-
-  @media (min-width: 1024px) {
-    height: 2400px;
-  }
+.instructions {
+  color: rgb(80, 80, 80);
 }
 
 body.dark {
@@ -319,6 +335,10 @@ body.dark {
     label {
       color: rgb(196, 196, 196);
     }
+  }
+
+  .instructions {
+    color: rgb(196, 196, 196);
   }
 }
 

@@ -94,7 +94,7 @@ const customListsPath = computed(() => {
 
 const providedListsPath = computed(() => {
   const id = providedListsStore.activeId
-  return id ? `/provided-list/${id}` : '/provided-lists'
+  return id ? `/provided-lists/${id}` : '/provided-lists'
 })
 </script>
 
