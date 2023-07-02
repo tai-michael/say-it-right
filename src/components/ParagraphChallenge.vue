@@ -373,6 +373,9 @@ main {
 
 .instructions {
   height: 19px;
+  @media only screen and (min-width: 768px) {
+    margin-bottom: 1rem;
+  }
 }
 
 .instructions,

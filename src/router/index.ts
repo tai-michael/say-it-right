@@ -149,6 +149,7 @@ router.beforeEach((to, from, next) => {
   const title = to.meta.title || 'Custom Lists'
   document.title = title as string
 
+  // NOTE trying to prevent browser back for Safari will cause buggy animation
   if (isSafari) next()
   // NOTE prevents browser back button from functioning
   else if (window.event && window.event.type == 'popstate') {

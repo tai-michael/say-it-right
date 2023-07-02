@@ -69,6 +69,16 @@ const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
 
+const customListsPath = computed(() => {
+  const id = customListsStore.activeId
+  return id ? `/custom-lists/${id}` : '/custom-lists'
+})
+
+const providedListsPath = computed(() => {
+  const id = providedListsStore.activeId
+  return id ? `/provided-lists/${id}` : '/provided-lists'
+})
+
 const isSafari = computed(() => {
   return (
     navigator.vendor.match(/apple/i) &&
@@ -79,22 +89,13 @@ const isSafari = computed(() => {
 })
 
 const customAnimation = computed(() => {
+  // NOTE Safari already has its own native animations
   if (isSafari.value) {
     return 'none'
   } else
     return route.name === 'custom-list' || route.name === 'provided-list'
       ? customLeaveAnimation
       : customEnterAnimation
-})
-
-const customListsPath = computed(() => {
-  const id = customListsStore.activeId
-  return id ? `/custom-lists/${id}` : '/custom-lists'
-})
-
-const providedListsPath = computed(() => {
-  const id = providedListsStore.activeId
-  return id ? `/provided-lists/${id}` : '/provided-lists'
 })
 </script>
 

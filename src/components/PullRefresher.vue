@@ -1,6 +1,19 @@
 <template>
-  <ion-refresher slot="fixed" @ionRefresh="handleRefresh()" v-if="isAtTop">
-    <ion-refresher-content></ion-refresher-content>
+  <ion-refresher
+    slot="fixed"
+    :scroll-y="false"
+    :force-overscroll="false"
+    @ionRefresh="handleRefresh()"
+    v-if="isAtTop"
+  >
+    <ion-refresher-content
+      :scroll-y="false"
+      :force-overscroll="false"
+      slot="fixed"
+      class="refresher-content"
+      no-bounce
+      has-bouncing="false"
+    ></ion-refresher-content>
   </ion-refresher>
   <div ref="refreshTrigger"></div>
 </template>
@@ -29,3 +42,8 @@ onUnmounted(() => {
   observerTop.disconnect()
 })
 </script>
+<style lang="scss" scoped>
+.refresher-content {
+  -webkit-overflow-scrolling: auto !important;
+}
+</style>
