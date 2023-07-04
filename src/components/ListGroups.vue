@@ -74,6 +74,10 @@ const noListStarted = computed(() => !store.inProgressLists.length && !store.com
 // }
 ion-accordion-group {
   padding: 0 !important;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1008px;
+  width: 100%;
 }
 
 ion-accordion {

@@ -25,10 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineAsyncComponent } from 'vue'
+import { ref, onMounted } from 'vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TheHeader from '@/components/TheHeader.vue'
-const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
+import PullRefresher from '@/components/PullRefresher.vue'
 
 import {
   IonPage,
@@ -36,7 +36,7 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  onIonViewWillEnter,
+  onIonViewDidEnter,
   onIonViewWillLeave
 } from '@ionic/vue'
 import { arrowUp } from 'ionicons/icons'
@@ -81,11 +81,11 @@ onMounted(() => {
 })
 
 // // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals
-onIonViewWillEnter(() => {
+onIonViewDidEnter(() => {
   // setTimeout is necessary to prevent fab from showing before the ref element ('scrollTrigger') is mounted
   setTimeout(() => {
     if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
-  }, 500)
+  }, 600)
 })
 
 onIonViewWillLeave(() => {

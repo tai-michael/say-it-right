@@ -1,96 +1,98 @@
 <template>
   <ion-page>
-    <div class="flex flex-col h-full justify-between test">
-      <main class="p-4 flex flex-col w-full h-full items-center justify-center">
-        <div class="instructions">
-          <TransitionFade>
-            <span v-if="props.list.status === 'LIST_NOT_STARTED'"
-              >Hold the button and speak this paragraph</span
-            >
-            <span v-else-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
-              >Recording complete</span
-            >
-          </TransitionFade>
-        </div>
-
-        <!-- :class="[testedParagraph.length > 350 ? '!leading-6' : '']" -->
-        <ion-card class="ml-0.5 mr-0.5 mb-3 pl-5 pr-5 max-w-xs">
-          <div class="tested-paragraph sm:!leading-8">
-            <p v-html="testedParagraph"></p>
+    <div class="h-full test">
+      <div class="flex flex-col h-full justify-between challenge-container">
+        <main class="p-4 flex flex-col w-full h-full items-center justify-center">
+          <div class="instructions">
+            <TransitionFade>
+              <span v-if="props.list.status === 'LIST_NOT_STARTED'"
+                >Hold the button and speak this paragraph</span
+              >
+              <span v-else-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
+                >Recording complete</span
+              >
+            </TransitionFade>
           </div>
-        </ion-card>
-      </main>
 
-      <div
-        class="message-container w-full h-full max-h-80 flex justify-center items-start pt-5 sm:items-start sm:pt-10"
-      >
-        <div v-if="isRecording" class="transcript">
-          <!-- TODO maybe replace this with a sound wave animation -->
-          <div>Recording...</div>
-          <!-- <label>Spoken Words:</label>
+          <!-- :class="[testedParagraph.length > 350 ? '!leading-6' : '']" -->
+          <ion-card class="ml-0.5 mr-0.5 mb-3 pl-5 pr-5 max-w-xs">
+            <div class="tested-paragraph sm:!leading-8">
+              <p v-html="testedParagraph"></p>
+            </div>
+          </ion-card>
+        </main>
+
+        <div
+          class="message-container w-full h-full max-h-80 flex justify-center items-start pt-5 sm:items-start sm:pt-10"
+        >
+          <div v-if="isRecording" class="transcript">
+            <!-- TODO maybe replace this with a sound wave animation -->
+            <div>Recording...</div>
+            <!-- <label>Spoken Words:</label>
         <div>{{ temporaryTranscriptDisplay }}</div> -->
-        </div>
+          </div>
 
-        <div v-else class="message">
-          <div class="sm:pb-5">
-            <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
-            <div v-else-if="recordingStatus === 'FEW_WORDS_RECORDED'" class="message__text">
-              <span>You didn't record enough words.</span>
-              <span>Try again, and remember to hold the recording button.</span>
-            </div>
-            <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
-              <span>Excellent! You pronounced each tested word correctly.</span>
-              <span>Next, create or try another list.</span>
-            </div>
-            <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
-              <span>Good job! You mispronounced only one word.</span>
-              <span>Let's practice it.</span>
-            </div>
-            <div v-else-if="recordingStatus === 'MOST_WORDS_CORRECT'" class="message__text">
-              <span>You did pretty well! However, these words were mispronounced.</span>
-              <span>Let's practice them.</span>
-            </div>
-            <div
-              v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'"
-              class="message__text flex gap-y-2"
-            >
-              <!-- <span>Please try again. You didn't record enough words.</span>
+          <div v-else class="message">
+            <div class="sm:pb-5">
+              <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
+              <div v-else-if="recordingStatus === 'FEW_WORDS_RECORDED'" class="message__text">
+                <span>You didn't record enough words.</span>
+                <span>Try again, and remember to hold the recording button.</span>
+              </div>
+              <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
+                <span>Excellent! You pronounced each tested word correctly.</span>
+                <span>Next, create or try another list.</span>
+              </div>
+              <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
+                <span>Good job! You mispronounced only one word.</span>
+                <span>Let's practice it.</span>
+              </div>
+              <div v-else-if="recordingStatus === 'MOST_WORDS_CORRECT'" class="message__text">
+                <span>You did pretty well! However, these words were mispronounced.</span>
+                <span>Let's practice them.</span>
+              </div>
+              <div
+                v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'"
+                class="message__text flex gap-y-2"
+              >
+                <!-- <span>Please try again. You didn't record enough words.</span>
               <span>Remember to hold the recording button.</span> -->
 
-              <!-- <span>Very impressive! You pronounced each tested word correctly.</span>
+                <!-- <span>Very impressive! You pronounced each tested word correctly.</span>
               <span>You can create or look at another list.</span> -->
 
-              <!-- <span>Good job! You mispronounced only one word.</span>
+                <!-- <span>Good job! You mispronounced only one word.</span>
               <span>Let's practice it.</span> -->
 
-              <!-- <span>You did pretty well! However, these words were mispronounced.</span>
+                <!-- <span>You did pretty well! However, these words were mispronounced.</span>
               <span>Let's practice them.</span> -->
 
-              <span>These words were mispronounced.</span>
-              <span>Let's practice them.</span>
+                <span>These words were mispronounced.</span>
+                <span>Let's practice them.</span>
+              </div>
             </div>
+
+            <ion-button
+              v-if="
+                props.list.status === 'PARAGRAPH_RECORDING_ENDED' &&
+                recordingStatus !== 'ALL_WORDS_CORRECT'
+              "
+              @click="store.setListStatus('TESTING_WORD_ONLY')"
+            >
+              Next
+            </ion-button>
           </div>
-
-          <ion-button
-            v-if="
-              props.list.status === 'PARAGRAPH_RECORDING_ENDED' &&
-              recordingStatus !== 'ALL_WORDS_CORRECT'
-            "
-            @click="store.setListStatus('TESTING_WORD_ONLY')"
-          >
-            Next
-          </ion-button>
         </div>
+        <!-- <RouterLink to="/provided-lists/word-test">Next</RouterLink> -->
       </div>
-      <!-- <RouterLink to="/provided-lists/word-test">Next</RouterLink> -->
-    </div>
 
-    <RecorderButton
-      v-if="props.list.status === 'LIST_NOT_STARTED' && listEntered"
-      @recording-started="isRecording = true"
-      @recording-stopped="handleFinalTranscript"
-      @temporary-transcript-rendered="handleTempTranscriptRender"
-    />
+      <RecorderButton
+        v-if="props.list.status === 'LIST_NOT_STARTED' && listEntered"
+        @recording-started="isRecording = true"
+        @recording-stopped="handleFinalTranscript"
+        @temporary-transcript-rendered="handleTempTranscriptRender"
+      />
+    </div>
   </ion-page>
 </template>
 
@@ -365,6 +367,19 @@ const recordingStatus = computed(() => {
 
 ion-page {
   --height: 100%;
+}
+
+.test {
+  // background-color: #5cc0b9;
+  // background-color: #dcf2f0;
+  background-color: #d4efed;
+}
+
+.challenge-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1008px;
+  width: 100%;
 }
 
 main {

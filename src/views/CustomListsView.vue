@@ -88,7 +88,7 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  onIonViewWillEnter,
+  onIonViewDidEnter,
   onIonViewWillLeave
 } from '@ionic/vue'
 import { arrowUp } from 'ionicons/icons'
@@ -229,11 +229,11 @@ onMounted(() => {
 })
 
 // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals
-onIonViewWillEnter(() => {
+onIonViewDidEnter(() => {
   // setTimeout is necessary to prevent fab from showing before the ref element ('scrollTrigger') is mounted
   setTimeout(() => {
     if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
-  }, 500)
+  }, 600)
 })
 
 onIonViewWillLeave(() => {
@@ -282,6 +282,11 @@ ion-toast {
 .submit-form {
   display: flex;
   margin-bottom: 1.5rem;
+  // max-width: 1008px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 
   // row-gap: 2rem;
 
