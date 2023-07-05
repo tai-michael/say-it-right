@@ -61,6 +61,7 @@ import {
   IonLabel,
   IonIcon
 } from '@ionic/vue'
+import useSafariDetector from '@/composables/useSafariDetector'
 import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
 import { useRoute } from 'vue-router'
 
@@ -79,14 +80,7 @@ const providedListsPath = computed(() => {
   return id ? `/provided-lists/${id}` : '/provided-lists'
 })
 
-const isSafari = computed(() => {
-  return (
-    navigator.vendor.match(/apple/i) &&
-    !navigator.userAgent.match(/crios/i) &&
-    !navigator.userAgent.match(/fxios/i) &&
-    !navigator.userAgent.match(/Opera|OPT\//)
-  )
-})
+const { isSafari } = useSafariDetector()
 
 const customAnimation = computed(() => {
   // NOTE Safari already has its own native animations

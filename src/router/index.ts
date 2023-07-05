@@ -10,6 +10,7 @@ import HardWordsView from '@/views/HardWordsView.vue'
 // import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import TabsRoot from '@/components/TabsRoot.vue'
 import { user } from '@/firebaseInit'
+import useSafariDetector from '@/composables/useSafariDetector'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -139,25 +140,61 @@ const router = createRouter({
   includeQueryParams: true
 })
 
-const isSafari =
-  navigator.vendor.match(/apple/i) &&
-  !navigator.userAgent.match(/crios/i) &&
-  !navigator.userAgent.match(/fxios/i) &&
-  !navigator.userAgent.match(/Opera|OPT\//)
+const { isSafari } = useSafariDetector()
 
 router.beforeEach((to, from, next) => {
   const title = to.meta.title || 'Custom Lists'
   document.title = title as string
 
   // NOTE trying to prevent browser back for Safari will cause buggy animation
-  if (isSafari) next()
-  // NOTE prevents browser back button from functioning
-  else if (window.event && window.event.type == 'popstate') {
-    next(false)
-  } else {
+  if (isSafari.value || !window.event || window.event.type !== 'popstate') {
     next()
   }
+  // NOTE prevents browser back button from functioning
+  else next(false)
 })
+
+// REVIEW below code is buggy if back button is pressed more than once while in custom or provided lists view
+// router.beforeEach((to, from) => {
+//   const title = to.meta.title || 'Custom Lists'
+//   document.title = title as string
+
+//   if (isSafari.value || !window.event || window.event.type !== 'popstate') {
+//     console.log('Go next')
+//     console.log(`FROM: ${from.name}`)
+//     console.log(`TO: ${to.name}`)
+//     console.log(router)
+//     if (
+//       (from.name === 'custom-lists' && to.name !== 'custom-list') ||
+//       (from.name === 'provided-lists' && to.name !== 'provided-list')
+//     ) {
+//       // router.go(1)
+//       // router.go(-1)
+
+//       return true
+//     } else return true
+//     // return true
+//   }
+
+//   if (from.name === 'provided-list') {
+//     console.log('A')
+//     useProvidedListsStore().setActiveId(null)
+//     // return '/provided-lists'
+//     if (to.name !== 'provided-lists') return { name: 'provided-lists', replace: true }
+//   } else if (from.name === 'custom-list') {
+//     console.log('B')
+//     useCustomListsStore().setActiveId(null)
+//     if (to.name !== 'custom-lists') return { name: 'custom-lists', replace: true }
+//   } else if (from.name === 'provided-lists' || from.name === 'custom-lists') {
+//     console.log('C')
+//     console.log(`FROM: ${from.name}`)
+//     console.log(`TO: ${to.name}`)
+//     console.log(router)
+//     router.go(1)
+
+//     return false
+//   }
+// })
 
 // let isReplacing = false
 
