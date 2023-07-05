@@ -156,10 +156,10 @@ auth.onAuthStateChanged(async () => {
 }
 </style>
 
-<style lang="scss">
+<!-- <style lang="scss">
 html,
 body {
   // NOTE prevents the swipe back and forward gestures on most browsers and Safari 16, released 2022 (See: https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior-x#browser_compatibility)
   overscroll-behavior-x: none;
 }
-</style>
+</style> -->
