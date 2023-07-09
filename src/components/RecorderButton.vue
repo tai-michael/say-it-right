@@ -1,5 +1,5 @@
 <template>
-  <div class="button-container">
+  <div class="button-container" :class="{ 'review-active': route.name === 'review' }">
     <button
       v-if="clientConnected"
       class="recording-btn mobile-view"
@@ -25,6 +25,8 @@ import { computed, onMounted, onUnmounted, onDeactivated, ref } from 'vue'
 import { client } from '@/speechlyInit.ts'
 import { BrowserMicrophone } from '@speechly/browser-client'
 import MicIcon from '@/assets/icons/mic.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 const microphone = ref()
 
@@ -172,10 +174,15 @@ client.onSegmentChange((segment) => {
 
   // TODO test if 500px is enough to trigger for tablets
   // @media (min-width: 639px) {
-  @media (min-width: 500px) {
+  @media only screen and (min-width: 500px) {
     left: 0;
     bottom: 2rem;
     justify-content: center;
+    // min-width: none !important;
+  }
+
+  @media only screen and (max-width: 768px) {
+    min-width: none !important;
   }
 
   .recording-btn {
@@ -241,6 +248,17 @@ client.onSegmentChange((segment) => {
     .desktop-view {
       display: inline-block;
     }
+  }
+}
+
+.review-active {
+  @media only screen and (min-width: 768px) {
+    min-width: 1500px;
+  }
+
+  @media only screen and (min-width: 768px) and (max-width: 1088px) {
+    margin-left: 23rem;
+    min-width: 0px;
   }
 }
 </style>
