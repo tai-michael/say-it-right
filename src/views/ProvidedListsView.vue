@@ -96,6 +96,10 @@ onIonViewWillLeave(() => {
 <style lang="scss" scoped>
 ion-content {
   --background: #eef9f8;
+
+  @media only screen and (min-width: 768px) {
+    --padding-start: 8rem;
+  }
 }
 
 .scroll-trigger {
@@ -103,9 +107,9 @@ ion-content {
   position: absolute;
   visibility: hidden;
 
-  @media (min-width: 1024px) {
-    height: 2400px;
-  }
+  // @media (min-width: 1024px) {
+  //   height: 800px;
+  // }
 }
 
 body.dark {

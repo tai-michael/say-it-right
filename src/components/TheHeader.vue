@@ -219,6 +219,12 @@ ion-toolbar {
   }
 }
 
+@media only screen and (min-width: 768px) {
+  .header-md::after {
+    background-image: none !important;
+  }
+}
+
 body.dark ion-toolbar {
   --background: rgb(24, 24, 24);
 

@@ -256,6 +256,10 @@ onIonViewWillLeave(() => {
 
 ion-content {
   --background: #eef9f8;
+
+  @media only screen and (min-width: 768px) {
+    --padding-start: 8rem;
+  }
 }
 
 ion-toolbar {

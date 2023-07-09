@@ -41,6 +41,12 @@ onUnmounted(() => {
 })
 </script>
 <style lang="scss" scoped>
+ion-refresher,
+ion-refresher-content,
+.trigger {
+  scroll-snap-type: none !important;
+}
+
 .trigger {
   position: absolute;
   overflow: hidden !important;
