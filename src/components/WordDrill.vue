@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <div class="flex flex-col h-full justify-between">
+    <div class="flex flex-col h-full justify-between content">
       <main class="p-3 flex flex-col w-full h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
         <div class="instructions">
           <TransitionFade>
@@ -370,8 +370,24 @@ ion-page {
   --height: 100%;
 }
 
+.content {
+  @media only screen and (min-width: 768px) {
+    margin-right: 368px;
+    min-width: 68rem;
+  }
+
+  @media only screen and (min-width: 768px) and (max-width: 1088px) {
+    min-width: 0rem;
+    width: 100%;
+  }
+}
+
 main {
   background-color: #b9e5e1;
+
+  @media only screen and (min-width: 768px) {
+    padding-left: 24rem;
+  }
 
   // @media only screen and (min-width: 768px) {
   //   padding-left: 300px !important;

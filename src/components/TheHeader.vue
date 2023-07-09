@@ -240,6 +240,10 @@ body.dark ion-toolbar {
   button:active {
     background-color: rgb(32, 32, 32);
   }
+
+  @media only screen and (min-width: 768px) {
+    border-bottom: 1px rgb(43, 43, 43) solid;
+  }
 }
 
 // ion-item {

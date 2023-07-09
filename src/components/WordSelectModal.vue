@@ -9,7 +9,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding" ref="content" id="test">
+    <ion-content class="ion-padding" ref="content">
       <div ref="scrollTrigger" class="scroll-trigger"></div>
       <div class="pl-4 pr-4">
         <!-- <label for="sort">Sort by:</label> -->
@@ -314,12 +314,17 @@ ion-toolbar {
   }
   // --background: #8ed6ce;
   // --background: #b9e5e1;
+  --background: #eef9f8;
 }
 
 ion-searchbar {
   display: flex;
   justify-content: center;
   padding: 0 1rem;
+
+  @media only screen and (min-width: 768px) {
+    padding: 0.75rem 1rem;
+  }
 }
 
 select {
@@ -338,9 +343,15 @@ select {
 ion-content {
   --background: #b9e5e1;
   // --background: #dcf2f0;
-  @media (min-width: 639px) {
-    --background: white;
+
+  @media only screen and (min-width: 768px) {
+    --background: #eef9f8;
+    --padding-start: 0px;
+    --padding-end: 0px;
   }
+  // &::-webkit-scrollbar {
+  //   width: 14px;
+  // }
 }
 
 ion-item {
@@ -365,6 +376,10 @@ ion-toast {
 body.dark {
   ion-toolbar {
     --background: rgb(24, 24, 24);
+
+    @media only screen and (min-width: 768px) {
+      --background: rgb(32, 32, 32);
+    }
   }
 
   ion-content {
