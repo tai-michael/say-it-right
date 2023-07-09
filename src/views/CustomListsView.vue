@@ -292,6 +292,10 @@ ion-toast {
   margin-right: auto;
   width: 100%;
 
+  @media only screen and (min-width: 768px) {
+    margin-top: 2rem;
+  }
+
   // row-gap: 2rem;
 
   .input-container {

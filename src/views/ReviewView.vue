@@ -197,15 +197,17 @@ onIonViewWillLeave(() => {
 </script>
 
 <style lang="scss" scoped>
-.desktop-list {
-  width: 300px;
-  // margin-top: 2.75rem; // ios setting, since ios headers are shorter
-  padding-top: 3.5rem;
+ion-content {
+  --background: #d4efed;
 }
 
-.review {
-  display: flex;
-  flex-direction: column;
+.desktop-list {
+  width: 24rem;
+  // margin-top: 2.75rem; // ios setting, since ios headers are shorter
+  padding-top: 3.5rem;
+  padding-left: 7rem;
+
+  //TODO do media query for over 1008px or something
 }
 
 ion-button {

@@ -13,16 +13,8 @@
         <div v-else>(Sign up or Intro display/message)</div>
       </ion-router-outlet> -->
       <ion-router-outlet :animation="customAnimation"></ion-router-outlet>
-      <ion-tab-bar slot="bottom">
-        <!-- <RouterLink to="/custom-lists" :class="getLinkClass('/custom-lists')"
-          >Custom Lists</RouterLink
-        >
-        <RouterLink to="/provided-lists" :class="getLinkClass('/provided-lists')"
-          >Provided Lists</RouterLink
-        >
-        <RouterLink to="/review">Review</RouterLink>
-        <RouterLink to="/hard-words">Hard Words</RouterLink>
-        <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink> -->
+
+      <ion-tab-bar>
         <ion-tab-button tab="custom-list" :href="customListsPath">
           <ion-icon :icon="personCircleOutline" />
           <ion-label>Custom Lists</ion-label>
@@ -43,6 +35,15 @@
           <ion-label>Hard Words</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
+      <!-- <RouterLink to="/custom-lists" :class="getLinkClass('/custom-lists')"
+          >Custom Lists</RouterLink
+        >
+        <RouterLink to="/provided-lists" :class="getLinkClass('/provided-lists')"
+          >Provided Lists</RouterLink
+        >
+        <RouterLink to="/review">Review</RouterLink>
+        <RouterLink to="/hard-words">Hard Words</RouterLink>
+        <RouterLink v-if="authStore.signedInAsAdmin" to="/admin">Admin</RouterLink> -->
     </ion-tabs>
   </ion-page>
 </template>
@@ -98,8 +99,38 @@ ion-tab-bar {
   // --background: rgb(231, 253, 243);
   // --background: #b9e5e1;
   --background: #dcf2f0;
+
+  @media only screen and (min-width: 769px) {
+    margin-top: 56px;
+    position: absolute;
+    justify-content: start;
+    width: 7rem;
+    height: 100vh;
+    flex-direction: column;
+    border-right: 1px rgb(206, 206, 206) solid;
+
+    ion-tab-button {
+      max-height: 85px;
+      min-width: 85px;
+
+      // TODO make icons a bit bigger
+    }
+
+    ion-icon {
+      font-size: 1.75rem;
+    }
+  }
 }
+
+// ion-router-outlet {
+//   margin-left: 7rem;
+// }
+
 body.dark ion-tab-bar {
   --background: rgb(24, 24, 24);
+
+  @media only screen and (min-width: 768px) {
+    border-right: 1px rgb(43, 43, 43) solid;
+  }
 }
 </style>
