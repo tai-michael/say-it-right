@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <div class="h-full test">
+    <div class="h-full outer-container">
       <div class="flex flex-col h-full justify-between challenge-container">
         <main class="p-4 flex flex-col w-full h-full items-center justify-center">
           <div class="instructions">
@@ -369,7 +369,7 @@ ion-page {
   --height: 100%;
 }
 
-.test {
+.outer-container {
   // background-color: #5cc0b9;
   // background-color: #dcf2f0;
   background-color: #d4efed;
@@ -513,6 +513,11 @@ ion-button {
 }
 
 body.dark {
+  .outer-container {
+    // background: rgb(29, 29, 29);
+    background: rgb(32, 32, 32);
+  }
+
   main {
     background-color: rgb(34, 34, 34);
   }

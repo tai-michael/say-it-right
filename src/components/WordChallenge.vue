@@ -1,107 +1,112 @@
 <template>
   <ion-page>
-    <div class="flex flex-col h-full justify-between">
-      <!-- <main class="p-4 flex flex-col w-full h-full min-h-[60%] items-center justify-center gap-y-4"> -->
-      <main class="p-3 flex flex-col w-full h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
-        <div class="instructions">
-          <TransitionFade>
-            <!-- Using conditional so that the transition works -->
-            <span v-if="testingWordOnly">Speak this word</span>
-            <span v-else-if="testingSentences">Speak this sentence</span>
-          </TransitionFade>
-        </div>
-
-        <ion-card v-if="testedWord" class="max-w-xs mt-7 pr-2 pl-2">
-          <div class="word-container">
-            <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
-            <!-- NOTE a key is needed for transition in a computed property, but is unneeded if there's a conditional -->
+    <div class="h-full outer-container">
+      <div class="flex flex-col h-full justify-between challenge-container">
+        <!-- <main class="p-4 flex flex-col w-full h-full min-h-[60%] items-center justify-center gap-y-4"> -->
+        <main class="p-3 flex flex-col w-full h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
+          <div class="instructions">
             <TransitionFade>
-              <div :key="testedWord" class="word">
-                {{ testedWord }}
-              </div>
+              <!-- Using conditional so that the transition works -->
+              <span v-if="testingWordOnly">Speak this word</span>
+              <span v-else-if="testingSentences">Speak this sentence</span>
             </TransitionFade>
-            <PlayAudioIcon @click="play" />
           </div>
-          <!-- <div class="checkmark-container" v-if="highlightActive">
+
+          <ion-card v-if="testedWord" class="max-w-xs mt-7 pr-2 pl-2">
+            <div class="word-container">
+              <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
+              <!-- NOTE a key is needed for transition in a computed property, but is unneeded if there's a conditional -->
+              <TransitionFade>
+                <div :key="testedWord" class="word">
+                  {{ testedWord }}
+                </div>
+              </TransitionFade>
+              <PlayAudioIcon @click="play" />
+            </div>
+            <!-- <div class="checkmark-container" v-if="highlightActive">
             <transition name="fade" mode="out-in" appear>
               <CheckmarkIcon class="checkmark" />
             </transition>
           </div> -->
-        </ion-card>
+          </ion-card>
 
-        <!-- <TransitionFade class="mb-3">
+          <!-- <TransitionFade class="mb-3">
           <div :key="testedSentence" class="sentence">
             {{ testedSentence }}
           </div>
         </TransitionFade> -->
 
-        <TransitionFade>
-          <div v-if="testingSentences">
-            <ion-card class="p-5 max-w-xs mt-3 mb-4">
-              <TransitionFade>
-                <div :key="testedSentence" class="sentence">
-                  {{ testedSentence }}
-                </div>
-              </TransitionFade>
-            </ion-card>
-          </div>
-        </TransitionFade>
-      </main>
+          <TransitionFade>
+            <div v-if="testingSentences">
+              <ion-card class="p-5 max-w-xs mt-3 mb-4">
+                <TransitionFade>
+                  <div :key="testedSentence" class="sentence">
+                    {{ testedSentence }}
+                  </div>
+                </TransitionFade>
+              </ion-card>
+            </div>
+          </TransitionFade>
+        </main>
 
-      <div class="message-container w-full h-full max-h-80 pt-10 pl-5 pr-5">
-        <!-- TODO remove transition below depending on user feedback; IMO, transitions make it feel smoother but also slower -->
-        <TransitionFade>
-          <div v-if="isRecording" class="transcript sm:flex sm:justify-center">
-            <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
-            <div class="transcript__text">
-              <label v-if="!testingWordOnly">Spoken Words:</label>
-              <span>
-                {{
-                  `${testingWordOnly ? 'Spoken Words:' : ''} ${
-                    temporaryTranscript.length > 0 ? '“' : ''
-                  }${temporaryTranscript}${temporaryTranscript.length > 0 ? '”' : ''}`
-                }}</span
-              >
+        <div class="message-container w-full h-full max-h-80 pt-10 pl-5 pr-5">
+          <!-- TODO remove transition below depending on user feedback; IMO, transitions make it feel smoother but also slower -->
+          <TransitionFade>
+            <div v-if="isRecording" class="transcript sm:flex sm:justify-center">
+              <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
+              <div class="transcript__text">
+                <label v-if="!testingWordOnly">Spoken Words:</label>
+                <span>
+                  {{
+                    `${testingWordOnly ? 'Spoken Words:' : ''} ${
+                      temporaryTranscript.length > 0 ? '“' : ''
+                    }${temporaryTranscript}${temporaryTranscript.length > 0 ? '”' : ''}`
+                  }}</span
+                >
+              </div>
             </div>
-          </div>
 
-          <div v-else class="message">
-            <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
-            <div v-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
-              <span>Good job! 👍</span>
-              <span>
-                Now read
-                {{ testingWordOnly ? 'it just one more time' : 'the second sentence' }}</span
+            <div v-else class="message">
+              <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
+              <div v-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
+                <span>Good job! 👍</span>
+                <span>
+                  Now read
+                  {{ testingWordOnly ? 'it just one more time' : 'the second sentence' }}</span
+                >
+              </div>
+              <div
+                v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'"
+                class="message__text"
               >
+                <span>Well done! 👍</span>
+                <span>{{ testingWordOnly ? 'Now try reading some sentences' : '' }}</span>
+              </div>
+              <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text">
+                <span>Try again</span>
+              </div>
+              <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
+                <span>Let's skip this word for now</span>
+              </div>
             </div>
-            <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
-              <span>Well done! 👍</span>
-              <span>{{ testingWordOnly ? 'Now try reading some sentences' : '' }}</span>
-            </div>
-            <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text">
-              <span>Try again</span>
-            </div>
-            <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message__text">
-              <span>Let's skip this word for now</span>
-            </div>
-          </div>
-        </TransitionFade>
+          </TransitionFade>
+        </div>
       </div>
-    </div>
 
-    <RecorderButton
-      v-if="showRecorderButton"
-      @recording-started="handleRecordingStarted"
-      @recording-stopped="handleFinalTranscript"
-      @temporary-transcript-rendered="handleTempTranscriptRender"
-    />
+      <RecorderButton
+        v-if="showRecorderButton"
+        @recording-started="handleRecordingStarted"
+        @recording-stopped="handleFinalTranscript"
+        @temporary-transcript-rendered="handleTempTranscriptRender"
+      />
 
-    <!-- <ion-button
+      <!-- <ion-button
       v-if="props.list.words[testedWord].attemptsSuccessful === 2"
       @click="store.setListStatus('TESTING_SENTENCES')"
     >
       Next
     </ion-button> -->
+    </div>
   </ion-page>
 </template>
 
@@ -396,6 +401,17 @@ ion-page {
   --height: 100%;
 }
 
+.outer-container {
+  background-color: #d4efed;
+}
+
+.challenge-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1008px;
+  width: 100%;
+}
+
 main {
   background-color: #b9e5e1;
 }
@@ -460,6 +476,11 @@ ion-card {
 }
 
 body.dark {
+  .outer-container {
+    // background: rgb(29, 29, 29);
+    background: rgb(32, 32, 32);
+  }
+
   main {
     background-color: rgb(34, 34, 34);
   }
