@@ -5,7 +5,7 @@
       <PullRefresher />
 
       <div v-if="tabMounted" class="h-full flex flex-col align-middle items-center">
-        <ion-label class="m-5 ion-padding leading-6"
+        <ion-label class="m-5 ion-padding leading-6 sm:mt-8 sm:mb-7"
           >Top 10 hardest words based on data collected from users:</ion-label
         >
         <ion-card

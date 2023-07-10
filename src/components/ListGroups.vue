@@ -7,7 +7,12 @@
     />
   </div>
 
-  <ion-accordion-group v-else :multiple="true" :value="['inProgress', 'new', 'completed']">
+  <ion-accordion-group
+    v-else
+    :multiple="true"
+    :value="['inProgress', 'new', 'completed']"
+    class="sm:mt-4"
+  >
     <ion-accordion value="inProgress" v-if="store.inProgressLists.length">
       <ion-item slot="header" lines="none">
         <ion-label>In Progress</ion-label>

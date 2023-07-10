@@ -323,7 +323,7 @@ ion-searchbar {
   padding: 0 1rem;
 
   @media only screen and (min-width: 768px) {
-    padding: 0.75rem 1rem;
+    padding: 1rem;
   }
 }
 

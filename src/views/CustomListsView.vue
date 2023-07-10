@@ -304,7 +304,11 @@ ion-toast {
     width: 100%;
 
     label {
-      margin-bottom: 0.5rem;
+      margin: 0.5rem;
+
+      @media (min-width: 640px) {
+        margin-bottom: 1.25rem;
+      }
     }
   }
   // .input-field {
