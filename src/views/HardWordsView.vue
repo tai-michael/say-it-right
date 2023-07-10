@@ -10,7 +10,7 @@
         >
         <ion-card
           v-if="leaderboard"
-          class="m-0 pt-3 pb-1 pl-2 pr-2 sm:pt-10 sm:pb-8 sm:pl-14 sm:pr-14"
+          class="m-0 pt-3 pb-1 pl-2 pr-2 sm:pt-10 sm:pb-8 sm:pl-12 sm:pr-12"
         >
           <ol class="list">
             <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">

@@ -12,7 +12,10 @@
         </div>
         <div v-else>(Sign up or Intro display/message)</div>
       </ion-router-outlet> -->
-      <ion-router-outlet :animation="customAnimation"></ion-router-outlet>
+      <ion-router-outlet
+        :animated="!isLargeScreenOrSafariBrowser"
+        :animation="customAnimation"
+      ></ion-router-outlet>
 
       <ion-tab-bar>
         <ion-tab-button tab="custom-list" :href="customListsPath">
@@ -81,16 +84,15 @@ const providedListsPath = computed(() => {
   return id ? `/provided-lists/${id}` : '/provided-lists'
 })
 
+// NOTE Safari already has its own native animations
 const { isSafari } = useSafariDetector()
+const isLargeScreen = window.matchMedia('(min-width: 640px)').matches
+const isLargeScreenOrSafariBrowser = isSafari.value || isLargeScreen
 
 const customAnimation = computed(() => {
-  // NOTE Safari already has its own native animations
-  if (isSafari.value) {
-    return 'none'
-  } else
-    return route.name === 'custom-list' || route.name === 'provided-list'
-      ? customLeaveAnimation
-      : customEnterAnimation
+  return route.name === 'custom-list' || route.name === 'provided-list'
+    ? customLeaveAnimation
+    : customEnterAnimation
 })
 </script>
 
