@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, provide, watch, watchEffect, nextTick, onMounted, onUnmounted } from 'vue'
+import { computed, ref, provide, watch, watchEffect, nextTick } from 'vue'
 import SignInView from '@/views/SignInView.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 // import DarkModeToggle from './components/DarkModeToggle.vue'
@@ -20,8 +20,6 @@ import { db, isAuthenticated, user, auth } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
 import { collection, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore'
 import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
-import inobounce from 'inobounce'
-import useSafariDetector from '@/composables/useSafariDetector'
 
 const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
@@ -149,15 +147,6 @@ auth.onAuthStateChanged(async () => {
     // const nav = document.querySelector('ion-router-outlet') as HTMLIonRouterOutletElement
     // nav.swipeGesture = false
   })
-})
-
-const { isSafari } = useSafariDetector()
-onMounted(() => {
-  if (isSafari.value) inobounce.enable()
-})
-
-onUnmounted(() => {
-  if (isSafari.value) inobounce.disable()
 })
 </script>
 

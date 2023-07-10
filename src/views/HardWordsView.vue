@@ -8,7 +8,10 @@
         <ion-label class="m-5 ion-padding leading-6"
           >Top 10 hardest words based on data collected from users:</ion-label
         >
-        <ion-card v-if="leaderboard" class="m-0 pt-3 pb-1 pl-2 pr-2">
+        <ion-card
+          v-if="leaderboard"
+          class="m-0 pt-3 pb-1 pl-2 pr-2 sm:pt-10 sm:pb-8 sm:pl-14 sm:pr-14"
+        >
           <ol class="list">
             <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">
               <!-- {{ entry.word }}: {{ entry.count }} -->
@@ -84,10 +87,18 @@ ion-label {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 15px;
+
+  @media only screen and (min-width: 768px) {
+    grid-gap: 30px;
+  }
 }
 
 .list__row {
   padding: 0 10px;
+
+  @media only screen and (min-width: 768px) {
+    padding: 4px 20px;
+  }
 
   span {
     // font-weight: 500;
@@ -102,10 +113,12 @@ ol {
   counter-reset: leaderboard;
   font-size: 16px;
 }
+
 li {
   counter-increment: leaderboard;
   margin-bottom: 14px; /* Increase the gap between rows */
 }
+
 li::before {
   content: counter(leaderboard) '. ';
   // font-weight: bold;

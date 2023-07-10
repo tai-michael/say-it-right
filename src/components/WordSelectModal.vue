@@ -20,7 +20,7 @@
           <option value="wordDesc">Z to A</option>
           <option value="bookmarked">Bookmarked</option>
           <option value="sourceCustom">Source: Custom list words</option>
-          <option value="sourceProvided">Source: Provided list words</option>
+          <option value="sourceProvided">Source: Premade list words</option>
         </select>
       </div>
 
@@ -349,9 +349,6 @@ ion-content {
     --padding-start: 0px;
     --padding-end: 0px;
   }
-  // &::-webkit-scrollbar {
-  //   width: 14px;
-  // }
 }
 
 ion-item {
