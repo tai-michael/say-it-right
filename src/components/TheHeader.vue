@@ -14,11 +14,30 @@
       <ion-title><slot></slot></ion-title>
       <!-- <ion-title><slot name="title">Default Title</slot></ion-title> -->
 
+      <button
+        slot="end"
+        class="desktop-view"
+        @click="toggleDarkMode"
+        aria-label="Switch between dark and light mode"
+      >
+        <ion-icon
+          :icon="isDarkModeEnabled ? sunny : moon"
+          class="mr-2"
+          aria-label="Switch between dark and light mode"
+        ></ion-icon
+        ><span class="button-text">Toggle darkmode</span>
+      </button>
+
+      <button slot="end" class="desktop-view mr-2" @click="authButtonConfig.onClick">
+        <ion-icon :icon="authButtonConfig.icon" class="mr-2"></ion-icon
+        ><span class="button-text">{{ authButtonConfig.text }}</span>
+      </button>
+
       <!-- <DarkModeToggle slot="end" class="mr-3" /> -->
       <button
         :icon="ellipsisHorizontalSharp"
         slot="end"
-        class="text-2xl"
+        class="text-2xl mobile-view"
         @click.prevent="openPopover($event)"
       >
         <ion-icon :icon="ellipsisHorizontalSharp"></ion-icon>
@@ -188,13 +207,18 @@ ion-toolbar {
   ion-title {
     // --color: rgb(231, 253, 243);
     --color: white;
+    @media screen and (min-width: 768px) {
+      font-size: 1.15rem;
+      font-weight: 400;
+    }
   }
+
   display: flex;
   height: 100%;
 
   button {
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
     height: 100%;
     padding: 0 0.75rem;
     background-color: transparent;
@@ -203,6 +227,10 @@ ion-toolbar {
     ion-icon {
       height: 24px;
       width: 24px;
+    }
+
+    @media only screen and (min-width: 480px) and (max-width: 850px) {
+      padding-right: 0.25rem;
     }
   }
 
@@ -219,6 +247,44 @@ ion-toolbar {
   }
 }
 
+.mobile-view {
+  display: none !important;
+}
+
+.desktop-view {
+  display: flex !important;
+}
+
+.button-text {
+  color: white;
+  font-size: 1rem;
+  // padding-right: 1.5rem;
+
+  @media screen and (max-width: 850px) {
+    display: none !important;
+  }
+}
+
+/* Mobile devices */
+@media screen and (max-width: 481px) {
+  .mobile-view {
+    display: flex !important;
+  }
+  .desktop-view {
+    display: none !important;
+  }
+}
+
+/* Desktop devices */
+@media screen and (min-width: 480px) {
+  .mobile-view {
+    display: none;
+  }
+  .desktop-view {
+    display: inline-block;
+  }
+}
+
 @media only screen and (min-width: 768px) {
   .header-md::after {
     background-image: none !important;
@@ -228,14 +294,17 @@ ion-toolbar {
 body.dark ion-toolbar {
   --background: rgb(24, 24, 24);
 
-  ion-icon {
-    color: rgb(196, 196, 196);
-  }
-
   ion-title {
     --color: rgb(196, 196, 196);
   }
 
+  .button-text {
+    color: rgb(196, 196, 196);
+  }
+
+  ion-icon {
+    color: rgb(196, 196, 196);
+  }
   button:hover,
   button:active {
     background-color: rgb(32, 32, 32);

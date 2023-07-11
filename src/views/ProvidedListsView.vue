@@ -97,8 +97,14 @@ onIonViewWillLeave(() => {
 ion-content {
   --background: #eef9f8;
 
+  @media only screen and (min-width: 500px) {
+    --padding-start: 3rem;
+    --padding-end: 3rem;
+  }
+
   @media only screen and (min-width: 768px) {
     --padding-start: 8rem;
+    --padding-end: 1rem;
   }
 }
 

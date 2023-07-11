@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, provide, defineAsyncComponent } from 'vue'
+import { ref, onMounted, provide, defineAsyncComponent } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
@@ -175,24 +175,20 @@ onMounted(() => {
     // selectedWord.value = useArrayFind(allWords.value, w => w.word === word)
     selectedWord.value = allWords.value.find((w) => w.word === word) ?? null
   }
-
-  window.addEventListener('resize', handleResize)
-  handleResize()
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize)
 })
 
 const reviewEntered = ref()
 provide('reviewEntered', reviewEntered)
 onIonViewWillEnter(() => {
+  console.log('Review entered')
   reviewEntered.value = true
-  // console.log('Review entered')
+  window.addEventListener('resize', handleResize)
+  handleResize()
 })
 onIonViewWillLeave(() => {
-  reviewEntered.value = false
   // console.log('Review left')
+  reviewEntered.value = false
+  window.removeEventListener('resize', handleResize)
 })
 </script>
 

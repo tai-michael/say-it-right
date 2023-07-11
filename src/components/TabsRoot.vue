@@ -114,8 +114,6 @@ ion-tab-bar {
     ion-tab-button {
       max-height: 85px;
       min-width: 85px;
-
-      // TODO make icons a bit bigger
     }
 
     ion-icon {
