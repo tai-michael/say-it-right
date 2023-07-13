@@ -11,6 +11,15 @@
           <div class="input-container">
             <label>Enter up to 7 words separated by spaces or commas:</label>
             <ion-searchbar
+              v-if="isLoading"
+              :search-icon="createOutline"
+              v-model="loadingText"
+              :disabled="isLoading"
+              animated="true"
+              show-clear-button="never"
+            ></ion-searchbar>
+            <ion-searchbar
+              v-else
               :search-icon="createOutline"
               placeholder="  e.g. urban thin kindly"
               v-model="wordsInput"
@@ -18,6 +27,7 @@
               autofocus
               animated="true"
               :show-clear-button="clearButtonMode"
+              @ion-input="submissionError = ''"
             ></ion-searchbar>
             <!-- <ion-button v-if="isLoading" ><LoadingDots /></ion-button>
           <ion-button v-else type="submit" :disabled="isLoading" class="color">Submit</ion-button> -->
@@ -146,10 +156,15 @@ const createListWithSentences = (wordObjects: WordObject[], allLists: List[]) =>
   allLists.push(newListObject)
 }
 
+const animationIndex = ref(0)
+const loadingText = computed(() => {
+  return isLoading.value ? `Please wait! Creating list${'.'.repeat(animationIndex.value)}` : ''
+})
+
 // TODO add error-handling in here for openai
 const submitWords = async (words: string) => {
   try {
-    if (!words) return (submissionError.value = 'Please enter at least one word')
+    if (!words) return (submissionError.value = 'Please enter at least one word!')
 
     submissionError.value = ''
 
@@ -158,7 +173,11 @@ const submitWords = async (words: string) => {
     if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
 
     isLoading.value = true
-    wordsInput.value = 'Creating list...'
+    const animatedDots = setInterval(() => {
+      animationIndex.value = (animationIndex.value + 1) % 4
+    }, 500)
+
+    // wordsInput.value = 'Creating list...'
 
     if (uniqueWordsArray.length > store.minWordsThreshold) {
       newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)
@@ -175,6 +194,7 @@ const submitWords = async (words: string) => {
     await store.updateListsInFirestore()
 
     wordsInput.value = ''
+    clearInterval(animatedDots)
     isLoading.value = false
     setToastOpen('Uploaded list')
     // REVIEW uncomment below if I want to automatically direct the user to a list right after generating it
@@ -336,7 +356,8 @@ ion-toast {
 }
 
 .error {
-  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 0.5rem;
   // color: hsl(2, 65%, 54%);
   color: var(--orange-color);
 }
