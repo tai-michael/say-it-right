@@ -59,9 +59,37 @@ ion-content {
   --background: #eef9f8;
 }
 
+.firebaseui-container {
+  background-color: #eef9f8;
+}
+
+.firebaseui-card-header {
+  border-bottom: none;
+}
+
 body.dark {
   ion-content {
     --background: rgb(32, 32, 32);
+  }
+
+  .firebaseui-container {
+    background-color: rgb(32, 32, 32);
+  }
+
+  .firebaseui-title,
+  .firebaseui-label,
+  .firebaseui-textfield.mdl-textfield .firebaseui-input,
+  .firebaseui-input-invalid,
+  .firebaseui-id-secondary-link {
+    color: white !important;
+  }
+
+  .firebaseui-textfield.mdl-textfield .firebaseui-input {
+    border-color: white;
+  }
+
+  .mdl-textfield__input {
+    border-bottom: 1px solid white;
   }
 }
 
