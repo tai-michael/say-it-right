@@ -14,7 +14,7 @@
               slot="end"
               class="menu-button text-xl"
               :class="{ 'dark-mode': isDarkModeEnabled }"
-              @click.prevent="openPopover($event, list)"
+              @click.stop.prevent="openPopover($event, list)"
             >
               <ion-icon :icon="ellipsisHorizontal"></ion-icon>
             </button>
