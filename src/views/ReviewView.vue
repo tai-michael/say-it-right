@@ -168,6 +168,10 @@ onMounted(() => {
   // console.log('Review mounted')
   setTimeout(() => {
     tabMounted.value = true
+
+    setTimeout(() => {
+      isInitiated.value = true
+    }, 1500)
   }, 500)
 
   const word = localStorage.getItem('selectedWord')
