@@ -49,7 +49,7 @@
               <LoadingDots v-if="isLoading || !relatedWords.length" class="mt-9 mb-4" />
               <div v-else>
                 <!-- <TransitionFade> -->
-                <ion-card class="mt-3 mb-4 card min-w-[270px] sm:min-w-[380px]">
+                <ion-card class="mt-3 mb-4 card min-w-[270px] sm:min-w-[380px] related-words">
                   <div class="flex pl-2 pr-2">
                     <div v-for="(word, index) of relatedWords" :key="index" class="w-full">
                       <span @click="handleRelatedWordClick(word)" class="related-word">{{
@@ -372,8 +372,8 @@ ion-page {
 
 .content {
   @media only screen and (min-width: 768px) {
-    margin-right: 368px;
-    min-width: 68rem;
+    margin-right: 456px;
+    min-width: 1120px;
   }
 
   @media only screen and (min-width: 768px) and (max-width: 1088px) {
@@ -385,8 +385,12 @@ ion-page {
 main {
   background-color: #b9e5e1;
 
-  @media only screen and (min-width: 768px) {
-    padding-left: 24rem;
+  @media only screen and (min-width: 769px) and (max-width: 850px) {
+    padding-left: 400px;
+  }
+
+  @media only screen and (min-width: 851px) {
+    padding-left: 468px;
   }
 
   // @media only screen and (min-width: 768px) {
@@ -427,6 +431,14 @@ ion-card {
 
 .message-container {
   background-color: #8ed6ce;
+
+  @media only screen and (min-width: 769px) and (max-width: 850px) {
+    padding-left: 400px;
+  }
+
+  @media only screen and (min-width: 851px) {
+    padding-left: 468px;
+  }
 }
 
 .message {
@@ -450,6 +462,20 @@ ion-card {
     display: flex;
     flex-direction: column;
     row-gap: 0.75rem;
+
+    @media only screen and (min-width: 769px) and (max-width: 850px) {
+      min-width: 350px;
+    }
+
+    @media only screen and (min-width: 851px) {
+      min-width: 350px;
+    }
+  }
+}
+
+.related-words {
+  @media only screen and (min-width: 769px) and (max-width: 850px) {
+    min-width: 340px !important;
   }
 }
 

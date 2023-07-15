@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-searchbar type="text" v-model="search" placeholder="Search"></ion-searchbar>
-        <ion-buttons slot="end" class="mobile-view">
+        <ion-buttons slot="end" class="narrowscreen">
           <ion-button @click="handleCancel">Cancel</ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -19,8 +19,8 @@
           <option value="wordAsc">A to Z</option>
           <option value="wordDesc">Z to A</option>
           <option value="bookmarked">Bookmarked</option>
-          <option value="sourceCustom">Source: Custom list words</option>
-          <option value="sourceProvided">Source: Premade list words</option>
+          <option value="sourceCustom">Source: Custom lists</option>
+          <option value="sourceProvided">Source: Premade lists</option>
         </select>
       </div>
 
@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, inject, onMounted, nextTick, watch, watchEffect } from 'vue'
+import { computed, ref, inject, onMounted, nextTick, watch, watchEffect, onUnmounted } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
@@ -254,6 +254,7 @@ const scrollToTop = async () => {
 }
 
 onMounted(async () => {
+  console.log('modal mounted')
   if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
 
   // NOTE code for triggering rerender for the list upon ANY update of its items
@@ -271,6 +272,10 @@ onMounted(async () => {
   //     { deep: true }
   //   )
   // })
+})
+
+onUnmounted(async () => {
+  observer.disconnect()
 })
 
 const isDarkModeEnabled = inject('isDarkModeEnabled')
@@ -296,7 +301,7 @@ const getSelectedWordHighlight = (word: string) => {
 
 <style lang="scss" scoped>
 @media only screen and (min-width: 768px) {
-  .mobile-view {
+  .narrowscreen {
     display: none;
   }
 }
@@ -346,14 +351,14 @@ ion-content {
 
   @media only screen and (min-width: 768px) {
     --background: #eef9f8;
-    --padding-start: 0px;
-    --padding-end: 0px;
+    --padding-start: 0;
+    --padding-end: 0;
+    // --padding-start: 0.5rem;
+    // --padding-end: 0.5rem;
   }
 }
 
 ion-item {
-  margin-left: 0px !important;
-  padding-left: 0px !important;
   --padding-start: 0px;
   --inner-padding-end: 0px;
 }

@@ -379,7 +379,11 @@ ion-page {
   margin-left: auto;
   margin-right: auto;
   max-width: 1008px;
-  width: 100%;
+
+  /* min margin for left tab */
+  @media (min-width: 769px) and (max-width: 1234px) {
+    margin-left: 112px;
+  }
 }
 
 main {

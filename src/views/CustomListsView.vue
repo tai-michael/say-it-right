@@ -44,7 +44,7 @@
 
         <div
           v-else
-          class="instructions flex flex-col h-full w-full mt-32 justify-center align-middle items-center gap-y-3 p-2 font-semibold"
+          class="instructions flex flex-col h-full w-full mt-32 justify-center align-middle items-center gap-y-3 p-2 font-semibold md:mt-20"
         >
           <span class="max-w-xs text-center">Not sure how to say certain words?</span>
           <span class="max-w-xs text-center">Start by creating a list!</span>

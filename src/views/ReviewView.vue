@@ -56,10 +56,10 @@
       @word-deleted="handleWordDeleted"
       :selected-word="selectedWord"
       :all-words="allWords"
-      class="desktop-list"
+      class="widescreen-list"
     />
 
-    <!-- This will be for desktop view -->
+    <!-- This will be for widescreen view -->
     <!-- <ion-content class="ion-padding">
       <div class="review">
         <main>
@@ -189,6 +189,7 @@ onIonViewWillEnter(() => {
   window.addEventListener('resize', handleResize)
   handleResize()
 })
+
 onIonViewWillLeave(() => {
   // console.log('Review left')
   reviewEntered.value = false
@@ -201,13 +202,13 @@ ion-content {
   --background: #d4efed;
 }
 
-.desktop-list {
-  width: 24rem;
-  // margin-top: 2.75rem; // ios setting, since ios headers are shorter
+.widescreen-list {
+  width: 456px;
   padding-top: 3.5rem;
   padding-left: 7rem;
-
-  //TODO do media query for over 1008px or something
+  @media only screen and (min-width: 480px) and (max-width: 850px) {
+    width: 400px;
+  }
 }
 
 ion-button {
@@ -227,6 +228,12 @@ ion-button {
 
 .instructions {
   color: rgb(80, 80, 80);
+
+  @media only screen and (min-width: 769px) {
+    margin-left: 12rem;
+    justify-content: start;
+    padding-top: 9rem;
+  }
 }
 
 body.dark {
@@ -245,6 +252,10 @@ body.dark {
 
   ion-content {
     --background: rgb(32, 32, 32);
+  }
+
+  .widescreen-list {
+    border: 1px solid rgb(50, 50, 50);
   }
 
   .instructions {

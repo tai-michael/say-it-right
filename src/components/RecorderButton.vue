@@ -1,18 +1,20 @@
 <template>
   <div class="button-container" :class="{ 'review-active': route.name === 'review' }">
+    <!-- mousedown needed in case it's narrowscreen on PC -->
     <button
       v-if="clientConnected"
-      class="recording-btn mobile-view"
+      class="recording-btn narrowscreen"
       @touchstart="(e) => startRecording(e, true)"
+      @mousedown="(e) => startRecording(e, false)"
       @touchend="stopRecording"
-      ref="recorderButtonMobile"
+      ref="recorderButtonNarrowscreen"
     >
       <MicIcon />
     </button>
 
     <button
       v-if="clientConnected"
-      class="recording-btn desktop-view"
+      class="recording-btn widescreen"
       @mousedown="(e) => startRecording(e, false)"
     >
       <MicIcon />
@@ -51,7 +53,7 @@ const attachMicrophone = async () => {
 
 // NOTE prevents right-click from triggering on hold when using Chrome devtools.
 // See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
-const recorderButtonMobile = ref(null)
+const recorderButtonNarrowscreen = ref(null)
 const disableContextMenu = (e) => {
   e.preventDefault()
 }
@@ -60,16 +62,16 @@ onMounted(async () => {
   await attachMicrophone()
   // console.log('mic attached')
 
-  if (recorderButtonMobile.value) {
-    recorderButtonMobile.value.addEventListener('contextmenu', disableContextMenu, true)
+  if (recorderButtonNarrowscreen.value) {
+    recorderButtonNarrowscreen.value.addEventListener('contextmenu', disableContextMenu, true)
   }
 })
 onUnmounted(() => {
   // console.log('mic unmounted')
   stopMicrophoneStream(microphone.value.mediaStream)
 
-  if (recorderButtonMobile.value)
-    recorderButtonMobile.value.removeEventListener('contextmenu', disableContextMenu, true)
+  if (recorderButtonNarrowscreen.value)
+    recorderButtonNarrowscreen.value.removeEventListener('contextmenu', disableContextMenu, true)
 })
 
 function stopMicrophoneStream(mediaStream) {
@@ -90,10 +92,10 @@ const temporaryTranscript = ref('')
 
 const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])
 
-const startRecording = async (e, isMobile) => {
-  // console.log('mousedown/touchstart triggered')
+const startRecording = async (e, isNarrowScreen) => {
+  console.log('mousedown/touchstart triggered')
   // NOTE Need to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
-  if (isMobile) {
+  if (isNarrowScreen) {
     const button = e.target.closest('.recording-btn')
     if (button) {
       button.classList.add('recording-btn-transform')
@@ -185,6 +187,10 @@ client.onSegmentChange((segment) => {
     min-width: none !important;
   }
 
+  @media (min-width: 769px) and (max-width: 1234px) {
+    margin-left: 112px;
+  }
+
   .recording-btn {
     display: flex;
     justify-content: center;
@@ -207,7 +213,7 @@ client.onSegmentChange((segment) => {
     // -webkit-user-select: none !important;
     transition: transform 0.3s;
 
-    // Triggers for desktops with mouse
+    // Triggers for widescreens with mouse
     @media (hover: hover) and (pointer: fine) {
       &:hover {
         background-color: #e65757;
@@ -222,43 +228,61 @@ client.onSegmentChange((segment) => {
     transform: scale(1.1);
   }
 
-  .mobile-view {
+  .narrowscreen {
     display: none;
   }
 
-  .desktop-view {
+  .widescreen {
     display: inline-block;
   }
 
   /* Mobile devices */
   @media screen and (max-width: 767px) {
-    .mobile-view {
+    .narrowscreen {
       display: inline-block;
     }
-    .desktop-view {
+    .widescreen {
       display: none;
     }
   }
 
-  /* Desktop devices */
+  /* widescreen devices */
   @media screen and (min-width: 768px) {
-    .mobile-view {
+    .narrowscreen {
       display: none;
     }
-    .desktop-view {
+    .widescreen {
       display: inline-block;
     }
   }
 }
 
 .review-active {
-  @media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 769px) {
     min-width: 1500px;
   }
 
-  @media only screen and (min-width: 768px) and (max-width: 1088px) {
-    margin-left: 23rem;
+  @media only screen and (min-width: 769px) and (max-width: 850px) {
+    margin-left: 400px;
     min-width: 0px;
   }
+
+  @media only screen and (min-width: 851px) and (max-width: 1088px) {
+    margin-left: 456px;
+    min-width: 0px;
+  }
+
+  @media only screen and (min-width: 1089px) and (max-width: 1575px) {
+    // margin-left: 23rem;
+    // min-width: 0px;
+    // margin-left: 200px;
+    min-width: 1603px;
+    margin-left: 0;
+  }
+
+  // @media only screen and (min-width: 1576) {
+  //   // margin-left: 23rem;
+  //   min-width: 0px;
+  // }
 }
 </style>

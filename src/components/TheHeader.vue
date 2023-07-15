@@ -16,7 +16,7 @@
 
       <button
         slot="end"
-        class="desktop-view"
+        class="widescreen"
         @click="toggleDarkMode"
         aria-label="Switch between dark and light mode"
       >
@@ -28,7 +28,7 @@
         ><span class="button-text">Toggle darkmode</span>
       </button>
 
-      <button slot="end" class="desktop-view mr-2" @click="authButtonConfig.onClick">
+      <button slot="end" class="widescreen mr-2" @click="authButtonConfig.onClick">
         <ion-icon :icon="authButtonConfig.icon" class="mr-2"></ion-icon
         ><span class="button-text">{{ authButtonConfig.text }}</span>
       </button>
@@ -37,7 +37,7 @@
       <button
         :icon="ellipsisHorizontalSharp"
         slot="end"
-        class="text-2xl mobile-view"
+        class="text-2xl narrowscreen"
         @click.prevent="openPopover($event)"
       >
         <ion-icon :icon="ellipsisHorizontalSharp"></ion-icon>
@@ -247,11 +247,11 @@ ion-toolbar {
   }
 }
 
-.mobile-view {
+.narrowscreen {
   display: none !important;
 }
 
-.desktop-view {
+.widescreen {
   display: flex !important;
 }
 
@@ -267,20 +267,20 @@ ion-toolbar {
 
 /* Mobile devices */
 @media screen and (max-width: 481px) {
-  .mobile-view {
+  .narrowscreen {
     display: flex !important;
   }
-  .desktop-view {
+  .widescreen {
     display: none !important;
   }
 }
 
-/* Desktop devices */
+/* widescreen devices */
 @media screen and (min-width: 480px) {
-  .mobile-view {
+  .narrowscreen {
     display: none;
   }
-  .desktop-view {
+  .widescreen {
     display: inline-block;
   }
 }
