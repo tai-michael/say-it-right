@@ -1,11 +1,13 @@
 <template>
   <div class="button-container" :class="{ 'review-active': route.name === 'review' }">
-    <!-- mousedown needed in case it's narrowscreen on PC -->
+    <!-- Pointerdown detects both mousedown and touchstart;
+      it's needed in case it's narrowscreen on PC. 
+      Touchend is needed to detect touch release,
+      which pointerup cannot detect if click & dragged -->
     <button
       v-if="clientConnected"
       class="recording-btn narrowscreen"
-      @touchstart="(e) => startRecording(e, true)"
-      @mousedown="(e) => startRecording(e, false)"
+      @pointerdown="(e) => startRecording(e, true)"
       @touchend="stopRecording"
       ref="recorderButtonNarrowscreen"
     >
@@ -15,7 +17,7 @@
     <button
       v-if="clientConnected"
       class="recording-btn widescreen"
-      @mousedown="(e) => startRecording(e, false)"
+      @pointerdown="(e) => startRecording(e, false)"
     >
       <MicIcon />
     </button>
@@ -93,16 +95,18 @@ const temporaryTranscript = ref('')
 const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])
 
 const startRecording = async (e, isNarrowScreen) => {
-  console.log('mousedown/touchstart triggered')
+  // console.log('mousedown/touchstart triggered')
+
   // NOTE Need to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
-  if (isNarrowScreen) {
+  if (isNarrowScreen && e.pointerType === 'touch') {
     const button = e.target.closest('.recording-btn')
     if (button) {
       button.classList.add('recording-btn-transform')
     }
   }
+
   // NOTE If mouseup happens outside an element (e.g. when user clicks, holds, then releases outside the button), the mouseup event is not captured. That's why I need to add a global event listener for it on the 'document' or 'window' object.
-  document.addEventListener('mouseup', handleStopRecording)
+  if (e.pointerType === 'mouse') document.addEventListener('pointerup', handleStopRecording)
   if (client.isActive()) return
 
   await client.start()
@@ -113,19 +117,19 @@ const startRecording = async (e, isNarrowScreen) => {
 
 const stopRecording = async (e) => {
   // console.log('mouseup/touchend triggered')
+  if (!client.isActive()) return
+
   const button = e.target.closest('.recording-btn')
   if (button) {
     button.classList.remove('recording-btn-transform')
   }
-
-  if (!client.isActive()) return
 
   await client.stop()
   // console.log('client stopped')
   // console.log(`client's isActive status: ${client.isActive()}`)
   emit('recordingStopped', finalTranscript.value)
   finalTranscript.value = ''
-  document.removeEventListener('mouseup', handleStopRecording)
+  if (e.pointerType === 'mouse') document.removeEventListener('pointerup', handleStopRecording)
 }
 
 const handleStopRecording = (e) => {
