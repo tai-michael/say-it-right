@@ -156,6 +156,35 @@ body.dark {
   --ion-card-background: #1e1e1e;
 }
 
+ion-searchbar.custom {
+  .searchbar-input.sc-ion-searchbar-md {
+    padding-inline-end: 82px;
+    padding-inline-start: 18px;
+  }
+
+  .searchbar-clear-button.sc-ion-searchbar-md {
+    inset-inline-end: 53px;
+  }
+
+  .searchbar-search-icon.sc-ion-searchbar-md {
+    pointer-events: all;
+    cursor: pointer;
+    right: 16px !important;
+    left: auto !important;
+    padding: 7px 8px 7px 7px;
+    top: 4px;
+    right: 3px;
+    color: white;
+    /* background: rgb(184, 184, 184); */
+    background: #3bb3ac;
+    border-radius: 4px;
+  }
+}
+
+body.dark .searchbar-search-icon.sc-ion-searchbar-md {
+  background: rgb(53, 53, 53);
+}
+
 /* color palette from <https://github.com/vuejs/theme> */
 /* Note: colors only works with hsla or rgba */
 /* :root {

@@ -19,7 +19,7 @@
 
       <ion-tab-bar>
         <ion-tab-button tab="custom-list" :href="customListsPath">
-          <ion-icon :icon="personCircleOutline" />
+          <ion-icon :icon="createOutline" />
           <ion-label>Custom Lists</ion-label>
         </ion-tab-button>
 
@@ -55,7 +55,7 @@
 import { computed } from 'vue'
 import { customEnterAnimation } from '@/components/transitions/CustomEnterAnimation'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
-import { personCircleOutline, folderOutline, timeOutline, trophyOutline } from 'ionicons/icons'
+import { createOutline, folderOutline, timeOutline, trophyOutline } from 'ionicons/icons'
 import {
   IonPage,
   IonRouterOutlet,

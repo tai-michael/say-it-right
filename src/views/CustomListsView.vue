@@ -12,29 +12,33 @@
             <label>Enter up to 7 words separated by spaces or commas:</label>
             <ion-searchbar
               v-if="isLoading"
-              :search-icon="createOutline"
+              :search-icon="enterOutline"
               v-model="loadingText"
               :disabled="isLoading"
               animated="true"
+              inputmode="text"
               show-clear-button="never"
+              @click="submitWords"
+              class="custom"
             ></ion-searchbar>
             <ion-searchbar
               v-else
-              :search-icon="createOutline"
+              :search-icon="enterOutline"
               placeholder="  e.g. urban thin kindly"
               v-model="wordsInput"
               :disabled="isLoading"
               autofocus
               animated="true"
+              inputmode="text"
               :show-clear-button="clearButtonMode"
               @ion-input="submissionError = ''"
+              class="custom"
             ></ion-searchbar>
             <!-- <ion-button v-if="isLoading" ><LoadingDots /></ion-button>
           <ion-button v-else type="submit" :disabled="isLoading" class="color">Submit</ion-button> -->
+            <div v-if="submissionError" class="mt-4 ml-2">{{ submissionError }}</div>
           </div>
         </form>
-
-        <div v-if="submissionError" class="error">{{ submissionError }}</div>
 
         <ListGroups
           v-if="store.allLists.length"
@@ -79,7 +83,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
-import { createOutline } from 'ionicons/icons'
+import { enterOutline } from 'ionicons/icons'
 import TheHeader from '@/components/TheHeader.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
@@ -199,6 +203,14 @@ const submitWords = async (words: string) => {
     setToastOpen('Uploaded list')
     // REVIEW uncomment below if I want to automatically direct the user to a list right after generating it
     // router.push({ params: { id: store.allLists.length } })
+
+    setTimeout(() => {
+      searchIcon = document.querySelector('.searchbar-search-icon')
+      if (searchIcon) {
+        searchIcon.addEventListener('click', onSearchIconClick)
+        searchIcon.addEventListener('touch', onSearchIconClick)
+      }
+    }, 600)
   } catch (err) {
     console.log(err)
     isLoading.value = false
@@ -248,16 +260,38 @@ onMounted(() => {
   }, 500)
 })
 
+const onSearchIconClick = () => {
+  submitWords(wordsInput.value)
+}
+
+let searchIcon: HTMLElement | null
 // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals
 onIonViewDidEnter(() => {
   // setTimeout is necessary to prevent fab from showing before the ref element ('scrollTrigger') is mounted
   setTimeout(() => {
     if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
+
+    searchIcon = document.querySelector('.searchbar-search-icon')
+    if (searchIcon) {
+      // console.log(searchIcon)
+      searchIcon.addEventListener('click', onSearchIconClick)
+      searchIcon.addEventListener('touch', onSearchIconClick)
+    }
+
+    // const searchInput = document.querySelector('.searchbar-input')
+    // if (searchInput) {
+    //   searchInput.style.paddingInlineEnd = '45px'
+    // }
   }, 600)
 })
 
 onIonViewWillLeave(() => {
   observer.disconnect()
+
+  if (searchIcon) {
+    searchIcon.removeEventListener('click', onSearchIconClick)
+    searchIcon.removeEventListener('touch', onSearchIconClick)
+  }
 })
 </script>
 
@@ -273,6 +307,23 @@ onIonViewWillLeave(() => {
 //   --background: #93e9be;
 //   --border-radius: 8px;
 // }
+
+ion-searchbar.custom input {
+  // --background: #19422d;
+  // --color: #fff;
+  // --placeholder-color: #fff;
+  // --icon-color: #fff;
+  // --clear-button-color: #fff;
+  // --border-radius: 4px;
+
+  // --padding-inline-end: 45px !important;
+  // --padding-inline-start: 45px !important;
+  // --padding-inline-end: 45px !important;
+}
+
+.searchbar-input.sc-ion-searchbar-md {
+  padding-inline-end: 45px !important;
+}
 
 ion-content {
   --background: #eef9f8;
@@ -355,15 +406,13 @@ ion-toast {
   // }
 }
 
-.error {
-  margin-bottom: 1rem;
-  margin-left: 0.5rem;
-  // color: hsl(2, 65%, 54%);
-  color: var(--orange-color);
-}
-
 .instructions {
   color: rgb(80, 80, 80);
+}
+
+ion-searchbar ion-icon {
+  right: 16px !important;
+  left: auto !important;
 }
 
 body.dark {
