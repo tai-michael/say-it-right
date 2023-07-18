@@ -9,8 +9,8 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 import { IonicVue } from '@ionic/vue'
 
-import './styles/main.css'
 import './styles/tailwind.css'
+import './styles/main.css'
 
 /* Required CSS for apps built with Ionic */
 import '@ionic/vue/css/core.css'

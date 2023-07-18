@@ -9,35 +9,34 @@
         :router-animation="customLeaveAnimation"
         slot="start"
       >
-        <ion-icon :icon="chevronBackOutline"></ion-icon>
+        <ion-icon :icon="chevronBackOutline" class="text-2xl"></ion-icon>
       </button>
       <ion-title><slot></slot></ion-title>
       <!-- <ion-title><slot name="title">Default Title</slot></ion-title> -->
 
+      <!-- Widescreen buttons -->
       <button
         slot="end"
-        class="widescreen"
+        class="widescreen h-[80%]"
         @click="toggleDarkMode"
         aria-label="Switch between dark and light mode"
       >
         <ion-icon
           :icon="isDarkModeEnabled ? sunny : moon"
-          class="mr-2"
+          class="text-2xl"
           aria-label="Switch between dark and light mode"
-        ></ion-icon
-        ><span class="button-text">Toggle darkmode</span>
+        ></ion-icon>
       </button>
 
-      <button slot="end" class="widescreen mr-2" @click="authButtonConfig.onClick">
-        <ion-icon :icon="authButtonConfig.icon" class="mr-2"></ion-icon
-        ><span class="button-text">{{ authButtonConfig.text }}</span>
+      <button slot="end" class="widescreen mr-2" @click.prevent="openPopover($event)">
+        <ion-icon :icon="personCircleOutline" class="text-3xl"></ion-icon>
       </button>
 
-      <!-- <DarkModeToggle slot="end" class="mr-3" /> -->
+      <!-- Narrowscreen ellipsis menu -->
       <button
         :icon="ellipsisHorizontalSharp"
         slot="end"
-        class="text-2xl narrowscreen"
+        class="text-2xl narrowscreen-btn"
         @click.prevent="openPopover($event)"
       >
         <ion-icon :icon="ellipsisHorizontalSharp"></ion-icon>
@@ -54,8 +53,11 @@
     >
       <ion-list class="pb-2 pt-2">
         <ion-item :detail="false" lines="full" @click.stop class="cursor-default">
-          <ion-icon :icon="personOutline" class="cursor-pointer text-xl mr-2 ml-[-1px]"></ion-icon>
-          Signed in as&nbsp;<span class="font-medium">{{ user?.displayName }}</span>
+          <ion-icon
+            :icon="personCircleOutline"
+            class="cursor-pointer text-2xl mr-2 ml-[-2px]"
+          ></ion-icon>
+          <span class="font-medium">{{ user?.displayName }}</span>
         </ion-item>
 
         <ion-item
@@ -63,11 +65,11 @@
           :detail="false"
           lines="full"
           @click="toggleDarkMode"
-          class="cursor-pointer"
+          class="cursor-pointer narrowscreen-item"
         >
           <ion-icon
             :icon="isDarkModeEnabled ? sunny : moon"
-            class="text-lg mr-2"
+            class="text-lg mr-2 ml-[1px]"
             aria-label="Switch between dark and light mode"
           ></ion-icon
           >{{ isDarkModeEnabled ? 'Turn off darkmode' : 'Turn on darkmode' }}
@@ -77,7 +79,7 @@
           :button="true"
           :detail="false"
           lines="none"
-          class="pt-1 cursor-pointer"
+          class="pt-1 cursor-pointer ml-[1px]"
           @click="authButtonConfig.onClick"
         >
           <ion-icon :icon="authButtonConfig.icon" class="text-xl mr-2"></ion-icon
@@ -103,6 +105,7 @@ import {
   chevronBackOutline,
   ellipsisHorizontalSharp,
   personOutline,
+  personCircleOutline,
   moon,
   sunny,
   logOutOutline,
@@ -202,6 +205,7 @@ ion-toolbar {
 
   ion-icon {
     color: rgb(231, 253, 243);
+    // 34px seems good for the avatar; maybe use last child or class selector
   }
 
   ion-title {
@@ -220,17 +224,22 @@ ion-toolbar {
     display: flex !important;
     align-items: center !important;
     height: 100%;
+    // height: 80%;
+    // border-radius: 4px;
     padding: 0 0.75rem;
     background-color: transparent;
     transition: background-color 0.3s;
 
-    ion-icon {
-      height: 24px;
-      width: 24px;
-    }
+    // @media only screen and (min-width: 480px) and (max-width: 850px) {
+    //   padding-right: 0.25rem;
+    // }
 
-    @media only screen and (min-width: 480px) and (max-width: 850px) {
-      padding-right: 0.25rem;
+    @media screen and (min-width: 480px) {
+      height: 2.7rem;
+      width: 2.85rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      justify-content: center;
     }
   }
 
@@ -247,7 +256,9 @@ ion-toolbar {
   }
 }
 
-.narrowscreen {
+/* Default Styles for all screen sizes */
+.narrowscreen-btn,
+.narrowscreen-item {
   display: none !important;
 }
 
@@ -267,17 +278,23 @@ ion-toolbar {
 
 /* Mobile devices */
 @media screen and (max-width: 481px) {
-  .narrowscreen {
+  .narrowscreen-btn {
     display: flex !important;
   }
+
+  .narrowscreen-item {
+    display: block !important;
+  }
+
   .widescreen {
     display: none !important;
   }
 }
 
-/* widescreen devices */
+/* Widescreen devices */
 @media screen and (min-width: 480px) {
-  .narrowscreen {
+  .narrowscreen-btn,
+  .narrowscreen-item {
     display: none;
   }
   .widescreen {
