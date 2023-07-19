@@ -203,11 +203,11 @@ ion-content {
 }
 
 .widescreen-list {
-  width: 456px;
-  padding-top: 3.5rem;
-  padding-left: 7rem;
+  width: 344px;
+  margin-top: 3.5rem;
+  margin-left: 7rem;
   @media only screen and (min-width: 480px) and (max-width: 850px) {
-    width: 400px;
+    width: 288px;
   }
 }
 

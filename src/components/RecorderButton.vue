@@ -263,7 +263,7 @@ client.onSegmentChange((segment) => {
 
 .review-active {
   @media only screen and (min-width: 769px) {
-    min-width: 1500px;
+    min-width: 1950px;
   }
 
   @media only screen and (min-width: 769px) and (max-width: 850px) {
@@ -271,22 +271,16 @@ client.onSegmentChange((segment) => {
     min-width: 0px;
   }
 
-  @media only screen and (min-width: 851px) and (max-width: 1088px) {
-    margin-left: 456px;
-    min-width: 0px;
-  }
-
-  @media only screen and (min-width: 1089px) and (max-width: 1575px) {
+  @media only screen and (min-width: 851px) and (max-width: 1462px) {
     // margin-left: 23rem;
     // min-width: 0px;
     // margin-left: 200px;
-    min-width: 1603px;
-    margin-left: 0;
+    margin-left: 448px;
+    min-width: 0px;
   }
 
-  // @media only screen and (min-width: 1576) {
-  //   // margin-left: 23rem;
-  //   min-width: 0px;
-  // }
+  @media only screen and (min-width: 1463px) {
+    max-width: 1950px;
+  }
 }
 </style>

@@ -235,7 +235,7 @@ ion-toolbar {
     // }
 
     @media screen and (min-width: 480px) {
-      height: 2.7rem;
+      height: 2.65rem;
       width: 2.85rem;
       padding: 0.5rem;
       border-radius: 4px;

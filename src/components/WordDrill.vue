@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <div class="flex flex-col h-full justify-between content">
-      <main class="p-3 flex flex-col w-full h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
+      <main class="p-3 flex flex-col h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
         <div class="instructions">
           <TransitionFade>
             <!-- Using conditional so that the transition works -->
@@ -66,7 +66,7 @@
         </TransitionFade>
       </main>
 
-      <div class="message-container w-full h-full max-h-80 pt-10 pl-5 pr-5">
+      <div class="message-container h-full max-h-80 pt-10 pl-5 pr-5">
         <TransitionFade>
           <div v-if="isRecording" class="transcript sm:flex sm:justify-center">
             <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
@@ -372,13 +372,12 @@ ion-page {
 
 .content {
   @media only screen and (min-width: 768px) {
-    margin-right: 456px;
-    min-width: 1120px;
+    // margin-right: 456px;
   }
 
   @media only screen and (min-width: 768px) and (max-width: 1088px) {
     min-width: 0rem;
-    width: 100%;
+    // width: 100%;
   }
 }
 
@@ -386,11 +385,12 @@ main {
   background-color: #b9e5e1;
 
   @media only screen and (min-width: 769px) and (max-width: 850px) {
-    padding-left: 400px;
+    margin-left: 400px;
   }
 
   @media only screen and (min-width: 851px) {
-    padding-left: 468px;
+    margin-left: 456px;
+    max-width: 1008px;
   }
 
   // @media only screen and (min-width: 768px) {
@@ -433,11 +433,12 @@ ion-card {
   background-color: #8ed6ce;
 
   @media only screen and (min-width: 769px) and (max-width: 850px) {
-    padding-left: 400px;
+    margin-left: 400px;
   }
 
   @media only screen and (min-width: 851px) {
-    padding-left: 468px;
+    margin-left: 456px;
+    max-width: 1008px;
   }
 }
 

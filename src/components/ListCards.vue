@@ -189,7 +189,7 @@ main {
     // overflow: auto;
     padding-top: 1rem;
     padding-bottom: 2.5rem;
-    padding-left: 2.5rem;
+    padding-left: 2rem;
     row-gap: 0.5rem;
     justify-content: left;
 
