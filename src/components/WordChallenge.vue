@@ -3,7 +3,7 @@
     <div class="h-full outer-container">
       <div class="flex flex-col h-full justify-between challenge-container">
         <!-- <main class="p-4 flex flex-col w-full h-full min-h-[60%] items-center justify-center gap-y-4"> -->
-        <main class="p-3 flex flex-col w-full h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
+        <main class="p-3 flex flex-col h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
           <div class="instructions">
             <TransitionFade>
               <!-- Using conditional so that the transition works -->
@@ -49,10 +49,10 @@
           </TransitionFade>
         </main>
 
-        <div class="message-container w-full h-full max-h-80 pt-10 pl-5 pr-5">
+        <div class="message-container h-full max-h-80 pt-10 pl-5 pr-5">
           <!-- TODO remove transition below depending on user feedback; IMO, transitions make it feel smoother but also slower -->
           <TransitionFade>
-            <div v-if="isRecording" class="transcript sm:flex sm:justify-center">
+            <div v-if="isRecording" class="transcript flex justify-center">
               <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
               <div class="transcript__text">
                 <label v-if="!testingWordOnly">Spoken Words:</label>
@@ -469,13 +469,23 @@ ion-card {
 }
 
 .transcript {
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 25px;
+  padding-right: 25px;
 
   &__text {
     display: flex;
     flex-direction: column;
     row-gap: 0.75rem;
+    width: 296px;
+
+    @media only screen and (min-width: 769px) and (max-width: 880px) {
+      width: 340px;
+    }
+
+    @media only screen and (min-width: 881px) {
+      margin-left: 30px;
+      width: 340px;
+    }
   }
 }
 

@@ -68,7 +68,7 @@
 
       <div class="message-container h-full max-h-80 pt-10 pl-5 pr-5">
         <TransitionFade>
-          <div v-if="isRecording" class="transcript sm:flex sm:justify-center">
+          <div v-if="isRecording" class="transcript flex justify-center">
             <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
             <div class="transcript__text">
               <label v-if="!testingWordOnly">Spoken Words:</label>
@@ -456,20 +456,22 @@ ion-card {
 }
 
 .transcript {
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 25px;
+  padding-right: 25px;
 
   &__text {
     display: flex;
     flex-direction: column;
     row-gap: 0.75rem;
+    width: 296px;
 
-    @media only screen and (min-width: 769px) and (max-width: 850px) {
-      min-width: 350px;
+    @media only screen and (min-width: 769px) and (max-width: 880px) {
+      width: 340px;
     }
 
-    @media only screen and (min-width: 851px) {
-      min-width: 350px;
+    @media only screen and (min-width: 881px) {
+      margin-left: 30px;
+      width: 340px;
     }
   }
 }
