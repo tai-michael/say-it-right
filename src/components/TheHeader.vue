@@ -324,7 +324,7 @@ body.dark ion-toolbar {
   }
   button:hover,
   button:active {
-    background-color: rgb(32, 32, 32);
+    background-color: rgb(43, 43, 43);
   }
 
   @media only screen and (min-width: 768px) {

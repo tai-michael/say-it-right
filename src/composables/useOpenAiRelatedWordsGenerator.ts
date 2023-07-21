@@ -20,8 +20,7 @@ export default async function (word: string) {
       throw new Error('No content found in response')
     }
 
-    // Take only string portion between first and last brackets []
-    const relatedWordsArray = extractArrayFromString(content)
+    const relatedWordsArray = createArrayFromString(content)
     console.log(relatedWordsArray)
 
     return relatedWordsArray
@@ -30,10 +29,20 @@ export default async function (word: string) {
   }
 }
 
-const extractArrayFromString = (jsonString: string) => {
-  const jsonRegex = /\[.*?\]/s
-  const fixedString = jsonString.replace(/'/g, '"')
-  const extractedArrayString = fixedString?.match(jsonRegex)?.[0] ?? ''
+const createArrayFromString = (jsonString: string) => {
+  const jsonRegex = /[^[\]]+/g
 
-  return JSON.parse(extractedArrayString)
+  const stringWithoutQuotes = jsonString.replace(/['"]+/g, '')
+  const stringBetweenBrackets = stringWithoutQuotes?.match(jsonRegex)?.[0] ?? ''
+  const arr = stringBetweenBrackets.split(',').map((str) => str.trim())
+
+  return arr
 }
+
+// const createArrayFromString = (jsonString: string) => {
+//   const jsonRegex = /\[.*?\]/s
+//   const fixedString = jsonString.replace(/'/g, '"')
+//   const extractedArrayString = fixedString?.match(jsonRegex)?.[0] ?? ''
+
+//   return JSON.parse(extractedArrayString)
+// }
