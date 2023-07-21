@@ -44,8 +44,9 @@
           @dismiss-modal="isOpen = false"
           @select-word="setWord"
           @word-deleted="handleWordDeleted"
-          :selected-word="selectedWord"
           :all-words="allWords"
+          :selected-word="selectedWord"
+          :related-word-clicked="relatedWordClicked"
         />
       </TransitionFadeAndSlide>
     </Teleport>
@@ -54,8 +55,9 @@
       v-if="!isNarrowScreen"
       @select-word="setWord"
       @word-deleted="handleWordDeleted"
-      :selected-word="selectedWord"
       :all-words="allWords"
+      :selected-word="selectedWord"
+      :related-word-clicked="relatedWordClicked"
       class="widescreen-list"
     />
 
@@ -133,9 +135,17 @@ const store = useReviewStore()
 const { allWords } = storeToRefs(store)
 const selectedWord: Ref<WordObject | null> = ref(null)
 
+const relatedWordClicked = ref(false)
+
 const handleRelatedWordClicked = (relatedWord: string) => {
   const matchedWord = allWords.value.find((word) => word.word === relatedWord)
   if (matchedWord) selectedWord.value = matchedWord
+
+  // NOTE alters the modal's key, forcing it to rerender, thereby visually adding the related word to the modal
+  relatedWordClicked.value = true
+  setTimeout(() => {
+    relatedWordClicked.value = false
+  })
 }
 
 const setWord = (word: WordObject) => {

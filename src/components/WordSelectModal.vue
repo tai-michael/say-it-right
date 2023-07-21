@@ -28,7 +28,7 @@
         <div v-if="sortedWords.length === 0" class="pl-2.5 pt-3.5">(No results)</div>
 
         <RecycleScroller
-          :key="sortOrder"
+          :key="recyclerKey"
           :items="sortedWords"
           :item-size="itemHeight"
           :buffer="520"
@@ -111,8 +111,12 @@ const store = useReviewStore()
 
 const props = defineProps({
   allWords: { type: Array as PropType<WordObject[]>, required: true },
+  relatedWordClicked: { type: Boolean, required: true },
   selectedWord: { type: Object as PropType<WordObject> }
 })
+
+// NOTE this key is needed for the modal to change reactively whenever a related word is clicked. Only used for when clicking related words and not when deleting words, because it rerenders the entire list and resets scroll position to top, which is undesirable when deleting a word.
+const recyclerKey = computed(() => `${sortOrder.value}-${props.relatedWordClicked}`)
 
 const emit = defineEmits(['selectWord', 'dismissModal', 'wordDeleted'])
 const chooseWord = async (word: WordObject) => {
@@ -294,9 +298,6 @@ const getSelectedWordHighlight = (word: string) => {
 //   console.log('Update event:', startIndex, endIndex, visibleStartIndex, visibleEndIndex)
 //   console.log('updated length:')
 // }
-
-// NOTE this key is needed for the list to change reactively whenever the order of the list is changed or when a word is deleted from the list. Currently not using it, as it rerenders the entire list and resets scroll position to top, which is undesirable when deleting a word.
-// const recyclerKey = computed(() => `${sortOrder.value}-${sortedWords.value.length}`)
 </script>
 
 <style lang="scss" scoped>
