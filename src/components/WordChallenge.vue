@@ -457,7 +457,6 @@ ion-card {
 
 .message {
   display: flex;
-  align-items: start;
   justify-content: center;
 
   &__text {

@@ -43,7 +43,7 @@
         <ListGroups
           v-if="store.allLists.length"
           :route-name="route.name"
-          @list-deleted="setToastOpen('List deleted')"
+          @list-deleted="setToastOpen('Deleted list')"
         />
 
         <div
@@ -347,6 +347,7 @@ ion-toolbar {
 
 ion-toast {
   --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+  --max-width: 300px;
   font-size: 15px;
 }
 

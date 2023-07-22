@@ -373,6 +373,7 @@ ion-alert {
 }
 
 ion-toast {
+  --max-width: 300px;
   z-index: 99999 !important;
 }
 
