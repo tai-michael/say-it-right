@@ -56,7 +56,7 @@
       </div>
 
       <ion-toast
-        :is-open="toastMessage ? true : false"
+        :is-open="isToastOpen"
         :message="toastMessage"
         :duration="3000"
         @didDismiss="setToastOpen('')"
@@ -228,8 +228,16 @@ const submitWords = async (words: string) => {
 // }
 
 const toastMessage = ref('')
+const isToastOpen = ref(false)
 const setToastOpen = (message: string) => {
-  toastMessage.value = message
+  // NOTE closes preexisting toasts (i.e. resets duration toast is open)
+  if (toastMessage.value) isToastOpen.value = false
+
+  if (message)
+    setTimeout(() => {
+      isToastOpen.value = true
+      toastMessage.value = message
+    })
 }
 
 const isVisible = ref(false)

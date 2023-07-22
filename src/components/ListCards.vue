@@ -148,8 +148,9 @@ const deleteList = async () => {
   try {
     if (!user.value) throw new Error('User not defined')
 
+    // NOTE opting not to await updateDoc, as it essentially freezes the screen
     const usersDocRef = doc(db, 'users', user.value.uid)
-    await updateDoc(usersDocRef, {
+    updateDoc(usersDocRef, {
       customLists: arrayRemove(selectedList.value)
     })
 

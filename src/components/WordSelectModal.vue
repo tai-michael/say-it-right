@@ -160,10 +160,14 @@ const deleteWord = async (word: WordObject, event) => {
   try {
     if (!user.value) throw new Error('User not defined')
 
+    // NOTE opting not to await updateDoc, as it essentially freezes the screen
     const usersDocRef = doc(db, 'users', user.value.uid)
-    await updateDoc(usersDocRef, {
+    updateDoc(usersDocRef, {
       review: arrayRemove(word)
     })
+
+    // NOTE closes preexisting toasts (i.e. resets duration toast is open)
+    if (isToastOpen.value) setToastOpen(false)
 
     // NOTE this delay makes the deletion more obvious to users
     setTimeout(async () => {

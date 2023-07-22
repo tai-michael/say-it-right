@@ -1,5 +1,5 @@
 <template>
-  <div v-if="noListStarted">
+  <div v-if="noListStarted" class="p-0 ml-auto mr-auto max-w-[1008px] w-full">
     <ListCards
       :lists="store.untouchedLists"
       :destination-route="destinationRoute"
