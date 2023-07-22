@@ -29,11 +29,11 @@
       </RouterLink>
     </ion-card>
     <ion-popover
+      @click="setAlertOpen(true)"
       :is-open="isPopoverOpen"
       :event="event"
       @didDismiss="isPopoverOpen = false"
       :dismiss-on-select="true"
-      @click="setAlertOpen(true)"
     >
       <div class="flex items-center text-center justify-center cursor-pointer pb-4 pt-4">
         <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon

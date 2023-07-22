@@ -14,7 +14,7 @@
       <ion-title><slot></slot></ion-title>
       <!-- <ion-title><slot name="title">Default Title</slot></ion-title> -->
 
-      <!-- Widescreen buttons -->
+      <!-- NOTE Widescreen buttons -->
       <button
         slot="end"
         class="widescreen h-[80%]"
@@ -28,15 +28,20 @@
         ></ion-icon>
       </button>
 
-      <button slot="end" class="widescreen mr-2" @click.prevent="openPopover($event)">
+      <!-- <button slot="end" class="widescreen mr-2" @click.prevent="openPopover($event)">
         <ion-icon :icon="personCircleOutline" class="text-3xl"></ion-icon>
-      </button>
+      </button> -->
+      <div slot="end" class="widescreen relative mr-2">
+        <button @click.prevent="togglePopover">
+          <ion-icon :icon="personCircleOutline" class="text-3xl"></ion-icon>
+        </button>
+      </div>
 
-      <!-- Narrowscreen ellipsis menu -->
+      <!-- NOTE Narrowscreen ellipsis menu -->
       <button
         :icon="ellipsisHorizontalSharp"
         slot="end"
-        class="text-2xl narrowscreen-btn"
+        class="text-2xl narrowscreen"
         @click.prevent="openPopover($event)"
       >
         <ion-icon :icon="ellipsisHorizontalSharp"></ion-icon>
@@ -45,6 +50,29 @@
       <ion-progress-bar type="indeterminate" v-if="isLoading"></ion-progress-bar>
     </ion-toolbar>
 
+    <!-- NOTE Widescreen popover -->
+    <ion-list v-if="showPopover" class="pb-2 pt-2 widescreen-popover">
+      <ion-item :detail="false" lines="full" @click.stop class="cursor-default">
+        <ion-icon
+          :icon="personCircleOutline"
+          class="cursor-pointer text-2xl mr-2 ml-[-2px]"
+        ></ion-icon>
+        <span class="font-medium">{{ user?.displayName }}</span>
+      </ion-item>
+
+      <ion-item
+        :button="true"
+        :detail="false"
+        lines="none"
+        class="pt-1 cursor-pointer ml-[1px]"
+        @click="authButtonConfig.onClick"
+      >
+        <ion-icon :icon="authButtonConfig.icon" class="text-xl mr-2"></ion-icon
+        >{{ authButtonConfig.text }}</ion-item
+      >
+    </ion-list>
+
+    <!-- NOTE Narrowscreen popover -->
     <ion-popover
       :is-open="isPopoverOpen"
       :event="event"
@@ -65,7 +93,7 @@
           :detail="false"
           lines="full"
           @click="toggleDarkMode"
-          class="cursor-pointer narrowscreen-item"
+          class="cursor-pointer"
         >
           <ion-icon
             :icon="isDarkModeEnabled ? sunny : moon"
@@ -98,13 +126,12 @@
   </ion-header>
 </template>
 <script setup lang="ts">
-import { ref, computed, inject, watch, useSlots } from 'vue'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import { ref, computed, inject, watch } from 'vue'
+// import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
 import {
   chevronBackOutline,
   ellipsisHorizontalSharp,
-  personOutline,
   personCircleOutline,
   moon,
   sunny,
@@ -118,15 +145,14 @@ import {
   IonIcon,
   IonProgressBar,
   IonPopover,
-  IonContent,
   IonList,
   IonItem
 } from '@ionic/vue'
 import { isAuthenticated, user } from '@/firebaseInit'
 import { useAuthStore } from '@/stores/index.ts'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
 const router = useRouter()
-
 const store = useAuthStore()
 
 const props = defineProps({
@@ -171,7 +197,7 @@ const signInUser = () => {
   router.push('/sign-in')
 }
 
-// see https://ionicframework.com/docs/theming/dark-mode for application
+// See https://ionicframework.com/docs/theming/dark-mode for application
 const isDarkModeEnabled = inject('isDarkModeEnabled')
 const toggleDarkMode = () => {
   isDarkModeEnabled.value = !isDarkModeEnabled.value
@@ -190,6 +216,19 @@ const openPopover = (e) => {
   event.value = e
   isPopoverOpen.value = true
 }
+
+const showPopover = ref(false)
+const togglePopover = () => {
+  showPopover.value = !showPopover.value
+}
+
+// Prevents a unique popover for every view
+watch(
+  () => route.name,
+  () => {
+    showPopover.value = false
+  }
+)
 </script>
 <style lang="scss" scoped>
 ion-toolbar {
@@ -257,8 +296,7 @@ ion-toolbar {
 }
 
 /* Default Styles for all screen sizes */
-.narrowscreen-btn,
-.narrowscreen-item {
+.narrowscreen {
   display: none !important;
 }
 
@@ -276,27 +314,39 @@ ion-toolbar {
   }
 }
 
+.widescreen-popover {
+  position: absolute;
+  z-index: 20; // z-index of ion-toolbar is 10
+  top: 90%;
+  bottom: 0;
+  right: 0;
+  width: 250px;
+  height: 115px;
+  margin-right: 0.75rem;
+  border-radius: 0.25rem;
+  // box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.35);
+  box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
 /* Mobile devices */
 @media screen and (max-width: 481px) {
-  .narrowscreen-btn {
+  .narrowscreen {
     display: flex !important;
   }
 
-  .narrowscreen-item {
-    display: block !important;
-  }
-
-  .widescreen {
+  .widescreen,
+  .widescreen-popover {
     display: none !important;
   }
 }
 
 /* Widescreen devices */
 @media screen and (min-width: 480px) {
-  .narrowscreen-btn,
-  .narrowscreen-item {
+  .narrowscreen,
+  ion-popover {
     display: none;
   }
+
   .widescreen {
     display: inline-block;
   }
