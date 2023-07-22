@@ -36,7 +36,7 @@
           v-slot="{ item }"
           class="pt-2 pb-2"
         >
-          <ion-item button detail="false" :class="getSelectedWordHighlight(item.word)">
+          <ion-item button :detail="false" :class="getSelectedWordHighlight(item.word)">
             <ion-icon
               :icon="`${item.bookmarked ? star : starOutline}`"
               class="text-xl m-0 p-3 pl-4"
@@ -111,12 +111,12 @@ const store = useReviewStore()
 
 const props = defineProps({
   allWords: { type: Array as PropType<WordObject[]>, required: true },
-  relatedWordClicked: { type: Boolean, required: true },
+  shouldRerenderModal: { type: Boolean, required: true },
   selectedWord: { type: Object as PropType<WordObject> }
 })
 
 // NOTE this key is needed for the modal to change reactively whenever a related word is clicked. Only used for when clicking related words and not when deleting words, because it rerenders the entire list and resets scroll position to top, which is undesirable when deleting a word.
-const recyclerKey = computed(() => `${sortOrder.value}-${props.relatedWordClicked}`)
+const recyclerKey = computed(() => `${sortOrder.value}-${props.shouldRerenderModal}`)
 
 const emit = defineEmits(['selectWord', 'dismissModal', 'wordDeleted'])
 const chooseWord = async (word: WordObject) => {

@@ -1,6 +1,6 @@
 <template>
   <ion-page v-if="tabMounted">
-    <TheHeader>
+    <TheHeader :is-loading="isLoadingRelatedWord">
       <div v-if="!isNarrowScreen">Review</div>
       <template #list>
         <!-- <ion-button :detail="false" id="word-selection-list" class="ml-11 mr-5 max-h-8"> -->
@@ -23,6 +23,7 @@
           v-if="selectedWord"
           :word="selectedWord"
           :key="selectedWord.word"
+          @loading-related-word="handleLoadingRelatedWord"
           @related-word-clicked="handleRelatedWordClicked"
         />
         <div
@@ -46,7 +47,7 @@
           @word-deleted="handleWordDeleted"
           :all-words="allWords"
           :selected-word="selectedWord"
-          :related-word-clicked="relatedWordClicked"
+          :should-rerender-modal="shouldRerenderModal"
         />
       </TransitionFadeAndSlide>
     </Teleport>
@@ -57,7 +58,7 @@
       @word-deleted="handleWordDeleted"
       :all-words="allWords"
       :selected-word="selectedWord"
-      :related-word-clicked="relatedWordClicked"
+      :should-rerender-modal="shouldRerenderModal"
       class="widescreen-list"
     />
 
@@ -135,16 +136,21 @@ const store = useReviewStore()
 const { allWords } = storeToRefs(store)
 const selectedWord: Ref<WordObject | null> = ref(null)
 
-const relatedWordClicked = ref(false)
+const shouldRerenderModal = ref(false)
+const isLoadingRelatedWord = ref(false)
+
+const handleLoadingRelatedWord = (loadingRelatedWord: boolean) => {
+  isLoadingRelatedWord.value = loadingRelatedWord
+}
 
 const handleRelatedWordClicked = (relatedWord: string) => {
   const matchedWord = allWords.value.find((word) => word.word === relatedWord)
   if (matchedWord) selectedWord.value = matchedWord
 
   // NOTE alters the modal's key, forcing it to rerender, thereby visually adding the related word to the modal
-  relatedWordClicked.value = true
+  shouldRerenderModal.value = true
   setTimeout(() => {
-    relatedWordClicked.value = false
+    shouldRerenderModal.value = false
   })
 }
 

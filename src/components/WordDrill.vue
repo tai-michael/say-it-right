@@ -45,8 +45,14 @@
 
           <div v-else-if="recordingStatus === 'TESTING_COMPLETE'">
             <!-- <TransitionFade> -->
-            <div v-if="relatedWords" class="flex mt-4">
-              <LoadingDots v-if="isLoading || !relatedWords.length" class="mt-9 mb-4" />
+            <div v-if="relatedWords.length" class="flex mt-4">
+              <!-- TODO need to add a message here, like 'Loading word, please wait...' -->
+
+              <span v-if="isLoadingRelatedWord" class="mt-9 mb-4 w-36 ml-10 loading-text">{{
+                loadingText
+              }}</span>
+              <!-- <LoadingDots class="mt-2" /> -->
+
               <div v-else>
                 <!-- <TransitionFade> -->
                 <ion-card class="mt-3 mb-4 card min-w-[270px] sm:min-w-[380px] related-words">
@@ -102,8 +108,11 @@
               <span>Let's skip this word for now</span>
             </div> -->
             <div v-else-if="recordingStatus === 'TESTING_COMPLETE'" class="message__text">
-              <span>Practice with a similar word!</span>
-              <span>Or <span @click="resetWord" class="link">Retry</span> this word.</span>
+              <span v-if="relatedWords.length">Practice with a similar word!</span>
+              <span
+                ><span v-if="relatedWords.length">Or </span>
+                <span @click="resetWord" class="link">Retry</span> this word.</span
+              >
             </div>
           </div>
         </TransitionFade>
@@ -164,7 +173,7 @@ const props = defineProps({
 })
 
 const relatedWords = ref<string[]>([...props.word.related_words])
-const emits = defineEmits(['related-word-clicked'])
+const emits = defineEmits(['related-word-clicked', 'loading-related-word'])
 const reviewEntered = inject('reviewEntered')
 
 // const word: Ref<WordObject | null> = ref(null)
@@ -334,11 +343,22 @@ const handleCorrectPronunciation = async () => {
   }
 }
 
-const isLoading = ref(false)
+const animationIndex = ref(0)
+const loadingText = computed(() => {
+  return isLoadingRelatedWord.value ? `Loading word${'.'.repeat(animationIndex.value)}` : ''
+})
+
+const isLoadingRelatedWord = ref(false)
 const handleRelatedWordClick = async (relatedWord: string) => {
-  isLoading.value = true
+  isLoadingRelatedWord.value = true
+  emits('loading-related-word', true)
+  const animatedDots = setInterval(() => {
+    animationIndex.value = (animationIndex.value + 1) % 4
+  }, 500)
   await useSentencesCreationAndStorage([relatedWord], route.name as WordSource)
-  isLoading.value = false
+  clearInterval(animatedDots)
+  isLoadingRelatedWord.value = false
+  emits('loading-related-word', false)
   emits('related-word-clicked', relatedWord)
 }
 
@@ -403,6 +423,7 @@ main {
 }
 
 .instructions,
+.loading-text,
 .message__text {
   font-weight: 600;
   color: rgb(80, 80, 80);
@@ -444,7 +465,6 @@ ion-card {
 
 .message {
   display: flex;
-  align-items: start;
   justify-content: center;
 
   &__text {
@@ -519,6 +539,7 @@ body.dark {
   .instructions,
   .word,
   .sentence,
+  .loading-text,
   .transcript__text,
   .message__text {
     // color: rgb(225, 225, 225);

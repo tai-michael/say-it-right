@@ -1,6 +1,6 @@
 <template>
   <ion-page v-if="tabMounted">
-    <TheHeader :is-loading="isLoading">Custom Lists</TheHeader>
+    <TheHeader :is-loading="isLoadingNewList">Custom Lists</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
       <PullRefresher />
@@ -11,10 +11,10 @@
           <div class="input-container">
             <label>Enter up to 7 words separated by spaces or commas:</label>
             <ion-searchbar
-              v-if="isLoading"
+              v-if="isLoadingNewList"
               :search-icon="enterOutline"
               v-model="loadingText"
-              :disabled="isLoading"
+              :disabled="isLoadingNewList"
               animated="true"
               inputmode="text"
               show-clear-button="never"
@@ -26,7 +26,7 @@
               :search-icon="enterOutline"
               placeholder="  e.g. urban thin kindly"
               v-model="wordsInput"
-              :disabled="isLoading"
+              :disabled="isLoadingNewList"
               autofocus
               animated="true"
               inputmode="text"
@@ -34,8 +34,8 @@
               @ion-input="submissionError = ''"
               class="custom"
             ></ion-searchbar>
-            <!-- <ion-button v-if="isLoading" ><LoadingDots /></ion-button>
-          <ion-button v-else type="submit" :disabled="isLoading" class="color">Submit</ion-button> -->
+            <!-- <ion-button v-if="isLoadingNewList" ><LoadingDots /></ion-button>
+          <ion-button v-else type="submit" :disabled="isLoadingNewList" class="color">Submit</ion-button> -->
             <div v-if="submissionError" class="mt-4 ml-2">{{ submissionError }}</div>
           </div>
         </form>
@@ -114,9 +114,9 @@ const store = useCustomListsStore()
 
 const wordsInput = ref('')
 const clearButtonMode = computed(() => {
-  return isLoading.value ? 'never' : 'focus'
+  return isLoadingNewList.value ? 'never' : 'focus'
 })
-const isLoading = ref(false)
+const isLoadingNewList = ref(false)
 const submissionError = ref('')
 const newlyCreatedParagraph = ref('')
 
@@ -162,7 +162,9 @@ const createListWithSentences = (wordObjects: WordObject[], allLists: List[]) =>
 
 const animationIndex = ref(0)
 const loadingText = computed(() => {
-  return isLoading.value ? `Please wait! Creating list${'.'.repeat(animationIndex.value)}` : ''
+  return isLoadingNewList.value
+    ? `Please wait! Creating list${'.'.repeat(animationIndex.value)}`
+    : ''
 })
 
 // TODO add error-handling in here for openai
@@ -176,7 +178,7 @@ const submitWords = async (words: string) => {
     const uniqueWordsArray = [...new Set(wordsArray)]
     if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
 
-    isLoading.value = true
+    isLoadingNewList.value = true
     const animatedDots = setInterval(() => {
       animationIndex.value = (animationIndex.value + 1) % 4
     }, 500)
@@ -199,7 +201,7 @@ const submitWords = async (words: string) => {
 
     wordsInput.value = ''
     clearInterval(animatedDots)
-    isLoading.value = false
+    isLoadingNewList.value = false
     setToastOpen('Uploaded list')
     // REVIEW uncomment below if I want to automatically direct the user to a list right after generating it
     // router.push({ params: { id: store.allLists.length } })
@@ -213,7 +215,7 @@ const submitWords = async (words: string) => {
     }, 600)
   } catch (err) {
     console.log(err)
-    isLoading.value = false
+    isLoadingNewList.value = false
     submissionError.value = 'Oops! Something went wrong. Please try again.'
   }
 }
