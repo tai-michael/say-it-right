@@ -12,9 +12,21 @@
             <button
               v-if="props.destinationRoute === 'custom-list'"
               slot="end"
-              class="menu-button text-xl"
+              class="narrowscreen menu-button text-xl"
               :class="{ 'dark-mode': isDarkModeEnabled }"
-              @click.stop.prevent="openPopover($event, list)"
+              @click.stop.prevent="openNarrowscreenPopover($event, list)"
+            >
+              <ion-icon :icon="ellipsisHorizontal"></ion-icon>
+            </button>
+            <button
+              v-if="props.destinationRoute === 'custom-list'"
+              slot="end"
+              class="widescreen menu-button text-xl"
+              :class="{
+                'dark-mode': isDarkModeEnabled,
+                'btn-active': customListsStore.selectedPopoverList === list
+              }"
+              @click.stop.prevent="toggleWidescreenPopover(list)"
             >
               <ion-icon :icon="ellipsisHorizontal"></ion-icon>
             </button>
@@ -25,9 +37,21 @@
               <span>{{ index }}</span>
             </li>
           </ul>
+
+          <!-- NOTE Widescreen popover -->
+          <div
+            v-if="customListsStore.selectedPopoverList === list"
+            class="widescreen-popover flex items-center text-center justify-center cursor-pointer pb-4 pt-4 text-black"
+            @click.prevent="deleteList"
+          >
+            <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
+            ><span class="mr-2 mt-0.5 text-base flex">Delete list</span>
+          </div>
         </ion-card-content>
       </RouterLink>
     </ion-card>
+
+    <!-- NOTE Narrowscreen popover -->
     <ion-popover
       @click="setAlertOpen(true)"
       :is-open="isPopoverOpen"
@@ -66,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject } from 'vue'
+import { ref, inject, watch } from 'vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import { ellipsisHorizontal, trashOutline } from 'ionicons/icons'
@@ -84,9 +108,11 @@ import {
 import { db, user } from '@/firebaseInit'
 import { doc, updateDoc, arrayRemove } from 'firebase/firestore'
 import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+import { useRoute } from 'vue-router'
 // import { listOutline } from 'ionicons/icons'
 // import ListChecked from '@/assets/icons/list-checked.vue'
 // import ListRegular from '@/assets/icons/list-regular.vue'
+const route = useRoute()
 
 const props = defineProps({
   lists: { type: Array as PropType<List[]>, required: true },
@@ -99,10 +125,6 @@ const store =
 const customListsStore = useCustomListsStore()
 
 const isDarkModeEnabled = inject('isDarkModeEnabled')
-
-// Code for popover
-// @ts-ignore
-const selectedList = ref<List>({})
 
 // NOTE long lists (ones with a paragraph) have the list status changed at the end of the paragraph challenge, but short lists skip the paragraph challenge, meaning their status needs to be manually set
 const handleClick = (list: List) => {
@@ -120,13 +142,29 @@ const handleShortListStatusChange = (list: List) => {
   // }, 1000)
 }
 
+// NOTE using store for selected popover list, so that it's shared across different List Groups (which each have their own set of List Cards); prevents having multiple popovers open across different List Groups
 const isPopoverOpen = ref(false)
 const event = ref(null)
-const openPopover = (e, list: List) => {
+const openNarrowscreenPopover = (e, list: List) => {
   event.value = e
-  selectedList.value = list
+  customListsStore.setSelectedPopoverList(list)
   isPopoverOpen.value = true
 }
+
+const toggleWidescreenPopover = (list: List) => {
+  if (customListsStore.selectedPopoverList === list) {
+    customListsStore.setSelectedPopoverList(null)
+  } else {
+    customListsStore.setSelectedPopoverList(list)
+  }
+}
+
+watch(
+  () => route.name,
+  () => {
+    customListsStore.setSelectedPopoverList(null)
+  }
+)
 
 // Code for alert
 const isAlertOpen = ref(false)
@@ -151,10 +189,10 @@ const deleteList = async () => {
     // NOTE opting not to await updateDoc, as it essentially freezes the screen
     const usersDocRef = doc(db, 'users', user.value.uid)
     updateDoc(usersDocRef, {
-      customLists: arrayRemove(selectedList.value)
+      customLists: arrayRemove(customListsStore.selectedPopoverList)
     })
 
-    store.deleteList(selectedList.value.listNumber)
+    store.deleteList(customListsStore.selectedPopoverList.listNumber)
     console.log('list deleted')
     emit('listDeleted')
     // trigger the toast
@@ -235,7 +273,8 @@ ion-toolbar {
     // }
   }
 
-  button:hover {
+  button:hover,
+  .btn-active {
     background-color: rgb(199, 243, 239);
   }
 
@@ -294,13 +333,69 @@ ion-popover {
   --width: 160px;
 }
 
+.widescreen-popover {
+  position: absolute;
+  z-index: 20; // z-index of ion-toolbar is 10
+  top: 50%;
+  bottom: 0;
+  right: 0;
+  width: 150px;
+  height: 50px;
+  margin-right: 0.25rem;
+  border-radius: 0.25rem;
+  background-color: white;
+  box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.35);
+}
+
+.narrowscreen {
+  display: none !important;
+}
+
+.widescreen {
+  display: flex !important;
+}
+
+/* Mobile devices */
+@media screen and (max-width: 481px) {
+  .narrowscreen {
+    display: flex !important;
+  }
+
+  .widescreen,
+  .widescreen-popover {
+    display: none !important;
+  }
+}
+
+/* Widescreen devices */
+@media screen and (min-width: 480px) {
+  .narrowscreen,
+  ion-popover {
+    display: none;
+  }
+
+  .widescreen {
+    display: inline-block;
+  }
+}
+
 body.dark {
   main {
     background: rgb(32, 32, 32);
   }
 
+  button:hover,
+  .btn-active {
+    background-color: rgb(43, 43, 43);
+  }
+
   ion-popover {
     --background: rgb(32, 32, 32);
+  }
+
+  .widescreen-popover {
+    background: rgb(42, 42, 42);
+    color: white;
   }
 
   ion-toolbar {

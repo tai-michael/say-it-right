@@ -136,6 +136,12 @@ export const useCustomListsStore = defineStore('customLists', () => {
     allLists.value.splice(index, 1)
   }
 
+  // @ts-ignore
+  const selectedPopoverList = ref<List>({})
+  const setSelectedPopoverList = (list: List | null) => {
+    selectedPopoverList.value = list
+  }
+
   // const setFinalParagraphTranscript = (transcript) => {
   //   activeList.value.finalParagraphTranscript = transcript
   //   console.log(activeList.value.finalParagraphTranscript)
@@ -145,6 +151,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
     activeList,
     activeId,
     allLists,
+    selectedPopoverList,
     inProgressLists,
     untouchedLists,
     completedLists,
@@ -155,6 +162,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
     setActiveId,
     setListStatus,
     setLists,
+    setSelectedPopoverList,
     logPronunciationAttempt,
     logPronunciationAttemptSuccessful,
     softResetAttempts,

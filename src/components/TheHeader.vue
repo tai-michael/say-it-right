@@ -16,10 +16,10 @@
 
       <!-- NOTE Widescreen buttons -->
       <button
-        slot="end"
-        class="widescreen h-[80%]"
         @click="toggleDarkMode"
         aria-label="Switch between dark and light mode"
+        slot="end"
+        class="widescreen h-[80%]"
       >
         <ion-icon
           :icon="isDarkModeEnabled ? sunny : moon"
@@ -27,22 +27,21 @@
           aria-label="Switch between dark and light mode"
         ></ion-icon>
       </button>
-
-      <!-- <button slot="end" class="widescreen mr-2" @click.prevent="openPopover($event)">
+      <button
+        @click.prevent="toggleWidescreenPopover"
+        slot="end"
+        class="widescreen relative mr-2"
+        :class="{ 'btn-active': showPopover }"
+      >
         <ion-icon :icon="personCircleOutline" class="text-3xl"></ion-icon>
-      </button> -->
-      <div slot="end" class="widescreen relative mr-2">
-        <button @click.prevent="togglePopover">
-          <ion-icon :icon="personCircleOutline" class="text-3xl"></ion-icon>
-        </button>
-      </div>
+      </button>
 
       <!-- NOTE Narrowscreen ellipsis menu -->
       <button
         :icon="ellipsisHorizontalSharp"
         slot="end"
-        class="text-2xl narrowscreen"
-        @click.prevent="openPopover($event)"
+        class="narrowscreen text-2xl"
+        @click.prevent="openNarrowscreenPopover($event)"
       >
         <ion-icon :icon="ellipsisHorizontalSharp"></ion-icon>
       </button>
@@ -51,7 +50,7 @@
     </ion-toolbar>
 
     <!-- NOTE Widescreen popover -->
-    <ion-list v-if="showPopover" class="pb-2 pt-2 widescreen-popover">
+    <ion-list v-if="showPopover" class="widescreen-popover pb-2 pt-2">
       <ion-item :detail="false" lines="full" @click.stop class="cursor-default">
         <ion-icon
           :icon="personCircleOutline"
@@ -207,18 +206,18 @@ const toggleDarkMode = () => {
 // Code for popover
 const isPopoverOpen = ref(false)
 const event = ref(null)
-// const openPopover = (e, list: List) => {
+// const openNarrowscreenPopover = (e, list: List) => {
 //   event.value = e
 //   selectedList.value = list
 //   isPopoverOpen.value = true
 // }
-const openPopover = (e) => {
+const openNarrowscreenPopover = (e) => {
   event.value = e
   isPopoverOpen.value = true
 }
 
 const showPopover = ref(false)
-const togglePopover = () => {
+const toggleWidescreenPopover = () => {
   showPopover.value = !showPopover.value
 }
 
@@ -283,7 +282,7 @@ ion-toolbar {
   }
 
   button:hover,
-  button:active {
+  .btn-active {
     // background-color: rgb(240, 240, 240);
     background-color: #3bb3ac;
   }
@@ -373,12 +372,25 @@ body.dark ion-toolbar {
     color: rgb(196, 196, 196);
   }
   button:hover,
-  button:active {
+  .btn-active {
     background-color: rgb(43, 43, 43);
   }
 
   @media only screen and (min-width: 768px) {
     border-bottom: 1px rgb(43, 43, 43) solid;
+  }
+}
+
+body.dark .widescreen-popover {
+  background: rgb(35, 35, 35);
+  border: 1px rgb(49, 49, 49) solid;
+
+  ion-item {
+    --background: rgb(35, 35, 35);
+  }
+
+  ion-item:first-child {
+    border-bottom: 1px rgb(49, 49, 49) solid;
   }
 }
 
