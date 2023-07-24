@@ -2,13 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Say It Right</title>
     <script
       type="text/javascript"
       src="https://speechly.github.io/browser-ui/latest/holdable-button.js"
     ></script>
+    <script>
+      var darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      var faviconEl = document.querySelector("link[rel='icon']")
+      var darkModeOn = darkModeMediaQuery.matches
+      faviconEl.href = darkModeOn ? '/favicon-dark.ico' : '/favicon-light.ico'
+    </script>
   </head>
   <body>
     <div id="app"></div>
