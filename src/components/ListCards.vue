@@ -294,7 +294,7 @@ ion-toolbar {
 }
 .list-link:hover {
   // background-color: transparent;
-  color: rgb(136, 136, 136);
+  color: rgb(8, 8, 8);
 }
 
 .list {
@@ -398,6 +398,10 @@ body.dark {
     color: white;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
       rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+
+    &:hover {
+      background: rgb(44, 44, 44);
+    }
   }
 
   ion-toolbar {
@@ -409,6 +413,11 @@ body.dark {
   ion-card {
     --background: rgb(48, 48, 48);
     --color: rgb(196, 196, 196);
+  }
+
+  .list-link:hover {
+    // background-color: transparent;
+    color: rgb(240, 240, 240);
   }
 }
 </style>

@@ -4,7 +4,7 @@
       <PullRefresher />
       <div class="text-center">
         <div class="mt-20 mb-10 text-3xl flex justify-center gap-3 items-end logo">
-          <img :src="image" class="w-11 h-11" /> Say It Right
+          <img :src="logo" class="w-11 h-11" /> Say It Right
         </div>
       </div>
       <div id="firebaseui-auth-container"></div>
@@ -20,7 +20,7 @@ import firebase from 'firebase/compat/app'
 import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
 import { IonPage, IonContent } from '@ionic/vue'
-import image from '@/assets/logo.png'
+import logo from '/images/logo-dark.png'
 
 onMounted(() => {
   // console.log('Sign in view mounted')

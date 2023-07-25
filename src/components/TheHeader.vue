@@ -1,8 +1,28 @@
 <template>
   <ion-header>
     <ion-toolbar>
-      <slot name="list"></slot>
+      <a slot="start" class="logo flex items-center pl-4 pr-4 no-underline h-full" href="/">
+        <!-- NOTE dynamic image sources work if placed in the public folder -->
+        <img
+          :src="`/images/${isDarkModeEnabled ? 'logo-dark' : 'logo-light'}.png`"
+          alt="Logo"
+          width="26"
+          height="26"
+        />
+        <span class="ml-2 text-[white] text-lg font-medium">Say It Right</span>
+      </a>
+
       <button
+        v-if="props.showBackButton"
+        @click="$emit('back-button-clicked')"
+        router-direction="back"
+        :router-animation="customLeaveAnimation"
+        slot="start"
+        class="narrowscreen-back-btn"
+      >
+        <ion-icon :icon="chevronBackOutline" class="text-2xl"></ion-icon>
+      </button>
+      <!-- <button
         v-if="props.showBackButton"
         @click="$emit('back-button-clicked')"
         router-direction="back"
@@ -10,25 +30,35 @@
         slot="start"
       >
         <ion-icon :icon="chevronBackOutline" class="text-2xl"></ion-icon>
-      </button>
-      <ion-title><slot></slot></ion-title>
+      </button> -->
+      <div slot="start" class="flex flex-row">
+        <ion-title><slot></slot></ion-title>
+        <button
+          v-if="props.showBackButton"
+          @click="$emit('back-button-clicked')"
+          class="widescreen-back-btn text-[white] text-lg font-medium"
+        >
+          <ion-icon :icon="chevronBackOutline" class="text-2xl mr-2"></ion-icon>
+          Return to lists
+        </button>
+      </div>
       <!-- <ion-title><slot name="title">Default Title</slot></ion-title> -->
+      <slot name="list"></slot>
 
       <!-- NOTE Widescreen buttons -->
       <button
         @click="toggleDarkMode"
-        aria-label="Switch between dark and light mode"
+        aria-label="Toggle darkmode"
+        title="Toggle darkmode"
         slot="end"
         class="widescreen h-[80%]"
       >
-        <ion-icon
-          :icon="isDarkModeEnabled ? sunny : moon"
-          class="text-2xl"
-          aria-label="Switch between dark and light mode"
-        ></ion-icon>
+        <ion-icon :icon="isDarkModeEnabled ? sunny : moon" class="text-2xl"></ion-icon>
       </button>
       <button
         @click.prevent="toggleWidescreenPopover"
+        aria-label="User profile"
+        title="User profile"
         slot="end"
         class="widescreen relative mr-2"
         :class="{ 'btn-active': showPopover }"
@@ -39,6 +69,7 @@
       <!-- NOTE Narrowscreen ellipsis menu -->
       <button
         :icon="ellipsisHorizontalSharp"
+        aria-label="Options"
         slot="end"
         class="narrowscreen text-2xl"
         @click.prevent="openNarrowscreenPopover($event)"
@@ -246,12 +277,35 @@ ion-toolbar {
     // 34px seems good for the avatar; maybe use last child or class selector
   }
 
+  .logo {
+    background-color: #2f8b86;
+    border-right: 2px #2f8b86 solid;
+    // @media screen and (max-width: 639px) {
+    //   display: none;
+    // }
+
+    // span {
+    //   @media screen and (max-width: 767px) {
+    //     display: none;
+    //   }
+    // }
+  }
+
   ion-title {
-    // --color: rgb(231, 253, 243);
     --color: white;
-    @media screen and (min-width: 768px) {
-      font-size: 1.15rem;
-      font-weight: 400;
+    // --color: rgb(231, 253, 243);
+    // @media screen and (min-width: 768px) {
+    //   font-size: 1.15rem;
+    //   font-weight: 400;
+    // }
+  }
+
+  .widescreen-back-btn {
+    width: 170px;
+    background-color: #5cc0b9;
+
+    &:hover {
+      background-color: #7dcdc5;
     }
   }
 
@@ -303,16 +357,6 @@ ion-toolbar {
   display: flex !important;
 }
 
-.button-text {
-  color: white;
-  font-size: 1rem;
-  // padding-right: 1.5rem;
-
-  @media screen and (max-width: 850px) {
-    display: none !important;
-  }
-}
-
 .widescreen-popover {
   position: absolute;
   z-index: 20; // z-index of ion-toolbar is 10
@@ -355,17 +399,34 @@ ion-toolbar {
   .header-md::after {
     background-image: none !important;
   }
+
+  .narrowscreen-back-btn {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .logo,
+  .widescreen-back-btn {
+    display: none !important;
+  }
+
+  .narrowscreen-back-btn {
+    display: block;
+  }
 }
 
 body.dark ion-toolbar {
   --background: rgb(24, 24, 24);
 
-  ion-title {
-    --color: rgb(196, 196, 196);
+  .logo {
+    // background: rgb(32, 32, 32);
+    background: rgb(24, 24, 24);
+    border-right: 2px rgb(43, 43, 43) solid;
   }
 
-  .button-text {
-    color: rgb(196, 196, 196);
+  ion-title {
+    --color: rgb(196, 196, 196);
   }
 
   ion-icon {
