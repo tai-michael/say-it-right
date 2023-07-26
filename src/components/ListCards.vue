@@ -45,7 +45,7 @@
             @click.prevent="deleteList"
           >
             <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
-            ><span class="mr-2 mt-0.5 text-base flex">Delete list</span>
+            ><span class="mr-2 mt-0.5 text-sm flex">Delete list</span>
           </div>
         </ion-card-content>
       </RouterLink>

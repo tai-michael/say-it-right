@@ -87,7 +87,7 @@
           :icon="personCircleOutline"
           class="cursor-pointer text-2xl mr-2 ml-[-2px]"
         ></ion-icon>
-        <span class="font-medium">{{ user?.displayName }}</span>
+        <span class="font-medium text-[14px]">{{ user?.displayName }}</span>
       </ion-item>
 
       <ion-item
@@ -98,7 +98,7 @@
         @click="authButtonConfig.onClick"
       >
         <ion-icon :icon="authButtonConfig.icon" class="text-xl mr-2"></ion-icon
-        >{{ authButtonConfig.text }}</ion-item
+        ><span class="text-[14px]">{{ authButtonConfig.text }}</span></ion-item
       >
     </ion-list>
 
@@ -302,6 +302,7 @@ ion-toolbar {
 
   .widescreen-back-btn {
     width: 170px;
+    padding-right: 1rem;
     background-color: #5cc0b9;
 
     &:hover {
