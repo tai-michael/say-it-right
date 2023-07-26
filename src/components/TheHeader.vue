@@ -432,6 +432,14 @@ body.dark ion-toolbar {
     --color: rgb(196, 196, 196);
   }
 
+  .widescreen-back-btn {
+    background-color: rgb(43, 43, 43);
+
+    &:hover {
+      background-color: rgb(50, 50, 50);
+    }
+  }
+
   ion-icon {
     color: rgb(196, 196, 196);
   }
