@@ -184,15 +184,16 @@ client.onSegmentChange((segment) => {
     left: 0;
     bottom: 2rem;
     justify-content: center;
-    // min-width: none !important;
   }
 
-  @media only screen and (max-width: 768px) {
-    min-width: none !important;
+  @media (min-width: 768px) and (max-width: 1119px) {
+    margin-left: 110px;
+    max-width: 1020px !important;
   }
 
-  @media (min-width: 769px) and (max-width: 1234px) {
-    margin-left: 112px;
+  @media (min-width: 1120px) and (max-width: 1234px) {
+    min-width: 1263px !important;
+    // margin-left: 112px;
   }
 
   .recording-btn {
@@ -233,21 +234,11 @@ client.onSegmentChange((segment) => {
   }
 
   .narrowscreen {
-    display: none;
-  }
-
-  .widescreen {
     display: inline-block;
   }
 
-  /* Mobile devices */
-  @media screen and (max-width: 767px) {
-    .narrowscreen {
-      display: inline-block;
-    }
-    .widescreen {
-      display: none;
-    }
+  .widescreen {
+    display: none;
   }
 
   /* widescreen devices */
@@ -262,11 +253,11 @@ client.onSegmentChange((segment) => {
 }
 
 .review-active {
-  @media only screen and (min-width: 769px) {
+  @media only screen and (min-width: 768px) {
     min-width: 1950px;
   }
 
-  @media only screen and (min-width: 769px) and (max-width: 850px) {
+  @media only screen and (min-width: 768px) and (max-width: 850px) {
     margin-left: 400px;
     min-width: 0px;
   }
@@ -276,7 +267,7 @@ client.onSegmentChange((segment) => {
     // min-width: 0px;
     // margin-left: 200px;
     margin-left: 448px;
-    min-width: 0px;
+    min-width: 0px !important;
   }
 
   @media only screen and (min-width: 1463px) {

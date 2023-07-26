@@ -10,9 +10,9 @@
       src="https://speechly.github.io/browser-ui/latest/holdable-button.js"
     ></script>
     <script>
-      var darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-      var faviconEl = document.querySelector("link[rel='icon']")
-      var darkModeOn = darkModeMediaQuery.matches
+      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      const faviconEl = document.querySelector("link[rel='icon']")
+      let darkModeOn = darkModeMediaQuery.matches
       faviconEl.href = darkModeOn ? '/images/favicon-dark.ico' : '/images/favicon-light.ico'
     </script>
   </head>

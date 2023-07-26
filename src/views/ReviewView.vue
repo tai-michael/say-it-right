@@ -176,7 +176,7 @@ const handleOpenModal = () => {
 // NOTE media queries only hide but don't remove elements in the DOM. Removing is necessary to prevent having duplicate modals that cause recursive rendering
 const isNarrowScreen = ref()
 const handleResize = () => {
-  isNarrowScreen.value = window.innerWidth <= 768
+  isNarrowScreen.value = window.innerWidth < 768
 }
 
 const tabMounted = ref(false)
@@ -245,7 +245,7 @@ ion-button {
 .instructions {
   color: rgb(80, 80, 80);
 
-  @media only screen and (min-width: 769px) {
+  @media only screen and (min-width: 768px) {
     margin-left: 12rem;
     justify-content: start;
     padding-top: 9rem;

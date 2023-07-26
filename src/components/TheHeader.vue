@@ -348,15 +348,6 @@ ion-toolbar {
   }
 }
 
-/* Default Styles for all screen sizes */
-.narrowscreen {
-  display: none !important;
-}
-
-.widescreen {
-  display: flex !important;
-}
-
 .widescreen-popover {
   position: absolute;
   z-index: 20; // z-index of ion-toolbar is 10
@@ -371,23 +362,40 @@ ion-toolbar {
   box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* Mobile devices */
-@media screen and (max-width: 481px) {
-  .narrowscreen {
+/* Default Styles for all screen sizes */
+.narrowscreen {
+  display: flex !important;
+}
+
+.logo,
+.widescreen-back-btn {
+  display: none !important;
+}
+
+.narrowscreen-back-btn {
+  display: block;
+}
+
+.widescreen {
+  display: none !important;
+}
+
+/* Non-mobile devices */
+@media screen and (min-width: 480px) {
+  .narrowscreen-back-btn {
+    margin-left: 0.5rem;
+  }
+  .widescreen {
     display: flex !important;
   }
 
-  .widescreen,
   .widescreen-popover {
-    display: none !important;
+    display: block !important;
   }
-}
 
-/* Widescreen devices */
-@media screen and (min-width: 480px) {
   .narrowscreen,
   ion-popover {
-    display: none;
+    display: none !important;
   }
 
   .widescreen {
@@ -403,16 +411,10 @@ ion-toolbar {
   .narrowscreen-back-btn {
     display: none !important;
   }
-}
 
-@media screen and (max-width: 767px) {
   .logo,
   .widescreen-back-btn {
-    display: none !important;
-  }
-
-  .narrowscreen-back-btn {
-    display: block;
+    display: flex !important;
   }
 }
 

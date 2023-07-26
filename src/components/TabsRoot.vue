@@ -102,7 +102,7 @@ ion-tab-bar {
   // --background: #b9e5e1;
   --background: #dcf2f0;
 
-  @media only screen and (min-width: 769px) {
+  @media only screen and (min-width: 768px) {
     margin-top: 56px;
     position: absolute;
     justify-content: start;

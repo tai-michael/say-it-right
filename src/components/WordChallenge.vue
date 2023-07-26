@@ -3,7 +3,7 @@
     <div class="h-full outer-container">
       <div class="flex flex-col h-full justify-between challenge-container">
         <!-- <main class="p-4 flex flex-col w-full h-full min-h-[60%] items-center justify-center gap-y-4"> -->
-        <main class="p-3 flex flex-col h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
+        <main class="p-3 flex flex-col h-full min-h-[65%] md:min-h-[50%] items-center pt-12">
           <div class="instructions">
             <TransitionFade>
               <!-- Using conditional so that the transition works -->
@@ -411,7 +411,7 @@ ion-page {
   max-width: 1008px;
 
   /* min margin for left tab */
-  @media (min-width: 769px) and (max-width: 1234px) {
+  @media (min-width: 768px) and (max-width: 1234px) {
     margin-left: 112px;
   }
 }
@@ -477,7 +477,7 @@ ion-card {
     row-gap: 0.75rem;
     width: 296px;
 
-    @media only screen and (min-width: 769px) and (max-width: 880px) {
+    @media only screen and (min-width: 768px) and (max-width: 880px) {
       width: 340px;
     }
 

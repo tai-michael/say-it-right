@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <div class="flex flex-col h-full justify-between content">
-      <main class="p-3 flex flex-col h-full min-h-[65%] sm:min-h-[50%] items-center pt-12">
+      <main class="p-3 flex flex-col h-full min-h-[65%] md:min-h-[50%] items-center pt-12">
         <div class="instructions">
           <TransitionFade>
             <!-- Using conditional so that the transition works -->
@@ -391,9 +391,9 @@ ion-page {
 }
 
 .content {
-  @media only screen and (min-width: 768px) {
-    // margin-right: 456px;
-  }
+  // @media only screen and (min-width: 768px) {
+  //   margin-right: 456px;
+  // }
 
   @media only screen and (min-width: 768px) and (max-width: 1088px) {
     min-width: 0rem;
@@ -404,7 +404,7 @@ ion-page {
 main {
   background-color: #b9e5e1;
 
-  @media only screen and (min-width: 769px) and (max-width: 850px) {
+  @media only screen and (min-width: 768px) and (max-width: 850px) {
     margin-left: 400px;
   }
 
@@ -453,7 +453,7 @@ ion-card {
 .message-container {
   background-color: #8ed6ce;
 
-  @media only screen and (min-width: 769px) and (max-width: 850px) {
+  @media only screen and (min-width: 768px) and (max-width: 850px) {
     margin-left: 400px;
   }
 
@@ -485,7 +485,7 @@ ion-card {
     row-gap: 0.75rem;
     width: 296px;
 
-    @media only screen and (min-width: 769px) and (max-width: 880px) {
+    @media only screen and (min-width: 768px) and (max-width: 880px) {
       width: 340px;
     }
 
@@ -497,7 +497,7 @@ ion-card {
 }
 
 .related-words {
-  @media only screen and (min-width: 769px) and (max-width: 850px) {
+  @media only screen and (min-width: 768px) and (max-width: 850px) {
     min-width: 340px !important;
   }
 }
