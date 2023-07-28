@@ -47,7 +47,7 @@
           @word-deleted="handleWordDeleted"
           :all-words="allWords"
           :selected-word="selectedWord"
-          :should-rerender-modal="shouldRerenderModal"
+          :forced-rerender-key="forcedRerenderKey"
         />
       </TransitionFadeAndSlide>
     </Teleport>
@@ -58,7 +58,7 @@
       @word-deleted="handleWordDeleted"
       :all-words="allWords"
       :selected-word="selectedWord"
-      :should-rerender-modal="shouldRerenderModal"
+      :forced-rerender-key="forcedRerenderKey"
       class="widescreen-list"
     />
 
@@ -136,7 +136,7 @@ const store = useReviewStore()
 const { allWords } = storeToRefs(store)
 const selectedWord: Ref<WordObject | null> = ref(null)
 
-const shouldRerenderModal = ref(false)
+const forcedRerenderKey = ref(0)
 const isLoadingRelatedWord = ref(false)
 
 const handleLoadingRelatedWord = (loadingRelatedWord: boolean) => {
@@ -148,10 +148,11 @@ const handleRelatedWordClicked = (relatedWord: string) => {
   if (matchedWord) selectedWord.value = matchedWord
 
   // NOTE alters the modal's key, forcing it to rerender, thereby visually adding the related word to the modal
-  shouldRerenderModal.value = true
-  setTimeout(() => {
-    shouldRerenderModal.value = false
-  })
+  rerenderModal()
+}
+
+const rerenderModal = () => {
+  forcedRerenderKey.value++
 }
 
 const setWord = (word: WordObject) => {

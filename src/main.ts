@@ -4,7 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import { auth } from './firebaseInit'
-import VueVirtualScroller from 'vue-virtual-scroller'
+import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 import { IonicVue } from '@ionic/vue'
@@ -44,7 +44,7 @@ auth.onAuthStateChanged((user) => {
         // hardwareBackButton: false, // ineffective
         swipeBackEnabled: false // does not disable Safari's built-in swipe to go back, but it will at least prevent ionic's swipe to go back from triggering (if both trigger then there will be buggy behavior)
       })
-      .use(VueVirtualScroller)
+      .component('RecycleScroller', RecycleScroller)
       // NOTE eager loading here eliminates lag when navigating between tabs
       .component('ListGroups', ListGroups)
       .component('WordDrill', WordDrill)

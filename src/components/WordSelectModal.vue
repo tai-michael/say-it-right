@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, inject, onMounted, nextTick, watch, watchEffect, onUnmounted } from 'vue'
+import { computed, ref, inject, onMounted, nextTick, onUnmounted } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
@@ -111,14 +111,41 @@ const store = useReviewStore()
 
 const props = defineProps({
   allWords: { type: Array as PropType<WordObject[]>, required: true },
-  shouldRerenderModal: { type: Boolean, required: true },
+  forcedRerenderKey: { type: Number, required: true },
   selectedWord: { type: Object as PropType<WordObject> }
 })
 
 // NOTE this key is needed for the modal to change reactively whenever a related word is clicked. Only used for when clicking related words and not when deleting words, because it rerenders the entire list and resets scroll position to top, which is undesirable when deleting a word.
-const recyclerKey = computed(() => `${sortOrder.value}-${props.shouldRerenderModal}`)
+const recyclerKey = computed(() => `${sortOrder.value}-${props.forcedRerenderKey}`)
 
-const emit = defineEmits(['selectWord', 'dismissModal', 'wordDeleted'])
+const search = ref('')
+const sortOrder = ref('createdDesc')
+const sortedWords = computed(() => {
+  const words = search.value
+    ? props.allWords.filter((word) => word.word.toLowerCase().includes(search.value.toLowerCase()))
+    : props.allWords
+  switch (sortOrder.value) {
+    case 'createdAsc':
+      return words.sort((a, b) => a.created - b.created)
+    case 'wordAsc':
+      return words.sort((a, b) => a.word.localeCompare(b.word))
+    case 'wordDesc':
+      return words.sort((a, b) => b.word.localeCompare(a.word))
+    // REVIEW consider sorting these by alphabetical order rather than creation date
+    case 'bookmarked':
+      return words.filter((word) => word.bookmarked === true)
+    case 'sourceCustom':
+      return words.filter((word) => word.source === 'custom-list')
+    case 'sourceProvided':
+      return words.filter((word) => word.source === 'provided-list')
+
+    default:
+      // this sorts by createdDesc
+      return words.sort((a, b) => b.created - a.created)
+  }
+})
+
+const emit = defineEmits(['selectWord', 'wordDeleted', 'dismissModal'])
 const chooseWord = async (word: WordObject) => {
   emit('selectWord', word)
   emit('dismissModal')
@@ -156,6 +183,7 @@ const handleDeleteAlert = (word: WordObject, event) => {
   wordToDelete.value = word
   deleteEvent.value = event
 }
+
 const deleteWord = async (word: WordObject, event) => {
   try {
     if (!user.value) throw new Error('User not defined')
@@ -166,19 +194,26 @@ const deleteWord = async (word: WordObject, event) => {
       review: arrayRemove(word)
     })
 
-    // NOTE closes preexisting toasts (i.e. resets duration toast is open)
+    // NOTE closes preexisting toasts (i.e. resets the duration toast is open)
     if (isToastOpen.value) setToastOpen(false)
 
-    // NOTE this delay makes the deletion more obvious to users
+    // NOTE this delay makes the deletion more visually obvious
     setTimeout(async () => {
-      store.deleteWord(word.word)
-      setToastOpen(true)
+      // NOTE The two conditionals below based on sortOrder are necessary for shiftElementsUp to work properly. This is because lists sorted by .sort() return the original allWords array, while ones sorted by .filter() return a new array.
+      if (wordsSortedBySortMethod.value) {
+        store.deleteWord(word.word)
+        setToastOpen(true)
+      }
       if (event) {
         // NOTE though hacky, this is the only solution I can think of to prevent rerendering the entire list after deleting a word (which is undesirable behavior, as we want to maintain the scroll position)
         await shiftElementsUp(event)
         event = null
       }
-    }, 500)
+      if (wordsSortedByFilterMethod.value) {
+        store.deleteWord(word.word)
+        setToastOpen(true)
+      }
+    }, 200)
 
     emit('wordDeleted', word.word)
     wordToDelete.value = null
@@ -187,6 +222,21 @@ const deleteWord = async (word: WordObject, event) => {
     console.log(`Failed to delete word ${err}`)
   }
 }
+
+const wordsSortedBySortMethod = computed(
+  () =>
+    sortOrder.value === 'createdDesc' ||
+    sortOrder.value === 'createdAsc' ||
+    sortOrder.value === 'wordAsc' ||
+    sortOrder.value === 'wordDesc'
+)
+
+const wordsSortedByFilterMethod = computed(
+  () =>
+    sortOrder.value === 'bookmarked' ||
+    sortOrder.value === 'sourceCustom' ||
+    sortOrder.value === 'sourceProvided'
+)
 
 const itemHeight = 49
 const shiftElementsUp = async (event) => {
@@ -219,33 +269,6 @@ const setToastOpen = (state: boolean) => {
   isToastOpen.value = state
 }
 
-const search = ref('')
-const sortOrder = ref('createdDesc')
-const sortedWords = computed(() => {
-  const words = search.value
-    ? props.allWords.filter((word) => word.word.toLowerCase().includes(search.value.toLowerCase()))
-    : props.allWords
-  switch (sortOrder.value) {
-    case 'createdAsc':
-      return words.sort((a, b) => a.created - b.created)
-    case 'wordAsc':
-      return words.sort((a, b) => a.word.localeCompare(b.word))
-    case 'wordDesc':
-      return words.sort((a, b) => b.word.localeCompare(a.word))
-    // REVIEW consider sorting these by alphabetical order rather than creation date
-    case 'bookmarked':
-      return words.filter((word) => word.bookmarked === true)
-    case 'sourceCustom':
-      return words.filter((word) => word.source === 'custom-list')
-    case 'sourceProvided':
-      return words.filter((word) => word.source === 'provided-list')
-
-    default:
-      // this sorts by createdDesc
-      return words.sort((a, b) => b.created - a.created)
-  }
-})
-
 const isVisible = ref(false)
 const scrollTrigger = ref<HTMLElement | null>(null)
 const observer = new IntersectionObserver((entries) => {
@@ -275,7 +298,7 @@ onMounted(async () => {
 
   //       setTimeout(() => {
   //         isUpdating.value = false
-  //       }, 10)
+  //       })
   //     },
   //     { deep: true }
   //   )
