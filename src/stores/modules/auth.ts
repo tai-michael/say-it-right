@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { auth, db, user } from '@/firebaseInit'
+import { auth, user } from '@/firebaseInit'
 import {
   // createUserWithEmailAndPassword,
   // signInWithEmailAndPassword,
@@ -9,13 +9,6 @@ import {
   // signInWithPopup,
   signOut
 } from 'firebase/auth'
-import {
-  doc,
-  setDoc,
-  updateDoc
-  // arrayUnion,
-} from 'firebase/firestore'
-// import { collection, setDoc } from 'firebase/firestore';
 import { defineStore } from 'pinia'
 import { useCustomListsStore, useProvidedListsStore } from '@/stores'
 
@@ -58,70 +51,12 @@ export const useAuthStore = defineStore('auth', () => {
     // location.reload()
   }
 
-  // TODO for testing purposes only; remove before production
-  const resetAllLists = async () => {
-    console.log('Resetting...')
-    if (!auth.currentUser) return
-
-    const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
-
-    await setDoc(doc(db, 'users', auth.currentUser.uid), {
-      userName: auth.currentUser.displayName,
-      customLists: [],
-      providedLists: globalProvidedLists,
-      review: []
-    })
-
-    console.log('Resetted ALL the lists')
-    location.reload()
-  }
-
-  const resetCustomLists = async () => {
-    console.log('Resetting...')
-    if (!auth.currentUser) return
-
-    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-      customLists: []
-    })
-    console.log('Resetted the Custom lists')
-    location.reload()
-  }
-
-  const resetProvidedLists = async () => {
-    console.log('Resetting...')
-    if (!auth.currentUser) return
-
-    const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
-
-    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-      providedLists: globalProvidedLists
-    })
-    console.log('Resetted the Provided lists')
-    location.reload()
-  }
-
-  const resetReview = async () => {
-    console.log('Resetting...')
-    if (!auth.currentUser) return
-
-    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-      review: []
-    })
-    console.log('Resetted Review')
-    location.reload()
-  }
-
   const signedInAsAdmin = computed(() => user.value?.email === import.meta.env.VITE_ADMIN_EMAIL)
 
   return {
     signedInAsAdmin,
-    signOutUser,
+    signOutUser
     // signInUser,
-
-    resetAllLists,
-    resetCustomLists,
-    resetProvidedLists,
-    resetReview
   }
 })
 

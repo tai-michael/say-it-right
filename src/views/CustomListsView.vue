@@ -198,6 +198,7 @@ const submitWords = async (words: string) => {
       if (wordsWithSentences) createListWithSentences(wordsWithSentences, store.allLists)
     }
     await store.updateListsInFirestore()
+    // TODO possibly force rerender or reload ReviewView or WordSelectModal here
 
     wordsInput.value = ''
     clearInterval(animatedDots)

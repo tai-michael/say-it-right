@@ -221,6 +221,7 @@ const handleFinalTranscript = async (transcript: string) => {
     addWordsToReview(nonMatchingWords, props.list.words)
     store.updateListsInFirestore()
     reviewStore.updateReviewInFirestore()
+    // TODO possibly force rerender or reload ReviewView or WordSelectModal here
   } else {
     const sortedMispronouncedWords = mispronouncedTestedWords.value.sort()
     console.log(sortedMispronouncedWords)
