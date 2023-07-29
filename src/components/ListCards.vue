@@ -347,28 +347,18 @@ ion-popover {
   box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.35);
 }
 
+/* Default Styles for all screen sizes */
 .narrowscreen {
-  display: none !important;
+  display: flex;
 }
 
-.widescreen {
-  display: flex !important;
+.widescreen,
+.widescreen-popover {
+  display: none;
 }
 
-/* Mobile devices */
-@media screen and (max-width: 481px) {
-  .narrowscreen {
-    display: flex !important;
-  }
-
-  .widescreen,
-  .widescreen-popover {
-    display: none !important;
-  }
-}
-
-/* Widescreen devices */
-@media screen and (min-width: 480px) {
+/* Non-mobile devices */
+@media screen and (min-width: 481px) {
   .narrowscreen,
   ion-popover {
     display: none;
@@ -376,6 +366,10 @@ ion-popover {
 
   .widescreen {
     display: inline-block;
+  }
+
+  .widescreen-popover {
+    display: flex;
   }
 }
 
