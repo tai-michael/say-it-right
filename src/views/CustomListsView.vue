@@ -36,7 +36,12 @@
             ></ion-searchbar>
             <!-- <ion-button v-if="isLoadingNewList" ><LoadingDots /></ion-button>
           <ion-button v-else type="submit" :disabled="isLoadingNewList" class="color">Submit</ion-button> -->
-            <div v-if="submissionError" class="mt-4 ml-2">{{ submissionError }}</div>
+            <div
+              v-if="submissionError"
+              class="mt-4 ml-2 text-red-500 font-medium flex leading-[1.6rem]"
+            >
+              <ion-icon :icon="alertCircle" class="text-2xl mr-1"></ion-icon>{{ submissionError }}
+            </div>
           </div>
         </form>
 
@@ -105,7 +110,7 @@ import {
   onIonViewDidEnter,
   onIonViewWillLeave
 } from '@ionic/vue'
-import { arrowUp } from 'ionicons/icons'
+import { arrowUp, alertCircle } from 'ionicons/icons'
 
 const route = useRoute()
 const router = useRouter()
@@ -170,20 +175,20 @@ const loadingText = computed(() => {
 // TODO add error-handling in here for openai
 const submitWords = async (words: string) => {
   try {
-    if (!words) return (submissionError.value = 'Please enter at least one word!')
+    if (!words) return (submissionError.value = 'Please enter at least one word')
+    // if (!words) return setToastOpen('Please enter at least one word')
 
     submissionError.value = ''
 
     const wordsArray = words.trim().toLowerCase().replace(/^,|,$/g, '').split(/[ ,]+/)
     const uniqueWordsArray = [...new Set(wordsArray)]
     if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
+    // if (uniqueWordsArray.length > 7) return setToastOpen('Please enter at MOST 7 words')
 
     isLoadingNewList.value = true
     const animatedDots = setInterval(() => {
       animationIndex.value = (animationIndex.value + 1) % 4
     }, 500)
-
-    // wordsInput.value = 'Creating list...'
 
     if (uniqueWordsArray.length > store.minWordsThreshold) {
       newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)
