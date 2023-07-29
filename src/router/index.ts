@@ -146,13 +146,27 @@ router.beforeEach((to, from, next) => {
   const title = to.meta.title || 'Custom Lists'
   document.title = title as string
 
-  // NOTE trying to prevent browser back for Safari will cause buggy animation
-  if (isSafari.value || !window.event || window.event.type !== 'popstate') {
+  // NOTE preventing browser back for Safari causes buggy animation
+  if (isSafari.value || window.innerWidth >= 481) {
     next()
-  }
-  // NOTE prevents browser back button from functioning
-  else next(false)
+  } else if (window.event && window.event.type === 'popstate') {
+    // Prevents browser back button from functioning on non-Safari mobile, which is necessary as it can cause confusing navigation for mobile users
+    next(false)
+  } else next()
 })
+
+// NOTE disables back button for non-Safari browsers only
+// router.beforeEach((to, from, next) => {
+//   const title = to.meta.title || 'Custom Lists'
+//   document.title = title as string
+
+//   // NOTE preventing browser back for Safari causes buggy animation
+//   if (isSafari.value || !window.event || window.event.type !== 'popstate') {
+//     next()
+//   }
+//   // NOTE prevents browser back button from functioning
+//   else next(false)
+// })
 
 // REVIEW below code is buggy if back button is pressed more than once while in custom or provided lists view
 // router.beforeEach((to, from) => {

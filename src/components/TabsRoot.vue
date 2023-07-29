@@ -13,7 +13,7 @@
         <div v-else>(Sign up or Intro display/message)</div>
       </ion-router-outlet> -->
       <ion-router-outlet
-        :animated="!isLargeScreenOrSafariBrowser"
+        :animated="!isWidescreenOrSafari"
         :animation="customAnimation"
       ></ion-router-outlet>
 
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch, watchEffect, onMounted } from 'vue'
 import { customEnterAnimation } from '@/components/transitions/CustomEnterAnimation'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
 import { createOutline, folderOutline, timeOutline, trophyOutline } from 'ionicons/icons'
@@ -86,13 +86,30 @@ const providedListsPath = computed(() => {
 
 // NOTE Safari already has its own native animations
 const { isSafari } = useSafariDetector()
-const isLargeScreen = window.matchMedia('(min-width: 640px)').matches
-const isLargeScreenOrSafariBrowser = isSafari.value || isLargeScreen
+const isWidescreen = window.matchMedia('(min-width: 640px)').matches
+const isWidescreenOrSafari = isWidescreen || isSafari.value
 
 const customAnimation = computed(() => {
   return route.name === 'custom-list' || route.name === 'provided-list'
     ? customLeaveAnimation
     : customEnterAnimation
+})
+
+onMounted(() => {
+  if (isWidescreenOrSafari)
+    watchEffect(() => {
+      // Used to highlight the active tab correctly after browser back used
+      return watch(
+        () => route.name,
+        (newValue) => {
+          if (newValue === 'custom-lists' && customListsStore.activeId)
+            customListsStore.setActiveId(null)
+
+          if (newValue === 'provided-lists' && providedListsStore.activeId)
+            providedListsStore.setActiveId(null)
+        }
+      )
+    })
 })
 </script>
 
