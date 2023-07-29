@@ -10,30 +10,36 @@
         <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
           <div class="input-container">
             <label>Enter up to 7 words separated by spaces or commas:</label>
-            <ion-searchbar
-              v-if="isLoadingNewList"
-              :search-icon="enterOutline"
-              v-model="loadingText"
-              :disabled="isLoadingNewList"
-              animated="true"
-              inputmode="text"
-              show-clear-button="never"
-              @click="submitWords"
-              class="custom"
-            ></ion-searchbar>
-            <ion-searchbar
-              v-else
-              :search-icon="enterOutline"
-              placeholder="  e.g. urban thin kindly"
-              v-model="wordsInput"
-              :disabled="isLoadingNewList"
-              autofocus
-              animated="true"
-              inputmode="text"
-              :show-clear-button="clearButtonMode"
-              @ion-input="submissionError = ''"
-              class="custom"
-            ></ion-searchbar>
+            <div class="relative">
+              <ion-searchbar
+                v-if="isLoadingNewList"
+                :search-icon="enterOutline"
+                v-model="loadingText"
+                :disabled="isLoadingNewList"
+                animated="true"
+                inputmode="text"
+                show-clear-button="never"
+                class="custom-lists"
+              ></ion-searchbar>
+              <ion-searchbar
+                v-else
+                :search-icon="enterOutline"
+                placeholder="  e.g. urban thin kindly"
+                v-model="wordsInput"
+                :disabled="isLoadingNewList"
+                autofocus
+                animated="true"
+                inputmode="text"
+                :show-clear-button="clearButtonMode"
+                @ion-input="submissionError = ''"
+                class="custom-lists"
+              ></ion-searchbar>
+              <ion-icon
+                :icon="enterOutline"
+                class="submit-btn text-xl"
+                @click="submitWords(wordsInput)"
+              ></ion-icon>
+            </div>
             <!-- <ion-button v-if="isLoadingNewList" ><LoadingDots /></ion-button>
           <ion-button v-else type="submit" :disabled="isLoadingNewList" class="color">Submit</ion-button> -->
             <div
@@ -310,35 +316,6 @@ onIonViewWillLeave(() => {
 </script>
 
 <style lang="scss" scoped>
-// hr {
-//   border: none;
-//   height: 0.5px;
-//   background-color: rgba(78, 78, 78, 0.623); // gray
-//   margin: 1.5rem 0;
-// }
-
-// ion-button {
-//   --background: #93e9be;
-//   --border-radius: 8px;
-// }
-
-ion-searchbar.custom input {
-  // --background: #19422d;
-  // --color: #fff;
-  // --placeholder-color: #fff;
-  // --icon-color: #fff;
-  // --clear-button-color: #fff;
-  // --border-radius: 4px;
-
-  // --padding-inline-end: 45px !important;
-  // --padding-inline-start: 45px !important;
-  // --padding-inline-end: 45px !important;
-}
-
-.searchbar-input.sc-ion-searchbar-md {
-  padding-inline-end: 45px !important;
-}
-
 ion-content {
   --background: #eef9f8;
 
@@ -394,6 +371,7 @@ ion-toast {
     display: flex;
     flex-direction: column;
     width: 100%;
+    position: relative;
 
     label {
       margin: 0.5rem;
@@ -403,22 +381,22 @@ ion-toast {
       }
     }
   }
-  // .input-field {
-  //   display: flex;
 
-  //   input {
-  //     height: 35px;
-  //     padding: 0.5rem;
-  //     width: 100%;
-  //   }
+  ion-icon.submit-btn {
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+    top: 11px;
+    right: 11px;
+    padding: 8px 9px 8px 8px;
+    color: white;
+    background: #3bb8b1;
+    border-radius: 4px;
 
-  //   button {
-  //     width: 100px;
-  //     display: flex;
-  //     align-items: center;
-  //     justify-content: center;
-  //   }
-  // }
+    &:hover {
+      background: #3dc4bd;
+    }
+  }
 }
 
 .instructions {
@@ -447,6 +425,14 @@ body.dark {
 
   .instructions {
     color: rgb(196, 196, 196);
+  }
+
+  .submit-btn {
+    background: rgb(53, 53, 53);
+
+    &:hover {
+      background: rgb(62, 62, 62);
+    }
   }
 }
 

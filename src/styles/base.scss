@@ -157,7 +157,7 @@ body.dark {
 }
 
 /* Adjusts searchbar in Custom Lists view */
-ion-searchbar.custom {
+ion-searchbar.custom-lists {
   .searchbar-input.sc-ion-searchbar-md {
     padding-inline-end: 82px;
     padding-inline-start: 14px;
@@ -167,29 +167,10 @@ ion-searchbar.custom {
     inset-inline-end: 53px;
   }
 
-  .searchbar-search-icon.sc-ion-searchbar-md {
-    pointer-events: all;
-    cursor: pointer;
-    right: 16px !important;
-    left: auto !important;
-    padding: 8px 9px 7px 8px;
-    top: 3px;
-    right: 3px;
-    color: white;
-    background: #3bb3ac;
-    border-radius: 4px;
-
-    &:hover {
-      background: #42cac3;
-    }
-  }
-}
-
-body.dark .searchbar-search-icon.sc-ion-searchbar-md {
-  background: rgb(53, 53, 53);
-
-  &:hover {
-    background: rgb(62, 62, 62);
+  .searchbar-search-icon {
+    display: none;
+    width: 0;
+    height: 0;
   }
 }
 
