@@ -176,14 +176,12 @@ const loadingText = computed(() => {
 const submitWords = async (words: string) => {
   try {
     if (!words) return (submissionError.value = 'Please enter at least one word')
-    // if (!words) return setToastOpen('Please enter at least one word')
 
     submissionError.value = ''
 
     const wordsArray = words.trim().toLowerCase().replace(/^,|,$/g, '').split(/[ ,]+/)
     const uniqueWordsArray = [...new Set(wordsArray)]
     if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
-    // if (uniqueWordsArray.length > 7) return setToastOpen('Please enter at MOST 7 words')
 
     isLoadingNewList.value = true
     const animatedDots = setInterval(() => {

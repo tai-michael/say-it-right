@@ -405,8 +405,9 @@ ion-toolbar {
 }
 
 @media only screen and (min-width: 768px) {
-  .header-md::after {
-    background-image: none !important;
+  .header-md {
+    -webkit-box-shadow: none;
+    box-shadow: none;
   }
 
   .narrowscreen-back-btn {

@@ -114,12 +114,6 @@
 import { ref, onMounted, provide, defineAsyncComponent, watch } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
-const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
-const TransitionFadeAndSlide = defineAsyncComponent(
-  () => import('@/components/transitions/TransitionFadeAndSlide.vue')
-)
-const WordSelectModal = defineAsyncComponent(() => import('@/components/WordSelectModal.vue'))
-// const WordDrill = defineAsyncComponent(() => import('@/components/WordDrill.vue'))
 import {
   IonPage,
   IonContent,
@@ -132,10 +126,13 @@ import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import type { WordObject } from '@/stores/modules/types/Review'
 import { useReviewStore } from '@/stores/index.ts'
-import { useRoute } from 'vue-router'
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
+const TransitionFadeAndSlide = defineAsyncComponent(
+  () => import('@/components/transitions/TransitionFadeAndSlide.vue')
+)
+const WordSelectModal = defineAsyncComponent(() => import('@/components/WordSelectModal.vue'))
 // import { useArrayFind } from '@vueuse/core'
 
-const route = useRoute()
 const store = useReviewStore()
 const { allWords } = storeToRefs(store)
 
