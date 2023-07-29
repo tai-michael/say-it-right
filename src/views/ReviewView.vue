@@ -5,14 +5,16 @@
       <template #list>
         <!-- <ion-button :detail="false" id="word-selection-list" class="ml-11 mr-5 max-h-8"> -->
         <!-- <ion-label class="m-0 max-h-8 pl-3 pr-3">Choose a word to review</ion-label> -->
-        <ion-button
-          v-if="isNarrowScreen"
-          :detail="false"
-          @click="handleOpenModal"
-          class="ml-14 mr-4 flex max-h-8"
-        >
-          <ion-label class="m-0 max-h-8">Click to choose word</ion-label>
-        </ion-button>
+        <div class="flex justify-center">
+          <ion-button
+            v-if="isNarrowScreen"
+            :detail="false"
+            @click="handleOpenModal"
+            class="max-h-8"
+          >
+            <ion-label>Click to choose word</ion-label>
+          </ion-button>
+        </div>
       </template>
     </TheHeader>
 
@@ -222,7 +224,7 @@ ion-content {
   width: 344px;
   margin-top: 3.5rem;
   margin-left: 7rem;
-  @media only screen and (min-width: 480px) and (max-width: 850px) {
+  @media only screen and (min-width: 481px) and (max-width: 850px) {
     width: 288px;
   }
 }
@@ -240,6 +242,15 @@ ion-button {
   // --color: #287671;
   --color: rgb(80, 80, 80);
   --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.35);
+
+  width: 90%;
+  margin-left: 0.25rem;
+
+  @media only screen and (min-width: 481px) and (max-width: 767px) {
+    width: 80%;
+    margin-left: 3rem;
+    margin-right: 1rem;
+  }
 }
 
 .instructions {

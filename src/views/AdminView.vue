@@ -216,7 +216,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 ion-content {
-  @media only screen and (min-width: 500px) {
+  @media only screen and (min-width: 481px) {
     --padding-start: 3rem;
     --padding-end: 3rem;
   }

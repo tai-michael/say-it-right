@@ -16,6 +16,18 @@ export const useAuthStore = defineStore('auth', () => {
   const providedListsStore = useProvidedListsStore()
   const customListsStore = useCustomListsStore()
   const router = useRouter()
+
+  const signOutUser = () => {
+    providedListsStore.setActiveId(null)
+    customListsStore.setActiveId(null)
+    localStorage.setItem('selectedWord', '')
+    signOut(auth)
+    router.push('/')
+    // location.reload()
+  }
+
+  const signedInAsAdmin = computed(() => user.value?.email === import.meta.env.VITE_ADMIN_EMAIL)
+
   // NOTE Using firebaseUI instead
   // const signInUser = async () => {
   //   try {
@@ -41,17 +53,6 @@ export const useAuthStore = defineStore('auth', () => {
   //     console.log(err)
   //   }
   // }
-
-  const signOutUser = () => {
-    providedListsStore.setActiveId(null)
-    customListsStore.setActiveId(null)
-    localStorage.setItem('selectedWord', '')
-    signOut(auth)
-    router.push('/')
-    // location.reload()
-  }
-
-  const signedInAsAdmin = computed(() => user.value?.email === import.meta.env.VITE_ADMIN_EMAIL)
 
   return {
     signedInAsAdmin,

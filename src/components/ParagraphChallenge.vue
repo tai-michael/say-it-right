@@ -16,15 +16,13 @@
 
           <!-- :class="[testedParagraph.length > 350 ? '!leading-6' : '']" -->
           <ion-card class="ml-0.5 mr-0.5 mb-3 pl-5 pr-5 max-w-xs">
-            <div class="tested-paragraph sm:!leading-8">
+            <div class="tested-paragraph">
               <p v-html="testedParagraph"></p>
             </div>
           </ion-card>
         </main>
 
-        <div
-          class="message-container w-full h-full max-h-80 flex justify-center items-start pt-5 sm:items-start sm:pt-10"
-        >
+        <div class="message-container w-full h-full max-h-80 flex justify-center items-start pt-5">
           <div v-if="isRecording" class="transcript">
             <!-- TODO maybe replace this with a sound wave animation -->
             <div>Recording...</div>
@@ -33,7 +31,7 @@
           </div>
 
           <div v-else class="message">
-            <div class="sm:pb-5">
+            <div>
               <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
               <div v-else-if="recordingStatus === 'FEW_WORDS_RECORDED'" class="message__text">
                 <span>You didn't record enough words.</span>
@@ -411,15 +409,20 @@ ion-card {
 .tested-paragraph {
   font-size: 1rem;
   color: rgb(19, 19, 19);
+  line-height: 1.5rem;
+  // line-height: 26px;
   // font-family: Arial;
   // font-family: Verdana;
-  line-height: 24px;
-  // line-height: 26px;
   // margin: 0.5rem 0;
   p {
     margin: 0.5rem 0.25;
     // text-align: justify;
   }
+
+  @media screen and (min-width: 481px) {
+    line-height: 2rem;
+  }
+
   // 'deep' selector is necessary, as scoped styles don't apply to content inside v-html
   &:deep(.incorrect),
   &:deep(.correct) {
@@ -471,6 +474,11 @@ ion-card {
   background-color: #8ed6ce;
   // align-content: space-around !important;
   // align-content: space-between !important;
+
+  @media screen and (min-width: 481px) {
+    align-items: flex-start;
+    padding-top: 2.5rem;
+  }
 }
 
 .message {
@@ -515,6 +523,10 @@ ion-button {
   max-height: 44px;
   text-transform: uppercase;
   color: rgb(231, 253, 243);
+
+  @media screen and (min-width: 481px) {
+    margin-top: 2.25rem;
+  }
 }
 
 body.dark {

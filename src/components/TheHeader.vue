@@ -323,11 +323,11 @@ ion-toolbar {
     background-color: transparent;
     transition: background-color 0.3s;
 
-    // @media only screen and (min-width: 480px) and (max-width: 850px) {
+    // @media only screen and (min-width: 481px) and (max-width: 850px) {
     //   padding-right: 0.25rem;
     // }
 
-    @media screen and (min-width: 480px) {
+    @media screen and (min-width: 481px) {
       height: 2.65rem;
       width: 2.85rem;
       padding: 0.5rem;
@@ -382,7 +382,7 @@ ion-toolbar {
 }
 
 /* Non-mobile devices */
-@media screen and (min-width: 480px) {
+@media screen and (min-width: 481px) {
   .narrowscreen-back-btn {
     margin-left: 0.5rem;
   }

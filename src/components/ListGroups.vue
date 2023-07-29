@@ -11,7 +11,7 @@
     v-else
     :multiple="true"
     :value="['inProgress', 'new', 'completed']"
-    class="sm:mt-4"
+    class="xs:mt-4"
   >
     <ion-accordion value="inProgress" v-if="store.inProgressLists.length">
       <ion-item slot="header" lines="none">

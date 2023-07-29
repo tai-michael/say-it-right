@@ -178,9 +178,7 @@ client.onSegmentChange((segment) => {
   // justify-content: center;
   z-index: 10000;
 
-  // TODO test if 500px is enough to trigger for tablets
-  // @media (min-width: 639px) {
-  @media only screen and (min-width: 500px) {
+  @media only screen and (min-width: 481px) {
     left: 0;
     bottom: 2rem;
     justify-content: center;

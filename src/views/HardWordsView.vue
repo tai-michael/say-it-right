@@ -5,12 +5,12 @@
       <PullRefresher />
 
       <div v-if="tabMounted" class="h-full flex flex-col align-middle items-center">
-        <ion-label class="m-5 ion-padding leading-6 sm:mt-8 sm:mb-7"
+        <ion-label class="m-5 ion-padding leading-6 xs:mt-8 xs:mb-7"
           >Top 10 hardest words based on data collected from users:</ion-label
         >
         <ion-card
           v-if="leaderboard"
-          class="m-0 pt-3 pb-1 pl-2 pr-2 sm:pt-10 sm:pb-8 sm:pl-12 sm:pr-12"
+          class="m-0 pt-3 pb-1 pl-2 pr-2 xs:pt-10 xs:pb-8 xs:pl-12 xs:pr-12"
         >
           <ol class="list">
             <li class="list__row" v-for="(entry, index) in leaderboard" :key="index">
@@ -88,7 +88,7 @@ ion-label {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 15px;
 
-  @media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 640px) {
     grid-gap: 30px;
   }
 }
@@ -96,7 +96,7 @@ ion-label {
 .list__row {
   padding: 0 10px;
 
-  @media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 640px) {
     padding: 4px 20px;
   }
 

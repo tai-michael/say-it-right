@@ -55,7 +55,7 @@
 
               <div v-else>
                 <!-- <TransitionFade> -->
-                <ion-card class="mt-3 mb-4 card min-w-[270px] sm:min-w-[380px] related-words">
+                <ion-card class="mt-3 mb-4 card min-w-[270px] xs:min-w-[380px] related-words">
                   <div class="flex pl-2 pr-2">
                     <div v-for="(word, index) of relatedWords" :key="index" class="w-full">
                       <span @click="handleRelatedWordClick(word)" class="related-word">{{
