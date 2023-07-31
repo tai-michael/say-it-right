@@ -24,8 +24,21 @@
 
         <div class="message-container w-full h-full max-h-80 flex justify-center items-start pt-5">
           <div v-if="isRecording" class="transcript">
-            <!-- TODO maybe replace this with a sound wave animation -->
-            <div>Recording...</div>
+            <div class="flex-col">
+              <div class="mt-8 mb-4">Recording...</div>
+              <div class="flex justify-center">
+                <VuMeter ref="vumeter"></VuMeter>
+              </div>
+            </div>
+            <!-- <VuMeter ref="vumeter" :color="highlightcolor"></VuMeter> -->
+            <!-- <div class="sound-wave">
+              <div
+                v-for="(bar, index) in bars"
+                :key="index"
+                class="bar"
+                :style="{ animationDuration: bar.duration + 's' }"
+              ></div>
+            </div> -->
             <!-- <label>Spoken Words:</label>
         <div>{{ temporaryTranscriptDisplay }}</div> -->
           </div>
@@ -36,6 +49,18 @@
               <div v-else-if="recordingStatus === 'FEW_WORDS_RECORDED'" class="message__text">
                 <span>You didn't record enough words.</span>
                 <span>Try again, and remember to hold the recording button.</span>
+
+                <!-- <span>Excellent! You pronounced each tested word correctly.</span>
+                <span>Next, create or try another list.</span> -->
+
+                <!-- <span>Good job! You mispronounced only one word.</span>
+                <span>Let's practice it.</span> -->
+
+                <!-- <span>You did pretty well! However, these words were mispronounced.</span>
+                <span>Let's practice them.</span> -->
+
+                <!-- <span>These words were mispronounced.</span>
+                <span>Let's practice them.</span> -->
               </div>
               <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
                 <span>Excellent! You pronounced each tested word correctly.</span>
@@ -53,18 +78,6 @@
                 v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'"
                 class="message__text flex gap-y-2"
               >
-                <!-- <span>Please try again. You didn't record enough words.</span>
-              <span>Remember to hold the recording button.</span> -->
-
-                <!-- <span>Very impressive! You pronounced each tested word correctly.</span>
-              <span>You can create or look at another list.</span> -->
-
-                <!-- <span>Good job! You mispronounced only one word.</span>
-              <span>Let's practice it.</span> -->
-
-                <!-- <span>You did pretty well! However, these words were mispronounced.</span>
-              <span>Let's practice them.</span> -->
-
                 <span>These words were mispronounced.</span>
                 <span>Let's practice them.</span>
               </div>
@@ -95,13 +108,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, inject } from 'vue'
+import { computed, ref, onMounted, inject, watch } from 'vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import { IonPage, IonCard } from '@ionic/vue'
 import type { PropType } from 'vue'
 import type { List, CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
 import type { WordObject } from '@/stores/modules/types/Review'
 import RecorderButton from './RecorderButton.vue'
+import VuMeter from '@/components/VuMeter.vue'
 import { IonButton } from '@ionic/vue'
 import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
 import useCorrectAndIncorrectWordsFilter from '@/composables/useCorrectAndIncorrectWordsFilter'
@@ -122,6 +136,9 @@ const props = defineProps({
   // words: { type: Array, required: true }
   // recorderComponentKey: { type: String, required: true }
 })
+
+const vumeter = ref(null)
+// const bars = Array.from({ length: 50 }, () => ({ duration: Math.random() * (0.7 - 0.2) + 0.2 }))
 
 const listEntered = inject('listEntered')
 
@@ -164,11 +181,16 @@ const handleTempTranscriptRender = (transcript: string) => {
   // NOTE this guard is necessary b/c the recorder cannot be deactivated between views. Also, there's a known bug where custom and provided lists with matching numbers (e.g. custom list 1 & provided list 1) will have matching ParagraphChallenge temporary transcripts. We can fix this by adding a routeName prop or something to ParagraphChallenge in Custom/ProvidedList.vue, but since we're removing temporary transcript here in production, we don't care about this bug.
   if (store.activeList?.listNumber !== props.list.listNumber) return
   temporaryTranscript.value = transcript
+
+  // Animated audio waveform
+  if (vumeter.value) {
+    vumeter.value.updateVU(Math.random() * 0.5 + 0.5, Math.random() * 75 + 75)
+  }
 }
 
-const temporaryTranscriptDisplay = computed(() =>
-  temporaryTranscript.value?.split(' ').slice(-8).join(' ')
-)
+// const temporaryTranscriptDisplay = computed(() =>
+//   temporaryTranscript.value?.split(' ').slice(-8).join(' ')
+// )
 
 const finalTranscript = ref('')
 
@@ -484,17 +506,16 @@ ion-card {
 .message {
   display: flex;
   flex-direction: column;
+  padding: 1rem 2rem;
   // row-gap: 0.75rem;
   // max-width: 340px;
   // min-height: 100px;
   // height: 50px;
-  // padding: 1rem 1rem 1.2rem;
-  padding: 0 1rem;
 
   &__text {
     display: flex;
     flex-direction: column;
-    row-gap: 0.5rem;
+    row-gap: 1rem;
     margin-left: 0.1rem;
 
     span {
@@ -502,12 +523,80 @@ ion-card {
       // color: var(--orange-color);
       font-weight: 600;
     }
+
+    @media screen and (min-width: 481px) {
+      align-items: center;
+    }
   }
 }
 
 .transcript {
   padding-left: 30px;
   padding-right: 30px;
+  // display: flex;
+  // justify-content: center;
+
+  //   .sound-wave {
+  //     margin-top: 1.5rem;
+  //     height: 50px;
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: center;
+  //   }
+
+  //   .bar {
+  //     animation-name: wave-lg;
+  //     animation-iteration-count: infinite;
+  //     animation-timing-function: ease-in-out;
+  //     animation-direction: alternate;
+  //     background: #f32968; // Change the color for the bars
+  //     margin: 0 1.5px;
+  //     height: 10px;
+  //     width: 1px; // Change the number for the bar width
+
+  //     &:nth-child(-n + 7),
+  //     &:nth-last-child(-n + 7) {
+  //       animation-name: wave-md;
+  //     }
+
+  //     &:nth-child(-n + 3),
+  //     &:nth-last-child(-n + 3) {
+  //       animation-name: wave-sm;
+  //     }
+  //   }
+  // }
+
+  // @keyframes wave-sm {
+  //   0% {
+  //     opacity: 0.35;
+  //     height: 10px;
+  //   }
+  //   100% {
+  //     opacity: 1;
+  //     height: 25px;
+  //   }
+  // }
+
+  // @keyframes wave-md {
+  //   0% {
+  //     opacity: 0.35;
+  //     height: 15px;
+  //   }
+  //   100% {
+  //     opacity: 1;
+  //     height: 50px;
+  //   }
+  // }
+
+  // @keyframes wave-lg {
+  //   0% {
+  //     opacity: 0.35;
+  //     height: 15px;
+  //   }
+  //   100% {
+  //     opacity: 1;
+  //     height: 70px;
+  //   }
 }
 
 ion-button {
