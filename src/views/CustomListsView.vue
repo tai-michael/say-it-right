@@ -13,7 +13,6 @@
             <div class="relative">
               <ion-searchbar
                 v-if="isLoadingNewList"
-                :search-icon="enterOutline"
                 v-model="loadingText"
                 :disabled="isLoadingNewList"
                 animated="true"
@@ -23,7 +22,6 @@
               ></ion-searchbar>
               <ion-searchbar
                 v-else
-                :search-icon="enterOutline"
                 placeholder="  e.g. urban thin kindly"
                 v-model="wordsInput"
                 :disabled="isLoadingNewList"
@@ -35,10 +33,48 @@
                 class="custom-lists"
               ></ion-searchbar>
               <ion-icon
-                :icon="enterOutline"
+                :icon="arrowForwardOutline"
                 class="submit-btn text-xl"
                 @click="submitWords(wordsInput)"
+                title="Submit words"
               ></ion-icon>
+              <!-- <button
+                class="absolute p-1 rounded-md md:bottom-3 md:p-2 md:right-3 dark:hover:bg-gray-900 dark:disabled:hover:bg-transparent right-2 disabled:text-gray-400 enabled:bg-brand-purple text-white bottom-1.5 transition-colors disabled:opacity-40"
+                style="background-color: rgb(25, 195, 125)"
+              >
+                <span class="" data-state="closed"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    class="h-4 w-4 m-1 md:m-0"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z"
+                      fill="currentColor"
+                    ></path></svg
+                ></span>
+              </button> -->
+              <!-- <button
+                class="absolute p-1 rounded-md md:bottom-3 md:p-2 md:right-3 dark:hover:bg-gray-900 dark:disabled:hover:bg-transparent right-2 disabled:text-gray-400 enabled:bg-brand-purple text-white bottom-1.5 transition-colors disabled:opacity-40"
+                style=""
+                disabled=""
+              >
+                <span class="" data-state="closed"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    class="h-4 w-4 m-1 md:m-0"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z"
+                      fill="currentColor"
+                    ></path></svg
+                ></span>
+              </button> -->
             </div>
             <!-- <ion-button v-if="isLoadingNewList" ><LoadingDots /></ion-button>
           <ion-button v-else type="submit" :disabled="isLoadingNewList" class="color">Submit</ion-button> -->
@@ -94,7 +130,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
-import { enterOutline } from 'ionicons/icons'
+import { arrowForwardOutline } from 'ionicons/icons'
 import TheHeader from '@/components/TheHeader.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))

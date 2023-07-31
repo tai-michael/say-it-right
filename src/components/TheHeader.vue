@@ -38,7 +38,8 @@
           @click="$emit('back-button-clicked')"
           class="widescreen-back-btn text-[white] text-lg font-medium"
         >
-          <ion-icon :icon="chevronBackOutline" class="text-2xl mr-2"></ion-icon>
+          <!-- <ion-icon :icon="chevronBackOutline" class="text-2xl mr-2"></ion-icon> -->
+          <ion-icon :icon="returnUpBackOutline" class="text-2xl mr-2"></ion-icon>
           Return to lists
         </button>
       </div>
@@ -83,10 +84,7 @@
     <!-- NOTE Widescreen popover -->
     <ion-list v-if="showPopover" class="widescreen-popover pb-2 pt-2">
       <ion-item :detail="false" lines="full" @click.stop class="cursor-default">
-        <ion-icon
-          :icon="personCircleOutline"
-          class="cursor-pointer text-2xl mr-2 ml-[-2px]"
-        ></ion-icon>
+        <ion-icon :icon="personCircleOutline" class="text-2xl mr-2 ml-[-2px]"></ion-icon>
         <span class="font-medium text-[14px]">{{ user?.displayName }}</span>
       </ion-item>
 
@@ -161,6 +159,7 @@ import { ref, computed, inject, watch } from 'vue'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
 import {
   chevronBackOutline,
+  returnUpBackOutline,
   ellipsisHorizontalSharp,
   personCircleOutline,
   moon,
@@ -302,7 +301,8 @@ ion-toolbar {
 
   .widescreen-back-btn {
     width: 170px;
-    padding-right: 1rem;
+    // padding-right: 1rem;
+    padding-right: 0.5rem;
     background-color: #5cc0b9;
 
     &:hover {
