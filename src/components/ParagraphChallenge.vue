@@ -47,8 +47,8 @@
             <div>
               <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
               <div v-else-if="recordingStatus === 'FEW_WORDS_RECORDED'" class="message__text">
-                <span>You didn't record enough words.</span>
-                <span>Try again, and remember to hold the recording button.</span>
+                <!-- <span>You didn't record enough words.</span>
+                <span>Try again, and remember to hold the recording button.</span> -->
 
                 <!-- <span>Excellent! You pronounced each tested word correctly.</span>
                 <span>Next, create or try another list.</span> -->
@@ -506,9 +506,9 @@ ion-card {
 .message {
   display: flex;
   flex-direction: column;
+  max-width: 340px;
   padding: 1rem 2rem;
   // row-gap: 0.75rem;
-  // max-width: 340px;
   // min-height: 100px;
   // height: 50px;
 
@@ -519,13 +519,7 @@ ion-card {
     margin-left: 0.1rem;
 
     span {
-      // padding-bottom: 0.25rem;
-      // color: var(--orange-color);
       font-weight: 600;
-    }
-
-    @media screen and (min-width: 481px) {
-      align-items: center;
     }
   }
 }
@@ -612,9 +606,9 @@ ion-button {
   max-height: 44px;
   text-transform: uppercase;
   color: rgb(231, 253, 243);
+  margin-top: 2.25rem;
 
   @media screen and (min-width: 481px) {
-    margin-top: 2.25rem;
   }
 }
 
