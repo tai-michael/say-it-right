@@ -49,7 +49,7 @@
           </TransitionFade>
         </main>
 
-        <div class="message-container h-full max-h-80 pt-10 pl-5 pr-5">
+        <div class="message-container h-full pt-10 pl-5 pr-5">
           <!-- TODO remove transition below depending on user feedback; IMO, transitions make it feel smoother but also slower -->
           <TransitionFade>
             <div v-if="isRecording" class="transcript flex justify-center">
@@ -128,6 +128,7 @@ import { useRoute } from 'vue-router'
 import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import { storeToRefs } from 'pinia'
 import { IonPage, IonCard } from '@ionic/vue'
+import usePhoneticConverter from '@/composables/usePhoneticConverter'
 
 const route = useRoute()
 const store = route.name === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
@@ -247,8 +248,8 @@ const handleTempTranscriptRender = (transcript: string) => {
 
   temporaryTranscript.value = transcript.split(' ').slice(-1).join(' ')
 
-  const transcribedWordCode = getPhoneticCode(temporaryTranscript.value)
-  const testedWordPhoneticCode = getPhoneticCode(testedWord.value)
+  const transcribedWordCode = usePhoneticConverter(temporaryTranscript.value)
+  const testedWordPhoneticCode = usePhoneticConverter(testedWord.value)
   if (transcribedWordCode === testedWordPhoneticCode) temporaryTranscript.value = testedWord.value
 }
 
@@ -453,6 +454,11 @@ ion-card {
 
 .message-container {
   background-color: #8ed6ce;
+  max-height: 15rem;
+
+  @media screen and (min-width: 481px) {
+    max-height: 20rem;
+  }
 }
 
 .message {

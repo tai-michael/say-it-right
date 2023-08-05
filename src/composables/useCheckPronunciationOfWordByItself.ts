@@ -1,15 +1,16 @@
-import { metaphone } from 'metaphone'
+import usePhoneticConverter from '@/composables/usePhoneticConverter'
+// import { metaphone } from 'metaphone'
 
 export default function (transcriptWords: string[], testedWord: string) {
   console.log(transcriptWords)
 
   const finalTranscriptWord = transcriptWords[transcriptWords.length - 1]
 
-  const transcribedWordCode = getPhoneticCode(finalTranscriptWord)
-  const testedWordPhoneticCode = getPhoneticCode(testedWord)
+  const transcribedWordCode = usePhoneticConverter(finalTranscriptWord)
+  const testedWordPhoneticCode = usePhoneticConverter(testedWord)
 
   if (transcribedWordCode === testedWordPhoneticCode) {
-    console.log('match found')
+    console.log(`match found: ${transcribedWordCode}, ${testedWordPhoneticCode}`)
     // const matchingWord = testedWord
     // return matchingWord
     return true

@@ -1,4 +1,5 @@
-import { metaphone } from 'metaphone'
+import usePhoneticConverter from '@/composables/usePhoneticConverter'
+// import { metaphone } from 'metaphone'
 import stem from 'wink-porter2-stemmer'
 
 // TODO fix this function so it works with a modified word with an accent (e.g. 'cafés' modified by chatGPT into 'café'. Phonetic code would be 'KFS', while transcription would be 'KF'. Stemmer doesn't help b/c it returns accented stem.)
@@ -13,12 +14,10 @@ export default function (transcriptWords: string[], testedWord: string, testedSe
 // NOTE convert any mistranscribed word to the tested word if they sound the same
 const checkForPhoneticCodeMatch = (transcriptWords: string[], testedWord: string) => {
   // TODO pass wordName as param
-  const testedWordPhoneticCode = getPhoneticCode(testedWord)
   for (const transcriptWord of transcriptWords) {
-    const transcriptWordPhoneticCode = metaphone(transcriptWord)
-    if (transcriptWordPhoneticCode === testedWordPhoneticCode) {
-      console.log(transcriptWordPhoneticCode)
-      console.log(testedWordPhoneticCode)
+    if (usePhoneticConverter(transcriptWord) === usePhoneticConverter(testedWord)) {
+      console.log(usePhoneticConverter(transcriptWord))
+      console.log(usePhoneticConverter(testedWord))
       // return transcriptWord
       return true
     }

@@ -72,7 +72,7 @@
         </TransitionFade>
       </main>
 
-      <div class="message-container h-full max-h-80 pt-10 pl-5 pr-5">
+      <div class="message-container h-full pt-10 pl-5 pr-5">
         <TransitionFade>
           <div v-if="isRecording" class="transcript flex justify-center">
             <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
@@ -163,6 +163,7 @@ import { useRoute } from 'vue-router'
 import type { WordSource } from '@/stores/modules/types/Review'
 import { useReviewStore } from '@/stores/index.ts'
 import { IonPage, IonCard } from '@ionic/vue'
+import usePhoneticConverter from '@/composables/usePhoneticConverter'
 // import { storeToRefs } from 'pinia'
 
 const route = useRoute()
@@ -251,9 +252,12 @@ const handleTempTranscriptRender = (transcript: string) => {
     return (temporaryTranscript.value = transcript.split(' ').slice(-8).join(' '))
 
   temporaryTranscript.value = transcript.split(' ').slice(-1).join(' ')
+  console.log(`speechly capture: ${temporaryTranscript.value}`)
 
-  const transcribedWordCode = getPhoneticCode(temporaryTranscript.value)
-  const testedWordPhoneticCode = getPhoneticCode(wordName.value)
+  const transcribedWordCode = usePhoneticConverter(temporaryTranscript.value)
+  const testedWordPhoneticCode = usePhoneticConverter(wordName.value)
+  // const transcribedWordCode = getPhoneticCode(temporaryTranscript.value)
+  // const testedWordPhoneticCode = getPhoneticCode(wordName.value)
   if (transcribedWordCode === testedWordPhoneticCode) temporaryTranscript.value = wordName.value
 }
 
@@ -452,6 +456,11 @@ ion-card {
 
 .message-container {
   background-color: #8ed6ce;
+  max-height: 15rem;
+
+  @media screen and (min-width: 481px) {
+    max-height: 20rem;
+  }
 
   @media only screen and (min-width: 768px) and (max-width: 850px) {
     margin-left: 400px;

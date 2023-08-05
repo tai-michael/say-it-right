@@ -26,7 +26,7 @@ defineExpose({
   updateVU
 })
 
-const getPixelRatio = (context: any) => {
+const getPixelRatio = (context) => {
   const backingStore: number =
     context.backingStorePixelRatio ||
     context.webkitBackingStorePixelRatio ||
@@ -59,7 +59,7 @@ const getPixelRatio = (context: any) => {
 // }
 
 onMounted(() => {
-  let requestId: any
+  let requestId
   const numVUs = (VULevels.length - 1) * 2 + 1
   const vuWidthWeight = 3
   const vuGapWeight = 1

@@ -1,6 +1,7 @@
 import { useCustomListsStore } from '@/stores'
 import { useProvidedListsStore } from '@/stores'
-import { metaphone } from 'metaphone'
+import usePhoneticConverter from '@/composables/usePhoneticConverter'
+// import { metaphone } from 'metaphone'
 
 export default function (
   testedWords: string[],
@@ -10,8 +11,8 @@ export default function (
   const store = routeName === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 
   const recordedWords = [...new Set(transcriptString.split(' '))]
-  const testedWordsPhonetic = testedWords.map((word) => getPhoneticCode(word))
-  const recordedWordsPhonetic = recordedWords.map((word) => getPhoneticCode(word))
+  const testedWordsPhonetic = testedWords.map((word) => usePhoneticConverter(word))
+  const recordedWordsPhonetic = recordedWords.map((word) => usePhoneticConverter(word))
 
   const correctWords = []
   const incorrectWords = []
@@ -36,9 +37,9 @@ export default function (
   return { correctWords, incorrectWords }
 }
 
-// NOTE Allows us to get the Phonetic code of a word
-// Useful in case a correctly pronounced word is mistranscribed
-// Also helps if there's an accented word in the paragraph (e.g. café)
-const getPhoneticCode = (word: string) => {
-  return metaphone(word)
-}
+// // NOTE Allows us to get the Phonetic code of a word
+// // Useful in case a correctly pronounced word is mistranscribed
+// // Also helps if there's an accented word in the paragraph (e.g. café)
+// const getPhoneticCode = (word: string) => {
+//   return metaphone(word)
+// }

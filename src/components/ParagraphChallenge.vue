@@ -22,7 +22,7 @@
           </ion-card>
         </main>
 
-        <div class="message-container w-full h-full max-h-80 flex justify-center items-start pt-5">
+        <div class="message-container w-full h-full flex justify-center items-start pt-5">
           <div v-if="isRecording" class="transcript">
             <div class="flex-col">
               <div class="mt-8 mb-4">Recording...</div>
@@ -494,12 +494,14 @@ ion-card {
 
 .message-container {
   background-color: #8ed6ce;
+  max-height: 15rem;
   // align-content: space-around !important;
   // align-content: space-between !important;
 
   @media screen and (min-width: 481px) {
     align-items: flex-start;
     padding-top: 2.5rem;
+    max-height: 20rem;
   }
 }
 
