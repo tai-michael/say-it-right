@@ -4,7 +4,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "John, a successful businessman, inspired many with his vivid visions of a better society. He said that discipline and a courageous spirit were essential to achieving greatness. As he shared his plan, people began to think about their own potential. Comforted by his words, they decided to study hard and contribute to a brighter future.  ",
+    "paragraph": "John, a successful businessman, inspired many with his vivid visions of a better society. He said that discipline and a courageous spirit were essential to achieving greatness. As he shared his plan, people began to think about their own potential. Comforted by his words, they decided to study hard and contribute to a brighter future.",
     "words": {
       "vivid": {
         "mispronouncedFrequentlyAs": "wiwid",
@@ -151,7 +151,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Samantha enjoyed visiting various cafés around the world. In her private time, she would really immerse herself in the process of tasting different lattes. Thanks to her passion, she usually knew the best places to find a great cup of coffee, because she had trained her palate to recognize quality.  ",
+    "paragraph": "Samantha enjoyed visiting various cafés around the world. In her private time, she would really immerse herself in the process of tasting different lattes. Thanks to her passion, she usually knew the best places to find a great cup of coffee, because she had trained her palate to recognize quality.",
     "words": {
       "various": {
         "mispronouncedFrequentlyAs": "warious",
@@ -287,7 +287,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Robert, an excellent pilot, visited small islands where he would often develop friendships with the kind locals. He was a thin man who rarely indulged in rich foods, but he couldn't resist the occasional snack on a plane. One day, a colleague introduced him to the joys of homemade treats.  ",
+    "paragraph": "Robert, an excellent pilot, visited small islands where he would often develop friendships with the kind locals. He was a thin man who rarely indulged in rich foods, but he couldn't resist the occasional snack on a plane. One day, a colleague introduced him to the joys of homemade treats.",
     "words": {
       "visited": {
         "mispronouncedFrequentlyAs": "wisited",
@@ -422,8 +422,19 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Emily was a famous vlogger known for her air travel adventures. She would recall her experiences with vivid memories and decorate her videos with valuable insights. While exploring new places, she met interesting people and captured their thoughts, which she later shared with her audience.  ",
+    "paragraph": "Peter values the memories he has of the time he met the famous actress Sarah while walking in the park. He can recall every detail as they chatted in the fresh air. Peter continues to decorate his home with photos from that day which pays tribute to the precious thoughts it brings him.",
     "words": {
+      "chatted": {
+        "mispronouncedFrequentlyAs": "cheated",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing the 'AA' sound",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "They chatted over coffee at the local café.",
+          "She chatted with her neighbor while walking their dogs."
+        ]
+      },
       "value": {
         "mispronouncedFrequentlyAs": "walue",
         "mispronunciationFrequency": 2,
@@ -527,17 +538,6 @@
           "She visited the famous monument during her vacation."
         ]
       },
-      "vlog": {
-        "mispronouncedFrequentlyAs": "vuh-log",
-        "mispronunciationFrequency": 3,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He started a vlog to document his travel adventures.",
-          "Her cooking vlog gained a large following online."
-        ]
-      },
       "air": {
         "mispronouncedFrequentlyAs": "ear",
         "mispronunciationFrequency": 3,
@@ -556,7 +556,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "During his free time, Thomas enjoyed a variety of activities, from skiing on thick snow to resting at home. He was never upset with his staff's choice of lighting, as they tastefully arranged the ambiance. The tasteful atmosphere possessed a calming effect, allowing him to relax and unwind.  ",
+    "paragraph": "During her free time, the president enjoyed a variety of activities, from skiing on thick snow to resting at home. She was never upset with her staff's choice of lighting in the living room. The tasteful atmosphere had a calming effect, allowing her to relax.",
     "words": {
       "time": {
         "mispronouncedFrequentlyAs": "tahm",
@@ -692,7 +692,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Laura, a young girl with an enthusiastic spirit, would often volunteer at the local community center. She loved chatting with the children and helping them with various tasks. Instead of staying home, Laura chose to make a difference, and her obvious passion for helping others was contagious.  ",
+    "paragraph": "Mary is an enthusiastic child who volunteers at the hospital on weekends instead of doing other things, like going to the mall with the other girls her age. She wasn't bored by the work. Instead, she enjoys wiping down the walls and rearranging the seats in the waiting area. It gives her a taste of accomplishment.",
     "words": {
       "volunteer": {
         "mispronouncedFrequentlyAs": "wallunseer",
@@ -779,17 +779,6 @@
           "He had a taste for fine wines and gourmet food."
         ]
       },
-      "chatted": {
-        "mispronouncedFrequentlyAs": "cheated",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'AA' sound",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "They chatted over coffee at the local café.",
-          "She chatted with her neighbor while walking their dogs."
-        ]
-      },
       "girl": {
         "mispronouncedFrequentlyAs": "ger",
         "mispronunciationFrequency": 1,
@@ -802,17 +791,6 @@
           "He bought a toy for the little girl next door."
         ]
       },
-      "obvious": {
-        "mispronouncedFrequentlyAs": "obviours",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Adding an unnecessary 'R' sound",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The answer to the problem was obvious after some thought.",
-          "Her excitement was obvious when she saw the surprise party."
-        ]
-      },
       "enthusiastic": {
         "mispronunciationFrequency": 2,
         "mistakeType": "Other",
@@ -822,6 +800,17 @@
           "The crowd was enthusiastic during the concert.",
           "She was enthusiastic about her new job opportunity."
         ]
+      },
+      "bored": {
+        "mispronouncedFrequentlyAs": "broad",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Other",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "He was bored during the long meeting.",
+          "She gets bored easily and always needs something to do."
+        ]
       }
     }
   },
@@ -830,7 +819,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Alex, a technology-driven entrepreneur, was always up-to-date with the latest trends. He loved espresso and often watched TV while eating a slice of bread. Meanwhile, he pondered whether to invest in a brave new startup or focus on his existing business. He was not scared of taking risks but knew when to be cautious.  ",
+    "paragraph": "Jake was scared and almost couldn't breathe while watching the TV broadcast on the virus. Then, he ate a piece of bread and pet his dog to calm his nerves. He is driven to protect his family well, even if that meant acting brave in the face of danger. He knows that technology will help beat the virus someday.",
     "words": {
       "TV": {
         "mispronouncedFrequentlyAs": "tee-wee",
@@ -855,30 +844,6 @@
         "sentences": [
           "She did well on her exam after studying hard.",
           "He wished his friend well before the big performance."
-        ]
-      },
-      "meanwhile": {
-        "mispronouncedFrequentlyAs": "meanwheel",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Neglecting the 'AI' sound",
-        "essentialSound": "i",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She cooked dinner; meanwhile, he set the table.",
-          "He went to the store; meanwhile, she cleaned the house."
-        ]
-      },
-      "whether": {
-        "mispronouncedFrequentlyAs": "wh-ai-ther",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "whe",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She couldn't decide whether to wear the red dress or the blue one.",
-          "He wondered whether he should call or send an email."
         ]
       },
       "beat": {
@@ -937,16 +902,6 @@
           "She enjoys making homemade bread."
         ]
       },
-      "espresso": {
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He ordered a double espresso at the café.",
-          "She prefers espresso over drip coffee."
-        ]
-      },
       "driven": {
         "mispronouncedFrequentlyAs": "drai-ven",
         "mispronunciationFrequency": 1,
@@ -957,6 +912,42 @@
           "He is a driven individual, always striving for success.",
           "Her driven attitude helped her achieve her goals."
         ]
+      },
+      "virus": {
+        "mispronouncedFrequentlyAs": "wirus",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing 'V' as 'W'",
+        "essentialSound": "v",
+        "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "The virus spread quickly through the population.",
+          "Scientists are working on a vaccine for the virus."
+        ]
+      },
+      "pet": {
+        "mispronouncedFrequentlyAs": "p-ai-ts",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing the 'EH' sound",
+        "essentialSound": "e",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "She pet her cat while reading a novel.",
+          "Pets can bring joy and companionship to their owners."
+        ]
+      },
+      "breathe": {
+        "mispronouncedFrequentlyAs": "breth",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Other",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "Take a deep breath and breathe slowly.",
+          "Plants need carbon dioxide to breathe and grow."
+        ]
       }
     }
   },
@@ -965,7 +956,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Sarah, a determined scientist, devoted her life to researching the best methods to combat fear. She experimented with various techniques and theories, even when she failed. Her passion for helping others led her to create a meal plan that incorporated fried foods and bikes, which surprisingly had a positive effect on her test subjects.  ",
+    "paragraph": "Sue failed her first experiment with cooking, so she tried again and fried some chicken for the meal. She was determined to feed the women and children. In her mind, practice makes perfect, so she got on her bike and bought more ingredients to test her best theories.",
     "words": {
       "meal": {
         "mispronouncedFrequentlyAs": "mear",
@@ -1097,19 +1088,17 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "During the height of the virus, David found solace in climbing and spending time with his pets. His beautiful smile would light up any room, and he was known for his great sense of humor. One day, he had a vivid dream that inspired him to create a unique method for teaching a college lecture.  ",
+    "paragraph": "Lily dreamed of traveling and seeing beautiful places. She focused during lectures and got good grades in school to make that dream a reality. It was obvious she had great experience and methods for learning. Lily woke up each day with a smile, excited to climb the mountain of knowledge and see where it would take her.",
     "words": {
-      "virus": {
-        "mispronouncedFrequentlyAs": "wirus",
+      "obvious": {
+        "mispronouncedFrequentlyAs": "obviours",
         "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing 'V' as 'W'",
-        "essentialSound": "v",
-        "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
+        "mistakeType": "Adding an unnecessary 'R' sound",
         "attempts": 0,
         "attemptsSuccessful": 0,
         "sentences": [
-          "The virus spread quickly through the population.",
-          "Scientists are working on a vaccine for the virus."
+          "The answer to the problem was obvious after some thought.",
+          "Her excitement was obvious when she saw the surprise party."
         ]
       },
       "beautiful": {
@@ -1154,27 +1143,6 @@
           "Her method of teaching is very effective."
         ]
       },
-      "let": {
-        "mispronouncedFrequentlyAs": "l-ai-t",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": ["He decided to let her go.", "She wouldn't let anything stand in her way."]
-      },
-      "pets": {
-        "mispronouncedFrequentlyAs": "p-ai-ts",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She has two pets, a dog and a cat.",
-          "Pets can bring joy and companionship to their owners."
-        ]
-      },
       "dream": {
         "mispronouncedFrequentlyAs": "drim",
         "mispronunciationFrequency": 1,
@@ -1216,6 +1184,17 @@
           "The professor gave an interesting lecture on history.",
           "I attended a lecture on climate change."
         ]
+      },
+      "focus": {
+        "mispronouncedFrequentlyAs": "focurse",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Adding an unnecessary 'R' sound",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "It's important to focus on your goals.",
+          "She needs to focus on her studies."
+        ]
       }
     }
   },
@@ -1224,18 +1203,18 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Carla, a skilled athlete, loved the sweet smell of victory. Her focus was unwavering, and she was always dressed in colorful clothes that matched her vibrant spirit. She would often take a deep breath before her final sprint, knowing that her hard work and determination would carry her through.  ",
+    "paragraph": "The young athlete liked to wear bright clothes that smelled sweet. She would focus on taking deep breaths before each race. The straight track in front of her filled her with inspiration to run faster and be a better version of herself, whether she won or lost the race.",
     "words": {
-      "colorful": {
-        "mispronouncedFrequentlyAs": "colorfor",
+      "whether": {
+        "mispronouncedFrequentlyAs": "wh-ai-ther",
         "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing 'L' as 'R'",
-        "essentialSound": "l",
+        "mistakeType": "Mispronouncing the 'EH' sound",
+        "essentialSound": "whe",
         "attempts": 0,
         "attemptsSuccessful": 0,
         "sentences": [
-          "The garden was filled with colorful flowers.",
-          "She wore a colorful dress to the party."
+          "She couldn't decide whether to wear the red dress or the blue one.",
+          "He wondered whether he should call or send an email."
         ]
       },
       "like": {
@@ -1310,27 +1289,6 @@
           "She has long, straight hair."
         ]
       },
-      "focus": {
-        "mispronouncedFrequentlyAs": "focurse",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Adding an unnecessary 'R' sound",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "It's important to focus on your goals.",
-          "She needs to focus on her studies."
-        ]
-      },
-      "barista": {
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The barista made a beautiful design on my coffee.",
-          "He works as a barista at the local coffee shop."
-        ]
-      },
       "breath": {
         "mispronouncedFrequentlyAs": "breethe",
         "mispronunciationFrequency": 1,
@@ -1342,15 +1300,27 @@
           "She was out of breath after running up the stairs."
         ]
       },
-      "bored": {
-        "mispronouncedFrequentlyAs": "broad",
+      "better": {
+        "mispronouncedFrequentlyAs": "bayter",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing the 'EH' sound",
+        "essentialSound": "e",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "She felt better after a good night's sleep.",
+          "His cooking skills are better than mine."
+        ]
+      },
+      "clothes": {
+        "mispronouncedFrequentlyAs": "clothe-sez",
         "mispronunciationFrequency": 1,
         "mistakeType": "Other",
         "attempts": 0,
         "attemptsSuccessful": 0,
         "sentences": [
-          "He was bored during the long meeting.",
-          "She gets bored easily and always needs something to do."
+          "She bought new clothes for the party.",
+          "He folded his clothes and put them away."
         ]
       }
     }
@@ -1360,8 +1330,29 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Sophia, an ancient history enthusiast, was impressed by the details found in museum exhibits. She believed that the better we understand our past, the more inspired we can be to create a brighter future. She doubted anyone who didn't share her passion for clothes from ancient civilizations, as she felt they were missing out on a rich source of inspiration.  ",
+    "paragraph": "Sarah was impressed by the details of the ancient pottery in the museum. She was required to write about it for class, but had doubts on where to begin. Meanwhile, the colorful patterns on the clay were breathtaking. Being surrounded there by history gave her inspiration and let her want to learn more.",
     "words": {
+      "meanwhile": {
+        "mispronouncedFrequentlyAs": "meanwheel",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Neglecting the 'AI' sound",
+        "essentialSound": "i",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "She cooked dinner; meanwhile, he set the table.",
+          "He went to the store; meanwhile, she cleaned the house."
+        ]
+      },
+      "let": {
+        "mispronouncedFrequentlyAs": "l-ai-t",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing the 'EH' sound",
+        "essentialSound": "e",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": ["He decided to let her go.", "She wouldn't let anything stand in her way."]
+      },
       "required": {
         "mispronouncedFrequentlyAs": "reqered",
         "mispronunciationFrequency": 1,
@@ -1386,16 +1377,16 @@
           "He was not impressed with the restaurant's service."
         ]
       },
-      "better": {
-        "mispronouncedFrequentlyAs": "bayter",
+      "colorful": {
+        "mispronouncedFrequentlyAs": "colorfor",
         "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
+        "mistakeType": "Mispronouncing 'L' as 'R'",
+        "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0,
         "sentences": [
-          "She felt better after a good night's sleep.",
-          "His cooking skills are better than mine."
+          "The garden was filled with colorful flowers.",
+          "She wore a colorful dress to the party."
         ]
       },
       "details": {
@@ -1430,28 +1421,6 @@
           "The museum has a fascinating collection of ancient artifacts."
         ]
       },
-      "clothes": {
-        "mispronouncedFrequentlyAs": "clothe-sez",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She bought new clothes for the party.",
-          "He folded his clothes and put them away."
-        ]
-      },
-      "breathe": {
-        "mispronouncedFrequentlyAs": "breth",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "Take a deep breath and breathe slowly.",
-          "Plants need carbon dioxide to breathe and grow."
-        ]
-      },
       "ancient": {
         "mispronouncedFrequentlyAs": "ayshent",
         "mispronunciationFrequency": 1,
@@ -1461,17 +1430,6 @@
         "sentences": [
           "The ancient ruins are a popular tourist attraction.",
           "He studied ancient civilizations in college."
-        ]
-      },
-      "dessert": {
-        "mispronouncedFrequentlyAs": "desert",
-        "mispronunciationFrequency": 10,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She ordered chocolate cake for dessert.",
-          "My favorite dessert is ice cream."
         ]
       },
       "inspiration": {
