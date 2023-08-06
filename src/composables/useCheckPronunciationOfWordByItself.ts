@@ -1,5 +1,4 @@
 import usePhoneticConverter from '@/composables/usePhoneticConverter'
-// import { metaphone } from 'metaphone'
 
 export default function (transcriptWords: string[], testedWord: string) {
   console.log(transcriptWords)
@@ -18,8 +17,4 @@ export default function (transcriptWords: string[], testedWord: string) {
   console.log('match not found')
   // return ''
   return false
-}
-
-const getPhoneticCode = (word: string) => {
-  return metaphone(word)
 }

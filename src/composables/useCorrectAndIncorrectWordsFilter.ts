@@ -1,7 +1,6 @@
 import { useCustomListsStore } from '@/stores'
 import { useProvidedListsStore } from '@/stores'
 import usePhoneticConverter from '@/composables/usePhoneticConverter'
-// import { metaphone } from 'metaphone'
 
 export default function (
   testedWords: string[],
@@ -36,10 +35,3 @@ export default function (
   console.log('Mispronounced keywords:', incorrectWords.join(', '))
   return { correctWords, incorrectWords }
 }
-
-// // NOTE Allows us to get the Phonetic code of a word
-// // Useful in case a correctly pronounced word is mistranscribed
-// // Also helps if there's an accented word in the paragraph (e.g. café)
-// const getPhoneticCode = (word: string) => {
-//   return metaphone(word)
-// }

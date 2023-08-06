@@ -47,8 +47,8 @@
             <div>
               <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
               <div v-else-if="recordingStatus === 'FEW_WORDS_RECORDED'" class="message__text">
-                <!-- <span>You didn't record enough words.</span>
-                <span>Try again, and remember to hold the recording button.</span> -->
+                <span>You didn't record enough words.</span>
+                <span>Try again, and remember to hold the recording button.</span>
 
                 <!-- <span>Excellent! You pronounced each tested word correctly.</span>
                 <span>Next, create or try another list.</span> -->

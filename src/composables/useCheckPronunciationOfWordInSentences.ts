@@ -1,5 +1,4 @@
 import usePhoneticConverter from '@/composables/usePhoneticConverter'
-// import { metaphone } from 'metaphone'
 import stem from 'wink-porter2-stemmer'
 
 // TODO fix this function so it works with a modified word with an accent (e.g. 'cafés' modified by chatGPT into 'café'. Phonetic code would be 'KFS', while transcription would be 'KF'. Stemmer doesn't help b/c it returns accented stem.)
@@ -49,8 +48,4 @@ const checkForWordStemMatch = (
     if (matchesTranscriptWord && sentenceWordStem === testedWordStem) return true
   }
   return false
-}
-
-const getPhoneticCode = (word: string) => {
-  return metaphone(word)
 }

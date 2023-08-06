@@ -112,6 +112,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, inject } from 'vue'
+import { storeToRefs } from 'pinia'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
@@ -122,13 +123,11 @@ import useTextToSpeechCreationAndStorage from '@/composables/useTextToSpeechCrea
 import useCheckPronunciationOfWordByItself from '@/composables/useCheckPronunciationOfWordByItself.ts'
 import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronunciationOfWordInSentences.ts'
 import useHardWordLogger from '@/composables/useHardWordLogger'
-import useDelay from '@/composables/useDelay'
-import { metaphone } from 'metaphone'
-import { useRoute } from 'vue-router'
-import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
-import { storeToRefs } from 'pinia'
-import { IonPage, IonCard } from '@ionic/vue'
 import usePhoneticConverter from '@/composables/usePhoneticConverter'
+import useDelay from '@/composables/useDelay'
+import { IonPage, IonCard } from '@ionic/vue'
+import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const store = route.name === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
@@ -352,10 +351,6 @@ const handleCorrectPronunciation = async () => {
     //   }, 2000)
     // }
   }
-}
-
-const getPhoneticCode = (word: string) => {
-  return metaphone(word)
 }
 
 const skipWord = async () => {
