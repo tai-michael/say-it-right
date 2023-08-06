@@ -259,10 +259,6 @@ const handleTempTranscriptRender = (transcript: string) => {
   if (transcribedWordCode === testedWordPhoneticCode) temporaryTranscript.value = wordName.value
 }
 
-const getPhoneticCode = (word: string) => {
-  return metaphone(word)
-}
-
 const finalTranscriptWords = ref<string[]>([])
 const isPronouncedCorrectly = ref(false)
 // const matchingWord = ref('')

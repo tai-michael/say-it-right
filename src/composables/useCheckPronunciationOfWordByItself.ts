@@ -7,9 +7,12 @@ export default function (transcriptWords: string[], testedWord: string) {
 
   const transcribedWordCode = usePhoneticConverter(finalTranscriptWord)
   const testedWordPhoneticCode = usePhoneticConverter(testedWord)
+  console.log(
+    `user phonetic code: ${transcribedWordCode}, tested phonetic code: ${testedWordPhoneticCode}`
+  )
 
   if (transcribedWordCode === testedWordPhoneticCode) {
-    console.log(`match found: ${transcribedWordCode}, ${testedWordPhoneticCode}`)
+    console.log('match found')
     // const matchingWord = testedWord
     // return matchingWord
     return true

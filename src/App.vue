@@ -10,34 +10,44 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, provide, watch, watchEffect, nextTick } from 'vue'
+import { computed, ref, provide, watch, watchEffect, nextTick, onMounted } from 'vue'
 import SignInView from '@/views/SignInView.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
-// import DarkModeToggle from './components/DarkModeToggle.vue'
 import { useLocalStorage } from '@vueuse/core'
 import { IonApp, IonContent, IonRouterOutlet } from '@ionic/vue'
 import { db, isAuthenticated, user, auth } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
 import { collection, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore'
-import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
+import {
+  useCustomListsStore,
+  useProvidedListsStore,
+  useReviewStore,
+  useIpaDictionaryStore
+} from '@/stores/index.ts'
 
 const customListsStore = useCustomListsStore()
 const providedListsStore = useProvidedListsStore()
 const reviewStore = useReviewStore()
+const ipaDictionaryStore = useIpaDictionaryStore()
 
 // const getLinkClass = (path: string) => {
 //   const route = useRoute()
 //   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
 // }
 
-const fetchingBackendData = ref(false)
-const signedIn = ref(false)
+onMounted(async () => {
+  const module = await import('@/assets/ipa_dict')
+  ipaDictionaryStore.hydrateDictionary(module.ipaDictionary)
+})
 
 const isDarkModeEnabled = useLocalStorage('dark-mode', false)
 provide('isDarkModeEnabled', isDarkModeEnabled)
 
 const globalListsQuery = computed(() => collection(db, 'global_provided_lists'))
 const globalLists = useFirestore(globalListsQuery)
+
+const signedIn = ref(false)
+const fetchingBackendData = ref(false)
 
 const fetchBackendData = async () => {
   try {
@@ -150,16 +160,8 @@ auth.onAuthStateChanged(async () => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #modals {
   z-index: 99999;
 }
 </style>
-
-<!-- <style lang="scss">
-html,
-body {
-  // NOTE prevents the swipe back and forward gestures on most browsers and Safari 16, released 2022 (See: https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior-x#browser_compatibility)
-  overscroll-behavior-x: none;
-}
-</style> -->
