@@ -14,6 +14,7 @@ import { computed, ref, provide, watch, watchEffect, nextTick, onMounted } from 
 import SignInView from '@/views/SignInView.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import { useLocalStorage } from '@vueuse/core'
+// import { compress, decompress } from 'lz-string'
 import { IonApp, IonContent, IonRouterOutlet } from '@ionic/vue'
 import { db, isAuthenticated, user, auth } from '@/firebaseInit'
 import { useFirestore } from '@vueuse/firebase/useFirestore'
@@ -34,10 +35,21 @@ const ipaDictionaryStore = useIpaDictionaryStore()
 //   const route = useRoute()
 //   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
 // }
-
+let lzString
 onMounted(async () => {
-  const module = await import('@/assets/ipa_dict')
-  ipaDictionaryStore.hydrateDictionary(module.ipaDictionary)
+  //  NOTE The dictionary is quite big (1.3MB after compression), so using localStorage
+  lzString = await import('lz-string')
+  const storedIpaDictionary = localStorage.getItem('ipaDictionary')
+
+  let ipaDictionary
+  if (storedIpaDictionary) {
+    ipaDictionary = JSON.parse(lzString.decompressFromUTF16(storedIpaDictionary))
+  } else {
+    const module = await import('@/assets/ipa_dict')
+    ipaDictionary = module.ipaDictionary
+    localStorage.setItem('ipaDictionary', lzString.compressToUTF16(JSON.stringify(ipaDictionary)))
+  }
+  ipaDictionaryStore.hydrateDictionary(ipaDictionary)
 })
 
 const isDarkModeEnabled = useLocalStorage('dark-mode', false)

@@ -18,20 +18,18 @@
     </ion-fab>
   </ion-page>
 
-  <ion-page v-else>
+  <ion-page v-else class="max-h-[100vh]">
     <TheHeader>Premade Lists</TheHeader>
-    <div class="flex h-full items-center justify-center">
-      <LoadingSpinner />
-    </div>
+    <LoadingSpinner />
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TheHeader from '@/components/TheHeader.vue'
-import PullRefresher from '@/components/PullRefresher.vue'
-
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
+const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
 import {
   IonPage,
   IonContent,
@@ -43,7 +41,6 @@ import {
 } from '@ionic/vue'
 import { arrowUp } from 'ionicons/icons'
 import { useRoute, useRouter } from 'vue-router'
-// const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
 // const ListGroups = defineAsyncComponent({
 //   loader: () => import('@/components/ListGroups.vue'),
 //   loadingComponent: LoadingSpinner

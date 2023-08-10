@@ -18,7 +18,6 @@
                 placeholder="Enter list number (e.g. 13)"
                 pattern="\d+"
                 v-model="listNumOfListToAdd"
-                autofocus
               />
               <ion-button type="submit" :disabled="isLoading">Upload</ion-button>
             </div>
@@ -33,7 +32,6 @@
                 placeholder="Enter list number (e.g. 13)"
                 pattern="\d+"
                 v-model="listNumOfListToDel"
-                autofocus
               />
               <ion-button type="submit" :disabled="isLoading">Delete</ion-button>
             </div>
@@ -54,7 +52,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
-import PullRefresher from '@/components/PullRefresher.vue'
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 import coreLists from '@/assets/lists_1-12.json'
 import { IonPage, IonContent, IonButton } from '@ionic/vue'
 import { db, auth } from '@/firebaseInit'

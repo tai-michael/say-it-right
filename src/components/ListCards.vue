@@ -8,7 +8,7 @@
       >
         <ion-card-content class="p-0">
           <ion-toolbar>
-            <ion-title class="font-thin">List {{ list.listNumber }}</ion-title>
+            <ion-title class="font-normal">List {{ list.listNumber }}</ion-title>
             <button
               v-if="props.destinationRoute === 'custom-list'"
               slot="end"

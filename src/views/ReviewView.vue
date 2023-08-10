@@ -104,7 +104,7 @@
       </div>
     </ion-content> -->
   </ion-page>
-  <ion-page v-else>
+  <ion-page v-else class="max-h-[100vh]">
     <TheHeader />
     <LoadingSpinner />
   </ion-page>
@@ -131,6 +131,7 @@ const TransitionFadeAndSlide = defineAsyncComponent(
   () => import('@/components/transitions/TransitionFadeAndSlide.vue')
 )
 const WordSelectModal = defineAsyncComponent(() => import('@/components/WordSelectModal.vue'))
+const WordDrill = defineAsyncComponent(() => import('@/components/WordDrill.vue'))
 // import { useArrayFind } from '@vueuse/core'
 
 const store = useReviewStore()

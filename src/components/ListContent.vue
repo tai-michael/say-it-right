@@ -33,16 +33,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, toRefs } from 'vue'
+import { computed, toRefs, defineAsyncComponent } from 'vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import TheHeader from '@/components/TheHeader.vue'
-import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
-import WordChallenge from '@/components/WordChallenge.vue'
+// import ParagraphChallenge from '@/components/ParagraphChallenge.vue'
+// import WordChallenge from '@/components/WordChallenge.vue'
+const ParagraphChallenge = defineAsyncComponent(() => import('@/components/ParagraphChallenge.vue'))
+const WordChallenge = defineAsyncComponent(() => import('@/components/WordChallenge.vue'))
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'
 import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import { RouterLink, useRouter } from 'vue-router'
-import { IonPage, IonContent } from '@ionic/vue'
+import { IonContent } from '@ionic/vue'
 const router = useRouter()
 
 const props = defineProps({

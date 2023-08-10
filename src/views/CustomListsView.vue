@@ -25,7 +25,6 @@
                 placeholder="  e.g. urban thin kindly"
                 v-model="wordsInput"
                 :disabled="isLoadingNewList"
-                autofocus
                 animated="true"
                 inputmode="text"
                 :show-clear-button="clearButtonMode"
@@ -122,7 +121,7 @@
     </router-view> -->
   </ion-page>
 
-  <ion-page v-else>
+  <ion-page v-else class="max-h-[100vh]">
     <TheHeader>Custom Lists</TheHeader>
     <LoadingSpinner />
   </ion-page>
@@ -153,6 +152,15 @@ import {
   onIonViewWillLeave
 } from '@ionic/vue'
 import { arrowUp, alertCircle } from 'ionicons/icons'
+// const ListGroups = defineAsyncComponent({
+//   // the loader function
+//   loader: () => import('@/components/ListGroups.vue'),
+
+//   // A component to use while the async component is loading
+//   loadingComponent: LoadingSpinner,
+//   // Delay before showing the loading component. Default: 200ms.
+//   delay: 0
+// })
 
 const route = useRoute()
 const router = useRouter()

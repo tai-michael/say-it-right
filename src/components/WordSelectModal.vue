@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, inject, onMounted, nextTick, onUnmounted } from 'vue'
+import { computed, ref, inject, onMounted, nextTick, onUnmounted, defineAsyncComponent } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
@@ -106,6 +106,10 @@ import {
 import { db, user } from '@/firebaseInit'
 import { doc, updateDoc, arrayRemove } from 'firebase/firestore'
 import { useReviewStore } from '@/stores/index.ts'
+const RecycleScroller = defineAsyncComponent(() =>
+  import('vue-virtual-scroller').then((module) => module.RecycleScroller)
+)
+// import { RecycleScroller } from 'vue-virtual-scroller'
 
 const store = useReviewStore()
 
