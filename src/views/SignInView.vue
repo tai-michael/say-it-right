@@ -2,8 +2,7 @@
   <PullRefresher />
   <div class="text-center">
     <div class="mt-20 mb-10 text-3xl flex justify-center gap-3 items-end logo">
-      <!-- <img :src="logo" class="w-11 h-11" /> Say It Right -->
-      Say It Right
+      <img :src="logo" class="w-11 h-11" /> Say It Right
     </div>
   </div>
   <FirebaseUI />
@@ -13,6 +12,7 @@
 import { defineAsyncComponent } from 'vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 const FirebaseUI = defineAsyncComponent(() => import('@/components/FirebaseUI.vue'))
+const logo = new URL('@/assets/images/logo-dark.png', import.meta.url).href
 </script>
 
 <style lang="scss">

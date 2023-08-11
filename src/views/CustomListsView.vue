@@ -134,6 +134,7 @@ import TheHeader from '@/components/TheHeader.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
+// import ListGroups from '@/components/ListGroups.vue'
 import useOpenAiParagraphGenerator from '@/composables/useOpenAiParagraphGenerator'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'
 import type { List } from '@/stores/modules/types/List'

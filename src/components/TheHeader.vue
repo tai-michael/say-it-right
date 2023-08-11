@@ -3,12 +3,13 @@
     <ion-toolbar>
       <a slot="start" class="logo flex items-center pl-4 pr-4 no-underline h-full" href="/">
         <!-- NOTE dynamic image sources work if placed in the public folder -->
-        <img
+        <!-- <img
           :src="`/images/${isDarkModeEnabled ? 'logo-dark' : 'logo-light'}.png`"
           alt="Logo"
           width="26"
           height="26"
-        />
+        /> -->
+        <img :src="isDarkModeEnabled ? logoDark : logoLight" alt="Logo" width="26" height="26" />
         <span class="ml-2 text-[white] text-lg font-medium">Say It Right</span>
       </a>
 
@@ -154,7 +155,7 @@
   </ion-header>
 </template>
 <script setup lang="ts">
-import { ref, computed, inject, watch } from 'vue'
+import { ref, computed, inject, watch, onMounted } from 'vue'
 // import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import { customLeaveAnimation } from '@/components/transitions/CustomLeaveAnimation'
 import {
@@ -191,6 +192,22 @@ const props = defineProps({
   isLoading: {
     type: Boolean
   }
+})
+
+// const logoDark = new URL('@/assets/images/logo-dark.png', import.meta.url).href
+// const logoLight = new URL('@/assets/images/logo-light.png', import.meta.url).href
+
+const logoDark = ref(null)
+const logoLight = ref(null)
+
+onMounted(() => {
+  const logoDarkImage = new Image()
+  logoDarkImage.src = new URL('@/assets/images/logo-dark.png', import.meta.url).href
+  logoDark.value = logoDarkImage.src
+
+  const logoLightImage = new Image()
+  logoLightImage.src = new URL('@/assets/images/logo-light.png', import.meta.url).href
+  logoLight.value = logoLightImage.src
 })
 
 // const slots = defineSlots()

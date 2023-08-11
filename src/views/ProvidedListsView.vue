@@ -29,7 +29,8 @@ import { ref, onMounted, defineAsyncComponent } from 'vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TheHeader from '@/components/TheHeader.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
-const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
+// const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
+import ListGroups from '@/components/ListGroups.vue'
 import {
   IonPage,
   IonContent,
