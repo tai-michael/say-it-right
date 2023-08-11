@@ -21,6 +21,7 @@
     "firebase": "^9.19.1",
     "firebaseui": "^6.0.2",
     "format-duration": "^3.0.2",
+    "lz-string": "^1.5.0",
     "metaphone": "^2.0.1",
     "pinia": "^2.0.32",
     "typescript": "^5.0.4",
