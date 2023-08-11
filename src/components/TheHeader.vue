@@ -439,6 +439,7 @@ ion-toolbar {
 
 body.dark ion-toolbar {
   --background: rgb(24, 24, 24);
+  border-bottom: 1px rgb(43, 43, 43) solid;
 
   .logo {
     // background: rgb(32, 32, 32);
@@ -464,10 +465,6 @@ body.dark ion-toolbar {
   button:hover,
   .btn-active {
     background-color: rgb(43, 43, 43);
-  }
-
-  @media only screen and (min-width: 768px) {
-    border-bottom: 1px rgb(43, 43, 43) solid;
   }
 }
 

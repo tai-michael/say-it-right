@@ -108,23 +108,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, inject, watch } from 'vue'
+import { computed, ref, onMounted, inject } from 'vue'
 import TransitionFade from '@/components/transitions/TransitionFade.vue'
-import { IonPage, IonCard } from '@ionic/vue'
-import type { PropType } from 'vue'
-import type { List, CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
-import type { WordObject } from '@/stores/modules/types/Review'
+import { IonPage, IonCard, IonButton } from '@ionic/vue'
 import RecorderButton from './RecorderButton.vue'
 import VuMeter from '@/components/VuMeter.vue'
-import { IonButton } from '@ionic/vue'
+import type { PropType } from 'vue'
+import type { WordSource } from '@/stores/modules/types/Review'
+import type { List, CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
+import type { WordObject } from '@/stores/modules/types/Review'
 import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
 import useCorrectAndIncorrectWordsFilter from '@/composables/useCorrectAndIncorrectWordsFilter'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'
 import useCheckIfWordsExistInReview from '@/composables/useCheckIfWordsExistInReview'
 import useWordObjCreator from '@/composables/useWordObjCreator'
-import { useRoute } from 'vue-router'
-import type { WordSource } from '@/stores/modules/types/Review'
 import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const store = route.name === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()

@@ -322,6 +322,9 @@ onMounted(() => {
 
   setTimeout(() => {
     tabMounted.value = true
+    // import('@/components/WordChallenge.vue')
+    // import('@/components/ParagraphChallenge.vue')
+    import('@/components/ListContent.vue')
   }, 500)
 })
 

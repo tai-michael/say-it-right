@@ -35,9 +35,10 @@ const ipaDictionaryStore = useIpaDictionaryStore()
 //   const route = useRoute()
 //   return route.path.startsWith(path) ? 'router-link-exact-active' : ''
 // }
+
+//  NOTE The dictionary is quite big (1.3MB after compression), so caching it in localStorage for reloads
 let lzString
 onMounted(async () => {
-  //  NOTE The dictionary is quite big (1.3MB after compression), so using localStorage
   lzString = await import('lz-string')
   const storedIpaDictionary = localStorage.getItem('ipaDictionary')
 

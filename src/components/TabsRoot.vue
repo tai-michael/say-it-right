@@ -145,6 +145,7 @@ ion-tab-bar {
 
 body.dark ion-tab-bar {
   --background: rgb(24, 24, 24);
+  border-top: 1px rgb(43, 43, 43) solid;
 
   @media only screen and (min-width: 768px) {
     border-right: 1px rgb(43, 43, 43) solid;
