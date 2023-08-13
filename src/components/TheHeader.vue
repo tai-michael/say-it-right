@@ -9,7 +9,12 @@
           width="26"
           height="26"
         /> -->
-        <img :src="isDarkModeEnabled ? logoDark : logoLight" alt="Logo" width="26" height="26" />
+        <img
+          :src="isDarkModeEnabled ? logoDark.src : logoLight.src"
+          alt="Logo"
+          width="26"
+          height="26"
+        />
         <span class="ml-2 text-[white] text-lg font-medium">Say It Right</span>
       </a>
 
@@ -194,34 +199,20 @@ const props = defineProps({
   }
 })
 
-// const logoDark = new URL('@/assets/images/logo-dark.png', import.meta.url).href
-// const logoLight = new URL('@/assets/images/logo-light.png', import.meta.url).href
-
-const logoDark = ref(null)
-const logoLight = ref(null)
-
+const logoDark = ref(new Image())
+const logoLight = ref(new Image())
 onMounted(() => {
-  const logoDarkImage = new Image()
-  logoDarkImage.src = new URL('@/assets/images/logo-dark.png', import.meta.url).href
-  logoDark.value = logoDarkImage.src
-
-  const logoLightImage = new Image()
-  logoLightImage.src = new URL('@/assets/images/logo-light.png', import.meta.url).href
-  logoLight.value = logoLightImage.src
+  // Preloads logos so there's no delay when switching between them
+  logoDark.value.src = new URL('@/assets/images/logo-dark.png', import.meta.url).href
+  logoLight.value.src = new URL('@/assets/images/logo-light.png', import.meta.url).href
 })
 
-// const slots = defineSlots()
-
-// const title = computed(() => {
-//   return slots.default()[0].children
-// })
-
-// watch(
-//   () => title.value,
-//   (newTitle) => {
-//     document.title = newTitle
-//   }
-// )
+// See https://ionicframework.com/docs/theming/dark-mode for application
+const isDarkModeEnabled = inject('isDarkModeEnabled')
+const toggleDarkMode = () => {
+  isDarkModeEnabled.value = !isDarkModeEnabled.value
+  document.body.classList.toggle('dark', isDarkModeEnabled.value)
+}
 
 const authButtonConfig = computed(() => {
   if (isAuthenticated.value) {
@@ -241,13 +232,6 @@ const authButtonConfig = computed(() => {
 
 const signInUser = () => {
   router.push('/sign-in')
-}
-
-// See https://ionicframework.com/docs/theming/dark-mode for application
-const isDarkModeEnabled = inject('isDarkModeEnabled')
-const toggleDarkMode = () => {
-  isDarkModeEnabled.value = !isDarkModeEnabled.value
-  document.body.classList.toggle('dark', isDarkModeEnabled.value)
 }
 
 // Code for popover
@@ -275,6 +259,19 @@ watch(
     showPopover.value = false
   }
 )
+
+// const slots = defineSlots()
+
+// const title = computed(() => {
+//   return slots.default()[0].children
+// })
+
+// watch(
+//   () => title.value,
+//   (newTitle) => {
+//     document.title = newTitle
+//   }
+// )
 </script>
 <style lang="scss" scoped>
 ion-toolbar {

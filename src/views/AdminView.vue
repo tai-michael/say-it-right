@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, defineAsyncComponent } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 import coreLists from '@/assets/lists_1-12.json'

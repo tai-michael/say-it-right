@@ -44,6 +44,15 @@ import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import { RouterLink, useRouter } from 'vue-router'
 import { IonContent } from '@ionic/vue'
 const router = useRouter()
+// const ParagraphChallenge = defineAsyncComponent({
+//   // the loader function
+//   loader: () => import('@/components/ParagraphChallenge.vue'),
+
+//   // A component to use while the async component is loading
+//   loadingComponent: LoadingSpinner,
+//   // Delay before showing the loading component. Default: 200ms.
+//   delay: 0
+// })
 
 const props = defineProps({
   list: { type: Object as PropType<List>, required: true },

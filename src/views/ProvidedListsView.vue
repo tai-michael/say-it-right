@@ -26,8 +26,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, defineAsyncComponent } from 'vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import TheHeader from '@/components/TheHeader.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 const ListGroups = defineAsyncComponent(() => import('@/components/ListGroups.vue'))
 import {
@@ -41,11 +41,6 @@ import {
 } from '@ionic/vue'
 import { arrowUp } from 'ionicons/icons'
 import { useRoute, useRouter } from 'vue-router'
-// const ListGroups = defineAsyncComponent({
-//   loader: () => import('@/components/ListGroups.vue'),
-//   loadingComponent: LoadingSpinner
-//   // delay: 200
-// })
 
 const route = useRoute()
 const router = useRouter()
@@ -66,9 +61,9 @@ const scrollToTop = () => {
 
 const tabMounted = ref(false)
 onMounted(() => {
-  // check if any parameters were passed in the URL
+  // Check if any parameters were passed in the URL
   if (route.params.catchAll) {
-    // redirect to error component
+    // Redirect to error component
     console.log(route.params)
     router.push('/not-found')
   }
@@ -76,6 +71,9 @@ onMounted(() => {
   // console.log('Provided Lists mounted')
   setTimeout(() => {
     tabMounted.value = true
+
+    // Preloading these components reduces delay when ListCard is clicked;
+    // Tested on iOS, Android, and desktop
     import('@/components/WordChallenge.vue')
     import('@/components/ParagraphChallenge.vue')
     import('@/components/ListContent.vue')

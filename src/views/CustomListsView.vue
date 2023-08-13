@@ -153,15 +153,6 @@ import {
   onIonViewWillLeave
 } from '@ionic/vue'
 import { arrowUp, alertCircle } from 'ionicons/icons'
-// const ListGroups = defineAsyncComponent({
-//   // the loader function
-//   loader: () => import('@/components/ListGroups.vue'),
-
-//   // A component to use while the async component is loading
-//   loadingComponent: LoadingSpinner,
-//   // Delay before showing the loading component. Default: 200ms.
-//   delay: 0
-// })
 
 const route = useRoute()
 const router = useRouter()
@@ -313,17 +304,20 @@ const scrollToTop = () => {
 
 const tabMounted = ref(false)
 onMounted(() => {
-  // check if any parameters were passed in the URL
+  // Check if any parameters were passed in the URL
   if (route.params.catchAll) {
-    // redirect to error component
+    // Redirect to error component
     console.log(route.params)
     router.push('/not-found')
   }
 
   setTimeout(() => {
     tabMounted.value = true
-    // import('@/components/WordChallenge.vue')
-    // import('@/components/ParagraphChallenge.vue')
+
+    // Preloading these components reduces delay when ListCard is clicked;
+    // Tested on iOS, Android, and desktop
+    import('@/components/WordChallenge.vue')
+    import('@/components/ParagraphChallenge.vue')
     import('@/components/ListContent.vue')
   }, 500)
 })
@@ -335,7 +329,7 @@ const onSearchIconClick = () => {
 let searchIcon: HTMLElement | null
 // NOTE regular vue 3 onActivated, deactivated, and beforeRouteUpdate seemingly don't work with either ionic's router outlet or its tabs, though they do with modals
 onIonViewDidEnter(() => {
-  // setTimeout is necessary to prevent fab from showing before the ref element ('scrollTrigger') is mounted
+  // NOTE setTimeout is necessary to prevent fab from showing before the ref element ('scrollTrigger') is mounted
   setTimeout(() => {
     if (scrollTrigger.value !== null) observer.observe(scrollTrigger.value)
 

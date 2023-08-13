@@ -12,6 +12,7 @@ import TabsRoot from '@/components/TabsRoot.vue'
 import { user } from '@/firebaseInit'
 import useSafariDetector from '@/composables/useSafariDetector'
 
+// NOTE eager loading the routes eliminates lag when navigating between tabs
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
