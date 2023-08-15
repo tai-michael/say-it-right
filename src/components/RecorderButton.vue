@@ -32,13 +32,19 @@ import MicIcon from '@/assets/icons/mic.vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 
-const microphone = ref()
+// NOTE prevents right-click from triggering on hold when using Chrome devtools.
+// See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
+const recorderButtonNarrowscreen = ref(null)
+const disableContextMenu = (e) => {
+  e.preventDefault()
+}
 
+const microphone = ref()
+const clientInitialized = ref(false)
 // @ts-ignore
 const clientConnected = computed(
   () => client.decoderOptions.connect === true && clientInitialized.value
 )
-const clientInitialized = ref(false)
 const attachMicrophone = async () => {
   microphone.value = new BrowserMicrophone()
   // if (!microphone.value) microphone.value = new BrowserMicrophone()
@@ -51,38 +57,48 @@ const attachMicrophone = async () => {
   clientInitialized.value = client.initialized
   // console.log(client)
   // console.log(client.initialized)
-}
-
-// NOTE prevents right-click from triggering on hold when using Chrome devtools.
-// See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
-const recorderButtonNarrowscreen = ref(null)
-const disableContextMenu = (e) => {
-  e.preventDefault()
-}
-
-onMounted(async () => {
-  await attachMicrophone()
-  // console.log('mic attached')
-
   if (recorderButtonNarrowscreen.value) {
     recorderButtonNarrowscreen.value.addEventListener('contextmenu', disableContextMenu, true)
   }
-})
-onUnmounted(() => {
-  // console.log('mic unmounted')
-  stopMicrophoneStream(microphone.value.mediaStream)
+}
 
-  if (recorderButtonNarrowscreen.value)
-    recorderButtonNarrowscreen.value.removeEventListener('contextmenu', disableContextMenu, true)
-})
-
-function stopMicrophoneStream(mediaStream) {
+const stopMicrophoneStream = (mediaStream) => {
   if (!mediaStream) return
   mediaStream.getTracks().forEach((track) => {
     track.stop()
   })
   // console.log(microphone)
+
+  if (recorderButtonNarrowscreen.value)
+    recorderButtonNarrowscreen.value.removeEventListener('contextmenu', disableContextMenu, true)
 }
+
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  navigator.userAgent
+)
+
+// NOTE The connection to Speechly is lost after about 1-3 minutes of mobile being put to sleep. In such cases, remounting the recorder button doesn't reestablish the connection, so need to reload the page
+const handleVisibilityChange = async () => {
+  // client.decoder.connectPromise changing from Promise to null is the only way to tell whether the Speechly connection has been lost
+  if (
+    isMobile &&
+    document.visibilityState === 'visible' &&
+    client.decoder.connectPromise === null
+  ) {
+    location.reload()
+  }
+}
+
+onMounted(async () => {
+  await attachMicrophone()
+  // console.log('mic attached')
+  document.addEventListener('visibilitychange', handleVisibilityChange)
+})
+onUnmounted(() => {
+  // console.log('mic unmounted')
+  stopMicrophoneStream(microphone.value.mediaStream)
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+})
 
 // NOTE Resetting the value here is necessary, since I'm currently unable to 'detach' the mic/mediastream/client when I swap between views, meaning finalTranscript and temporaryTranscript in this component carries over to the new view
 onDeactivated(() => {
@@ -97,7 +113,7 @@ const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTran
 const startRecording = async (e, isNarrowScreen) => {
   // console.log('mousedown/touchstart triggered')
 
-  // NOTE Need to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
+  // NOTE It's necessary to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
   if (isNarrowScreen && e.pointerType === 'touch') {
     const button = e.target.closest('.recording-btn')
     if (button) {
