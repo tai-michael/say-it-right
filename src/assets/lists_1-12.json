@@ -4,21 +4,8 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "John, a successful businessman, inspired many with his vivid visions of a better society. He said that discipline and a courageous spirit were essential to achieving greatness. As he shared his plan, people began to think about their own potential. Comforted by his words, they decided to study hard and contribute to a brighter future.",
+    "paragraph": "John, a successful businessman, inspired many with his vivid visions of a better society. He said that discipline and a courageous spirit were essential to achieving greatness. As he shared his plan, people began to think about their own potential. Motivated by his words, they decided to study hard and contribute to a brighter future.",
     "words": {
-      "vivid": {
-        "mispronouncedFrequentlyAs": "wiwid",
-        "mispronunciationFrequency": 3,
-        "mistakeType": "Mispronouncing 'V' as 'W'",
-        "essentialSound": "v",
-        "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The sunset painted a vivid picture of orange and pink across the sky.",
-          "She described her dream with such vivid detail that it felt like I was there."
-        ]
-      },
       "successful": {
         "mispronouncedFrequentlyAs": "successfur",
         "mispronunciationFrequency": 10,
@@ -53,29 +40,6 @@
         "sentences": [
           "I think it's going to rain today, so don't forget your umbrella.",
           "If you think about it, the solution to the problem is quite simple."
-        ]
-      },
-      "said": {
-        "mispronouncedFrequentlyAs": "side / sad",
-        "mispronunciationFrequency": 4,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He said he would be here at 5 o'clock.",
-          "She said she loves chocolate ice cream."
-        ]
-      },
-      "comforted": {
-        "mispronouncedFrequentlyAs": "com-FORTED",
-        "mispronunciationFrequency": 5,
-        "mistakeType": "Placing stress on the wrong syllable",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She comforted her friend after the loss of his pet.",
-          "The warm blanket comforted him on the cold night."
         ]
       },
       "he": {
@@ -151,21 +115,8 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Samantha enjoyed visiting various cafés around the world. In her private time, she would really immerse herself in the process of tasting different lattes. Thanks to her passion, she usually knew the best places to find a great cup of coffee, because she had trained her palate to recognize quality.",
+    "paragraph": "Samantha enjoyed visiting various cafés around the world. In her private time, she liked to taste different kinds of lattes. Thanks to her passion, she usually knew the best places to find a great cup of coffee, because she had trained herself to recognize quality.",
     "words": {
-      "various": {
-        "mispronouncedFrequentlyAs": "warious",
-        "mispronunciationFrequency": 10,
-        "mistakeType": "Mispronouncing 'V' as 'W'",
-        "essentialSound": "v",
-        "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The store offers various types of fruits and vegetables.",
-          "She has traveled to various countries around the world."
-        ]
-      },
       "private": {
         "mispronouncedFrequentlyAs": "preevit",
         "mispronunciationFrequency": 10,
@@ -247,28 +198,6 @@
           "He was late because he missed the bus."
         ]
       },
-      "café": {
-        "mispronouncedFrequentlyAs": "kayf",
-        "mispronunciationFrequency": 10,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "They met at the café for a cup of coffee.",
-          "The small café on the corner is her favorite place to relax."
-        ]
-      },
-      "latte": {
-        "mispronouncedFrequentlyAs": "la-tee",
-        "mispronunciationFrequency": 10,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She ordered a pumpkin spice latte at the coffee shop.",
-          "He prefers a caramel latte over a cappuccino."
-        ]
-      },
       "usually": {
         "mispronouncedFrequentlyAs": "urually",
         "mispronunciationFrequency": 10,
@@ -287,7 +216,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Robert, an excellent pilot, visited small islands where he would often develop friendships with the kind locals. He was a thin man who rarely indulged in rich foods, but he couldn't resist the occasional snack on a plane. One day, a colleague introduced him to the joys of homemade treats.",
+    "paragraph": "Robert, an excellent pilot, visited small islands where he would often develop friendships with the kind locals. He was a thin man who rarely ate rich foods, but he couldn't resist the occasional snack on a plane. One day, a colleague introduced him to the joys of homemade treats.",
     "words": {
       "visited": {
         "mispronouncedFrequentlyAs": "wisited",
@@ -324,18 +253,6 @@
         "sentences": [
           "She is a kind and caring person.",
           "He offered a kind word of encouragement."
-        ]
-      },
-      "thin": {
-        "mispronouncedFrequentlyAs": "sin",
-        "mispronunciationFrequency": 3,
-        "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "essentialSound": "th",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She wore a thin jacket on the chilly day.",
-          "The thin layer of ice on the pond began to crack."
         ]
       },
       "develop": {
@@ -382,17 +299,6 @@
           "She offered a snack to her friend during the movie."
         ]
       },
-      "rarely": {
-        "mispronouncedFrequentlyAs": "rally",
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Mispronouncing the 'R' sound",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He rarely went to parties, preferring to stay at home.",
-          "She rarely ate dessert, but she couldn't resist the chocolate cake."
-        ]
-      },
       "colleague": {
         "mispronouncedFrequentlyAs": "college",
         "mispronunciationFrequency": 10,
@@ -402,17 +308,6 @@
         "sentences": [
           "He went to lunch with a colleague to discuss the project.",
           "She asked her colleague for help with the presentation."
-        ]
-      },
-      "rich": {
-        "mispronouncedFrequentlyAs": "reach",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'IH' sound",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The rich taste of the chocolate cake was irresistible.",
-          "He became rich after inventing a successful product."
         ]
       }
     }
@@ -484,26 +379,6 @@
           "She shared her thoughts on the book during the discussion."
         ]
       },
-      "met": {
-        "mispronouncedFrequentlyAs": "mite",
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": ["They met at the park for a picnic.", "She met her future spouse in college."]
-      },
-      "pays": {
-        "mispronouncedFrequentlyAs": "pace",
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Placing stress on the wrong syllable",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He pays the bills promptly every month.",
-          "She pays for her groceries with a credit card."
-        ]
-      },
       "memories": {
         "mispronouncedFrequentlyAs": "memor-ai-z",
         "mispronunciationFrequency": 2,
@@ -556,7 +431,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "During her free time, the president enjoyed a variety of activities, from skiing on thick snow to resting at home. She was never upset with her staff's choice of lighting in the living room. The tasteful atmosphere had a calming effect, allowing her to relax.",
+    "paragraph": "During her free time, the president enjoyed a variety of activities, from skiing on thick snow to resting at home. She was never upset with her staff's choice of lighting in the living room. The tasteful atmosphere possesses a calming effect, allowing her to relax.",
     "words": {
       "time": {
         "mispronouncedFrequentlyAs": "tahm",
@@ -819,45 +694,8 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Jake was scared and almost couldn't breathe while watching the TV broadcast on the virus. Then, he ate a piece of bread and pet his dog to calm his nerves. He is driven to protect his family well, even if that meant acting brave in the face of danger. He knows that technology will help beat the virus someday.",
+    "paragraph": "Jake was scared and upset and almost couldn't breathe while watching the TV broadcast on the virus. Then, he ate a piece of thick bread and pet his dog to calm his nerves. He is driven to protect his family well, even if that meant acting brave and being courageous. He knows that technology will help beat the virus someday.",
     "words": {
-      "TV": {
-        "mispronouncedFrequentlyAs": "tee-wee",
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Mispronouncing 'V' as 'W'",
-        "essentialSound": "v",
-        "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He watched his favorite show on TV.",
-          "She turned off the TV to focus on her work."
-        ]
-      },
-      "well": {
-        "mispronouncedFrequentlyAs": "werr",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing 'L' as 'R'",
-        "essentialSound": "l",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She did well on her exam after studying hard.",
-          "He wished his friend well before the big performance."
-        ]
-      },
-      "beat": {
-        "mispronouncedFrequentlyAs": "bit",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EE' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The beat of the music made her want to dance.",
-          "He could feel his heart beat faster as he got nervous."
-        ]
-      },
       "brave": {
         "mispronouncedFrequentlyAs": "br-ai-v",
         "mispronunciationFrequency": 1,
@@ -911,42 +749,6 @@
         "sentences": [
           "He is a driven individual, always striving for success.",
           "Her driven attitude helped her achieve her goals."
-        ]
-      },
-      "virus": {
-        "mispronouncedFrequentlyAs": "wirus",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing 'V' as 'W'",
-        "essentialSound": "v",
-        "pronunciationTip": "You're pronouncing 'v' like 'w', which is wrong. To pronounce the 'v' sound clearly, try putting your upper teeth on your lower lip.",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The virus spread quickly through the population.",
-          "Scientists are working on a vaccine for the virus."
-        ]
-      },
-      "pet": {
-        "mispronouncedFrequentlyAs": "p-ai-ts",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She pet her cat while reading a novel.",
-          "Pets can bring joy and companionship to their owners."
-        ]
-      },
-      "breathe": {
-        "mispronouncedFrequentlyAs": "breth",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "Take a deep breath and breathe slowly.",
-          "Plants need carbon dioxide to breathe and grow."
         ]
       }
     }
@@ -1006,18 +808,6 @@
           "Her theories on the subject were well-researched."
         ]
       },
-      "best": {
-        "mispronouncedFrequentlyAs": "b-ai-st",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He did his best to complete the task.",
-          "She always tries to be the best version of herself."
-        ]
-      },
       "fear": {
         "mispronouncedFrequentlyAs": "fair",
         "mispronunciationFrequency": 1,
@@ -1048,17 +838,6 @@
         "attemptsSuccessful": 0,
         "sentences": ["He ordered fried chicken for dinner.", "She loves eating fried rice."]
       },
-      "experiment": {
-        "mispronouncedFrequentlyAs": "expreement",
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He conducted an experiment in the lab.",
-          "The experiment yielded interesting results."
-        ]
-      },
       "women": {
         "mispronouncedFrequentlyAs": "woman",
         "mispronunciationFrequency": 1,
@@ -1068,17 +847,6 @@
         "sentences": [
           "The conference celebrated the achievements of women.",
           "She is inspired by strong, independent women."
-        ]
-      },
-      "determined": {
-        "mispronouncedFrequentlyAs": "determ-ai-ned",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'IH' sound",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He was determined to finish the race.",
-          "Her determined spirit helped her overcome obstacles."
         ]
       }
     }
@@ -1131,18 +899,6 @@
         "attemptsSuccessful": 0,
         "sentences": ["His smile brightened the room.", "She has a contagious smile."]
       },
-      "method": {
-        "mispronouncedFrequentlyAs": "mesh-ed",
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "essentialSound": "th",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He developed a new method for solving the problem.",
-          "Her method of teaching is very effective."
-        ]
-      },
       "dream": {
         "mispronouncedFrequentlyAs": "drim",
         "mispronunciationFrequency": 1,
@@ -1154,14 +910,6 @@
           "I had a strange dream last night.",
           "She wants to fulfill her dream of becoming a doctor."
         ]
-      },
-      "great": {
-        "mispronouncedFrequentlyAs": "gr-ai-t",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'AY' sound",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": ["He is a great musician.", "We had a great time at the party."]
       },
       "experience": {
         "mispronouncedFrequentlyAs": "exprence",
@@ -1203,7 +951,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "The young athlete liked to wear bright clothes that smelled sweet. She would focus on taking deep breaths before each race. The straight track in front of her filled her with inspiration to run faster and be a better version of herself, whether she won or lost the race.",
+    "paragraph": "The young athlete liked to wear bright clothes that smelled sweet. She focused on taking deep breaths before each race. The straight track in front of her filled her with inspiration to run faster and become better, whether she won or lost the race. There was no defeat. This idea comforted her when she was resting by the seats.",
     "words": {
       "whether": {
         "mispronouncedFrequentlyAs": "wh-ai-ther",
@@ -1217,6 +965,17 @@
           "He wondered whether he should call or send an email."
         ]
       },
+      "comforted": {
+        "mispronouncedFrequentlyAs": "com-FORTED",
+        "mispronunciationFrequency": 5,
+        "mistakeType": "Placing stress on the wrong syllable",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "She comforted her friend after the loss of his pet.",
+          "The warm blanket comforted him on the cold night."
+        ]
+      },
       "like": {
         "mispronouncedFrequentlyAs": "lack",
         "mispronunciationFrequency": 1,
@@ -1227,18 +986,6 @@
         "sentences": [
           "I like to read books in my free time.",
           "She likes to go for a walk every morning."
-        ]
-      },
-      "athlete": {
-        "mispronouncedFrequentlyAs": "aslete",
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "essentialSound": "th",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He is a professional athlete and competes in marathons.",
-          "The young athlete trains every day to improve her skills."
         ]
       },
       "smell": {
@@ -1264,64 +1011,6 @@
           "He decided to wear a suit to the interview.",
           "She always wears a hat when it's sunny outside."
         ]
-      },
-      "sweet": {
-        "mispronouncedFrequentlyAs": "swayt",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EE' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The cake was very sweet and delicious.",
-          "She has a sweet personality and is always kind to others."
-        ]
-      },
-      "straight": {
-        "mispronouncedFrequentlyAs": "strite",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'AY' sound",
-        "essentialSound": "a",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "Walk straight ahead and you'll find the store.",
-          "She has long, straight hair."
-        ]
-      },
-      "breath": {
-        "mispronouncedFrequentlyAs": "breethe",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "Take a deep breath and relax.",
-          "She was out of breath after running up the stairs."
-        ]
-      },
-      "better": {
-        "mispronouncedFrequentlyAs": "bayter",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She felt better after a good night's sleep.",
-          "His cooking skills are better than mine."
-        ]
-      },
-      "clothes": {
-        "mispronouncedFrequentlyAs": "clothe-sez",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She bought new clothes for the party.",
-          "He folded his clothes and put them away."
-        ]
       }
     }
   },
@@ -1330,41 +1019,8 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Sarah was impressed by the details of the ancient pottery in the museum. She was required to write about it for class, but had doubts on where to begin. Meanwhile, the colorful patterns on the clay were breathtaking. Being surrounded there by history gave her inspiration and let her want to learn more.",
+    "paragraph": "Sarah admired and was impressed by the details of the ancient pottery in the museum. She was required to write some things about it for class, but despite her best efforts, she had doubts on where to begin. Meanwhile, the colorful patterns on the clay were breathtaking. Being surrounded by history gave her inspiration to learn.",
     "words": {
-      "meanwhile": {
-        "mispronouncedFrequentlyAs": "meanwheel",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Neglecting the 'AI' sound",
-        "essentialSound": "i",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She cooked dinner; meanwhile, he set the table.",
-          "He went to the store; meanwhile, she cleaned the house."
-        ]
-      },
-      "let": {
-        "mispronouncedFrequentlyAs": "l-ai-t",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": ["He decided to let her go.", "She wouldn't let anything stand in her way."]
-      },
-      "required": {
-        "mispronouncedFrequentlyAs": "reqered",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Neglecting the 'AI' sound",
-        "essentialSound": "i",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "A password is required to access the account.",
-          "Attendance is required for all students."
-        ]
-      },
       "impressed": {
         "mispronouncedFrequentlyAs": "impr-ai-sed",
         "mispronunciationFrequency": 1,
@@ -1389,38 +1045,6 @@
           "She wore a colorful dress to the party."
         ]
       },
-      "details": {
-        "mispronouncedFrequentlyAs": "dee-tie-ls",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The artist paid attention to the details in the painting.",
-          "She explained the details of the project to the team."
-        ]
-      },
-      "doubt": {
-        "mispronouncedFrequentlyAs": "doubt (with b sound)",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "There is no doubt that he is a talented musician.",
-          "If you have any doubt, don't hesitate to ask for help."
-        ]
-      },
-      "museum": {
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "We visited the art museum last weekend.",
-          "The museum has a fascinating collection of ancient artifacts."
-        ]
-      },
       "ancient": {
         "mispronouncedFrequentlyAs": "ayshent",
         "mispronunciationFrequency": 1,
@@ -1430,16 +1054,6 @@
         "sentences": [
           "The ancient ruins are a popular tourist attraction.",
           "He studied ancient civilizations in college."
-        ]
-      },
-      "inspiration": {
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "Nature is a great source of inspiration for artists.",
-          "His hard work and dedication are an inspiration to us all."
         ]
       }
     }
@@ -1461,27 +1075,6 @@
         "sentences": [
           "I admire her courage and determination.",
           "He admires the beauty of the sunset."
-        ]
-      },
-      "special": {
-        "mispronouncedFrequentlyAs": "spai-cial",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": ["Today is a special day for her.", "He made a special effort to be on time."]
-      },
-      "help": {
-        "mispronouncedFrequentlyAs": "heelp",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "hel",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "Can you help me carry these bags?",
-          "She offered to help with the preparations."
         ]
       },
       "efforts": {
