@@ -88,7 +88,7 @@
                 props.list.status === 'PARAGRAPH_RECORDING_ENDED' &&
                 recordingStatus !== 'ALL_WORDS_CORRECT'
               "
-              @click="store.setListStatus('TESTING_WORD_ONLY')"
+              @click="handleNextButtonClicked"
             >
               Next
             </ion-button>
@@ -372,6 +372,11 @@ const recordingStatus = computed(() => {
     return 'MOST_WORDS_CORRECT'
   else return 'MOST_WORDS_INCORRECT'
 })
+
+const handleNextButtonClicked = () => {
+  store.setListStatus('TESTING_WORD_ONLY')
+  store.updateListsInFirestore()
+}
 </script>
 
 <style lang="scss" scoped>
