@@ -2,6 +2,7 @@
   <TheHeader :show-back-button="true" @back-button-clicked="returnToLists">{{ title }}</TheHeader>
 
   <ion-content>
+    <PullRefresher />
     <TransitionAppear>
       <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
 
@@ -37,6 +38,7 @@ import { computed, toRefs, defineAsyncComponent } from 'vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import TheHeader from '@/components/TheHeader.vue'
+const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 const ParagraphChallenge = defineAsyncComponent(() => import('@/components/ParagraphChallenge.vue'))
 const WordChallenge = defineAsyncComponent(() => import('@/components/WordChallenge.vue'))
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'
