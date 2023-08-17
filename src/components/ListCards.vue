@@ -61,7 +61,7 @@
     >
       <div class="flex items-center text-center justify-center cursor-pointer pb-4 pt-4">
         <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
-        ><span class="mr-2">Delete list</span>
+        ><span class="mr-2 font-sans">Delete list</span>
         <!-- <ion-list>
         <ion-item :button="true" :detail="false">
           <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon>Delete list</ion-item

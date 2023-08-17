@@ -12,16 +12,6 @@
             <label>Enter up to 7 words separated by spaces or commas:</label>
             <div class="relative">
               <ion-searchbar
-                v-if="isLoadingNewList"
-                v-model="loadingText"
-                :disabled="isLoadingNewList"
-                animated="true"
-                inputmode="text"
-                show-clear-button="never"
-                class="custom-lists"
-              ></ion-searchbar>
-              <ion-searchbar
-                v-else
                 placeholder="  e.g. urban thin kindly"
                 v-model="wordsInput"
                 :disabled="isLoadingNewList"
@@ -31,52 +21,20 @@
                 @ion-input="submissionError = ''"
                 class="custom-lists"
               ></ion-searchbar>
-              <ion-icon
-                :icon="arrowForwardOutline"
-                class="submit-btn text-xl"
-                @click="submitWords(wordsInput)"
-                title="Submit words"
-              ></ion-icon>
-              <!-- <button
-                class="absolute p-1 rounded-md md:bottom-3 md:p-2 md:right-3 dark:hover:bg-gray-900 dark:disabled:hover:bg-transparent right-2 disabled:text-gray-400 enabled:bg-brand-purple text-white bottom-1.5 transition-colors disabled:opacity-40"
-                style="background-color: rgb(25, 195, 125)"
+              <button
+                class="submit-btn cursor-pointer disabled:opacity-40 disabled:cursor-default"
+                @click.prevent="submitWords(wordsInput)"
+                :disabled="!wordsInput"
               >
-                <span class="" data-state="closed"
-                  ><svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    class="h-4 w-4 m-1 md:m-0"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z"
-                      fill="currentColor"
-                    ></path></svg
-                ></span>
-              </button> -->
-              <!-- <button
-                class="absolute p-1 rounded-md md:bottom-3 md:p-2 md:right-3 dark:hover:bg-gray-900 dark:disabled:hover:bg-transparent right-2 disabled:text-gray-400 enabled:bg-brand-purple text-white bottom-1.5 transition-colors disabled:opacity-40"
-                style=""
-                disabled=""
-              >
-                <span class="" data-state="closed"
-                  ><svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    class="h-4 w-4 m-1 md:m-0"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z"
-                      fill="currentColor"
-                    ></path></svg
-                ></span>
-              </button> -->
+                <ion-icon
+                  v-if="!isLoadingNewList"
+                  :icon="arrowForwardOutline"
+                  class="text-xl"
+                  title="Submit words"
+                ></ion-icon>
+                <ion-spinner name="dots" v-else></ion-spinner>
+              </button>
             </div>
-            <!-- <ion-button v-if="isLoadingNewList" ><LoadingDots /></ion-button>
-          <ion-button v-else type="submit" :disabled="isLoadingNewList" class="color">Submit</ion-button> -->
             <div
               v-if="submissionError"
               class="mt-4 ml-2 text-red-500 font-medium flex leading-[1.6rem]"
@@ -94,7 +52,7 @@
 
         <div
           v-else
-          class="instructions flex flex-col h-full w-full mt-32 justify-center align-middle items-center gap-y-3 p-2 font-semibold md:mt-20"
+          class="instructions flex flex-col h-full w-full mt-24 justify-center align-middle items-center gap-y-3 p-2 font-semibold md:mt-20"
         >
           <span class="max-w-xs text-center">Not sure how to say certain words?</span>
           <span class="max-w-xs text-center">Start by creating a list!</span>
@@ -121,7 +79,7 @@
     </router-view> -->
   </ion-page>
 
-  <ion-page v-else class="max-h-[100vh]">
+  <ion-page v-else class="max-h-[100vh] h-full">
     <TheHeader>Custom Lists</TheHeader>
     <LoadingSpinner />
   </ion-page>
@@ -149,6 +107,7 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
+  IonSpinner,
   onIonViewDidEnter,
   onIonViewWillLeave
 } from '@ionic/vue'
@@ -207,17 +166,10 @@ const createListWithSentences = (wordObjects: WordObject[], allLists: List[]) =>
   allLists.push(newListObject)
 }
 
-const animationIndex = ref(0)
-const loadingText = computed(() => {
-  return isLoadingNewList.value
-    ? `Please wait! Creating list${'.'.repeat(animationIndex.value)}`
-    : ''
-})
-
 // TODO add error-handling in here for openai
 const submitWords = async (words: string) => {
   try {
-    if (!words) return (submissionError.value = 'Please enter at least one word')
+    // if (!words) return (submissionError.value = 'Please enter at least one word')
 
     submissionError.value = ''
 
@@ -226,9 +178,6 @@ const submitWords = async (words: string) => {
     if (uniqueWordsArray.length > 7) return (submissionError.value = 'Please enter at MOST 7 words')
 
     isLoadingNewList.value = true
-    const animatedDots = setInterval(() => {
-      animationIndex.value = (animationIndex.value + 1) % 4
-    }, 500)
 
     if (uniqueWordsArray.length > store.minWordsThreshold) {
       newlyCreatedParagraph.value = await useOpenAiParagraphGenerator(uniqueWordsArray)
@@ -246,10 +195,9 @@ const submitWords = async (words: string) => {
     // TODO possibly force rerender or reload ReviewView or WordSelectModal here
 
     wordsInput.value = ''
-    clearInterval(animatedDots)
     isLoadingNewList.value = false
     setToastOpen('Uploaded list')
-    // REVIEW uncomment below if I want to automatically direct the user to a list right after generating it
+    // REVIEW uncomment below if we want to automatically direct the user to a list right after generating it
     // router.push({ params: { id: store.allLists.length } })
 
     setTimeout(() => {
@@ -424,19 +372,23 @@ ion-toast {
     }
   }
 
-  ion-icon.submit-btn {
+  .submit-btn {
     position: absolute;
-    pointer-events: auto;
-    cursor: pointer;
     top: 11px;
     right: 11px;
-    padding: 8px 9px 8px 8px;
+    padding: 8px 9px 6px 8px;
+    border-radius: 4px;
     color: white;
     background: #3bb8b1;
-    border-radius: 4px;
 
-    &:hover {
+    &:not(:disabled):hover {
       background: #3dc4bd;
+    }
+
+    ion-spinner {
+      width: 20px;
+      height: 20px;
+      color: white;
     }
   }
 }
@@ -470,10 +422,9 @@ body.dark {
   }
 
   .submit-btn {
-    background: rgb(53, 53, 53);
-
-    &:hover {
-      background: rgb(62, 62, 62);
+    &:disabled {
+      // background-color: transparent;
+      opacity: 0.3;
     }
   }
 }

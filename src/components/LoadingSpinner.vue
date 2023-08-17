@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full items-center justify-center">
+  <div class="flex h-full items-center justify-center max-h-[100vh]">
     <div class="spinner">
       <span class="spinner material"></span>
     </div>

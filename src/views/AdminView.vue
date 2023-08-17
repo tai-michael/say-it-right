@@ -270,4 +270,8 @@ label {
     }
   }
 }
+
+body.dark input {
+  color: black;
+}
 </style>
