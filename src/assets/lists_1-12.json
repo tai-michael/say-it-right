@@ -75,17 +75,6 @@
           "The scientist conducted a study on the effects of pollution."
         ]
       },
-      "courageous": {
-        "mispronouncedFrequentlyAs": "courage-as",
-        "mispronunciationFrequency": 10,
-        "mistakeType": "Other",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The courageous firefighter saved the child from the burning building.",
-          "He made a courageous decision to stand up for what he believed in."
-        ]
-      },
       "society": {
         "mispronouncedFrequentlyAs": "social-ty",
         "mispronunciationFrequency": 4,
@@ -343,18 +332,6 @@
           "The antique had great sentimental value to the family."
         ]
       },
-      "recall": {
-        "mispronouncedFrequentlyAs": "recore",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing 'L' as 'R'",
-        "essentialSound": "l",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "I can't recall the name of the book I read last week.",
-          "She tried to recall where she had left her keys."
-        ]
-      },
       "while": {
         "mispronouncedFrequentlyAs": "well",
         "mispronunciationFrequency": 2,
@@ -431,7 +408,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "During her free time, the president enjoyed a variety of activities, from skiing on thick snow to resting at home. She was never upset with her staff's choice of lighting in the living room. The tasteful atmosphere possesses a calming effect, allowing her to relax.",
+    "paragraph": "During her free time, the president enjoyed a variety of activities, from skiing on thick snow to resting at home. She was never upset with her staff's choice of lighting in the living room. The tasteful atmosphere possesses a calming effect, allowing her to relax and recall fond memories under the glow of the lamps.",
     "words": {
       "time": {
         "mispronouncedFrequentlyAs": "tahm",
@@ -457,28 +434,16 @@
           "She enjoyed the variety of activities available at the resort."
         ]
       },
-      "thick": {
-        "mispronouncedFrequentlyAs": "sick",
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "essentialSound": "th",
+      "recall": {
+        "mispronouncedFrequentlyAs": "recore",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing 'L' as 'R'",
+        "essentialSound": "l",
         "attempts": 0,
         "attemptsSuccessful": 0,
         "sentences": [
-          "The thick fog made it difficult to see the road.",
-          "She wore a thick sweater to stay warm in the cold weather."
-        ]
-      },
-      "upset": {
-        "mispronouncedFrequentlyAs": "upsite",
-        "mispronunciationFrequency": 2,
-        "mistakeType": "Mispronouncing the 'EH' sound",
-        "essentialSound": "e",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "He was upset when his team lost the game.",
-          "She tried to comfort her upset friend after the breakup."
+          "I can't recall the name of the book I read last week.",
+          "She tried to recall where she had left her keys."
         ]
       },
       "skiing": {
@@ -491,30 +456,6 @@
         "sentences": [
           "They went skiing in the mountains during their vacation.",
           "She took skiing lessons to improve her skills on the slopes."
-        ]
-      },
-      "tastefully": {
-        "mispronouncedFrequentlyAs": "textfully",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'AY' sound",
-        "essentialSound": "a",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She dressed tastefully for the elegant event.",
-          "The room was tastefully decorated with modern artwork."
-        ]
-      },
-      "rest": {
-        "mispronouncedFrequentlyAs": "west",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'R' sound",
-        "essentialSound": "r",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "She decided to rest after a long day at work.",
-          "He put the book down and let it rest on the table."
         ]
       },
       "staff": {
@@ -606,18 +547,6 @@
           "She read a bedtime story to her child."
         ]
       },
-      "thing": {
-        "mispronouncedFrequentlyAs": "sing",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing 'TH' as 'S'",
-        "essentialSound": "th",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The most important thing to her was spending time with family.",
-          "He packed up his things before moving to a new city."
-        ]
-      },
       "instead": {
         "mispronouncedFrequentlyAs": "inst-ai-d",
         "mispronunciationFrequency": 1,
@@ -628,18 +557,6 @@
         "sentences": [
           "Instead of going out, they decided to stay home and watch a movie.",
           "She chose to walk instead of taking the bus."
-        ]
-      },
-      "seats": {
-        "mispronouncedFrequentlyAs": "sets",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EE' sound",
-        "essentialSound": "ea",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "They found their seats in the theater before the show started.",
-          "The car had comfortable seats and plenty of legroom."
         ]
       },
       "taste": {
@@ -749,6 +666,41 @@
         "sentences": [
           "He is a driven individual, always striving for success.",
           "Her driven attitude helped her achieve her goals."
+        ]
+      },
+      "courageous": {
+        "mispronouncedFrequentlyAs": "courage-as",
+        "mispronunciationFrequency": 10,
+        "mistakeType": "Other",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "The courageous firefighter saved the child from the burning building.",
+          "He made a courageous decision to stand up for what he believed in."
+        ]
+      },
+      "thick": {
+        "mispronouncedFrequentlyAs": "sick",
+        "mispronunciationFrequency": 2,
+        "mistakeType": "Mispronouncing 'TH' as 'S'",
+        "essentialSound": "th",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "The thick fog made it difficult to see the road.",
+          "She wore a thick sweater to stay warm in the cold weather."
+        ]
+      },
+      "upset": {
+        "mispronouncedFrequentlyAs": "upsite",
+        "mispronunciationFrequency": 2,
+        "mistakeType": "Mispronouncing the 'EH' sound",
+        "essentialSound": "e",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "He was upset when his team lost the game.",
+          "She tried to comfort her upset friend after the breakup."
         ]
       }
     }
@@ -1011,6 +963,42 @@
           "He decided to wear a suit to the interview.",
           "She always wears a hat when it's sunny outside."
         ]
+      },
+      "rest": {
+        "mispronouncedFrequentlyAs": "west",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing the 'R' sound",
+        "essentialSound": "r",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "She decided to rest after a long day at work.",
+          "He put the book down and let it rest on the table."
+        ]
+      },
+      "seats": {
+        "mispronouncedFrequentlyAs": "sets",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing the 'EE' sound",
+        "essentialSound": "ea",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "They found their seats in the theater before the show started.",
+          "The car had comfortable seats and plenty of legroom."
+        ]
+      },
+      "defeat": {
+        "mispronouncedFrequentlyAs": "defit",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing the 'EE' sound",
+        "essentialSound": "ea",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "The team faced a tough defeat in the championship game.",
+          "He refused to accept defeat and continued to try."
+        ]
       }
     }
   },
@@ -1019,7 +1007,7 @@
     "status": "LIST_NOT_STARTED",
     "attempts": 0,
     "attemptsSuccessful": 0,
-    "paragraph": "Sarah admired and was impressed by the details of the ancient pottery in the museum. She was required to write some things about it for class, but despite her best efforts, she had doubts on where to begin. Meanwhile, the colorful patterns on the clay were breathtaking. Being surrounded by history gave her inspiration to learn.",
+    "paragraph": "Sarah admired and was impressed by the details of the ancient pottery in the museum. She was required to write some things about it for class, but despite her best efforts, she had doubts on where to begin. Meanwhile, the colorful patterns on the clay were breathtaking. Being surrounded by history gave her inspiration.",
     "words": {
       "impressed": {
         "mispronouncedFrequentlyAs": "impr-ai-sed",
@@ -1055,16 +1043,7 @@
           "The ancient ruins are a popular tourist attraction.",
           "He studied ancient civilizations in college."
         ]
-      }
-    }
-  },
-  {
-    "listNumber": 12,
-    "status": "LIST_NOT_STARTED",
-    "attempts": 0,
-    "attemptsSuccessful": 0,
-    "paragraph": "Michael had a special gift for helping others. His friends and family would often admire his efforts to assist those in need. He believed that everyone had the power to defeat their",
-    "words": {
+      },
       "admire": {
         "mispronouncedFrequentlyAs": "admeer",
         "mispronunciationFrequency": 10,
@@ -1077,6 +1056,18 @@
           "He admires the beauty of the sunset."
         ]
       },
+      "thing": {
+        "mispronouncedFrequentlyAs": "sing",
+        "mispronunciationFrequency": 1,
+        "mistakeType": "Mispronouncing 'TH' as 'S'",
+        "essentialSound": "th",
+        "attempts": 0,
+        "attemptsSuccessful": 0,
+        "sentences": [
+          "The most important thing to her was spending time with family.",
+          "He packed up his things before moving to a new city."
+        ]
+      },
       "efforts": {
         "mispronouncedFrequentlyAs": "ee-forts",
         "mispronunciationFrequency": 1,
@@ -1087,18 +1078,6 @@
         "sentences": [
           "His efforts to improve were noticeable.",
           "She appreciated their efforts to make her feel welcome."
-        ]
-      },
-      "defeat": {
-        "mispronouncedFrequentlyAs": "defit",
-        "mispronunciationFrequency": 1,
-        "mistakeType": "Mispronouncing the 'EE' sound",
-        "essentialSound": "ea",
-        "attempts": 0,
-        "attemptsSuccessful": 0,
-        "sentences": [
-          "The team faced a tough defeat in the championship game.",
-          "He refused to accept defeat and continued to try."
         ]
       }
     }
