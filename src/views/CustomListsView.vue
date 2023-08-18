@@ -1,5 +1,5 @@
 <template>
-  <ion-page v-if="tabMounted">
+  <ion-page v-if="!tabMounted">
     <TheHeader :is-loading="isLoadingNewList">Custom Lists</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
@@ -79,9 +79,12 @@
     </router-view> -->
   </ion-page>
 
-  <ion-page v-else class="max-h-[100vh] h-full">
+  <!-- <ion-page v-else class="max-h-[100vh] h-full justify-center items-center"> -->
+  <ion-page v-else>
     <TheHeader>Custom Lists</TheHeader>
-    <LoadingSpinner />
+    <ion-content>
+      <LoadingSpinner />
+    </ion-content>
   </ion-page>
 </template>
 
@@ -340,6 +343,13 @@ ion-toast {
   @media (min-width: 1024px) {
     height: 2400px;
   }
+}
+
+ion-spinner.mounting-spinner {
+  // color: green;
+  color: #25c7b1;
+  height: 48px;
+  width: 48px;
 }
 
 .submit-form {

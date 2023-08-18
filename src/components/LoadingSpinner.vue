@@ -1,12 +1,19 @@
 <template>
-  <div class="flex h-full items-center justify-center max-h-[100vh]">
+  <div class="flex justify-center items-center max-h-[100vh] h-full">
+    <ion-spinner name="crescent" class="text-[#25c7b1] h-12 w-12"></ion-spinner>
+  </div>
+  <!-- <div class="flex h-full items-center justify-center max-h-[100vh]">
     <div class="spinner">
       <span class="spinner material"></span>
     </div>
-  </div>
+  </div> -->
 </template>
 
-<style lang="scss" scoped>
+<script setup lang="ts">
+import { IonSpinner } from '@ionic/vue'
+</script>
+
+<!-- <style lang="scss" scoped>
 .spinner {
   // margin: 2rem;
   // text-align: center;
@@ -40,4 +47,4 @@
     }
   }
 }
-</style>
+</style> -->

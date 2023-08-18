@@ -114,6 +114,11 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+// ion-tabs,
+// ion-router-outlet {
+//   max-height: 100vh;
+// }
+
 ion-tab-bar {
   // --background: rgb(231, 253, 243);
   // --background: #b9e5e1;

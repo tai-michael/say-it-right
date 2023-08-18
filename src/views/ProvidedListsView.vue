@@ -20,7 +20,9 @@
 
   <ion-page v-else class="max-h-[100vh]">
     <TheHeader>Premade Lists</TheHeader>
-    <LoadingSpinner />
+    <ion-content>
+      <LoadingSpinner />
+    </ion-content>
   </ion-page>
 </template>
 
