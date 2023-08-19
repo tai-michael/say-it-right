@@ -45,33 +45,43 @@ const clientInitialized = ref(false)
 const clientConnected = computed(
   () => client.decoderOptions.connect === true && clientInitialized.value
 )
+let isMounted = false
+
 const attachMicrophone = async () => {
   microphone.value = new BrowserMicrophone()
-  // if (!microphone.value) microphone.value = new BrowserMicrophone()
-  // console.log(microphone.value)
   if (microphone.value.mediaStream?.active) return (clientInitialized.value = client.initialized)
+
   await microphone.value.initialize()
-  // console.log('microphone.value.initialize() finished')
-  // @ts-ignore
+  // NOTE stops microphone stream if user switches tab before mic's finished initializing
+  if (!isMounted) return stopMicrophoneStream(microphone.value.mediaStream)
   await client.attach(microphone.value.mediaStream)
   clientInitialized.value = client.initialized
-  // console.log(client)
-  // console.log(client.initialized)
+
   if (recorderButtonNarrowscreen.value) {
     recorderButtonNarrowscreen.value.addEventListener('contextmenu', disableContextMenu, true)
   }
 }
 
-const stopMicrophoneStream = (mediaStream) => {
+const stopMicrophoneStream = async (mediaStream) => {
   if (!mediaStream) return
   mediaStream.getTracks().forEach((track) => {
     track.stop()
   })
-  // console.log(microphone)
-
   if (recorderButtonNarrowscreen.value)
     recorderButtonNarrowscreen.value.removeEventListener('contextmenu', disableContextMenu, true)
 }
+
+onMounted(async () => {
+  isMounted = true
+  await attachMicrophone()
+  document.addEventListener('visibilitychange', handleVisibilityChange)
+})
+
+onUnmounted(() => {
+  isMounted = false
+  stopMicrophoneStream(microphone.value.mediaStream)
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+})
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
   navigator.userAgent
@@ -88,17 +98,6 @@ const handleVisibilityChange = async () => {
     location.reload()
   }
 }
-
-onMounted(async () => {
-  await attachMicrophone()
-  // console.log('mic attached')
-  document.addEventListener('visibilitychange', handleVisibilityChange)
-})
-onUnmounted(() => {
-  // console.log('mic unmounted')
-  stopMicrophoneStream(microphone.value.mediaStream)
-  document.removeEventListener('visibilitychange', handleVisibilityChange)
-})
 
 // NOTE Resetting the value here is necessary, since I'm currently unable to 'detach' the mic/mediastream/client when I swap between views, meaning finalTranscript and temporaryTranscript in this component carries over to the new view
 onDeactivated(() => {

@@ -1,5 +1,5 @@
 <template>
-  <ion-page v-if="!tabMounted">
+  <ion-page v-if="tabMounted">
     <TheHeader :is-loading="isLoadingNewList">Custom Lists</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
