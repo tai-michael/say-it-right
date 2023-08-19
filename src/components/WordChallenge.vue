@@ -3,7 +3,10 @@
     <div class="h-full outer-container">
       <div class="flex flex-col h-full justify-between challenge-container">
         <!-- <main class="p-4 flex flex-col w-full h-full min-h-[60%] items-center justify-center gap-y-4"> -->
-        <main class="p-3 flex flex-col h-full min-h-[65%] md:min-h-[50%] items-center pt-12">
+        <main
+          class="p-3 flex flex-col h-full min-h-[55%] md:min-h-[50%] items-center pt-12"
+          :class="{ 'pt-8': testedSentence?.length > 80 }"
+        >
           <div class="instructions">
             <TransitionFade>
               <!-- Using conditional so that the transition works -->

@@ -71,7 +71,6 @@ onMounted(async () => {
 
   if (recorderButtonNarrowscreen.value) {
     recorderButtonNarrowscreen.value.addEventListener('contextmenu', disableContextMenu, true)
-    console.log('added')
   }
 
   document.addEventListener('visibilitychange', handleVisibilityChange)

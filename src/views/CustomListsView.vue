@@ -390,6 +390,8 @@ ion-spinner.mounting-spinner {
     border-radius: 4px;
     color: white;
     background: #3bb8b1;
+    transition-duration: 0.2s;
+    transition-property: opacity;
 
     &:not(:disabled):hover {
       background: #3dc4bd;

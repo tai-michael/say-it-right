@@ -1,7 +1,10 @@
 <template>
   <ion-page>
     <div class="flex flex-col h-full justify-between content">
-      <main class="p-3 flex flex-col h-full min-h-[65%] md:min-h-[50%] items-center pt-12">
+      <main
+        class="p-3 flex flex-col h-full min-h-[55%] md:min-h-[50%] items-center pt-12"
+        :class="{ 'pt-8': testedSentence?.length > 80 }"
+      >
         <div class="instructions">
           <TransitionFade>
             <!-- Using conditional so that the transition works -->
@@ -200,8 +203,8 @@ const testingSentences = computed(() => word.value.status === 'TESTING_SENTENCES
 
 const testedSentence = computed(() => {
   return word.value.attemptsSuccessful === attemptsSuccessfulRequired.value - 2
-    ? word.value.sentences[0]
-    : word.value.sentences[1]
+    ? word.value.sentences?.[0]
+    : word.value.sentences?.[1]
 })
 
 const testedWordAudioText = computed(
