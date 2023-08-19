@@ -2,8 +2,8 @@
   <ion-page>
     <div class="h-full outer-container">
       <div class="flex flex-col h-full justify-between challenge-container">
-        <main class="p-4 flex flex-col w-full h-full items-center justify-center">
-          <div class="instructions">
+        <main class="p-4 flex flex-col w-full items-center h-full">
+          <div class="instructions" :class="[{ '!mt-4 !mb-4': isShortParagraph }]">
             <TransitionFade>
               <span v-if="props.list.status === 'LIST_NOT_STARTED'"
                 >Hold the button and speak this paragraph</span
@@ -14,9 +14,11 @@
             </TransitionFade>
           </div>
 
-          <!-- :class="[testedParagraph.length > 350 ? '!leading-6' : '']" -->
-          <ion-card class="ml-0.5 mr-0.5 mb-3 pl-5 pr-5 max-w-xs">
-            <div class="tested-paragraph">
+          <ion-card
+            class="ml-0.5 mr-0.5 mb-3 pl-5 pr-5 max-w-xs"
+            :class="{ 'max-w-[19rem]': isShortParagraph }"
+          >
+            <div class="tested-paragraph" :class="{ '!leading-10': isShortParagraph }">
               <p v-html="testedParagraph"></p>
             </div>
           </ion-card>
@@ -25,7 +27,7 @@
         <div class="message-container w-full h-full flex justify-center items-start pt-5">
           <div v-if="isRecording" class="transcript">
             <div class="flex-col">
-              <div class="mt-8 mb-4">Recording...</div>
+              <div class="mt-4 mb-3">Recording...</div>
               <div class="flex justify-center">
                 <VuMeter ref="vumeter"></VuMeter>
               </div>
@@ -136,10 +138,8 @@ const props = defineProps({
   // recorderComponentKey: { type: String, required: true }
 })
 
-const vumeter = ref(null)
-// const bars = Array.from({ length: 50 }, () => ({ duration: Math.random() * (0.7 - 0.2) + 0.2 }))
-
 const listEntered = inject('listEntered')
+const isShortParagraph = computed(() => testedParagraph.value.length < 150)
 
 const isRecording = ref(false)
 const testedParagraph = ref('')
@@ -173,9 +173,10 @@ onMounted(() => {
   }
 })
 
+const vumeter = ref(null)
+// const bars = Array.from({ length: 50 }, () => ({ duration: Math.random() * (0.7 - 0.2) + 0.2 }))
 // TODO disable temporaryTranscript and related code in production
 const temporaryTranscript = ref('')
-
 const handleTempTranscriptRender = (transcript: string) => {
   // NOTE this guard is necessary b/c the recorder cannot be deactivated between views. Also, there's a known bug where custom and provided lists with matching numbers (e.g. custom list 1 & provided list 1) will have matching ParagraphChallenge temporary transcripts. We can fix this by adding a routeName prop or something to ParagraphChallenge in Custom/ProvidedList.vue, but since we're removing temporary transcript here in production, we don't care about this bug.
   if (store.activeList?.listNumber !== props.list.listNumber) return
@@ -238,7 +239,6 @@ const handleFinalTranscript = async (transcript: string) => {
       route.name
     )
     addWordsToReview(nonMatchingWords, props.list.words)
-    store.updateListsInFirestore()
     reviewStore.updateReviewInFirestore()
     // TODO possibly force rerender or reload ReviewView or WordSelectModal here
   } else {
@@ -267,9 +267,9 @@ const handleFinalTranscript = async (transcript: string) => {
         route.name as WordSource,
         props.list.listNumber
       )
-
-    console.log('finished executing entire handleFinalTranscript function')
   }
+  store.updateListsInFirestore()
+  // console.log('finished executing entire handleFinalTranscript function')
 }
 
 const addWordsToReview = (
@@ -404,6 +404,7 @@ ion-page {
   margin-left: auto;
   margin-right: auto;
   max-width: 1008px;
+  overflow-y: auto;
 
   /* min margin for left tab */
   @media (min-width: 768px) and (max-width: 1234px) {
@@ -417,8 +418,10 @@ main {
 
 .instructions {
   height: 19px;
+  margin: 0.5rem 0;
+
   @media only screen and (min-width: 768px) {
-    margin-bottom: 1rem;
+    margin: 1rem 0;
   }
 }
 
@@ -498,14 +501,14 @@ ion-card {
 
 .message-container {
   background-color: #8ed6ce;
-  max-height: 15rem;
+  // max-height: 15rem;
   // align-content: space-around !important;
   // align-content: space-between !important;
 
   @media screen and (min-width: 481px) {
     align-items: flex-start;
     padding-top: 2.5rem;
-    max-height: 20rem;
+    // max-height: 20rem;
   }
 }
 
