@@ -140,7 +140,6 @@ const props = defineProps({
 const listEntered = inject('listEntered')
 
 onMounted(() => {
-  // console.log(props.list)
   // @ts-ignore
   const mispronouncedParagraphWords = Object.fromEntries(
     // @ts-ignore
@@ -169,7 +168,10 @@ onMounted(() => {
   // sentences.value = [...props?.list?.words[testedWord.value]?.sentences]
 })
 
-const testingWordOnly = computed(() => props.list.status === 'TESTING_WORD_ONLY')
+// NOTE short custom lists do not have a paragraph, meaning they start from 'LIST_NOT_STARTED' rather than 'TESTING_WORD_ONLY'
+const testingWordOnly = computed(
+  () => props.list.status === 'TESTING_WORD_ONLY' || props.list.status === 'LIST_NOT_STARTED'
+)
 const testingSentences = computed(() => props.list.status === 'TESTING_SENTENCES')
 
 const testedWords = ref<string[]>([])
@@ -272,6 +274,8 @@ const handleFinalTranscript = async (transcript: string) => {
 
   if (!transcript || store.activeList?.listNumber !== props.list.listNumber) return
   console.log(transcript)
+  // NOTE moves a List Card without a paragraph into the 'In Progress' accordion group
+  if (props.list.status === 'LIST_NOT_STARTED') store.setListStatus('TESTING_WORD_ONLY')
 
   finalTranscriptWords.value = transcript.split(' ')
 

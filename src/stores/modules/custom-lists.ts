@@ -81,7 +81,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
   }
 
   const attemptsSuccessfulRequired = computed(() =>
-    activeList.value?.status === 'TESTING_WORD_ONLY' ? 2 : 4
+    activeList.value?.status === 'TESTING_SENTENCES' ? 4 : 2
   )
 
   const attemptsLimit = computed(() => attemptsSuccessfulRequired.value + 4)

@@ -3,7 +3,6 @@
     <ion-card v-for="list of props.lists" :key="list.listNumber" class="flex">
       <RouterLink
         :to="{ name: props.destinationRoute, params: { id: list.listNumber } }"
-        @click="handleClick(list)"
         class="list-link"
       >
         <ion-card-content class="p-0">
@@ -125,22 +124,6 @@ const store =
 const customListsStore = useCustomListsStore()
 
 const isDarkModeEnabled = inject('isDarkModeEnabled')
-
-// NOTE long lists (ones with a paragraph) have the list status changed at the end of the paragraph challenge, but short lists skip the paragraph challenge, meaning their status needs to be manually set
-const handleClick = (list: List) => {
-  if (Object.keys(list.words).length > customListsStore.minWordsThreshold) return
-  handleShortListStatusChange(list)
-}
-
-const handleShortListStatusChange = (list: List) => {
-  if (list.status !== 'LIST_NOT_STARTED') return
-
-  // setTimeout(() => {
-  list.status = 'TESTING_WORD_ONLY'
-  store.updateListsInFirestore()
-  // console.log(list)
-  // }, 1000)
-}
 
 // NOTE using store for selected popover list, so that it's shared across different List Groups (which each have their own set of List Cards); prevents having multiple popovers open across different List Groups
 const isPopoverOpen = ref(false)

@@ -32,7 +32,7 @@
                   class="text-xl"
                   title="Submit words"
                 ></ion-icon>
-                <ion-spinner name="dots" v-else></ion-spinner>
+                <ion-spinner name="lines-sharp" v-else></ion-spinner>
               </button>
             </div>
             <div

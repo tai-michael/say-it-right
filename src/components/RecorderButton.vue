@@ -56,30 +56,34 @@ const attachMicrophone = async () => {
   if (!isMounted) return stopMicrophoneStream(microphone.value.mediaStream)
   await client.attach(microphone.value.mediaStream)
   clientInitialized.value = client.initialized
-
-  if (recorderButtonNarrowscreen.value) {
-    recorderButtonNarrowscreen.value.addEventListener('contextmenu', disableContextMenu, true)
-  }
 }
 
-const stopMicrophoneStream = async (mediaStream) => {
+const stopMicrophoneStream = (mediaStream) => {
   if (!mediaStream) return
   mediaStream.getTracks().forEach((track) => {
     track.stop()
   })
-  if (recorderButtonNarrowscreen.value)
-    recorderButtonNarrowscreen.value.removeEventListener('contextmenu', disableContextMenu, true)
 }
 
 onMounted(async () => {
   isMounted = true
   await attachMicrophone()
+
+  if (recorderButtonNarrowscreen.value) {
+    recorderButtonNarrowscreen.value.addEventListener('contextmenu', disableContextMenu, true)
+    console.log('added')
+  }
+
   document.addEventListener('visibilitychange', handleVisibilityChange)
 })
 
 onUnmounted(() => {
   isMounted = false
   stopMicrophoneStream(microphone.value.mediaStream)
+
+  if (recorderButtonNarrowscreen.value)
+    recorderButtonNarrowscreen.value.removeEventListener('contextmenu', disableContextMenu, true)
+
   document.removeEventListener('visibilitychange', handleVisibilityChange)
 })
 

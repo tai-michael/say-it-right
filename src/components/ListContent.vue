@@ -5,11 +5,7 @@
     <PullRefresher />
     <TransitionAppear>
       <ParagraphChallenge v-if="showParagraphChallenge" :list="list" />
-
-      <WordChallenge
-        v-else-if="list.status === 'TESTING_WORD_ONLY' || list.status === 'TESTING_SENTENCES'"
-        :list="list"
-      />
+      <WordChallenge v-else-if="showWordChallenge" :list="list" />
 
       <div v-else-if="list.status === 'LIST_COMPLETE'" class="message ion-padding">
         <div class="message__text flex flex-col">
@@ -68,8 +64,17 @@ const customListsStore = useCustomListsStore()
 const showParagraphChallenge = computed(
   () =>
     Object.keys(list.value).length &&
-    (list.value?.status === 'LIST_NOT_STARTED' ||
+    ((list.value?.status === 'LIST_NOT_STARTED' && list.value?.paragraph) ||
       list.value?.status === 'PARAGRAPH_RECORDING_ENDED')
+)
+
+// NOTE short custom lists will only have Word and Sentence Challenges, and will not contain a paragraph
+const showWordChallenge = computed(
+  () =>
+    Object.keys(list.value).length &&
+    ((list.value?.status === 'LIST_NOT_STARTED' && !list.value?.paragraph) ||
+      list.value?.status === 'TESTING_WORD_ONLY' ||
+      list.value?.status === 'TESTING_SENTENCES')
 )
 
 const returnToLists = () => {
