@@ -250,8 +250,10 @@ client.onSegmentChange((segment) => {
     }
   }
 
+  // Triggers for touch press
   .recording-btn-transform {
     transform: scale(1.02);
+    background-color: #3bb3ac;
   }
 
   .narrowscreen {
@@ -278,10 +280,16 @@ body.dark {
     background-color: #353535;
     // background-color: #236864;
 
-    &:hover {
-      background-color: #3b3b3b;
-      // background-color: #267470;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: #3b3b3b;
+        // background-color: #267470;
+      }
     }
+  }
+
+  .recording-btn-transform {
+    background-color: #3b3b3b;
   }
 
   button {

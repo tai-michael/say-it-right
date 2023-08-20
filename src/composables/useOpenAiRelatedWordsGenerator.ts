@@ -30,19 +30,11 @@ export default async function (word: string) {
 }
 
 const createArrayFromString = (jsonString: string) => {
-  const jsonRegex = /[^[\]]+/g
-
   const stringWithoutQuotes = jsonString.replace(/['"]+/g, '')
-  const stringBetweenBrackets = stringWithoutQuotes?.match(jsonRegex)?.[0] ?? ''
-  const arr = stringBetweenBrackets.split(',').map((str) => str.trim())
+  const arr = stringWithoutQuotes
+    .toLowerCase()
+    .split(',')
+    .map((str) => str.trim())
 
   return arr
 }
-
-// const createArrayFromString = (jsonString: string) => {
-//   const jsonRegex = /\[.*?\]/s
-//   const fixedString = jsonString.replace(/'/g, '"')
-//   const extractedArrayString = fixedString?.match(jsonRegex)?.[0] ?? ''
-
-//   return JSON.parse(extractedArrayString)
-// }
