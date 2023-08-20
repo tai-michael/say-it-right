@@ -5,9 +5,7 @@
         <main class="p-4 flex flex-col w-full items-center h-full">
           <div class="instructions" :class="[{ '!mt-4 !mb-4': isShortParagraph }]">
             <TransitionFade>
-              <span v-if="props.list.status === 'LIST_NOT_STARTED'"
-                >Hold the button and speak this paragraph</span
-              >
+              <span v-if="props.list.status === 'LIST_NOT_STARTED'">Speak this paragraph</span>
               <span v-else-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
                 >Recording complete</span
               >
@@ -139,7 +137,13 @@ const props = defineProps({
 })
 
 const listEntered = inject('listEntered')
-const isShortParagraph = computed(() => testedParagraph.value.length < 150)
+const isShortParagraph = computed(() => {
+  const nonHighlightedParagraph = testedParagraph.value.replace(
+    /\<span[^>]*\>(.*?)\<\/span\>/g,
+    '\$1'
+  )
+  return nonHighlightedParagraph.length < 150
+})
 
 const isRecording = ref(false)
 const testedParagraph = ref('')
