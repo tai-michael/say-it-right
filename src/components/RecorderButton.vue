@@ -236,7 +236,8 @@ client.onSegmentChange((segment) => {
     // Triggers for widescreens with mouse
     @media (hover: hover) and (pointer: fine) {
       &:hover {
-        background-color: #0b90e9;
+        background-color: #3bb3ac;
+        // background-color: #0b90e9;
         // background-color: #e65757;
       }
       &:active {
@@ -268,6 +269,24 @@ client.onSegmentChange((segment) => {
     }
     .widescreen {
       display: flex;
+    }
+  }
+}
+
+body.dark {
+  .recording-btn {
+    background-color: #353535;
+    // background-color: #236864;
+
+    &:hover {
+      background-color: #3b3b3b;
+      // background-color: #267470;
+    }
+  }
+
+  button {
+    span {
+      color: rgb(196, 196, 196);
     }
   }
 }

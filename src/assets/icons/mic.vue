@@ -36,4 +36,8 @@ svg {
   width: 1.5rem;
   fill: white;
 }
+
+body.dark svg {
+  fill: rgb(196, 196, 196);
+}
 </style>
