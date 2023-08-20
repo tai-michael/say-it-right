@@ -30,8 +30,10 @@ export default {
 
 <style lang="scss" scoped>
 svg {
-  height: 2rem;
-  width: 2rem;
+  // height: 2rem;
+  // width: 2rem;
+  height: 1.5rem;
+  width: 1.5rem;
   fill: white;
 }
 </style>

@@ -12,6 +12,7 @@
       ref="recorderButtonNarrowscreen"
     >
       <MicIcon />
+      <span class="uppercase text-base text-white">Hold to speak</span>
     </button>
 
     <button
@@ -20,6 +21,7 @@
       @pointerdown="(e) => startRecording(e, false)"
     >
       <MicIcon />
+      <span class="uppercase text-base text-white">Hold to speak</span>
     </button>
   </div>
 </template>
@@ -58,7 +60,7 @@ const attachMicrophone = async () => {
   clientInitialized.value = client.initialized
 }
 
-const stopMicrophoneStream = (mediaStream) => {
+const stopMicrophoneStream = (mediaStream: MediaStream) => {
   if (!mediaStream) return
   mediaStream.getTracks().forEach((track) => {
     track.stop()
@@ -112,14 +114,17 @@ const temporaryTranscript = ref('')
 
 const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])
 
-const startRecording = async (e, isNarrowScreen) => {
+const startRecording = async (e: PointerEvent, isNarrowScreen: boolean) => {
   // console.log('mousedown/touchstart triggered')
 
   // NOTE It's necessary to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
   if (isNarrowScreen && e.pointerType === 'touch') {
-    const button = e.target.closest('.recording-btn')
-    if (button) {
-      button.classList.add('recording-btn-transform')
+    const target = e.target as HTMLElement | null
+    if (target) {
+      const button = target.closest('.recording-btn')
+      if (button) {
+        button.classList.add('recording-btn-transform')
+      }
     }
   }
 
@@ -182,25 +187,13 @@ client.onSegmentChange((segment) => {
 <style lang="scss" scoped>
 .button-container {
   position: fixed;
-  box-sizing: border-box;
-  bottom: 0;
-  left: 1;
+  left: 0;
   right: 0;
-  max-height: 100vh;
-  // padding-bottom: 1rem;
-  margin: -0.75rem;
-  margin-right: -1rem;
-
+  bottom: 14px; // 8px/10px/14px
   display: flex;
-  flex-direction: row;
-  // justify-content: center;
+  justify-content: center;
   z-index: 10000;
-
-  @media only screen and (min-width: 481px) {
-    left: 0;
-    bottom: 2rem;
-    justify-content: center;
-  }
+  // max-height: 100vh;
 
   @media (min-width: 768px) and (max-width: 1119px) {
     margin-left: 110px;
@@ -216,41 +209,52 @@ client.onSegmentChange((segment) => {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color: #fa2222;
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
-
-    // transform: scale(1);
-    /* text-align: left; */
+    column-gap: 0.5rem;
+    width: 90%;
+    max-width: 330px;
+    height: 55px;
+    // height: 65px;
+    // background-color: #3bb3ac;
+    background-color: #39aba4;
+    // background-color: #36a19c;
+    // background-color: #31928c;
+    // background-color: #0a8adf;
+    // background-color: #0a8adf;
+    // background-color: #fa2222;
+    // background-color: #fb6262; // #fa5757
     position: relative;
-    // pointer-events: auto;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none !important;
-    // -webkit-user-select: none !important;
     transition: transform 0.3s;
+    border-radius: 8px;
+    // border-radius: 16px;
+    // border-radius: 35px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+      rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
 
     // Triggers for widescreens with mouse
     @media (hover: hover) and (pointer: fine) {
       &:hover {
-        background-color: #e65757;
+        background-color: #0b90e9;
+        // background-color: #e65757;
       }
       &:active {
-        transform: scale(1.1);
+        transform: scale(1.02);
       }
+    }
+
+    @media only screen and (min-width: 481px) {
+      max-width: 280px;
     }
   }
 
   .recording-btn-transform {
-    transform: scale(1.1);
+    transform: scale(1.02);
   }
 
   .narrowscreen {
-    display: inline-block;
+    display: flex;
   }
 
   .widescreen {
@@ -263,7 +267,7 @@ client.onSegmentChange((segment) => {
       display: none;
     }
     .widescreen {
-      display: inline-block;
+      display: flex;
     }
   }
 }
