@@ -250,7 +250,7 @@ const handleTempTranscriptRender = (transcript: string) => {
 
   // NOTE simply 'return' if I decide not to show transcript for Sentence Challenges
   if (testingSentences.value)
-    return (temporaryTranscript.value = transcript.split(' ').slice(-8).join(' '))
+    return (temporaryTranscript.value = transcript.split(' ').slice(-6).join(' '))
 
   temporaryTranscript.value = transcript.split(' ').slice(-1).join(' ')
   console.log(`speechly capture: ${temporaryTranscript.value}`)

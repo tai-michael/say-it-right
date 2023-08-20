@@ -174,11 +174,11 @@ auth.onAuthStateChanged(async () => {
 </script>
 
 <style lang="scss" scoped>
-// ion-app,
-// ion-content,
-// ion-router-outlet {
-//   max-height: 100vh;
-// }
+ion-app,
+ion-content,
+ion-router-outlet {
+  max-height: 100vh;
+}
 
 #modals {
   z-index: 99999;
