@@ -46,7 +46,7 @@
 
         <ListGroups
           v-if="store.allLists.length"
-          :route-name="route.name"
+          :route-name="'custom-lists'"
           @list-deleted="setToastOpen('Deleted list')"
         />
 

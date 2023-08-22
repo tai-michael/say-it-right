@@ -6,8 +6,7 @@
     <ion-content class="ion-padding" ref="content" :force-overscroll="false">
       <PullRefresher />
       <div ref="scrollTrigger" class="scroll-trigger"></div>
-      <!-- REVIEW using 'rout.name' seems to cause a bug sometimes, loading custom lists rather than provided lists, perhaps because ListGroups is eager loaded -->
-      <!-- <ListGroups :route-name="route.name" /> -->
+      <!-- NOTE don't use 'route.name', as it can cause bugs from navigation/redirects -->
       <ListGroups :route-name="'provided-lists'" />
     </ion-content>
 

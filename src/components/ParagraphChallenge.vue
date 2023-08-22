@@ -126,7 +126,9 @@ import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/st
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const store = route.name === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
+// Storing the route name prevents bugs caused by navigating to other routes during async operations
+const routeName = route.name
+const store = routeName === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
 const reviewStore = useReviewStore()
 
 const props = defineProps({
@@ -148,7 +150,7 @@ const isShortParagraph = computed(() => {
 const isRecording = ref(false)
 const testedParagraph = ref('')
 const testedWordsObj =
-  route.name === 'provided-list' ? ref<Words<ProvidedWord>>({}) : ref<Words<CustomWord>>({})
+  routeName === 'provided-list' ? ref<Words<ProvidedWord>>({}) : ref<Words<CustomWord>>({})
 const testedWords = ref<string[]>([])
 
 const correctlyPronouncedTestedWords = ref<string[]>([])
@@ -210,16 +212,12 @@ const handleFinalTranscript = async (transcript: string) => {
 
   console.log(`para challenge: ${transcript}`)
   // NOTE chatGPT sometimes modifies tested words that we feed it for creating paragraphs. To prevent bugs, we use this function to change any tested word to its modified version in the paragraph.
-  testedWords.value = useTestedWordsAdjuster(
-    testedWordsObj.value,
-    testedParagraph.value,
-    route.name
-  )
+  testedWords.value = useTestedWordsAdjuster(testedWordsObj.value, testedParagraph.value, routeName)
 
   const { correctWords, incorrectWords } = useCorrectAndIncorrectWordsFilter(
     testedWords.value,
     finalTranscript.value,
-    route.name
+    routeName
   )
   correctlyPronouncedTestedWords.value = correctWords
   mispronouncedTestedWords.value = incorrectWords
@@ -236,11 +234,11 @@ const handleFinalTranscript = async (transcript: string) => {
 
   // NOTE provided lists all have sentences already,
   // so no need to generate new sentences for those
-  if (route.name === 'provided-list') {
+  if (routeName === 'provided-list') {
     // NOTE only add words that aren't already in Review to Review
     const { nonMatchingWords } = useCheckIfWordsExistInReview(
       mispronouncedTestedWords.value,
-      route.name
+      routeName
     )
     addWordsToReview(nonMatchingWords, props.list.words)
     reviewStore.updateReviewInFirestore()
@@ -254,21 +252,21 @@ const handleFinalTranscript = async (transcript: string) => {
       const remainingWords = sortedMispronouncedWords.slice(2)
       // console.log(firstCoupleWords)
       // console.log(remainingWords)
-      // NOTE awaiting the first is necessary, as openAI doesn't allow concurrent queries
+      // NOTE awaiting these are necessary, as openAI doesn't allow concurrent queries
       await useSentencesCreationAndStorage(
         firstCoupleWords,
-        route.name as WordSource,
+        routeName as WordSource,
         props.list.listNumber
       )
-      useSentencesCreationAndStorage(
+      await useSentencesCreationAndStorage(
         remainingWords,
-        route.name as WordSource,
+        routeName as WordSource,
         props.list.listNumber
       )
     } else
-      useSentencesCreationAndStorage(
+      await useSentencesCreationAndStorage(
         sortedMispronouncedWords,
-        route.name as WordSource,
+        routeName as WordSource,
         props.list.listNumber
       )
   }
@@ -290,7 +288,7 @@ const addWordsToReview = (
       const wordObject = useWordObjCreator(
         mispronouncedWord,
         listWords[mispronouncedWord].sentences,
-        route.name as WordSource
+        routeName as WordSource
       )
 
       wordObjectsToAdd.push(wordObject)

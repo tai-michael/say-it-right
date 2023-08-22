@@ -41,13 +41,13 @@ export const useReviewStore = defineStore('review', () => {
     console.log('Updated firestore review')
   }
 
-  // TODO should maybe make 3 categories or simply a dropdown filter for:
-  // Not reviewed / Need review, Recently reviewed, Mastered/Proficient (maybe; consider UX)
-  const inProgressWords = computed(() => allWords.value.filter((word) => word.attempts > 0))
+  // // TODO should maybe make 3 categories or simply a dropdown filter for:
+  // // Not reviewed / Need review, Recently reviewed, Mastered/Proficient (maybe; consider UX)
+  // const inProgressWords = computed(() => allWords.value.filter((word) => word.attempts > 0))
 
-  const untouchedWords = computed(() => allWords.value.filter((word) => word.attempts === 0))
+  // const untouchedWords = computed(() => allWords.value.filter((word) => word.attempts === 0))
 
-  const masteredWords = computed(() => allWords.value.filter((word) => word.attempts === 0))
+  // const masteredWords = computed(() => allWords.value.filter((word) => word.attempts === 0))
 
   // const setActiveId = (id: number) => {
   //   activeId.value = id
@@ -121,12 +121,12 @@ export const useReviewStore = defineStore('review', () => {
 
   return {
     allWords,
+    savedScrollPosition,
+    // inProgressWords,
+    // untouchedWords,
+    // masteredWords,
     // activeWord,
     // firestoreWord,
-    inProgressWords,
-    untouchedWords,
-    masteredWords,
-    savedScrollPosition,
     // attemptsLimit,
 
     addWords,

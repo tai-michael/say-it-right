@@ -356,7 +356,7 @@ const handleRelatedWordClick = async (relatedWord: string) => {
   const animatedDots = setInterval(() => {
     animationIndex.value = (animationIndex.value + 1) % 4
   }, 500)
-  await useSentencesCreationAndStorage([relatedWord], route.name as WordSource)
+  await useSentencesCreationAndStorage([relatedWord], 'review' as WordSource)
   clearInterval(animatedDots)
   isLoadingRelatedWord.value = false
   emits('loading-related-word', false)

@@ -29,22 +29,22 @@ export default async function (words: string[], source: WordSource, listNum?: nu
   const wordsWithSentences: WordObject[] = []
   let wordsWithoutSentences: string[] = []
 
-  // // check if word exists in customLists
+  // Check if word exists in customLists
   // const customListsResults = checkIfWordsExistInLists(words, customListsStore.allLists)
   // wordsWithSentences.push(...customListsResults.matchingWordObjects)
   // wordsWithoutSentences = customListsResults.nonMatchingWords
 
-  // check if word exists in Review. Even though all
+  // Check if word exists in Review. Even though all
   // words in Review are also in sentences, checking
   // Review first might save us a firestore read
-  console.log('checking if word exists in word review')
+  console.log('checking if word exists in Review')
   const reviewResults = useCheckIfWordsExistInReview(words, source)
   wordsWithSentences.push(...reviewResults.matchingWordObjects)
   // NOTE reassigning instead of pushing is necessary here
   wordsWithoutSentences = reviewResults.nonMatchingWords
 
   console.log('checking if word exists in provided lists')
-  // then check if word exists in providedLists
+  // Then check if word exists in providedLists
   const providedListsResults = checkIfWordsExistInProvidedLists(
     wordsWithoutSentences,
     providedListsStore.allLists
@@ -52,7 +52,7 @@ export default async function (words: string[], source: WordSource, listNum?: nu
   wordsWithSentences.push(...providedListsResults.matchingWordObjects)
   wordsWithoutSentences = providedListsResults.nonMatchingWords
 
-  // if not, check if sentences exist in firestore
+  // If not, check if sentences exist in firestore
   if (wordsWithoutSentences.length > 0) {
     console.log('checking if word exists in firestore')
     const firestoreResults = await checkIfWordsExistInFirestore(wordsWithoutSentences, source)
@@ -62,19 +62,18 @@ export default async function (words: string[], source: WordSource, listNum?: nu
 
     if (firestoreResults.nonMatchingWords.length) {
       console.log('ready to generate openAI sentences')
-      // need to sort because words in WordChallenge are sorted too,
-      // so I need the first word to have its sentence generated ASAP
+      // Need to sort because words in WordChallenge are sorted too,
+      // meaning we need to generate the sentences for the first word ASAP
       const sortedNonMatchingWords = firestoreResults.nonMatchingWords.sort()
-      // TODO add new param to the composable and argument here so that it uses a different openAI endpoint, which I'll also need to create
       const generatedSentencesObj = await useOpenAiSentencesGenerator(sortedNonMatchingWords)
       // console.log(generatedSentencesObj)
 
-      // upload generated sentences to firestore so that they can be
-      // retrieved from other users, saving us openAI tokens and time
+      // Upload generated sentences to firestore so that they can be
+      // retrieved from other users, saving time and openAI tokens
       await storeSentencesInFirestore(generatedSentencesObj)
       console.log('Sentences have been stored in firestore')
 
-      // convert generated sentences to structure of Review words
+      // Convert generated sentences to structure of Review words
       // @ts-ignore
       for (const [word, sentences] of Object.entries(generatedSentencesObj)) {
         const wordObject = useWordObjCreator(word, sentences, source)
@@ -85,7 +84,7 @@ export default async function (words: string[], source: WordSource, listNum?: nu
     }
   }
 
-  // add any words that don't already exist in Review to its store
+  // Add any words that don't already exist in Review to its store
   const newWords = wordsWithSentences.filter(
     (wordObj) =>
       !reviewStore.allWords.some((existingWordObj) => existingWordObj.word === wordObj.word)
@@ -93,7 +92,7 @@ export default async function (words: string[], source: WordSource, listNum?: nu
   reviewStore.addWords(newWords)
   reviewStore.updateReviewInFirestore()
 
-  // add sentences to matching words in customLists
+  // Add sentences to matching words in customLists
   if (source === 'custom-list' && listNum) {
     const list = customListsStore.allLists.find((list) => list.listNumber === listNum)
     if (list) addSentencesToCustomList(wordsWithSentences, list)
