@@ -24,7 +24,7 @@
               <button
                 class="submit-btn cursor-pointer disabled:opacity-40 disabled:cursor-default"
                 @click.prevent="submitWords(wordsInput)"
-                :disabled="!wordsInput"
+                :disabled="!wordsInput || isLoadingNewList"
               >
                 <ion-icon
                   v-if="!isLoadingNewList"

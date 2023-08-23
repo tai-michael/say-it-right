@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { NoSimilarSoundingWordsError } from '@/stores/modules/types/Errors'
 
 // NOTE Can make it so that only authenticated users can create sentences,
 // in which case use 'callable functions'
@@ -8,6 +9,7 @@ import axios from 'axios'
 
 export default async function (word: string) {
   try {
+    console.log('Generating related words using OpenAI...')
     console.log(word)
     const url = import.meta.env.VITE_RELATED_WORDS_GENERATOR_ENDPOINT
     const query = word
@@ -25,7 +27,10 @@ export default async function (word: string) {
 
     return relatedWordsArray
   } catch (err) {
-    throw new Error(`Failed to generate related words with openAI: ${err}`)
+    throw err
+    // const newError = new Error(`Failed to generate related words with openAI: ${err.message}`);
+    // newError.originalError = err; // Attach the original error as a property
+    // throw newError;
   }
 }
 
@@ -36,5 +41,6 @@ const createArrayFromString = (jsonString: string) => {
     .split(',')
     .map((str) => str.trim())
 
+  if (arr.length === 1) throw new NoSimilarSoundingWordsError()
   return arr
 }
