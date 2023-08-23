@@ -139,6 +139,12 @@ const WordDrill = defineAsyncComponent(() => import('@/components/WordDrill.vue'
 
 const store = useReviewStore()
 const { allWords } = storeToRefs(store)
+watch(
+  () => allWords.value.length,
+  (newValue, oldValue) => {
+    if (newValue > oldValue) rerenderModal()
+  }
+)
 
 const selectedWord: Ref<WordObject | null> = ref(null)
 const setWord = (word: WordObject) => {
@@ -153,12 +159,10 @@ const handleLoadingRelatedWord = (loadingRelatedWord: boolean) => {
 const handleRelatedWordClicked = (relatedWord: string) => {
   const matchedWord = allWords.value.find((word) => word.word === relatedWord)
   if (matchedWord) selectedWord.value = matchedWord
-
-  // NOTE alters the modal's key, forcing it to rerender, thereby visually adding the related word to the modal
-  rerenderModal()
 }
 const forcedRerenderKey = ref(0)
 const rerenderModal = () => {
+  // NOTE alters the modal's key, forcing it to rerender
   forcedRerenderKey.value++
 }
 
