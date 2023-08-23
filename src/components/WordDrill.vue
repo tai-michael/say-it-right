@@ -164,10 +164,10 @@ import usePhoneticConverter from '@/composables/usePhoneticConverter'
 import useDelay from '@/composables/useDelay'
 import { useReviewStore } from '@/stores/index.ts'
 import { IonPage, IonCard } from '@ionic/vue'
-import { useRoute } from 'vue-router'
 // import LoadingDots from '@/components/LoadingDots.vue'
+// import { useRoute } from 'vue-router'
 
-const route = useRoute()
+// const route = useRoute()
 const store = useReviewStore()
 
 const props = defineProps({
@@ -330,7 +330,9 @@ const handleCorrectPronunciation = async () => {
       // introductionNeeded.value = true
 
       if (relatedWords.value.length > 0) return
-      relatedWords.value = await useRelatedWordsCreationAndStorage(wordName.value)
+      relatedWords.value = await useAsyncCallWithRetries(
+        useRelatedWordsCreationAndStorage(wordName.value)
+      )
       store.addRelatedWords(wordName.value, relatedWords.value)
       store.updateReviewInFirestore()
     } else {

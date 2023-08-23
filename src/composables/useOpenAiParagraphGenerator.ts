@@ -15,6 +15,6 @@ export default async function (words: string[]) {
     console.log(response)
     return response?.data?.choices[0]?.message?.content
   } catch (err) {
-    throw new Error(`Failed to create paragraph with openAI: ${err}`)
+    throw err
   }
 }

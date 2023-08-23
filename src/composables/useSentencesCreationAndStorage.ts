@@ -1,5 +1,5 @@
 import useOpenAiSentencesGenerator from '@/composables/useOpenAiSentencesGenerator'
-useWordObjCreator
+import useAsyncCallWithRetries from '@/composables/useAsyncCallWithRetries'
 import useWordObjCreator from '@/composables/useWordObjCreator'
 import useCheckIfWordsExistInReview from '@/composables/useCheckIfWordsExistInReview'
 import type { Sentences } from '@/stores/modules/types/Sentences'
@@ -61,11 +61,13 @@ export default async function (words: string[], source: WordSource, listNum?: nu
       wordsWithSentences.push(...firestoreResults.matchingWordObjects)
 
     if (firestoreResults.nonMatchingWords.length) {
-      console.log('ready to generate openAI sentences')
+      console.log('generating openAI sentences...')
       // Need to sort because words in WordChallenge are sorted too,
       // meaning we need to generate the sentences for the first word ASAP
       const sortedNonMatchingWords = firestoreResults.nonMatchingWords.sort()
-      const generatedSentencesObj = await useOpenAiSentencesGenerator(sortedNonMatchingWords)
+      const generatedSentencesObj = await useAsyncCallWithRetries(() =>
+        useOpenAiSentencesGenerator(sortedNonMatchingWords)
+      )
       // console.log(generatedSentencesObj)
 
       // Upload generated sentences to firestore so that they can be

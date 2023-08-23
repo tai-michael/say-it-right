@@ -38,7 +38,7 @@ export default async function (mispronouncedWords: string[]) {
     console.log(finalSentencesObject)
     return finalSentencesObject
   } catch (err) {
-    throw new Error(`Failed to create sentences with openAI: ${err}`)
+    throw err
   }
 }
 
