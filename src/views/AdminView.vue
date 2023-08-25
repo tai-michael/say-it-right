@@ -43,24 +43,28 @@
           <ion-button @click="resetCustomLists">Reset custom lists</ion-button>
           <ion-button @click="resetProvidedLists">Reset premade lists</ion-button>
           <ion-button @click="resetReview">Reset review</ion-button>
+          <ion-button @click="hydrateReview">Hydrate review</ion-button>
         </div>
       </main>
     </ion-content>
   </ion-page>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, defineAsyncComponent } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
 const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefresher.vue'))
 import coreLists from '@/assets/lists_1-12.json'
+import type { WordObject, WordSource } from '@/stores/modules/types/Review'
+import useWordObjCreator from '@/composables/useWordObjCreator'
 import { IonPage, IonContent, IonButton } from '@ionic/vue'
 import { db, auth } from '@/firebaseInit'
 import { doc, collection, setDoc, updateDoc, deleteDoc, writeBatch } from 'firebase/firestore'
 import { useRouter } from 'vue-router'
-import { useProvidedListsStore, useAuthStore } from '@/stores/index.ts'
+import { useProvidedListsStore, useAuthStore, useReviewStore } from '@/stores/index.ts'
 
 const providedListsStore = useProvidedListsStore()
+const reviewStore = useReviewStore()
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -182,6 +186,28 @@ const resetReview = async () => {
   })
   console.log('Resetted Review')
   location.reload()
+}
+
+const hydrateReview = async () => {
+  const wordObjectsToAdd: WordObject[] = []
+
+  for (let i = 0; i < providedListsStore.allLists.length; i++) {
+    const testedWords = [...Object.keys(providedListsStore.allLists[i].words)]
+    for (const word of testedWords) {
+      // if (providedListsStore.allLists[i].words.hasOwnProperty(word)) {
+      const wordObject = useWordObjCreator(
+        word,
+        providedListsStore.allLists[i].words[word].sentences,
+        'provided-lists' as WordSource
+      )
+
+      wordObjectsToAdd.push(wordObject)
+      // }
+    }
+  }
+  reviewStore.addWords(wordObjectsToAdd)
+  reviewStore.updateReviewInFirestore()
+  console.log('Hydrated Review with words')
 }
 
 // const uploadList = async (list) => {
