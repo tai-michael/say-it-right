@@ -160,6 +160,7 @@ import useCheckPronunciationOfWordByItself from '@/composables/useCheckPronuncia
 import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronunciationOfWordInSentences.ts'
 import useRelatedWordsCreationAndStorage from '@/composables/useRelatedWordsCreationAndStorage.ts'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage.ts'
+import useAsyncCallWithRetries from '@/composables/useAsyncCallWithRetries'
 import usePhoneticConverter from '@/composables/usePhoneticConverter'
 import useDelay from '@/composables/useDelay'
 import { useReviewStore } from '@/stores/index.ts'
@@ -330,7 +331,7 @@ const handleCorrectPronunciation = async () => {
       // introductionNeeded.value = true
 
       if (relatedWords.value.length > 0) return
-      relatedWords.value = await useAsyncCallWithRetries(
+      relatedWords.value = await useAsyncCallWithRetries(() =>
         useRelatedWordsCreationAndStorage(wordName.value)
       )
       store.addRelatedWords(wordName.value, relatedWords.value)

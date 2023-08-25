@@ -19,6 +19,8 @@
       v-if="clientConnected"
       class="recording-btn widescreen"
       @pointerdown="(e) => startRecording(e, false)"
+      @keydown="(e) => startRecording(e, false)"
+      @keyup="stopRecording"
     >
       <MicIcon />
       <span class="uppercase text-base text-white">Hold to speak</span>
@@ -27,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, onDeactivated, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { client } from '@/speechlyInit.ts'
 import { BrowserMicrophone } from '@speechly/browser-client'
 import MicIcon from '@/assets/icons/mic.vue'
@@ -67,61 +69,19 @@ const stopMicrophoneStream = (mediaStream: MediaStream) => {
   })
 }
 
-onMounted(async () => {
-  isMounted = true
-  await attachMicrophone()
-
-  if (recorderButtonNarrowscreen.value) {
-    recorderButtonNarrowscreen.value.addEventListener('contextmenu', disableContextMenu, true)
-  }
-
-  document.addEventListener('visibilitychange', handleVisibilityChange)
-})
-
-onUnmounted(() => {
-  isMounted = false
-  stopMicrophoneStream(microphone.value.mediaStream)
-
-  if (recorderButtonNarrowscreen.value)
-    recorderButtonNarrowscreen.value.removeEventListener('contextmenu', disableContextMenu, true)
-
-  document.removeEventListener('visibilitychange', handleVisibilityChange)
-})
-
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-  navigator.userAgent
-)
-
-// NOTE The connection to Speechly is lost after about 1-3 minutes of mobile being put to sleep. In such cases, remounting the recorder button doesn't reestablish the connection, so need to reload the page
-const handleVisibilityChange = async () => {
-  // client.decoder.connectPromise changing from Promise to null is the only way to tell whether the Speechly connection has been lost
-  if (
-    isMobile &&
-    document.visibilityState === 'visible' &&
-    client.decoder.connectPromise === null
-  ) {
-    location.reload()
-  }
-}
-
-// NOTE Resetting the value here is necessary, since I'm currently unable to 'detach' the mic/mediastream/client when I swap between views, meaning finalTranscript and temporaryTranscript in this component carries over to the new view
-onDeactivated(() => {
-  finalTranscript.value = ''
-})
-
 const finalTranscript = ref('')
 const temporaryTranscript = ref('')
 
 const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])
 
-const startRecording = async (e: PointerEvent, isNarrowScreen: boolean) => {
+const startRecording = async (e, isNarrowScreen: boolean) => {
   // console.log('mousedown/touchstart triggered')
 
   // NOTE It's necessary to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
   if (isNarrowScreen && e.pointerType === 'touch') {
     const target = e.target as HTMLElement | null
     if (target) {
-      const button = target.closest('.recording-btn')
+      const button = target.closest('.recording-btn.narrowscreen')
       if (button) {
         button.classList.add('recording-btn-transform')
       }
@@ -142,9 +102,11 @@ const stopRecording = async (e) => {
   // console.log('mouseup/touchend triggered')
   if (!client.isActive()) return
 
-  const button = e.target.closest('.recording-btn')
-  if (button) {
-    button.classList.remove('recording-btn-transform')
+  if (e.pointerType === 'touch') {
+    const button = e.target.closest('.recording-btn.narrowscreen')
+    if (button) {
+      button.classList.remove('recording-btn-transform')
+    }
   }
 
   await client.stop()
@@ -182,6 +144,41 @@ client.onSegmentChange((segment) => {
     // if (!isRecording.value) client.stop()
   }
 })
+
+onMounted(async () => {
+  isMounted = true
+  await attachMicrophone()
+
+  if (recorderButtonNarrowscreen.value) {
+    recorderButtonNarrowscreen.value.addEventListener('contextmenu', disableContextMenu, true)
+  }
+  document.addEventListener('visibilitychange', handleVisibilityChange)
+})
+
+onUnmounted(() => {
+  isMounted = false
+  stopMicrophoneStream(microphone.value.mediaStream)
+
+  if (recorderButtonNarrowscreen.value)
+    recorderButtonNarrowscreen.value.removeEventListener('contextmenu', disableContextMenu, true)
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+})
+
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  navigator.userAgent
+)
+
+// NOTE The connection to Speechly is lost after about 1-3 minutes of mobile being put to sleep. In such cases, remounting the recorder button doesn't reestablish the connection, so need to reload the page
+const handleVisibilityChange = async () => {
+  // client.decoder.connectPromise changing from Promise to null is the only way to tell whether the Speechly connection has been lost
+  if (
+    isMobile &&
+    document.visibilityState === 'visible' &&
+    client.decoder.connectPromise === null
+  ) {
+    location.reload()
+  }
+}
 </script>
 
 <style lang="scss" scoped>
