@@ -198,7 +198,7 @@ const hydrateReview = async () => {
       const wordObject = useWordObjCreator(
         word,
         providedListsStore.allLists[i].words[word].sentences,
-        'provided-lists' as WordSource
+        'provided-list' as WordSource
       )
 
       wordObjectsToAdd.push(wordObject)

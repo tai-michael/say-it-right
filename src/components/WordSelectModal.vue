@@ -30,7 +30,7 @@
         <RecycleScroller
           :key="recyclerKey"
           :items="sortedWords"
-          :item-size="itemHeight"
+          :item-size="49"
           :buffer="520"
           key-field="word"
           v-slot="{ item }"
@@ -83,7 +83,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, inject, onMounted, nextTick, onUnmounted, defineAsyncComponent } from 'vue'
+import {
+  computed,
+  ref,
+  inject,
+  onMounted,
+  onUnmounted,
+  defineAsyncComponent,
+  watch,
+  watchEffect
+} from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
@@ -109,7 +118,6 @@ import { useReviewStore } from '@/stores/index.ts'
 const RecycleScroller = defineAsyncComponent(() =>
   import('vue-virtual-scroller').then((module) => module.RecycleScroller)
 )
-// import { RecycleScroller } from 'vue-virtual-scroller'
 
 const store = useReviewStore()
 
@@ -119,9 +127,7 @@ const props = defineProps({
   selectedWord: { type: Object as PropType<WordObject> }
 })
 
-// NOTE this key is needed for the modal to change reactively whenever a related word is clicked. Only used for when clicking related words and not when deleting words, because it rerenders the entire list and resets scroll position to top, which is undesirable when deleting a word.
 const recyclerKey = computed(() => `${sortOrder.value}-${props.forcedRerenderKey}`)
-
 const search = ref('')
 const sortOrder = ref('createdDesc')
 const sortedWords = computed(() => {
@@ -200,72 +206,14 @@ const deleteWord = async (word: WordObject, event) => {
 
     // NOTE closes preexisting toasts (i.e. resets the duration toast is open)
     if (isToastOpen.value) setToastOpen(false)
-
-    // NOTE this delay makes the deletion more visually obvious
-    setTimeout(async () => {
-      // NOTE The two conditionals below based on sortOrder are necessary for shiftElementsUp to work properly. This is because lists sorted by .sort() return the original allWords array, while ones sorted by .filter() return a new array.
-      if (wordsSortedBySortMethod.value) {
-        store.deleteWord(word.word)
-        setToastOpen(true)
-      }
-      if (event) {
-        // NOTE though hacky, this is the only solution I can think of to prevent rerendering the entire list after deleting a word (which is undesirable behavior, as we want to maintain the scroll position)
-        await shiftElementsUp(event)
-        event = null
-      }
-      if (wordsSortedByFilterMethod.value) {
-        store.deleteWord(word.word)
-        setToastOpen(true)
-      }
-    }, 200)
-
+    store.deleteWord(word.word)
+    setToastOpen(true)
     emit('wordDeleted', word.word)
     wordToDelete.value = null
     console.log('word deleted')
   } catch (err) {
     console.log(`Failed to delete word ${err}`)
   }
-}
-
-const wordsSortedBySortMethod = computed(
-  () =>
-    sortOrder.value === 'createdDesc' ||
-    sortOrder.value === 'createdAsc' ||
-    sortOrder.value === 'wordAsc' ||
-    sortOrder.value === 'wordDesc'
-)
-
-const wordsSortedByFilterMethod = computed(
-  () =>
-    sortOrder.value === 'bookmarked' ||
-    sortOrder.value === 'sourceCustom' ||
-    sortOrder.value === 'sourceProvided'
-)
-
-const itemHeight = 49
-const shiftElementsUp = async (event) => {
-  const removedElement = event.target.parentElement.parentElement
-  const siblingElement = removedElement.nextElementSibling
-  const parentElement = removedElement.parentElement
-
-  removedElement.remove()
-  await nextTick()
-
-  if (siblingElement) {
-    const currentSiblingTransform = siblingElement.style.transform || 'translateY(0px)'
-    const newSiblingTransform = `translateY(${
-      parseInt(currentSiblingTransform.replace('translateY(', '').replace('px)', '')) - itemHeight
-    }px)`
-    siblingElement.style.transform = newSiblingTransform
-  }
-
-  if (parentElement) {
-    const currentParentMinHeight = parentElement.style.minHeight || '0px'
-    const newParentMinHeight = `calc(${currentParentMinHeight} - ${itemHeight}px)`
-    parentElement.style.minHeight = newParentMinHeight
-  }
-
-  event = null
 }
 
 const isToastOpen = ref(false)

@@ -141,9 +141,7 @@ const store = useReviewStore()
 const { allWords } = storeToRefs(store)
 watch(
   () => allWords.value.length,
-  (newValue, oldValue) => {
-    if (newValue > oldValue) rerenderModal()
-  }
+  () => rerenderModal()
 )
 
 const selectedWord: Ref<WordObject | null> = ref(null)
