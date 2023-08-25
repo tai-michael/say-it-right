@@ -9,7 +9,7 @@
       <div>
         <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
           <div class="input-container">
-            <label>Enter up to 7 words separated by spaces or commas:</label>
+            <label>{{ $t('custom_lists_creation_instructions') }}</label>
             <div class="relative">
               <ion-searchbar
                 placeholder="  e.g. urban thin kindly"

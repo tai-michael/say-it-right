@@ -107,12 +107,8 @@
     </ion-list>
 
     <!-- NOTE Narrowscreen popover -->
-    <ion-popover
-      :is-open="isPopoverOpen"
-      :event="event"
-      @didDismiss="isPopoverOpen = false"
-      :dismiss-on-select="true"
-    >
+    <!-- :dismiss-on-select="true" -->
+    <ion-popover :is-open="isPopoverOpen" :event="event" @didDismiss="isPopoverOpen = false">
       <ion-list class="pb-2 pt-2">
         <ion-item :detail="false" lines="full" @click.stop class="cursor-default">
           <ion-icon
@@ -135,6 +131,20 @@
             aria-label="Switch between dark and light mode"
           ></ion-icon
           >{{ isDarkModeEnabled ? 'Turn off darkmode' : 'Turn on darkmode' }}
+        </ion-item>
+
+        <ion-item :button="false" :detail="false" lines="full" class="cursor-pointer">
+          <ion-icon
+            :icon="languageOutline"
+            class="text-lg mr-2 ml-[1px]"
+            aria-label="Choose language"
+          ></ion-icon>
+          <span class="mr-3">Language:</span>
+          <select v-model="locale" @change="saveLocale">
+            <option value="en">English</option>
+            <option value="zh-CN">中文</option>
+            <option value="ja">日本語</option>
+          </select>
         </ion-item>
 
         <ion-item
@@ -171,7 +181,8 @@ import {
   moon,
   sunny,
   logOutOutline,
-  logInOutline
+  logInOutline,
+  languageOutline
 } from 'ionicons/icons'
 import {
   IonHeader,
@@ -183,6 +194,7 @@ import {
   IonList,
   IonItem
 } from '@ionic/vue'
+import { useI18n } from 'vue-i18n'
 import { isAuthenticated, user } from '@/firebaseInit'
 import { useAuthStore } from '@/stores/index.ts'
 import { useRoute, useRouter } from 'vue-router'
@@ -199,6 +211,10 @@ const props = defineProps({
   }
 })
 
+const { locale } = useI18n()
+const saveLocale = () => {
+  localStorage.setItem('locale', locale.value)
+}
 const logoDark = ref(new Image())
 const logoLight = ref(new Image())
 onMounted(() => {
@@ -361,6 +377,30 @@ ion-toolbar {
     // --progress-background: #3d8bff;
     --progress-background: #4255ff;
   }
+}
+
+select {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  padding: 0 10px;
+  height: 35px;
+  width: 6.5rem;
+  // width: 100%;
+  border: 1px solid #ccc;
+  background: white;
+  background-image: url(@/assets/icons/chevron-down-dark.svg);
+  background-position: calc(100% - 8px) center;
+  background-repeat: no-repeat;
+}
+
+body.dark select {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  border: 1px solid rgb(50, 50, 50);
+  background: rgb(40, 40, 40);
+  background-image: url(@/assets/icons/chevron-down-light.svg);
+  background-position: calc(100% - 8px) center;
+  background-repeat: no-repeat;
 }
 
 .widescreen-popover {
