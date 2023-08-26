@@ -2,9 +2,13 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-searchbar type="text" v-model="search" placeholder="Search"></ion-searchbar>
+        <ion-searchbar
+          type="text"
+          v-model="search"
+          :placeholder="$t('word_select_modal.search')"
+        ></ion-searchbar>
         <ion-buttons slot="end" class="narrowscreen">
-          <ion-button @click="handleCancel">Cancel</ion-button>
+          <ion-button @click="handleCancel">{{ $t('word_select_modal.cancel') }}</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -14,18 +18,24 @@
       <div class="pl-4 pr-4">
         <!-- <label for="sort">Sort by:</label> -->
         <select id="sort" v-model="sortOrder" :inset="true" class="h-8 w-full">
-          <option value="createdDesc">Newest</option>
-          <option value="createdAsc">Oldest</option>
-          <option value="wordAsc">A to Z</option>
-          <option value="wordDesc">Z to A</option>
-          <option value="bookmarked">Bookmarked</option>
-          <option value="sourceCustom">Source: Custom lists</option>
-          <option value="sourceProvided">Source: Premade lists</option>
+          <option value="createdDesc">{{ $t('word_select_modal.option_newest') }}</option>
+          <option value="createdAsc">{{ $t('word_select_modal.option_oldest') }}</option>
+          <option value="wordAsc">{{ $t('word_select_modal.option_A_to_Z') }}</option>
+          <option value="wordDesc">{{ $t('word_select_modal.option_Z_to_A') }}</option>
+          <option value="bookmarked">{{ $t('word_select_modal.option_bookmarked') }}</option>
+          <option value="sourceCustom">
+            {{ $t('word_select_modal.option_source') }} {{ $t('custom_lists.heading') }}
+          </option>
+          <option value="sourceProvided">
+            {{ $t('word_select_modal.option_source') }} {{ $t('premade_lists.heading') }}
+          </option>
         </select>
       </div>
 
       <ion-list id="modal-list" :inset="true" class="mt-2 pt-0 pb-0">
-        <div v-if="sortedWords.length === 0" class="pl-2.5 pt-3.5">(No results)</div>
+        <div v-if="sortedWords.length === 0" class="pl-2.5 pt-3.5">
+          {{ $t('word_select_modal.no_results') }}
+        </div>
 
         <RecycleScroller
           :key="recyclerKey"
@@ -83,16 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  ref,
-  inject,
-  onMounted,
-  onUnmounted,
-  defineAsyncComponent,
-  watch,
-  watchEffect
-} from 'vue'
+import { computed, ref, inject, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
 import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
