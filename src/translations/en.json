@@ -1,3 +1,56 @@
 {
-  "custom_lists_creation_instructions": "Enter up to 7 words separated by spaces or commas:"
+	"custom_lists": {
+		"create_list_instructions": "Enter up to 7 words separated by spaces or commas:",
+		"example": "e.g.",
+		"heading": "Custom Lists",
+		"introduction1": "Not sure how to say certain words?",
+		"introduction2": "Start by creating a list!"
+	},
+	"hard_words": {
+		"heading": "Hard Words",
+		"introduction": "Top 10 hardest words based on data collected from users:"
+	},
+	"header": {
+		"dark_mode_off": "Turn off darkmode",
+		"dark_mode_on": "Turn on darkmode",
+		"language": "Language:",
+		"return_to_lists": "Return to lists",
+		"sign_in": "Sign in",
+		"sign_out": "Sign out"
+	},
+	"home_button": "Home Page",
+	"list_accordion_labels": {
+		"completed": "Completed",
+		"in_progress": "In Progress",
+		"not_started": "Not Started"
+	},
+	"list_card": {
+		"delete_list": "Delete list",
+		"title": "List"
+	},
+	"not_found": {
+		"introduction": "Oops! It looks like this page doesn't exist anymore or your link is wrong.",
+		"title": "404 ERROR"
+	},
+	"premade_lists": {
+		"heading": "Premade Lists"
+	},
+	"recorder_button": "Hold to speak",
+	"review": {
+		"heading": "Review",
+		"introduction1": "Review words you've mispronounced.",
+		"introduction2": "Choose a word and begin practicing!",
+		"modal_button_instructions": "Click to choose word"
+	},
+	"word_select_modal": {
+		"cancel": "Cancel",
+		"no_results": "(No results)",
+		"option_A_to_Z": "A to Z",
+		"option_bookmarked": "Bookmarked",
+		"option_newest": "Newest",
+		"option_oldest": "Oldest",
+		"option_source": "Source:",
+		"option_Z_to_A": "Z to A",
+		"search": "Search"
+	}
 }

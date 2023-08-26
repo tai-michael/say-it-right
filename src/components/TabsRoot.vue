@@ -20,22 +20,22 @@
       <ion-tab-bar>
         <ion-tab-button tab="custom-list" :href="customListsPath">
           <ion-icon :icon="createOutline" />
-          <ion-label>Custom Lists</ion-label>
+          <ion-label> {{ $t('custom_lists.heading') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="provided-lists" :href="providedListsPath">
           <ion-icon :icon="folderOutline" />
-          <ion-label>Premade Lists</ion-label>
+          <ion-label>{{ $t('premade_lists.heading') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="review" href="/review" v-if="reviewStore.allWords.length > 0">
           <ion-icon :icon="timeOutline" />
-          <ion-label>Review</ion-label>
+          <ion-label>{{ $t('review.heading') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="hard-words" href="/hard-words">
           <ion-icon :icon="trophyOutline" />
-          <ion-label>Hard Words</ion-label>
+          <ion-label>{{ $t('hard_words.heading') }}</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
       <!-- <RouterLink to="/custom-lists" :class="getLinkClass('/custom-lists')"

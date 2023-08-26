@@ -12,7 +12,7 @@
       ref="recorderButtonNarrowscreen"
     >
       <MicIcon />
-      <span class="uppercase text-base text-white">Hold to speak</span>
+      <span class="uppercase text-base text-white">{{ $t('recorder_button') }}</span>
     </button>
 
     <button
@@ -23,7 +23,7 @@
       @keyup="stopRecording"
     >
       <MicIcon />
-      <span class="uppercase text-base text-white">Hold to speak</span>
+      <span class="uppercase text-base text-white">{{ $t('recorder_button') }}</span>
     </button>
   </div>
 </template>

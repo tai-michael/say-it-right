@@ -2,7 +2,7 @@
   <div>
     <!-- use router-link instead of router.push to set animation -->
     <ion-button router-link="/" router-direction="none"
-      ><ion-icon :icon="home" class="mr-2 mb-1" />Home Page</ion-button
+      ><ion-icon :icon="home" class="mr-2 mb-1" />{{ $t('home_button') }}</ion-button
     >
   </div>
 </template>

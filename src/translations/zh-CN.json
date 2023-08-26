@@ -1,3 +1,56 @@
 {
-  "custom_lists_creation_instructions": "请输入最多7个词语, 用空格或逗号分隔："
+	"custom_lists": {
+		"create_list_instructions": "请输入最多7个词汇, 用空格或逗号分隔：",
+		"example": "例：",
+		"heading": "自定列表",
+		"introduction1": "不确定某些词语如何表达？",
+		"introduction2": "创建一个列表！"
+	},
+	"hard_words": {
+		"heading": "最难词汇",
+		"introduction": "前十个最难词汇（基于用户数据）："
+	},
+	"header": {
+		"dark_mode_off": "关闭暗黑模式",
+		"dark_mode_on": "打开暗黑模式",
+		"language": "语言：",
+		"return_to_lists": "返回列表",
+		"sign_in": "登录",
+		"sign_out": "退出"
+	},
+	"home_button": "主页",
+	"list_accordion_labels": {
+		"completed": "已完成",
+		"in_progress": "进行中",
+		"not_started": "未开始"
+	},
+	"list_card": {
+		"delete_list": "删除列表",
+		"title": "列表"
+	},
+	"not_found": {
+		"introduction": "抱歉！页面无法访问",
+		"title": "404错误"
+	},
+	"premade_lists": {
+		"heading": "预制列表"
+	},
+	"recorder_button": "按住 说话",
+	"review": {
+		"heading": "复习",
+		"introduction1": "复习你发错的单词。",
+		"introduction2": "选一个单词开始练习！",
+		"modal_button_instructions": "点击选择单词"
+	},
+	"word_select_modal": {
+		"cancel": "取消",
+		"no_results": "（无搜索结果）",
+		"option_A_to_Z": "A 到 Z",
+		"option_bookmarked": "已收藏",
+		"option_newest": "最新",
+		"option_oldest": "最早",
+		"option_source": "来源：",
+		"option_Z_to_A": "Z 到 A",
+		"search": "搜索"
+	}
 }
