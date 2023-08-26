@@ -46,7 +46,7 @@
         >
           <!-- <ion-icon :icon="chevronBackOutline" class="text-2xl mr-2"></ion-icon> -->
           <ion-icon :icon="returnUpBackOutline" class="text-2xl mr-2"></ion-icon>
-          Return to lists
+          {{ $t('header.return_to_lists') }}
         </button>
       </div>
       <!-- <ion-title><slot name="title">Default Title</slot></ion-title> -->
@@ -130,7 +130,7 @@
             class="text-lg mr-2 ml-[1px]"
             aria-label="Switch between dark and light mode"
           ></ion-icon
-          >{{ isDarkModeEnabled ? 'Turn off darkmode' : 'Turn on darkmode' }}
+          >{{ isDarkModeEnabled ? $t('header.dark_mode_off') : $t('header.dark_mode_on') }}
         </ion-item>
 
         <ion-item :button="false" :detail="false" lines="full" class="cursor-pointer">
@@ -139,7 +139,7 @@
             class="text-lg mr-2 ml-[1px]"
             aria-label="Choose language"
           ></ion-icon>
-          <span class="mr-3">Language:</span>
+          <span class="mr-3"> {{ $t('header.language') }} </span>
           <select v-model="locale" @change="saveLocale">
             <option value="en">English</option>
             <option value="zh-CN">中文</option>
@@ -211,9 +211,10 @@ const props = defineProps({
   }
 })
 
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 const saveLocale = () => {
   localStorage.setItem('locale', locale.value)
+  isPopoverOpen.value = false
 }
 const logoDark = ref(new Image())
 const logoLight = ref(new Image())
@@ -228,23 +229,29 @@ const isDarkModeEnabled = inject('isDarkModeEnabled')
 const toggleDarkMode = () => {
   isDarkModeEnabled.value = !isDarkModeEnabled.value
   document.body.classList.toggle('dark', isDarkModeEnabled.value)
+  isPopoverOpen.value = false
 }
 
 const authButtonConfig = computed(() => {
   if (isAuthenticated.value) {
     return {
-      onClick: store.signOutUser,
+      onClick: signOutUser,
       icon: logOutOutline,
-      text: 'Sign out'
+      text: t('header.sign_out')
     }
   } else {
     return {
       onClick: signInUser,
       icon: logInOutline,
-      text: 'Sign in'
+      text: t('header.sign_in')
     }
   }
 })
+
+const signOutUser = () => {
+  store.signOutUser()
+  isPopoverOpen.value = false
+}
 
 const signInUser = () => {
   router.push('/sign-in')
