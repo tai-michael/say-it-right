@@ -1,7 +1,7 @@
 <template>
   <ion-page v-if="tabMounted">
     <TheHeader :is-loading="isLoadingRelatedWord">
-      <div v-if="!isNarrowScreen">Review</div>
+      <div v-if="!isNarrowScreen">{{ $t('review.heading') }}</div>
       <template #list>
         <!-- <ion-button :detail="false" id="word-selection-list" class="ml-11 mr-5 max-h-8"> -->
         <!-- <ion-label class="m-0 max-h-8 pl-3 pr-3">Choose a word to review</ion-label> -->
@@ -12,7 +12,7 @@
             @click="handleOpenModal"
             class="max-h-8"
           >
-            <ion-label>Click to choose word</ion-label>
+            <ion-label>{{ $t('review.modal_button_instructions') }}</ion-label>
           </ion-button>
         </div>
       </template>
@@ -32,8 +32,8 @@
           v-else
           class="instructions flex flex-col h-full w-full justify-center align-middle items-center gap-y-3 p-2 font-semibold"
         >
-          <span class="max-w-xs text-center">Review words you've mispronounced.</span>
-          <span class="max-w-xs text-center">Choose a word and begin practicing!</span>
+          <span class="max-w-xs text-center">{{ $t('review.introduction1') }}</span>
+          <span class="max-w-xs text-center">{{ $t('review.introduction2') }}</span>
         </div>
       </keep-alive>
     </ion-content>
