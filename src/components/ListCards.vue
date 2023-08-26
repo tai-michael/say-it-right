@@ -7,7 +7,9 @@
       >
         <ion-card-content class="p-0">
           <ion-toolbar>
-            <ion-title class="font-normal">List {{ list.listNumber }}</ion-title>
+            <ion-title class="font-normal"
+              >{{ $t('list_card.title') }} {{ list.listNumber }}</ion-title
+            >
             <button
               v-if="props.destinationRoute === 'custom-list'"
               slot="end"
@@ -44,7 +46,7 @@
             @click.prevent="deleteList"
           >
             <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
-            ><span class="mr-2 mt-0.5 text-sm flex">Delete list</span>
+            ><span class="mr-2 mt-0.5 text-sm flex">{{ $t('list_card.delete_list') }}</span>
           </div>
         </ion-card-content>
       </RouterLink>
@@ -60,7 +62,7 @@
     >
       <div class="flex items-center text-center justify-center cursor-pointer pb-4 pt-4">
         <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
-        ><span class="mr-2 font-sans">Delete list</span>
+        ><span class="mr-2 font-sans">{{ $t('list_card.delete_list') }}</span>
         <!-- <ion-list>
         <ion-item :button="true" :detail="false">
           <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon>Delete list</ion-item
@@ -319,7 +321,7 @@ ion-popover {
 .widescreen-popover {
   position: absolute;
   z-index: 20; // z-index of ion-toolbar is 10
-  top: 50%;
+  top: 3.1rem;
   bottom: 0;
   right: 0;
   width: 150px;
