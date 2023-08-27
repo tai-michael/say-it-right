@@ -8,8 +8,10 @@
         <div class="instructions">
           <TransitionFade>
             <!-- Using conditional so that the transition works -->
-            <span v-if="testingWordOnly">Speak this word</span>
-            <span v-else-if="testingSentences">Speak this sentence</span>
+            <span v-if="testingWordOnly">{{ $t('word_practice.general_instructions_word') }}</span>
+            <span v-else-if="testingSentences">{{
+              $t('word_practice.general_instructions_sentence')
+            }}</span>
           </TransitionFade>
         </div>
 
@@ -80,10 +82,10 @@
           <div v-if="isRecording" class="transcript flex justify-center">
             <!-- :class="[testingWordOnly ? 'transcript__single-word' : 'transcript-multiple-words']" -->
             <div class="transcript__text">
-              <label v-if="!testingWordOnly">Spoken Words:</label>
+              <label v-if="!testingWordOnly">{{ $t('word_practice.spoken_words_label') }}</label>
               <span>
                 {{
-                  `${testingWordOnly ? 'Spoken Words:' : ''} ${
+                  `${testingWordOnly ? $t('word_practice.spoken_words_label') : ''} ${
                     temporaryTranscript.length > 0 ? '“' : ''
                   }${temporaryTranscript}${temporaryTranscript.length > 0 ? '”' : ''}`
                 }}</span
@@ -94,27 +96,36 @@
           <div v-else class="message">
             <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
             <div v-if="recordingStatus === 'PRONOUNCED_CORRECTLY_ONCE'" class="message__text">
-              <span>Good job! 👍</span>
+              <span>{{ $t('word_practice.message.correct_once1') }}</span>
               <span>
-                Now read
-                {{ testingWordOnly ? 'it just one more time' : 'the second sentence' }}</span
+                {{ $t('word_practice.message.correct_once2')
+                }}{{
+                  testingWordOnly
+                    ? $t('word_practice.message.correct_once3_word')
+                    : $t('word_practice.message.correct_once3_sentence')
+                }}</span
               >
             </div>
             <div v-else-if="recordingStatus === 'PRONOUNCED_CORRECTLY_TWICE'" class="message__text">
-              <span>Well done! 👍</span>
-              <span>{{ testingWordOnly ? 'Now try reading some sentences' : '' }}</span>
+              <span>{{ $t('word_practice.message.correct_twice1') }}</span>
+              <span>{{ testingWordOnly ? $t('word_practice.message.correct_twice2') : '' }}</span>
             </div>
             <div v-else-if="recordingStatus === 'PRONOUNCED_INCORRECTLY'" class="message__text">
-              <span>Try again</span>
+              <span>{{ $t('word_practice.message.incorrect') }}</span>
             </div>
             <!-- <div v-else-if="recordingStatus === 'SKIPPING_WORD'" class="message">
               <span>Let's skip this word for now</span>
             </div> -->
             <div v-else-if="recordingStatus === 'TESTING_COMPLETE'" class="message__text">
-              <span v-if="relatedWords.length">Practice with a similar word!</span>
+              <span v-if="relatedWords.length">{{ $t('word_practice.message.complete1') }}</span>
               <span
-                ><span v-if="relatedWords.length">Or </span>
-                <span @click="resetWord" class="link">Retry</span> this word.</span
+                ><span v-if="relatedWords.length"
+                  >{{ $t('word_practice.message.complete2') }}
+                </span>
+                <span @click="resetWord" class="link">{{
+                  $t('word_practice.message.complete3')
+                }}</span>
+                {{ $t('word_practice.message.complete4') }}</span
               >
             </div>
           </div>
