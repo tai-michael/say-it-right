@@ -27,7 +27,7 @@ import '@ionic/vue/css/padding.css'
 // import '@ionic/vue/css/flex-utils.css'
 // import '@ionic/vue/css/display.css'
 
-const savedLocale = localStorage.getItem('locale') || 'en'
+const savedLocale = localStorage.getItem('locale') || navigator.language || 'en'
 const i18n = createI18n({
   legacy: false,
   locale: savedLocale,
