@@ -5,11 +5,9 @@
       <main>
         <div class="flex align-baseline justify-baseline gap-x-2">
           <ion-icon :icon="sadOutline" class="text-5xl" />
-          <span class="title">404 ERROR</span>
+          <span class="title">{{ $t('not_found.title') }}</span>
         </div>
-        <span class="text-center"
-          >Oops! It looks like this page doesn't exist anymore or your link is wrong.
-        </span>
+        <span class="mr-4 ml-4">{{ $t('not_found.introduction') }} </span>
         <HomeButton />
       </main>
     </ion-content>

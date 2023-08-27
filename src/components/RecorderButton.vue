@@ -12,7 +12,7 @@
       ref="recorderButtonNarrowscreen"
     >
       <MicIcon />
-      <span class="uppercase text-base text-white">Hold to speak</span>
+      <span class="uppercase text-base text-white">{{ $t('recorder_button') }}</span>
     </button>
 
     <button
@@ -23,7 +23,7 @@
       @keyup="stopRecording"
     >
       <MicIcon />
-      <span class="uppercase text-base text-white">Hold to speak</span>
+      <span class="uppercase text-base text-white">{{ $t('recorder_button') }}</span>
     </button>
   </div>
 </template>
@@ -102,7 +102,7 @@ const stopRecording = async (e) => {
   // console.log('mouseup/touchend triggered')
   if (!client.isActive()) return
 
-  if (e.pointerType === 'touch') {
+  if (e.type === 'touchend') {
     const button = e.target.closest('.recording-btn.narrowscreen')
     if (button) {
       button.classList.remove('recording-btn-transform')

@@ -5,10 +5,12 @@
         <main class="p-4 flex flex-col w-full items-center h-full">
           <div class="instructions" :class="[{ '!mt-4 !mb-4': isShortParagraph }]">
             <TransitionFade>
-              <span v-if="props.list.status === 'LIST_NOT_STARTED'">Speak this paragraph</span>
-              <span v-else-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'"
-                >Recording complete</span
-              >
+              <span v-if="props.list.status === 'LIST_NOT_STARTED'">{{
+                $t('paragraph_challenge.general_instructions')
+              }}</span>
+              <span v-else-if="props.list.status === 'PARAGRAPH_RECORDING_ENDED'">{{
+                $t('paragraph_challenge.recording_complete')
+              }}</span>
             </TransitionFade>
           </div>
 
@@ -25,7 +27,7 @@
         <div class="message-container w-full h-full flex justify-center items-start pt-5">
           <div v-if="isRecording" class="transcript">
             <div class="flex-col">
-              <div class="mt-4 mb-3">Recording...</div>
+              <div class="mt-4 mb-3">{{ $t('paragraph_challenge.recording_label') }}</div>
               <div class="flex justify-center">
                 <VuMeter ref="vumeter"></VuMeter>
               </div>
@@ -47,8 +49,8 @@
             <div>
               <div v-if="recordingStatus === 'NOTHING_RECORDED'"></div>
               <div v-else-if="recordingStatus === 'FEW_WORDS_RECORDED'" class="message__text">
-                <span>You didn't record enough words.</span>
-                <span>Try again, and remember to hold the recording button.</span>
+                <span>{{ $t('paragraph_challenge.message.too_few_words1') }}</span>
+                <span>{{ $t('paragraph_challenge.message.too_few_words2') }}</span>
 
                 <!-- <span>Excellent! You pronounced each tested word correctly.</span>
                 <span>Next, create or try another list.</span> -->
@@ -63,23 +65,23 @@
                 <span>Let's practice them.</span> -->
               </div>
               <div v-else-if="recordingStatus === 'ALL_WORDS_CORRECT'" class="message__text">
-                <span>Excellent! You pronounced each tested word correctly.</span>
-                <span>Next, create or try another list.</span>
+                <span>{{ $t('paragraph_challenge.message.all_correct1') }}</span>
+                <span>{{ $t('paragraph_challenge.message.all_correct2') }}</span>
               </div>
-              <div v-else-if="recordingStatus === 'ONE_WORD_CORRECT'" class="message__text">
-                <span>Good job! You mispronounced only one word.</span>
-                <span>Let's practice it.</span>
+              <div v-else-if="recordingStatus === 'ONE_WORD_INCORRECT'" class="message__text">
+                <span>{{ $t('paragraph_challenge.message.one_incorrect1') }}</span>
+                <span>{{ $t('paragraph_challenge.message.one_incorrect2') }}</span>
               </div>
               <div v-else-if="recordingStatus === 'MOST_WORDS_CORRECT'" class="message__text">
-                <span>You did pretty well! However, these words were mispronounced.</span>
-                <span>Let's practice them.</span>
+                <span>{{ $t('paragraph_challenge.message.most_correct1') }}</span>
+                <span>{{ $t('paragraph_challenge.message.most_correct2') }}</span>
               </div>
               <div
                 v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'"
                 class="message__text flex gap-y-2"
               >
-                <span>These words were mispronounced.</span>
-                <span>Let's practice them.</span>
+                <span>{{ $t('paragraph_challenge.message.most_incorrect1') }}</span>
+                <span>{{ $t('paragraph_challenge.message.most_incorrect2') }}</span>
               </div>
             </div>
 
@@ -90,7 +92,7 @@
               "
               @click="handleNextButtonClicked"
             >
-              Next
+              {{ $t('paragraph_challenge.next_button') }}
             </ion-button>
           </div>
         </div>
@@ -368,7 +370,7 @@ const recordingStatus = computed(() => {
   else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length)
     return 'ALL_WORDS_CORRECT'
   else if (correctlyPronouncedTestedWords.value.length === testedWords.value.length - 1)
-    return 'ONE_WORD_CORRECT'
+    return 'ONE_WORD_INCORRECT'
   else if (correctlyPronouncedTestedWords.value.length > testedWords.value.length * 0.5)
     return 'MOST_WORDS_CORRECT'
   else return 'MOST_WORDS_INCORRECT'

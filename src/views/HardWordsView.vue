@@ -1,13 +1,13 @@
 <template>
   <ion-page>
-    <TheHeader>The Hardest Words</TheHeader>
+    <TheHeader>{{ $t('hard_words.heading') }}</TheHeader>
     <ion-content>
       <PullRefresher />
 
       <div v-if="tabMounted" class="h-full flex flex-col align-middle items-center">
-        <ion-label class="m-5 ion-padding leading-6 xs:mt-8 xs:mb-7"
-          >Top 10 hardest words based on data collected from users:</ion-label
-        >
+        <ion-label class="m-5 ion-padding leading-6 xs:mt-8 xs:mb-7">{{
+          $t('hard_words.introduction')
+        }}</ion-label>
         <ion-card
           v-if="leaderboard"
           class="m-0 pt-3 pb-1 pl-2 pr-2 xs:pt-10 xs:pb-8 xs:pl-12 xs:pr-12"

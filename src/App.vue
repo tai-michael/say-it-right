@@ -63,56 +63,52 @@ const signedIn = ref(false)
 const fetchingBackendData = ref(false)
 
 const fetchBackendData = async () => {
-  try {
-    if (!user.value) throw new Error('User not defined')
+  if (!user.value) throw new Error('User not defined')
 
-    const usersDocRef = doc(db, 'users', user.value.uid)
-    let userDocSnap = await getDoc(usersDocRef)
-    const userProvidedList = ref(userDocSnap.data()?.providedLists)
-    console.log('Fetched user data from firestore')
-    // console.log(userDocSnap.data())
+  const usersDocRef = doc(db, 'users', user.value.uid)
+  let userDocSnap = await getDoc(usersDocRef)
+  const userProvidedList = ref(userDocSnap.data()?.providedLists)
+  console.log('Fetched user data from firestore')
+  // console.log(userDocSnap.data())
 
-    // NOTE if it's user's first time logging in, send provided lists from backend
-    if (!userProvidedList.value) {
-      console.log('hydrating provided lists')
-      userProvidedList.value = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+  // NOTE if it's user's first time logging in, send provided lists from backend
+  if (!userProvidedList.value) {
+    console.log('hydrating provided lists')
+    userProvidedList.value = await providedListsStore.downloadAndExtractGlobalProvidedLists()
 
-      await setDoc(usersDocRef, {
-        userName: user.value.displayName,
-        customLists: [],
-        providedLists: userProvidedList.value,
-        review: []
-      })
-
-      userDocSnap = await getDoc(usersDocRef)
-    }
-
-    // NOTE adds any new lists to backend user lists when App starts
-    if (globalLists.value && globalLists.value.length > userProvidedList.value.length) {
-      const newLists = extractNewLists(globalLists.value, userProvidedList.value)
-
-      const newProvidedLists = [...userProvidedList.value, ...newLists]
-      console.log(newProvidedLists)
-
-      await updateDoc(usersDocRef, {
-        providedLists: newProvidedLists
-      })
-
-      userDocSnap = await getDoc(usersDocRef)
-    }
-
-    customListsStore.setLists(userDocSnap.data()?.customLists)
-    providedListsStore.setLists(userDocSnap.data()?.providedLists)
-    reviewStore.setWords(userDocSnap.data()?.review)
-
-    // NOTE triggers watcher after allLists has been hydrated
-    // Adds a new list whenever a new global list is added
-    watchEffect(() => {
-      addWatcherForGlobalProvidedLists()
+    await setDoc(usersDocRef, {
+      userName: user.value.displayName,
+      customLists: [],
+      providedLists: userProvidedList.value,
+      review: []
     })
-  } catch (err) {
-    throw err
+
+    userDocSnap = await getDoc(usersDocRef)
   }
+
+  // NOTE adds any new lists to backend user lists when App starts
+  if (globalLists.value && globalLists.value.length > userProvidedList.value.length) {
+    const newLists = extractNewLists(globalLists.value, userProvidedList.value)
+
+    const newProvidedLists = [...userProvidedList.value, ...newLists]
+    console.log(newProvidedLists)
+
+    await updateDoc(usersDocRef, {
+      providedLists: newProvidedLists
+    })
+
+    userDocSnap = await getDoc(usersDocRef)
+  }
+
+  customListsStore.setLists(userDocSnap.data()?.customLists)
+  providedListsStore.setLists(userDocSnap.data()?.providedLists)
+  reviewStore.setWords(userDocSnap.data()?.review)
+
+  // NOTE triggers watcher after allLists has been hydrated
+  // Adds a new list whenever a new global list is added
+  watchEffect(() => {
+    addWatcherForGlobalProvidedLists()
+  })
 }
 
 const addWatcherForGlobalProvidedLists = () => {

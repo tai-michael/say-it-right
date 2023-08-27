@@ -1,6 +1,6 @@
 <template>
   <ion-page v-if="tabMounted">
-    <TheHeader :is-loading="isLoadingNewList">Custom Lists</TheHeader>
+    <TheHeader :is-loading="isLoadingNewList">{{ $t('custom_lists.heading') }}</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
       <PullRefresher />
@@ -9,10 +9,10 @@
       <div>
         <form class="submit-form" @submit.prevent="submitWords(wordsInput)">
           <div class="input-container">
-            <label>Enter up to 7 words separated by spaces or commas:</label>
+            <label>{{ $t('custom_lists.create_list_instructions') }}</label>
             <div class="relative">
               <ion-searchbar
-                placeholder="  e.g. urban thin kindly"
+                :placeholder="`  ${$t('custom_lists.example')} urban thin kindly`"
                 v-model="wordsInput"
                 :disabled="isLoadingNewList"
                 animated="true"
@@ -54,8 +54,8 @@
           v-else
           class="instructions flex flex-col h-full w-full mt-24 justify-center align-middle items-center gap-y-3 p-2 font-semibold md:mt-20"
         >
-          <span class="max-w-xs text-center">Not sure how to say certain words?</span>
-          <span class="max-w-xs text-center">Start by creating a list!</span>
+          <span class="max-w-xs text-center">{{ $t('custom_lists.introduction1') }}</span>
+          <span class="max-w-xs text-center">{{ $t('custom_lists.introduction2') }}</span>
         </div>
       </div>
 
@@ -81,7 +81,7 @@
 
   <!-- <ion-page v-else class="max-h-[100vh] h-full justify-center items-center"> -->
   <ion-page v-else>
-    <TheHeader>Custom Lists</TheHeader>
+    <TheHeader>{{ $t('custom_lists.heading', 2) }}</TheHeader>
     <ion-content>
       <LoadingSpinner />
     </ion-content>

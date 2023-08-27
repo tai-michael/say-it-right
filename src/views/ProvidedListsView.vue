@@ -1,7 +1,7 @@
 <template>
   <!-- <ion-page v-if="!tabMounted">Loading...</ion-page> -->
   <ion-page v-if="tabMounted">
-    <TheHeader>Premade Lists</TheHeader>
+    <TheHeader>{{ $t('premade_lists.heading') }}</TheHeader>
 
     <ion-content class="ion-padding" ref="content" :force-overscroll="false">
       <PullRefresher />
@@ -18,7 +18,7 @@
   </ion-page>
 
   <ion-page v-else class="max-h-[100vh]">
-    <TheHeader>Premade Lists</TheHeader>
+    <TheHeader>{{ $t('premade_lists.heading') }}</TheHeader>
     <ion-content>
       <LoadingSpinner />
     </ion-content>

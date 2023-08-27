@@ -7,7 +7,8 @@ import { auth } from './firebaseInit'
 import * as Sentry from '@sentry/vue'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { IonicVue } from '@ionic/vue'
-
+import { createI18n } from 'vue-i18n'
+import messages from './translations/main'
 import './styles/tailwind.css'
 import './styles/main.css'
 
@@ -25,6 +26,14 @@ import '@ionic/vue/css/padding.css'
 // import '@ionic/vue/css/text-transformation.css'
 // import '@ionic/vue/css/flex-utils.css'
 // import '@ionic/vue/css/display.css'
+
+const savedLocale = localStorage.getItem('locale') || navigator.language || 'en'
+const i18n = createI18n({
+  legacy: false,
+  locale: savedLocale,
+  // fallbackLocale: 'en',
+  messages
+})
 
 let app: ReturnType<typeof createApp>
 
@@ -74,6 +83,7 @@ auth.onAuthStateChanged((user) => {
       // .component('ListGroups', ListGroups)
       // .component('WordDrill', WordDrill)
       .use(router)
+      .use(i18n)
 
     app.mount('#app')
   }

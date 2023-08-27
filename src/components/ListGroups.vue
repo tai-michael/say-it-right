@@ -15,7 +15,7 @@
   >
     <ion-accordion value="inProgress" v-if="store.inProgressLists.length">
       <ion-item slot="header" lines="none">
-        <ion-label>In Progress</ion-label>
+        <ion-label>{{ $t('list_accordion_labels.in_progress') }}</ion-label>
       </ion-item>
       <div slot="content">
         <ListCards
@@ -30,7 +30,7 @@
         <!-- <ion-label v-if="noListStarted">{{
           props.routeName === 'provided-lists' ? 'Not Started' : 'New'
         }}</ion-label> -->
-        <ion-label>Not Started</ion-label>
+        <ion-label>{{ $t('list_accordion_labels.not_started') }}</ion-label>
       </ion-item>
       <div slot="content">
         <ListCards
@@ -42,7 +42,7 @@
     </ion-accordion>
     <ion-accordion value="completed" v-if="store.completedLists.length">
       <ion-item slot="header" lines="none">
-        <ion-label>Completed</ion-label>
+        <ion-label>{{ $t('list_accordion_labels.completed') }}</ion-label>
       </ion-item>
       <div slot="content">
         <ListCards

@@ -9,19 +9,41 @@
 
       <div v-else-if="list.status === 'LIST_COMPLETE'" class="message ion-padding">
         <div class="message__text flex flex-col">
-          <span class="mb-5">You've completed this list!</span>
-          <span class="mb-4">You can: </span>
-          <ul>
+          <span class="mb-5">{{ $t('list_content.message1') }}</span>
+          <span class="mb-4">{{ $t('list_content.message2') }}</span>
+          <ul v-if="locale === 'ja'">
             <li>
-              <RouterLink to="/review" class="link">Review</RouterLink> the words you've learned
+              {{ $t('list_content.message3') }}
+              <RouterLink to="/review" class="link">{{ $t('list_content.message4') }}</RouterLink>
+            </li>
+            <li>
+              {{ $t('list_content.message5') }}
+              <span @click="returnToLists" class="link"> {{ $t('list_content.message6') }}</span>
+            </li>
+            <li>
+              {{ $t('list_content.message9')
+              }}<span @click="handleReset" class="link">{{ $t('list_content.message10') }}</span>
+            </li>
+          </ul>
+          <ul v-else>
+            <li>
+              <RouterLink to="/review" class="link" routerDirection="none">{{
+                $t('list_content.message3')
+              }}</RouterLink
+              >{{ $t('list_content.message4') }}
             </li>
             <li>
               <span @click="returnToLists" class="link">
-                {{ `${routeName === 'custom-lists' ? 'Create or' : ''}` }} Try</span
+                {{ `${routeName === 'custom-lists' ? $t('list_content.message5') : ''}` }}
+                {{ $t('list_content.message6') }}</span
               >
-              another list
+              {{ $t('list_content.message7') }}
             </li>
-            <li>Or <span @click="handleReset" class="link">Retry</span> this list</li>
+            <li>
+              {{ $t('list_content.message8')
+              }}<span @click="handleReset" class="link">{{ $t('list_content.message9') }}</span
+              >{{ $t('list_content.message10') }}
+            </li>
           </ul>
         </div>
       </div>
@@ -38,9 +60,12 @@ const PullRefresher = defineAsyncComponent(() => import('@/components/PullRefres
 const ParagraphChallenge = defineAsyncComponent(() => import('@/components/ParagraphChallenge.vue'))
 const WordChallenge = defineAsyncComponent(() => import('@/components/WordChallenge.vue'))
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'
+import { IonContent } from '@ionic/vue'
 import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
 import { RouterLink, useRouter } from 'vue-router'
-import { IonContent } from '@ionic/vue'
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n()
 const router = useRouter()
 // const ParagraphChallenge = defineAsyncComponent({
 //   // the loader function
@@ -101,9 +126,9 @@ const resetShortList = () => {
 
 const title = computed(
   () =>
-    `${routeName.value === 'provided-lists' ? 'Premade List' : 'Custom List'} ${
-      list.value.listNumber
-    }`
+    `${
+      routeName.value === 'provided-lists' ? t('premade_lists.heading') : t('custom_lists.heading')
+    } ${list.value.listNumber}`
 )
 </script>
 

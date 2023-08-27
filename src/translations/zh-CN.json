@@ -1,0 +1,105 @@
+{
+	"custom_lists": {
+		"create_list_instructions": "请输入最多7个词汇, 用空格或逗号分隔：",
+		"example": "例：",
+		"heading": "自定列表",
+		"introduction1": "不确定某些词语如何表达？",
+		"introduction2": "创建一个列表！"
+	},
+	"hard_words": {
+		"heading": "最难词汇",
+		"introduction": "前十个最难词汇（基于用户数据）："
+	},
+	"header": {
+		"dark_mode_off": "关闭暗黑模式",
+		"dark_mode_on": "打开暗黑模式",
+		"language": "语言：",
+		"return_to_lists": "返回列表",
+		"sign_in": "登录",
+		"sign_out": "退出"
+	},
+	"home_button": "主页",
+	"list_accordion_labels": {
+		"completed": "已完成",
+		"in_progress": "进行中",
+		"not_started": "未开始"
+	},
+	"list_card": {
+		"delete_list": "删除列表",
+		"title": "列表"
+	},
+	"list_content": {
+		"message1": "你已完成此列表！",
+		"message2": "你可以：",
+		"message3": "复习 ",
+		"message4": "你已学习的单词",
+		"message5": "创建或",
+		"message6": "參考",
+		"message7": "另一个列表",
+		"message8": "或",
+		"message9": " 重试 ",
+		"message10": "此列表"
+	},
+	"not_found": {
+		"introduction": "抱歉！页面无法访问",
+		"title": "404错误"
+	},
+	"paragraph_challenge": {
+		"general_instructions": "朗读这个段落",
+		"message": {
+			"all_correct1": "太棒了！每个词都发的准确。",
+			"all_correct2": "接着，你可以创建或试另一个列表。",
+			"most_correct1": "做得不错！然而，有些词发音不准确。",
+			"most_correct2": "我们来练习一下。",
+			"most_incorrect1": "有些词发音不准确。",
+			"most_incorrect2": "我们来练习一下。",
+			"one_incorrect1": "念得好！你只发错了一个词。",
+			"one_incorrect2": "我们来练习一下。",
+			"too_few_words1": "你没有录足够多的字。",
+			"too_few_words2": "请再试一次，记得按住录音按钮。"
+		},
+		"next_button": "下一步",
+		"recording_complete": "录音完成",
+		"recording_label": "录音中..."
+	},
+	"premade_lists": {
+		"heading": "预制列表"
+	},
+	"recorder_button": "按住 说话",
+	"review": {
+		"heading": "复习",
+		"introduction1": "复习你发错的单词。",
+		"introduction2": "选一个单词开始练习！",
+		"modal_button_instructions": "点击选择单词"
+	},
+	"word_practice": {
+		"general_instructions_sentence": "朗读这个句子",
+		"general_instructions_word": "朗读这个词汇",
+		"message": {
+			"complete1": "练习类似的词汇！",
+			"complete2": "或",
+			"complete3": "重试",
+			"complete4": "这词汇。",
+			"correct_once1": "读的好！👍",
+			"correct_once2": "请读",
+			"correct_once3_sentence": "第二句",
+			"correct_once3_word": "第二次",
+			"correct_twice1": "非常好！👍",
+			"correct_twice2": "我们来练一些句子",
+			"incorrect": "再试一次",
+			"skip": "我们先跳过这个词"
+		},
+		"spoken_words_label": "语音内容："
+	},
+	"word_select_modal": {
+		"cancel": "取消",
+		"no_results": "（无搜索结果）",
+		"option_A_to_Z": "A 到 Z",
+		"option_bookmarked": "已收藏",
+		"option_newest": "最新",
+		"option_oldest": "最早",
+		"option_source": "来源：",
+		"option_Z_to_A": "Z 到 A",
+		"search": "搜索"
+	}
+}
