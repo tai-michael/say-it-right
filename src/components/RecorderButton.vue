@@ -102,7 +102,7 @@ const stopRecording = async (e) => {
   // console.log('mouseup/touchend triggered')
   if (!client.isActive()) return
 
-  if (e.pointerType === 'touch') {
+  if (e.type === 'touchend') {
     const button = e.target.closest('.recording-btn.narrowscreen')
     if (button) {
       button.classList.remove('recording-btn-transform')
