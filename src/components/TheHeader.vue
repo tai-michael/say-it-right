@@ -94,6 +94,20 @@
         <span class="font-medium text-[14px]">{{ user?.displayName }}</span>
       </ion-item>
 
+      <ion-item :button="false" :detail="false" lines="full">
+        <ion-icon
+          :icon="languageOutline"
+          class="text-lg mr-2 ml-[1px]"
+          aria-label="Choose language"
+        ></ion-icon>
+        <span class="mr-3"> {{ $t('header.language') }} </span>
+        <select v-model="locale" @change="saveLocale">
+          <option value="en">English</option>
+          <option value="zh-CN">中文</option>
+          <option value="ja">日本語</option>
+        </select>
+      </ion-item>
+
       <ion-item
         :button="true"
         :detail="false"
@@ -417,7 +431,8 @@ body.dark select {
   bottom: 0;
   right: 0;
   width: 250px;
-  height: 115px;
+  // height: 115px;
+  height: 166px;
   margin-right: 0.75rem;
   border-radius: 0.25rem;
   // box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.35);
@@ -520,7 +535,7 @@ body.dark .widescreen-popover {
     --background: rgb(35, 35, 35);
   }
 
-  ion-item:first-child {
+  ion-item:not(:last-child) {
     border-bottom: 1px rgb(49, 49, 49) solid;
   }
 }

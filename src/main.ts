@@ -27,10 +27,28 @@ import '@ionic/vue/css/padding.css'
 // import '@ionic/vue/css/flex-utils.css'
 // import '@ionic/vue/css/display.css'
 
-const savedLocale = localStorage.getItem('locale') || navigator.language || 'en'
+function checkDefaultLanguage(locale: string) {
+  const supportedLanguages = ['en', 'zh-CN', 'ja'] // Add your supported languages here
+  let matched = supportedLanguages.find((lang) => lang === locale)
+
+  if (!matched) {
+    const savedLocalePartials = savedLocale.split('-')[0]
+    matched = supportedLanguages.find((lang) => lang === savedLocalePartials)
+  }
+
+  if (!matched) {
+    const savedLocalePartials = savedLocale.split('-')[0]
+    matched = supportedLanguages.find((lang) => lang.split('-')[0] === savedLocalePartials)
+  }
+
+  return matched || 'en'
+}
+
+const savedLocale = localStorage.getItem('locale') || navigator.language
+const matchedLocale = checkDefaultLanguage(savedLocale)
 const i18n = createI18n({
   legacy: false,
-  locale: savedLocale,
+  locale: matchedLocale,
   // fallbackLocale: 'en',
   messages
 })
