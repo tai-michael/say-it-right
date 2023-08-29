@@ -83,7 +83,7 @@
     <ion-alert
       :is-open="isAlertOpen"
       class="custom-alert"
-      header="Are you sure?"
+      :header="$t('alert_for_delete.message')"
       :buttons="alertButtons"
       @didDismiss="setAlertOpen(false)"
     ></ion-alert>
@@ -94,6 +94,7 @@
 import { ref, inject, watch } from 'vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
+import { useI18n } from 'vue-i18n'
 import { ellipsisHorizontal, trashOutline } from 'ionicons/icons'
 import {
   IonCard,
@@ -114,17 +115,15 @@ import { useRoute } from 'vue-router'
 // import ListChecked from '@/assets/icons/list-checked.vue'
 // import ListRegular from '@/assets/icons/list-regular.vue'
 const route = useRoute()
-
 const props = defineProps({
   lists: { type: Array as PropType<List[]>, required: true },
   destinationRoute: { type: String, required: true }
 })
-
 const store =
   props.destinationRoute === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
-
 const customListsStore = useCustomListsStore()
 
+const { t } = useI18n()
 const isDarkModeEnabled = inject('isDarkModeEnabled')
 
 // NOTE using store for selected popover list, so that it's shared across different List Groups (which each have their own set of List Cards); prevents having multiple popovers open across different List Groups
@@ -158,10 +157,10 @@ const setAlertOpen = (state: boolean) => {
 }
 const alertButtons = [
   {
-    text: 'Cancel'
+    text: t('alert_for_delete.cancel_button')
   },
   {
-    text: 'Delete',
+    text: t('alert_for_delete.delete_button'),
     handler: () => deleteList()
   }
 ]

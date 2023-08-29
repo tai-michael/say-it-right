@@ -1,4 +1,9 @@
 {
+	"alert_for_delete": {
+		"cancel_button": "Cancel",
+		"delete_button": "Delete",
+		"message": "Are you sure?"
+	},
 	"custom_lists": {
 		"create_list_instructions": "Enter up to 7 words separated by spaces or commas:",
 		"example": "e.g.",

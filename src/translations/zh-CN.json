@@ -1,4 +1,9 @@
 {
+	"alert_for_delete": {
+		"cancel_button": "取消",
+		"delete_button": "删除",
+		"message": "确定删除？"
+	},
 	"custom_lists": {
 		"create_list_instructions": "请输入最多7个词汇, 用空格或逗号分隔：",
 		"example": "例：",

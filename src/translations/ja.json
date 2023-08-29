@@ -1,4 +1,9 @@
 {
+	"alert_for_delete": {
+		"cancel_button": "キャンセル",
+		"delete_button": "削除",
+		"message": "本当に削除しますか？"
+	},
 	"custom_lists": {
 		"create_list_instructions": "最大7つの単語を入力（スペースまたはコンマで区切ってください）:",
 		"example": "例：",

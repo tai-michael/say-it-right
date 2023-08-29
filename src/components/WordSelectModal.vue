@@ -71,7 +71,7 @@
 
     <ion-alert
       :is-open="isAlertOpen"
-      header="Are you sure?"
+      :header="$t('alert_for_delete.message')"
       :buttons="alertButtons"
       @didDismiss="setAlertOpen(false)"
     ></ion-alert>
@@ -96,6 +96,7 @@
 import { computed, ref, inject, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import type { PropType } from 'vue'
 import type { WordObject } from '@/stores/modules/types/Review'
+import { useI18n } from 'vue-i18n'
 import { arrowUp, star, starOutline, trashOutline } from 'ionicons/icons'
 import {
   IonHeader,
@@ -120,8 +121,8 @@ const RecycleScroller = defineAsyncComponent(() =>
   import('vue-virtual-scroller').then((module) => module.RecycleScroller)
 )
 
+const { t } = useI18n()
 const store = useReviewStore()
-
 const props = defineProps({
   allWords: { type: Array as PropType<WordObject[]>, required: true },
   forcedRerenderKey: { type: Number, required: true },
@@ -178,10 +179,10 @@ const setAlertOpen = (state: boolean) => {
 }
 const alertButtons = [
   {
-    text: 'Cancel'
+    text: t('alert_for_delete.cancel_button')
   },
   {
-    text: 'Delete',
+    text: t('alert_for_delete.delete_button'),
     // @ts-ignore
     handler: () => deleteWord(wordToDelete.value, deleteEvent.value)
   }
