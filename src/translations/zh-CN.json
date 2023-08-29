@@ -7,8 +7,8 @@
 		"introduction2": "创建一个列表！"
 	},
 	"hard_words": {
-		"heading": "最难词汇",
-		"introduction": "前十个最难词汇（基于用户数据）："
+		"heading": "最难的词汇",
+		"introduction": "前十个最难的词汇（基于用户数据）："
 	},
 	"header": {
 		"dark_mode_off": "关闭暗黑模式",
@@ -25,7 +25,7 @@
 		"not_started": "未开始"
 	},
 	"list_card": {
-		"delete_list": "删除列表",
+		"delete_list": "删除此列表",
 		"title": "列表"
 	},
 	"list_content": {
@@ -45,13 +45,13 @@
 		"title": "404错误"
 	},
 	"paragraph_challenge": {
-		"general_instructions": "朗读这个段落",
+		"general_instructions": "请大声朗读以下段落",
 		"message": {
 			"all_correct1": "太棒了！每个词都发的准确。",
 			"all_correct2": "接着，你可以创建或试另一个列表。",
-			"most_correct1": "做得不错！然而，有些词发音不准确。",
+			"most_correct1": "做得不错！然而，有些词语发音不准确。",
 			"most_correct2": "我们来练习一下。",
-			"most_incorrect1": "有些词发音不准确。",
+			"most_incorrect1": "有些词语发音不准确。",
 			"most_incorrect2": "我们来练习一下。",
 			"one_incorrect1": "念得好！你只发错了一个词。",
 			"one_incorrect2": "我们来练习一下。",
@@ -73,10 +73,10 @@
 		"modal_button_instructions": "点击选择单词"
 	},
 	"word_practice": {
-		"general_instructions_sentence": "朗读这个句子",
-		"general_instructions_word": "朗读这个词汇",
+		"general_instructions_sentence": "请大声朗读以下句子",
+		"general_instructions_word": "请大声朗读以下词语",
 		"message": {
-			"complete1": "练习类似的词汇！",
+			"complete1": "练习类似的词语！",
 			"complete2": "或",
 			"complete3": "重试",
 			"complete4": "这词汇。",
@@ -87,7 +87,7 @@
 			"correct_twice1": "非常好！👍",
 			"correct_twice2": "我们来练一些句子",
 			"incorrect": "再试一次",
-			"skip": "我们先跳过这个词"
+			"skip": "我们先跳过这个单词"
 		},
 		"spoken_words_label": "语音内容："
 	},
