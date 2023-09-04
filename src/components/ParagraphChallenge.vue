@@ -19,7 +19,7 @@
 
           <ion-card
             class="ml-0.5 mr-0.5 mb-3 pl-5 pr-5 max-w-xs"
-            :class="{ 'max-w-[19rem]': isShortParagraph }"
+            :class="{ 'max-w-[19rem]': isShortParagraph, 'mb-0': isLongParagraph }"
           >
             <div
               class="tested-paragraph"
@@ -31,12 +31,14 @@
         </main>
 
         <div
-          class="message-container w-full h-full flex justify-center items-start pt-5"
-          :class="{ '!pt-1': isLongParagraph }"
+          class="message-container w-full h-full flex justify-center items-start"
+          :class="{
+            'pb-[70px]': props.list.status !== 'PARAGRAPH_RECORDING_ENDED'
+          }"
         >
           <div v-if="isRecording" class="transcript">
             <div class="flex-col">
-              <div class="mt-4 mb-3">{{ $t('paragraph_challenge.recording_label') }}</div>
+              <div class="recording-label">{{ $t('paragraph_challenge.recording_label') }}</div>
               <div class="flex justify-center">
                 <VuMeter ref="vumeter"></VuMeter>
               </div>
@@ -88,12 +90,14 @@
               <div
                 v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'"
                 class="message__text flex gap-y-2"
+                :class="{
+                  '!gap-y-1': isLongParagraph
+                }"
               >
                 <span>{{ $t('paragraph_challenge.message.most_incorrect1') }}</span>
                 <span>{{ $t('paragraph_challenge.message.most_incorrect2') }}</span>
               </div>
             </div>
-
             <ion-button
               v-if="
                 props.list.status === 'PARAGRAPH_RECORDING_ENDED' &&
@@ -433,8 +437,8 @@ main {
   height: 19px;
   margin: 0.5rem 0;
 
-  @media only screen and (min-width: 768px) {
-    margin: 1rem 0;
+  @media only screen and (min-width: 481px) {
+    margin: 1rem 0 !important;
   }
 }
 
@@ -442,10 +446,18 @@ main {
 .message__text {
   font-weight: 600;
   color: rgb(80, 80, 80);
+
+  @media screen and (min-width: 481px) {
+    row-gap: 1rem !important;
+  }
 }
 
 ion-card {
   --background: #eef9f8;
+
+  @media screen and (min-width: 481px) {
+    margin-bottom: 0.75rem;
+  }
 }
 
 .tested-paragraph {
@@ -463,6 +475,7 @@ ion-card {
 
   @media screen and (min-width: 481px) {
     line-height: 2rem;
+    font-size: 1rem !important;
   }
 
   // 'deep' selector is necessary, as scoped styles don't apply to content inside v-html
@@ -514,6 +527,7 @@ ion-card {
 
 .message-container {
   background-color: #8ed6ce;
+  align-items: center;
   // max-height: 15rem;
   // align-content: space-around !important;
   // align-content: space-between !important;
@@ -521,6 +535,7 @@ ion-card {
   @media screen and (min-width: 481px) {
     align-items: flex-start;
     padding-top: 2.5rem;
+    padding-bottom: 0;
     // max-height: 20rem;
   }
 }
@@ -529,10 +544,9 @@ ion-card {
   display: flex;
   flex-direction: column;
   max-width: 340px;
-  padding: 1rem 2rem;
-  // row-gap: 0.75rem;
-  // min-height: 100px;
-  // height: 50px;
+  padding: 0 2rem;
+  height: 100%;
+  justify-content: space-evenly;
 
   &__text {
     display: flex;
@@ -544,11 +558,25 @@ ion-card {
       font-weight: 600;
     }
   }
+
+  @media screen and (min-width: 481px) {
+    padding: 1rem 2rem;
+    height: auto;
+    justify-content: flex-start;
+  }
 }
 
 .transcript {
   padding-left: 30px;
   padding-right: 30px;
+
+  .recording-label {
+    margin-bottom: 0.5rem;
+
+    @media screen and (min-width: 481px) {
+      margin-bottom: 1rem;
+    }
+  }
   // display: flex;
   // justify-content: center;
 
@@ -624,13 +652,12 @@ ion-button {
 
   // max-width: 50px;
   display: flex;
-  margin: 1rem 0;
   max-height: 44px;
   text-transform: uppercase;
   color: rgb(231, 253, 243);
-  margin-top: 2.25rem;
 
   @media screen and (min-width: 481px) {
+    margin-top: 2.25rem;
   }
 }
 

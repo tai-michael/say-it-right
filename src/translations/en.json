@@ -1,110 +1,110 @@
 {
-	"alert_for_delete": {
-		"cancel_button": "Cancel",
-		"delete_button": "Delete",
-		"message": "Are you sure?"
-	},
-	"custom_lists": {
-		"create_list_instructions": "Enter up to 7 words separated by spaces or commas:",
-		"example": "e.g.",
-		"heading": "Custom Lists",
-		"introduction1": "Not sure how to say certain words?",
-		"introduction2": "Start by creating a list!"
-	},
-	"hard_words": {
-		"heading": "Hard Words",
-		"introduction": "Top 10 hardest words based on data collected from users:"
-	},
-	"header": {
-		"dark_mode_off": "Turn off darkmode",
-		"dark_mode_on": "Turn on darkmode",
-		"language": "Language:",
-		"return_to_lists": "Return to lists",
-		"sign_in": "Sign in",
-		"sign_out": "Sign out"
-	},
-	"home_button": "Home Page",
-	"list_accordion_labels": {
-		"completed": "Completed",
-		"in_progress": "In Progress",
-		"not_started": "Not Started"
-	},
-	"list_card": {
-		"delete_list": "Delete list",
-		"title": "List"
-	},
-	"list_content": {
-		"message1": "You've completed this list!",
-		"message2": "You can:",
-		"message3": "Review",
-		"message4": " the words you've learned",
-		"message5": "Create or",
-		"message6": "Try",
-		"message7": "another list",
-		"message8": "Or ",
-		"message9": "Retry",
-		"message10": " this list"
-	},
-	"not_found": {
-		"introduction": "Oops! It looks like this page doesn't exist anymore or your link is wrong.",
-		"title": "404 ERROR"
-	},
-	"paragraph_challenge": {
-		"general_instructions": "Speak this paragraph",
-		"message": {
-			"all_correct1": "Excellent! You pronounced each tested word correctly.",
-			"all_correct2": "Next, create or try another list.",
-			"most_correct1": "You did pretty well! However, these words were mispronounced.",
-			"most_correct2": "Let's practice them.",
-			"most_incorrect1": "These words were mispronounced.",
-			"most_incorrect2": "Let's practice them.",
-			"one_incorrect1": "Good job! You mispronounced only one word.",
-			"one_incorrect2": "Let's practice it.",
-			"too_few_words1": "You didn't record enough words.",
-			"too_few_words2": "Try again, and remember to hold the recording button."
-		},
-		"next_button": "Next",
-		"recording_complete": "Recording complete",
-		"recording_label": "Recording..."
-	},
-	"premade_lists": {
-		"heading": "Premade Lists"
-	},
-	"recorder_button": "Hold to speak",
-	"review": {
-		"heading": "Review",
-		"introduction1": "Review words you've mispronounced.",
-		"introduction2": "Choose a word and begin practicing!",
-		"modal_button_instructions": "Click to choose word"
-	},
-	"word_practice": {
-		"general_instructions_sentence": "Speak this sentence",
-		"general_instructions_word": "Speak this word",
-		"message": {
-			"complete1": "Practice with a similar word!",
-			"complete2": "Or ",
-			"complete3": "Retry",
-			"complete4": "this word.",
-			"correct_once1": "Good job! 👍",
-			"correct_once2": "Now read ",
-			"correct_once3_sentence": "the second sentence",
-			"correct_once3_word": "it just one more time",
-			"correct_twice1": "Well done! 👍",
-			"correct_twice2": "Now try reading some sentences",
-			"incorrect": "Try again",
-			"skip": "Let's skip this word for now"
-		},
-		"spoken_words_label": "Spoken Words:"
-	},
-	"word_select_modal": {
-		"cancel": "Cancel",
-		"no_results": "(No results)",
-		"option_A_to_Z": "A to Z",
-		"option_bookmarked": "Bookmarked",
-		"option_newest": "Newest",
-		"option_oldest": "Oldest",
-		"option_source": "Source:",
-		"option_Z_to_A": "Z to A",
-		"search": "Search"
-	}
+  "alert_for_delete": {
+    "cancel_button": "Cancel",
+    "delete_button": "Delete",
+    "message": "Are you sure?"
+  },
+  "custom_lists": {
+    "create_list_instructions": "Enter up to 7 words separated by spaces or commas:",
+    "example": "e.g.",
+    "heading": "Custom Lists",
+    "introduction1": "Not sure how to say certain words?",
+    "introduction2": "Start by creating a list!"
+  },
+  "hard_words": {
+    "heading": "Hard Words",
+    "introduction": "Top 10 hardest words based on data collected from users:"
+  },
+  "header": {
+    "dark_mode_off": "Turn off darkmode",
+    "dark_mode_on": "Turn on darkmode",
+    "language": "Language:",
+    "return_to_lists": "Return to lists",
+    "sign_in": "Sign in",
+    "sign_out": "Sign out"
+  },
+  "home_button": "Home Page",
+  "list_accordion_labels": {
+    "completed": "Completed",
+    "in_progress": "In Progress",
+    "not_started": "Not Started"
+  },
+  "list_card": {
+    "delete_list": "Delete list",
+    "title": "List"
+  },
+  "list_content": {
+    "message1": "You've completed this list!",
+    "message2": "You can:",
+    "message3": "Review",
+    "message4": " the words you've learned",
+    "message5": "Create or",
+    "message6": "try",
+    "message7": "another list",
+    "message8": "Or ",
+    "message9": "Retry",
+    "message10": " this list"
+  },
+  "not_found": {
+    "introduction": "Oops! It looks like this page doesn't exist anymore or your link is wrong.",
+    "title": "404 ERROR"
+  },
+  "paragraph_challenge": {
+    "general_instructions": "Speak this paragraph",
+    "message": {
+      "all_correct1": "Excellent! You pronounced each tested word correctly.",
+      "all_correct2": "Next, create or try another list.",
+      "most_correct1": "You did pretty well! However, these words were mispronounced.",
+      "most_correct2": "Let's practice them.",
+      "most_incorrect1": "These words were mispronounced.",
+      "most_incorrect2": "Let's practice them.",
+      "one_incorrect1": "Good job! You mispronounced only one word.",
+      "one_incorrect2": "Let's practice it.",
+      "too_few_words1": "You didn't record enough words.",
+      "too_few_words2": "Try again, and remember to hold the recording button."
+    },
+    "next_button": "Next",
+    "recording_complete": "Recording complete",
+    "recording_label": "Recording..."
+  },
+  "premade_lists": {
+    "heading": "Premade Lists"
+  },
+  "recorder_button": "Hold to speak",
+  "review": {
+    "heading": "Review",
+    "introduction1": "Review words you've mispronounced.",
+    "introduction2": "Choose a word and begin practicing!",
+    "modal_button_instructions": "Click to choose word"
+  },
+  "word_practice": {
+    "general_instructions_sentence": "Speak this sentence",
+    "general_instructions_word": "Speak this word",
+    "message": {
+      "complete1": "Practice with a similar word!",
+      "complete2": "Or ",
+      "complete3": "Retry",
+      "complete4": "this word.",
+      "correct_once1": "Good job! 👍",
+      "correct_once2": "Now read ",
+      "correct_once3_sentence": "the second sentence",
+      "correct_once3_word": "it just one more time",
+      "correct_twice1": "Well done! 👍",
+      "correct_twice2": "Now try reading some sentences",
+      "incorrect": "Try again",
+      "skip": "Let's skip this word for now"
+    },
+    "spoken_words_label": "Spoken Words:"
+  },
+  "word_select_modal": {
+    "cancel": "Cancel",
+    "no_results": "(No results)",
+    "option_A_to_Z": "A to Z",
+    "option_bookmarked": "Bookmarked",
+    "option_newest": "Newest",
+    "option_oldest": "Oldest",
+    "option_source": "Source:",
+    "option_Z_to_A": "Z to A",
+    "search": "Search"
+  }
 }
