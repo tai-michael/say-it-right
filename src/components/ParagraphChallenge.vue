@@ -3,7 +3,10 @@
     <div class="h-full outer-container">
       <div class="flex flex-col h-full justify-between challenge-container">
         <main class="p-4 flex flex-col w-full items-center h-full">
-          <div class="instructions" :class="[{ '!mt-4 !mb-4': isShortParagraph }]">
+          <div
+            class="instructions"
+            :class="[{ '!mt-4 !mb-4': isShortParagraph, '!m-0': isLongParagraph }]"
+          >
             <TransitionFade>
               <span v-if="props.list.status === 'LIST_NOT_STARTED'">{{
                 $t('paragraph_challenge.general_instructions')
@@ -18,13 +21,19 @@
             class="ml-0.5 mr-0.5 mb-3 pl-5 pr-5 max-w-xs"
             :class="{ 'max-w-[19rem]': isShortParagraph }"
           >
-            <div class="tested-paragraph" :class="{ '!leading-10': isShortParagraph }">
+            <div
+              class="tested-paragraph"
+              :class="{ '!leading-10': isShortParagraph, '!text-[15px]': isLongParagraph }"
+            >
               <p v-html="testedParagraph"></p>
             </div>
           </ion-card>
         </main>
 
-        <div class="message-container w-full h-full flex justify-center items-start pt-5">
+        <div
+          class="message-container w-full h-full flex justify-center items-start pt-5"
+          :class="{ '!pt-1': isLongParagraph }"
+        >
           <div v-if="isRecording" class="transcript">
             <div class="flex-col">
               <div class="mt-4 mb-3">{{ $t('paragraph_challenge.recording_label') }}</div>
@@ -140,13 +149,14 @@ const props = defineProps({
 })
 
 const listEntered = inject('listEntered')
+const nonHighlightedParagraph = computed(() =>
+  testedParagraph.value.replace(/<span[^>]*>(.*?)<\/span>/g, '$1')
+)
 const isShortParagraph = computed(() => {
-  const nonHighlightedParagraph = testedParagraph.value.replace(
-    /\<span[^>]*\>(.*?)\<\/span\>/g,
-    '\$1'
-  )
-  return nonHighlightedParagraph.length < 150
+  return nonHighlightedParagraph.value.length < 150
 })
+
+const isLongParagraph = computed(() => nonHighlightedParagraph.value.length > 320)
 
 const isRecording = ref(false)
 const testedParagraph = ref('')
