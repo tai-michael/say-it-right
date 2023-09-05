@@ -15,7 +15,11 @@
           </TransitionFade>
         </div>
 
-        <ion-card v-if="wordName" class="max-w-xs mt-7 pr-2 pl-2">
+        <ion-card
+          v-if="wordName"
+          class="max-w-xs mt-7 pr-2 pl-2"
+          :class="{ '!mt-4': testedSentence?.length > 50 }"
+        >
           <div class="word-container">
             <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
             <TransitionFade>

@@ -19,7 +19,11 @@
             </TransitionFade>
           </div>
 
-          <ion-card v-if="testedWord" class="max-w-xs mt-7 pr-2 pl-2">
+          <ion-card
+            v-if="testedWord"
+            class="max-w-xs mt-7 pr-2 pl-2"
+            :class="{ '!mt-4': testedSentence?.length > 50 }"
+          >
             <div class="word-container">
               <!-- <div class="word" :class="{ 'word-highlight': highlightActive }"> -->
               <!-- NOTE a key is needed for transition in a computed property, but is unneeded if there's a conditional -->
