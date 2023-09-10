@@ -141,11 +141,11 @@ import useCheckPronunciationOfWordInSentences from '@/composables/useCheckPronun
 import useHardWordLogger from '@/composables/useHardWordLogger'
 import usePhoneticConverter from '@/composables/usePhoneticConverter'
 import useDelay from '@/composables/useDelay'
-import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore, usePremadeListsStore } from '@/stores/index.ts'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const store = route.name === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
+const store = route.name === 'premade-list' ? usePremadeListsStore() : useCustomListsStore()
 const { attemptsLimit, attemptsSuccessfulRequired } = storeToRefs(store)
 
 const props = defineProps({

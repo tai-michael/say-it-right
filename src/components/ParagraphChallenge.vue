@@ -89,9 +89,9 @@
               </div>
               <div
                 v-else-if="recordingStatus === 'MOST_WORDS_INCORRECT'"
-                class="message__text flex gap-y-2"
+                class="message__text flex"
                 :class="{
-                  '!gap-y-1': isLongParagraph
+                  '!gap-y-3': isLongParagraph
                 }"
               >
                 <span>{{ $t('paragraph_challenge.message.most_incorrect1') }}</span>
@@ -109,7 +109,7 @@
             </ion-button>
           </div>
         </div>
-        <!-- <RouterLink to="/provided-lists/word-test">Next</RouterLink> -->
+        <!-- <RouterLink to="/premade-lists/word-test">Next</RouterLink> -->
       </div>
 
       <RecorderButton
@@ -129,20 +129,20 @@ import { IonPage, IonCard, IonButton } from '@ionic/vue'
 import RecorderButton from './RecorderButton.vue'
 import VuMeter from '@/components/VuMeter.vue'
 import type { PropType } from 'vue'
-import type { List, CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
+import type { List, CustomWord, PremadeWord, Words } from '@/stores/modules/types/List'
 import type { WordSource, WordObject } from '@/stores/modules/types/Review'
 import useTestedWordsAdjuster from '@/composables/useTestedWordsAdjuster'
 import useCorrectAndIncorrectWordsFilter from '@/composables/useCorrectAndIncorrectWordsFilter'
 import useSentencesCreationAndStorage from '@/composables/useSentencesCreationAndStorage'
 import useCheckIfWordsExistInReview from '@/composables/useCheckIfWordsExistInReview'
 import useWordObjCreator from '@/composables/useWordObjCreator'
-import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
+import { useCustomListsStore, usePremadeListsStore, useReviewStore } from '@/stores/index.ts'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 // Storing the route name prevents bugs caused by navigating to other routes during async operations
 const routeName = route.name
-const store = routeName === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
+const store = routeName === 'premade-list' ? usePremadeListsStore() : useCustomListsStore()
 const reviewStore = useReviewStore()
 
 const props = defineProps({
@@ -165,7 +165,7 @@ const isLongParagraph = computed(() => nonHighlightedParagraph.value.length > 32
 const isRecording = ref(false)
 const testedParagraph = ref('')
 const testedWordsObj =
-  routeName === 'provided-list' ? ref<Words<ProvidedWord>>({}) : ref<Words<CustomWord>>({})
+  routeName === 'premade-list' ? ref<Words<PremadeWord>>({}) : ref<Words<CustomWord>>({})
 const testedWords = ref<string[]>([])
 
 const correctlyPronouncedTestedWords = ref<string[]>([])
@@ -199,7 +199,7 @@ const vumeter = ref(null)
 // TODO disable temporaryTranscript and related code in production
 const temporaryTranscript = ref('')
 const handleTempTranscriptRender = (transcript: string) => {
-  // NOTE this guard is necessary b/c the recorder cannot be deactivated between views. Also, there's a known bug where custom and provided lists with matching numbers (e.g. custom list 1 & provided list 1) will have matching ParagraphChallenge temporary transcripts. We can fix this by adding a routeName prop or something to ParagraphChallenge in Custom/ProvidedList.vue, but since we're removing temporary transcript here in production, we don't care about this bug.
+  // NOTE this guard is necessary b/c the recorder cannot be deactivated between views. Also, there's a known bug where custom and premade lists with matching numbers (e.g. custom list 1 & premade list 1) will have matching ParagraphChallenge temporary transcripts. We can fix this by adding a routeName prop or something to ParagraphChallenge in Custom/PremadeList.vue, but since we're removing temporary transcript here in production, we don't care about this bug.
   if (store.activeList?.listNumber !== props.list.listNumber) return
   temporaryTranscript.value = transcript
 
@@ -247,9 +247,9 @@ const handleFinalTranscript = async (transcript: string) => {
   store.setParagraph(testedParagraph.value)
   store.setListStatus('PARAGRAPH_RECORDING_ENDED')
 
-  // NOTE provided lists all have sentences already,
+  // NOTE premade lists all have sentences already,
   // so no need to generate new sentences for those
-  if (routeName === 'provided-list') {
+  if (routeName === 'premade-list') {
     // NOTE only add words that aren't already in Review to Review
     const { nonMatchingWords } = useCheckIfWordsExistInReview(
       mispronouncedTestedWords.value,
@@ -291,11 +291,11 @@ const handleFinalTranscript = async (transcript: string) => {
 
 const addWordsToReview = (
   mispronouncedWords: string[],
-  listWords: Words<ProvidedWord> | Words<CustomWord>
+  listWords: Words<PremadeWord> | Words<CustomWord>
 ) => {
   // TODO Either here or in a new function,
   // only add words that aren't already in Review.
-  // Test with providedLists
+  // Test with premadeLists
   const wordObjectsToAdd: WordObject[] = []
 
   for (const mispronouncedWord of mispronouncedWords) {
@@ -544,7 +544,7 @@ ion-card {
   display: flex;
   flex-direction: column;
   max-width: 340px;
-  padding: 0 2rem;
+  padding: 0 1.25rem;
   height: 100%;
   justify-content: space-evenly;
 

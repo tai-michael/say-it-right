@@ -3,11 +3,11 @@ import { createRouter, createWebHistory } from '@ionic/vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import CustomListsView from '@/views/CustomListsView.vue'
 // import CustomList from '@/components/CustomList.vue'
-import ProvidedListsView from '@/views/ProvidedListsView.vue'
-// import ProvidedList from '@/components/ProvidedList.vue'
+import PremadeListsView from '@/views/PremadeListsView.vue'
+// import PremadeList from '@/components/PremadeList.vue'
 import ReviewView from '@/views/ReviewView.vue'
 import HardWordsView from '@/views/HardWordsView.vue'
-// import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+// import { useCustomListsStore, usePremadeListsStore } from '@/stores/index.ts'
 import TabsRoot from '@/components/TabsRoot.vue'
 import { user } from '@/firebaseInit'
 import useSafariDetector from '@/composables/useSafariDetector'
@@ -60,31 +60,31 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: 'provided-lists',
-        name: 'provided-lists',
-        // component: () => import('@/views/ProvidedListsView.vue'),
-        component: ProvidedListsView,
+        path: 'premade-lists',
+        name: 'premade-lists',
+        // component: () => import('@/views/PremadeListsView.vue'),
+        component: PremadeListsView,
         meta: {
-          title: 'Provided Lists'
+          title: 'Premade Lists'
         }
         // NOTE made redundant by computed routes in TabRoutes component
         // beforeEnter: (to, from, next) => {
-        //   const providedListsStore = useProvidedListsStore()
-        //   const id = providedListsStore.activeId
+        //   const premadeListsStore = usePremadeListsStore()
+        //   const id = premadeListsStore.activeId
         //   if (id) {
-        //     next({ name: 'provided-list', params: { id } })
+        //     next({ name: 'premade-list', params: { id } })
         //   } else {
         //     next()
         //   }
         // }
       },
       {
-        path: 'provided-lists/:id',
-        name: 'provided-list',
-        component: () => import('@/components/ProvidedList.vue'),
-        // component: ProvidedList,
+        path: 'premade-lists/:id',
+        name: 'premade-list',
+        component: () => import('@/components/PremadeList.vue'),
+        // component: PremadeList,
         meta: {
-          title: 'Provided List'
+          title: 'Premade List'
         }
       },
       {
@@ -169,7 +169,7 @@ router.beforeEach((to, from, next) => {
 //   else next(false)
 // })
 
-// REVIEW below code is buggy if back button is pressed more than once while in custom or provided lists view
+// REVIEW below code is buggy if back button is pressed more than once while in custom or premade lists view
 // router.beforeEach((to, from) => {
 //   const title = to.meta.title || 'Custom Lists'
 //   document.title = title as string
@@ -181,7 +181,7 @@ router.beforeEach((to, from, next) => {
 //     console.log(router)
 //     if (
 //       (from.name === 'custom-lists' && to.name !== 'custom-list') ||
-//       (from.name === 'provided-lists' && to.name !== 'provided-list')
+//       (from.name === 'premade-lists' && to.name !== 'premade-list')
 //     ) {
 //       // router.go(1)
 //       // router.go(-1)
@@ -191,16 +191,16 @@ router.beforeEach((to, from, next) => {
 //     // return true
 //   }
 
-//   if (from.name === 'provided-list') {
+//   if (from.name === 'premade-list') {
 //     console.log('A')
-//     useProvidedListsStore().setActiveId(null)
-//     // return '/provided-lists'
-//     if (to.name !== 'provided-lists') return { name: 'provided-lists', replace: true }
+//     usePremadeListsStore().setActiveId(null)
+//     // return '/premade-lists'
+//     if (to.name !== 'premade-lists') return { name: 'premade-lists', replace: true }
 //   } else if (from.name === 'custom-list') {
 //     console.log('B')
 //     useCustomListsStore().setActiveId(null)
 //     if (to.name !== 'custom-lists') return { name: 'custom-lists', replace: true }
-//   } else if (from.name === 'provided-lists' || from.name === 'custom-lists') {
+//   } else if (from.name === 'premade-lists' || from.name === 'custom-lists') {
 //     console.log('C')
 //     console.log(`FROM: ${from.name}`)
 //     console.log(`TO: ${to.name}`)
@@ -268,23 +268,23 @@ router.beforeEach((to, from, next) => {
 //       component: () => import('@/views/ReviewView.vue')
 //     },
 //     {
-//       path: '/provided-lists',
-//       name: 'provided-lists',
-//       component: () => import('@/views/ProvidedListsView.vue'),
+//       path: '/premade-lists',
+//       name: 'premade-lists',
+//       component: () => import('@/views/PremadeListsView.vue'),
 //       beforeEnter: (to, from, next) => {
-//         const providedListsStore = useProvidedListsStore()
-//         const id = providedListsStore.activeId
+//         const premadeListsStore = usePremadeListsStore()
+//         const id = premadeListsStore.activeId
 //         if (id) {
-//           next({ name: 'provided-list', params: { id } })
+//           next({ name: 'premade-list', params: { id } })
 //         } else {
 //           next()
 //         }
 //       }
 //     },
 //     {
-//       path: '/provided-lists/:id',
-//       name: 'provided-list',
-//       component: () => import('@/components/ProvidedList.vue')
+//       path: '/premade-lists/:id',
+//       name: 'premade-list',
+//       component: () => import('@/components/PremadeList.vue')
 //     },
 //     {
 //       path: '/hard-words',

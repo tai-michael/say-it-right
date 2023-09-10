@@ -26,7 +26,7 @@
           <option value="sourceCustom">
             {{ $t('word_select_modal.option_source') }} {{ $t('custom_lists.heading') }}
           </option>
-          <option value="sourceProvided">
+          <option value="sourcePremade">
             {{ $t('word_select_modal.option_source') }} {{ $t('premade_lists.heading') }}
           </option>
         </select>
@@ -148,8 +148,8 @@ const sortedWords = computed(() => {
       return words.filter((word) => word.bookmarked === true)
     case 'sourceCustom':
       return words.filter((word) => word.source === 'custom-list')
-    case 'sourceProvided':
-      return words.filter((word) => word.source === 'provided-list')
+    case 'sourcePremade':
+      return words.filter((word) => word.source === 'premade-list')
 
     default:
       // this sorts by createdDesc

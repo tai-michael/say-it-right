@@ -37,7 +37,7 @@ export const useReviewStore = defineStore('review', () => {
       updateDoc(doc(db, 'users', user.value.uid), {
         review: allWords.value
       })
-    // sessionStorage.setItem('allProvidedLists', JSON.stringify(allLists.value))
+    // sessionStorage.setItem('allPremadeLists', JSON.stringify(allLists.value))
     console.log('Updated firestore review')
   }
 

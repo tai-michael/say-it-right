@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ListContent :list="list" route-name="provided-lists" />
+    <ListContent :list="list" route-name="premade-lists" />
   </ion-page>
 </template>
 
@@ -12,16 +12,16 @@ import {
   IonPage,
   useIonRouter,
   onIonViewWillEnter,
-  onIonViewWillLeave // maybe replace history so that it goes to provided lists view? and do similar for all tabs*
+  onIonViewWillLeave // maybe replace history so that it goes to premade lists view? and do similar for all tabs*
 } from '@ionic/vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useProvidedListsStore } from '@/stores/index.ts'
+import { usePremadeListsStore } from '@/stores/index.ts'
 
 const route = useRoute()
 const router = useRouter()
 const ionRouter = useIonRouter()
-const store = useProvidedListsStore()
-// const componentKey = 'provided-lists'
+const store = usePremadeListsStore()
+// const componentKey = 'premade-lists'
 
 // @ts-ignore
 const list = ref<List>({})
@@ -29,7 +29,7 @@ const list = ref<List>({})
 const listEntered = ref()
 provide('listEntered', listEntered)
 
-// NOTE need to use this instead of onMounted, as the latter only triggers once, meaning if user navigates with back button to provided lists view, the activeId for the instance will be set to null and never change again
+// NOTE need to use this instead of onMounted, as the latter only triggers once, meaning if user navigates with back button to premade lists view, the activeId for the instance will be set to null and never change again
 onIonViewWillEnter(() => {
   if (route.params.id) {
     // console.log(1)

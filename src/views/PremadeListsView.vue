@@ -7,7 +7,7 @@
       <PullRefresher />
       <div ref="scrollTrigger" class="scroll-trigger"></div>
       <!-- NOTE don't use 'route.name', as it can cause bugs from navigation/redirects -->
-      <ListGroups :route-name="'provided-lists'" />
+      <ListGroups :route-name="'premade-lists'" />
     </ion-content>
 
     <ion-fab vertical="bottom" horizontal="end">
@@ -69,7 +69,7 @@ onMounted(() => {
     router.push('/not-found')
   }
 
-  // console.log('Provided Lists mounted')
+  // console.log('Premade Lists mounted')
   setTimeout(() => {
     tabMounted.value = true
 

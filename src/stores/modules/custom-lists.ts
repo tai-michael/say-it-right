@@ -62,7 +62,7 @@ export const useCustomListsStore = defineStore('customLists', () => {
       await updateDoc(doc(db, 'users', user.value.uid), {
         customLists: allLists.value
       })
-    // sessionStorage.setItem('allProvidedLists', JSON.stringify(allLists.value))
+    // sessionStorage.setItem('allPremadeLists', JSON.stringify(allLists.value))
     console.log('Updated firestore customList')
   }
 

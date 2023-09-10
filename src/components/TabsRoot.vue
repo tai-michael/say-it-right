@@ -23,7 +23,7 @@
           <ion-label> {{ $t('custom_lists.heading') }}</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="provided-lists" :href="providedListsPath">
+        <ion-tab-button tab="premade-lists" :href="premadeListsPath">
           <ion-icon :icon="folderOutline" />
           <ion-label>{{ $t('premade_lists.heading') }}</ion-label>
         </ion-tab-button>
@@ -41,8 +41,8 @@
       <!-- <RouterLink to="/custom-lists" :class="getLinkClass('/custom-lists')"
           >Custom Lists</RouterLink
         >
-        <RouterLink to="/provided-lists" :class="getLinkClass('/provided-lists')"
-          >Provided Lists</RouterLink
+        <RouterLink to="/premade-lists" :class="getLinkClass('/premade-lists')"
+          >Premade Lists</RouterLink
         >
         <RouterLink to="/review">Review</RouterLink>
         <RouterLink to="/hard-words">Hard Words</RouterLink>
@@ -66,12 +66,12 @@ import {
   IonIcon
 } from '@ionic/vue'
 import useSafariDetector from '@/composables/useSafariDetector'
-import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
+import { useCustomListsStore, usePremadeListsStore, useReviewStore } from '@/stores/index.ts'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const customListsStore = useCustomListsStore()
-const providedListsStore = useProvidedListsStore()
+const premadeListsStore = usePremadeListsStore()
 const reviewStore = useReviewStore()
 
 const customListsPath = computed(() => {
@@ -79,9 +79,9 @@ const customListsPath = computed(() => {
   return id ? `/custom-lists/${id}` : '/custom-lists'
 })
 
-const providedListsPath = computed(() => {
-  const id = providedListsStore.activeId
-  return id ? `/provided-lists/${id}` : '/provided-lists'
+const premadeListsPath = computed(() => {
+  const id = premadeListsStore.activeId
+  return id ? `/premade-lists/${id}` : '/premade-lists'
 })
 
 // NOTE Safari already has its own native animations
@@ -90,7 +90,7 @@ const isWidescreen = window.matchMedia('(min-width: 640px)').matches
 const isWidescreenOrSafari = isWidescreen || isSafari.value
 
 const customAnimation = computed(() => {
-  return route.name === 'custom-list' || route.name === 'provided-list'
+  return route.name === 'custom-list' || route.name === 'premade-list'
     ? customLeaveAnimation
     : customEnterAnimation
 })
@@ -105,8 +105,8 @@ onMounted(() => {
           if (newValue === 'custom-lists' && customListsStore.activeId)
             customListsStore.setActiveId(null)
 
-          if (newValue === 'provided-lists' && providedListsStore.activeId)
-            providedListsStore.setActiveId(null)
+          if (newValue === 'premade-lists' && premadeListsStore.activeId)
+            premadeListsStore.setActiveId(null)
         }
       )
     })

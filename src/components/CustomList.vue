@@ -12,7 +12,7 @@ import {
   IonPage,
   useIonRouter,
   onIonViewWillEnter,
-  onIonViewWillLeave // maybe replace history so that it goes to provided lists view? and do similar for all tabs*
+  onIonViewWillLeave // maybe replace history so that it goes to premade lists view? and do similar for all tabs*
 } from '@ionic/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCustomListsStore } from '@/stores/index.ts'

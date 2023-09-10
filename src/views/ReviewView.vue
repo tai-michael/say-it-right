@@ -76,7 +76,7 @@
               <option value="wordAsc">A to Z</option>
               <option value="wordDesc">Z to A</option>
               <option value="sourceCustom">Custom list words</option>
-              <option value="sourceProvided">Provided list words</option>
+              <option value="sourcePremade">Premade list words</option>
             </select>
 
             <ul class="list">

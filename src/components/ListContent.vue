@@ -61,7 +61,7 @@ const ParagraphChallenge = defineAsyncComponent(() => import('@/components/Parag
 const WordChallenge = defineAsyncComponent(() => import('@/components/WordChallenge.vue'))
 import TransitionAppear from '@/components/transitions/TransitionFade.vue'
 import { IonContent } from '@ionic/vue'
-import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore, usePremadeListsStore } from '@/stores/index.ts'
 import { RouterLink, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
@@ -83,7 +83,7 @@ const props = defineProps({
 })
 const { list, routeName } = toRefs(props)
 
-const store = routeName.value === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
+const store = routeName.value === 'premade-lists' ? usePremadeListsStore() : useCustomListsStore()
 const customListsStore = useCustomListsStore()
 
 const showParagraphChallenge = computed(
@@ -127,7 +127,7 @@ const resetShortList = () => {
 const title = computed(
   () =>
     `${
-      routeName.value === 'provided-lists' ? t('premade_lists.heading') : t('custom_lists.heading')
+      routeName.value === 'premade-lists' ? t('premade_lists.heading') : t('custom_lists.heading')
     } ${list.value.listNumber}`
 )
 </script>

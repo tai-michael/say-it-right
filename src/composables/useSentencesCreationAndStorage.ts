@@ -18,12 +18,12 @@ import {
   documentId,
   getDocs
 } from 'firebase/firestore'
-import { useCustomListsStore, useProvidedListsStore, useReviewStore } from '@/stores/index.ts'
+import { useCustomListsStore, usePremadeListsStore, useReviewStore } from '@/stores/index.ts'
 
 export default async function (words: string[], source: WordSource, listNum?: number) {
   const reviewStore = useReviewStore()
   const customListsStore = useCustomListsStore()
-  const providedListsStore = useProvidedListsStore()
+  const premadeListsStore = usePremadeListsStore()
 
   // console.log(words)
   const wordsWithSentences: WordObject[] = []
@@ -43,14 +43,14 @@ export default async function (words: string[], source: WordSource, listNum?: nu
   // NOTE reassigning instead of pushing is necessary here
   wordsWithoutSentences = reviewResults.nonMatchingWords
 
-  console.log('checking if word exists in provided lists')
-  // Then check if word exists in providedLists
-  const providedListsResults = checkIfWordsExistInProvidedLists(
+  console.log('checking if word exists in premade lists')
+  // Then check if word exists in premadeLists
+  const premadeListsResults = checkIfWordsExistInPremadeLists(
     wordsWithoutSentences,
-    providedListsStore.allLists
+    premadeListsStore.allLists
   )
-  wordsWithSentences.push(...providedListsResults.matchingWordObjects)
-  wordsWithoutSentences = providedListsResults.nonMatchingWords
+  wordsWithSentences.push(...premadeListsResults.matchingWordObjects)
+  wordsWithoutSentences = premadeListsResults.nonMatchingWords
 
   // If not, check if sentences exist in firestore
   if (wordsWithoutSentences.length > 0) {
@@ -106,7 +106,7 @@ export default async function (words: string[], source: WordSource, listNum?: nu
   }
 }
 
-const checkIfWordsExistInProvidedLists = (submittedWords: string[], lists: List[]) => {
+const checkIfWordsExistInPremadeLists = (submittedWords: string[], lists: List[]) => {
   const matchingWordObjects = []
   const nonMatchingWords = []
 
@@ -118,7 +118,7 @@ const checkIfWordsExistInProvidedLists = (submittedWords: string[], lists: List[
           const wordObject = useWordObjCreator(
             submittedWord,
             list.words[word].sentences,
-            'provided-list'
+            'premade-list'
           )
           matchingWordObjects.push(wordObject)
           found = true

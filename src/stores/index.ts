@@ -1,5 +1,5 @@
 export * from './modules/auth'
 export * from './modules/custom-lists'
-export * from './modules/provided-lists'
+export * from './modules/premade-lists'
 export * from './modules/review'
 export * from './modules/ipa-dictionary'

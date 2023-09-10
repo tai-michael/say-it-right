@@ -1,15 +1,15 @@
-import type { CustomWord, ProvidedWord, Words } from '@/stores/modules/types/List'
-import { useProvidedListsStore } from '@/stores'
+import type { CustomWord, PremadeWord, Words } from '@/stores/modules/types/List'
+import { usePremadeListsStore } from '@/stores'
 import { useCustomListsStore } from '@/stores'
 // NOTE used for useTestedWordsAdjuster composable
 import stem from 'wink-porter2-stemmer'
 
 export default function (
-  testedWords: Words<ProvidedWord> | Words<CustomWord>,
+  testedWords: Words<PremadeWord> | Words<CustomWord>,
   testedParagraph: string,
   routeName: string | unknown
 ) {
-  const store = routeName === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
+  const store = routeName === 'premade-list' ? usePremadeListsStore() : useCustomListsStore()
 
   // Matches any sequence of characters that are not whitespace or certain punctuation marks, including the punctuation marks themselves
   const wordRegex = /(?:[^\s.,;:!?"'’“”()[\]{}<>«»]+)|(?:[.,;:!?"'’“”()[\]{}<>«»]+)/g
@@ -17,7 +17,7 @@ export default function (
   // @ts-ignore
   const paragraphWords = testedParagraph.match(wordRegex).map((word) => word.toLowerCase())
 
-  const adjustedTestedWordsObj: Words<ProvidedWord> | Words<CustomWord> = {}
+  const adjustedTestedWordsObj: Words<PremadeWord> | Words<CustomWord> = {}
 
   const keys = Object.keys(testedWords)
   for (const key of keys) {

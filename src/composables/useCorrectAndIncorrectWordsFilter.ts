@@ -1,5 +1,5 @@
 import { useCustomListsStore } from '@/stores'
-import { useProvidedListsStore } from '@/stores'
+import { usePremadeListsStore } from '@/stores'
 import usePhoneticConverter from '@/composables/usePhoneticConverter'
 
 export default function (
@@ -7,7 +7,7 @@ export default function (
   transcriptString: string,
   routeName: string | unknown
 ) {
-  const store = routeName === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
+  const store = routeName === 'premade-list' ? usePremadeListsStore() : useCustomListsStore()
 
   const recordedWords = [...new Set(transcriptString.split(' '))]
   const testedWordsPhonetic = testedWords.map((word) => usePhoneticConverter(word))

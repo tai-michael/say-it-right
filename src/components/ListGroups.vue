@@ -28,7 +28,7 @@
     <ion-accordion value="new" v-if="store.untouchedLists.length">
       <ion-item slot="header" lines="none">
         <!-- <ion-label v-if="noListStarted">{{
-          props.routeName === 'provided-lists' ? 'Not Started' : 'New'
+          props.routeName === 'premade-lists' ? 'Not Started' : 'New'
         }}</ion-label> -->
         <ion-label>{{ $t('list_accordion_labels.not_started') }}</ion-label>
       </ion-item>
@@ -58,14 +58,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import ListCards from '@/components/ListCards.vue'
-import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore, usePremadeListsStore } from '@/stores/index.ts'
 import { IonAccordionGroup, IonAccordion, IonItem, IonLabel } from '@ionic/vue'
 const props = defineProps({
   routeName: { type: String, required: true }
 })
 
-const store = props.routeName === 'provided-lists' ? useProvidedListsStore() : useCustomListsStore()
-const destinationRoute = props.routeName === 'provided-lists' ? 'provided-list' : 'custom-list'
+const store = props.routeName === 'premade-lists' ? usePremadeListsStore() : useCustomListsStore()
+const destinationRoute = props.routeName === 'premade-lists' ? 'premade-list' : 'custom-list'
 const noListStarted = computed(() => !store.inProgressLists.length && !store.completedLists.length)
 
 // const isDarkModeEnabled = inject('isDarkModeEnabled')

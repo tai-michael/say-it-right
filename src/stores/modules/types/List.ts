@@ -2,7 +2,7 @@ export interface List {
   listNumber: number
   status: ListStatus
   paragraph: string
-  words: Words<ProvidedWord> | Words<CustomWord>
+  words: Words<PremadeWord> | Words<CustomWord>
 }
 
 export type ListStatus =
@@ -16,7 +16,7 @@ export interface Words<T> {
   [key: string]: T
 }
 
-export interface ProvidedWord {
+export interface PremadeWord {
   mispronouncedFrequentlyAs: string
   mispronunciationFrequency: number
   mistakeType: string

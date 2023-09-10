@@ -15,7 +15,7 @@ import { user } from '@/firebaseInit'
 import type { List, ListStatus } from './types/List'
 import useSpanTagsRemover from '@/composables/useSpanTagsRemover'
 
-export const useProvidedListsStore = defineStore('providedLists', () => {
+export const usePremadeListsStore = defineStore('premadeLists', () => {
   const route = useRoute()
 
   // NOTE the '+' is necessary b/c the number becomes a string when sent as a parameter
@@ -26,7 +26,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   const activeId: Ref<number | null> = ref(null)
 
   const allLists =
-    // ref([...JSON.parse(sessionStorage.getItem('allProvidedLists'))]) ||
+    // ref([...JSON.parse(sessionStorage.getItem('allPremadeLists'))]) ||
     // ref([...firestoreLists.value])
     ref<List[]>([])
 
@@ -65,10 +65,10 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
   const updateListsInFirestore = () => {
     if (user.value)
       updateDoc(doc(db, 'users', user.value.uid), {
-        providedLists: allLists.value
+        premadeLists: allLists.value
       })
-    // sessionStorage.setItem('allProvidedLists', JSON.stringify(allLists.value))
-    console.log('Updated firestore providedList')
+    // sessionStorage.setItem('allPremadeLists', JSON.stringify(allLists.value))
+    console.log('Updated firestore premadeList')
   }
 
   const logPronunciationAttempt = (testedWord: string) => {
@@ -150,8 +150,8 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     allLists.value.splice(index, 1)
   }
 
-  const downloadAndExtractGlobalProvidedLists = async () => {
-    const querySnapshot = await getDocs(collection(db, 'global_provided_lists'))
+  const downloadAndExtractGlobalPremadeLists = async () => {
+    const querySnapshot = await getDocs(collection(db, 'global_premade_lists'))
     const lists = querySnapshot.docs.map((doc) => doc.data())
 
     const wordsByListNumber = {}
@@ -221,7 +221,7 @@ export const useProvidedListsStore = defineStore('providedLists', () => {
     setTestedWordsObj,
     resetList,
     deleteList,
-    downloadAndExtractGlobalProvidedLists
+    downloadAndExtractGlobalPremadeLists
     // setFinalParagraphTranscript,
   }
 })

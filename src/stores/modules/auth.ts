@@ -10,15 +10,15 @@ import {
   signOut
 } from 'firebase/auth'
 import { defineStore } from 'pinia'
-import { useCustomListsStore, useProvidedListsStore } from '@/stores'
+import { useCustomListsStore, usePremadeListsStore } from '@/stores'
 
 export const useAuthStore = defineStore('auth', () => {
-  const providedListsStore = useProvidedListsStore()
+  const premadeListsStore = usePremadeListsStore()
   const customListsStore = useCustomListsStore()
   const router = useRouter()
 
   const signOutUser = () => {
-    providedListsStore.setActiveId(null)
+    premadeListsStore.setActiveId(null)
     customListsStore.setActiveId(null)
     localStorage.setItem('selectedWord', '')
     signOut(auth)
@@ -34,14 +34,14 @@ export const useAuthStore = defineStore('auth', () => {
   //     const result = await signInWithPopup(auth, new GoogleAuthProvider())
   //     const user = auth.currentUser
 
-  //     // NOTE if it's user's first time logging in, send provided lists from backend
+  //     // NOTE if it's user's first time logging in, send premade lists from backend
   //     if (user && getAdditionalUserInfo(result)?.isNewUser) {
-  //       const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+  //       const globalPremadeLists = await premadeListsStore.downloadAndExtractGlobalPremadeLists()
 
   //       await setDoc(doc(db, 'users', user.uid), {
   //         userName: user.displayName,
   //         customLists: [],
-  //         providedLists: globalProvidedLists,
+  //         premadeLists: globalPremadeLists,
   //         review: []
   //       })
   //     }

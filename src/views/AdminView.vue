@@ -41,7 +41,7 @@
         <div class="mt-8">
           <ion-button @click="resetAllLists">Reset all lists</ion-button>
           <ion-button @click="resetCustomLists">Reset custom lists</ion-button>
-          <ion-button @click="resetProvidedLists">Reset premade lists</ion-button>
+          <ion-button @click="resetPremadeLists">Reset premade lists</ion-button>
           <ion-button @click="resetReview">Reset review</ion-button>
           <ion-button @click="hydrateReview">Hydrate review</ion-button>
         </div>
@@ -61,9 +61,9 @@ import { IonPage, IonContent, IonButton } from '@ionic/vue'
 import { db, auth } from '@/firebaseInit'
 import { doc, collection, setDoc, updateDoc, deleteDoc, writeBatch } from 'firebase/firestore'
 import { useRouter } from 'vue-router'
-import { useProvidedListsStore, useAuthStore, useReviewStore } from '@/stores/index.ts'
+import { usePremadeListsStore, useAuthStore, useReviewStore } from '@/stores/index.ts'
 
-const providedListsStore = useProvidedListsStore()
+const premadeListsStore = usePremadeListsStore()
 const reviewStore = useReviewStore()
 const authStore = useAuthStore()
 const router = useRouter()
@@ -81,7 +81,7 @@ const uploadCoreLists = async (lists) => {
     lists.forEach((list) => {
       const { listNumber } = list
       const listNumberWithZeros = addLeadingZeros(listNumber, 3)
-      const listRef = doc(collection(db, 'global_provided_lists'), `${listNumberWithZeros}`)
+      const listRef = doc(collection(db, 'global_premade_lists'), `${listNumberWithZeros}`)
       batch.set(listRef, list)
     })
 
@@ -100,7 +100,7 @@ const uploadList = async () => {
 
     const listData = await import(`@/assets/new_global_lists/list_${listNumOfListToAdd.value}.json`)
     const adjustedListNumber = addLeadingZeros(listNumOfListToAdd.value, 3)
-    await setDoc(doc(db, 'global_provided_lists', adjustedListNumber), listData.default)
+    await setDoc(doc(db, 'global_premade_lists', adjustedListNumber), listData.default)
     console.log(`Uploaded list_${listNumOfListToAdd.value}`)
 
     listNumOfListToAdd.value = ''
@@ -116,7 +116,7 @@ const deleteList = async () => {
     isLoading.value = true
 
     const adjustedListNumber = addLeadingZeros(listNumOfListToDel.value, 3)
-    await deleteDoc(doc(db, 'global_provided_lists', adjustedListNumber))
+    await deleteDoc(doc(db, 'global_premade_lists', adjustedListNumber))
     console.log(`Deleted list_${listNumOfListToDel.value}`)
 
     listNumOfListToDel.value = ''
@@ -140,12 +140,12 @@ const resetAllLists = async () => {
   console.log('Resetting...')
   if (!auth.currentUser) return
 
-  const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+  const globalPremadeLists = await premadeListsStore.downloadAndExtractGlobalPremadeLists()
 
   await setDoc(doc(db, 'users', auth.currentUser.uid), {
     userName: auth.currentUser.displayName,
     customLists: [],
-    providedLists: globalProvidedLists,
+    premadeLists: globalPremadeLists,
     review: []
   })
 
@@ -164,16 +164,16 @@ const resetCustomLists = async () => {
   location.reload()
 }
 
-const resetProvidedLists = async () => {
+const resetPremadeLists = async () => {
   console.log('Resetting...')
   if (!auth.currentUser) return
 
-  const globalProvidedLists = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+  const globalPremadeLists = await premadeListsStore.downloadAndExtractGlobalPremadeLists()
 
   await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-    providedLists: globalProvidedLists
+    premadeLists: globalPremadeLists
   })
-  console.log('Resetted the Provided lists')
+  console.log('Resetted the Premade lists')
   location.reload()
 }
 
@@ -191,14 +191,14 @@ const resetReview = async () => {
 const hydrateReview = async () => {
   const wordObjectsToAdd: WordObject[] = []
 
-  for (let i = 0; i < providedListsStore.allLists.length; i++) {
-    const testedWords = [...Object.keys(providedListsStore.allLists[i].words)]
+  for (let i = 0; i < premadeListsStore.allLists.length; i++) {
+    const testedWords = [...Object.keys(premadeListsStore.allLists[i].words)]
     for (const word of testedWords) {
-      // if (providedListsStore.allLists[i].words.hasOwnProperty(word)) {
+      // if (premadeListsStore.allLists[i].words.hasOwnProperty(word)) {
       const wordObject = useWordObjCreator(
         word,
-        providedListsStore.allLists[i].words[word].sentences,
-        'provided-list' as WordSource
+        premadeListsStore.allLists[i].words[word].sentences,
+        'premade-list' as WordSource
       )
 
       wordObjectsToAdd.push(wordObject)
@@ -214,7 +214,7 @@ const hydrateReview = async () => {
 //   try {
 //     isLoading.value = true
 //     const adjustedListNumber = await createNewListNumber()
-//     await setDoc(doc(db, 'global_provided_lists', adjustedListNumber), list)
+//     await setDoc(doc(db, 'global_premade_lists', adjustedListNumber), list)
 //     isLoading.value = false
 //   } catch (err) {
 //     console.log(err)
@@ -223,7 +223,7 @@ const hydrateReview = async () => {
 
 // const createNewListNumber = async () => {
 //   try {
-//     const querySnapshot = await getDocs(collection(db, 'global_provided_lists'))
+//     const querySnapshot = await getDocs(collection(db, 'global_premade_lists'))
 //     const adjustedListNumber = querySnapshot.docs.length + 1
 //     return addLeadingZeros(adjustedListNumber, 3)
 //   } catch (err) {

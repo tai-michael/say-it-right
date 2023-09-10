@@ -12,4 +12,4 @@ export interface WordObject {
 
 export type WordStatus = 'TESTING_WORD_ONLY' | 'TESTING_SENTENCES' | 'TESTING_COMPLETE'
 
-export type WordSource = 'provided-list' | 'custom-list'
+export type WordSource = 'premade-list' | 'custom-list'

@@ -109,7 +109,7 @@ import {
 } from '@ionic/vue'
 import { db, user } from '@/firebaseInit'
 import { doc, updateDoc, arrayRemove } from 'firebase/firestore'
-import { useCustomListsStore, useProvidedListsStore } from '@/stores/index.ts'
+import { useCustomListsStore, usePremadeListsStore } from '@/stores/index.ts'
 import { useRoute } from 'vue-router'
 // import { listOutline } from 'ionicons/icons'
 // import ListChecked from '@/assets/icons/list-checked.vue'
@@ -120,7 +120,7 @@ const props = defineProps({
   destinationRoute: { type: String, required: true }
 })
 const store =
-  props.destinationRoute === 'provided-list' ? useProvidedListsStore() : useCustomListsStore()
+  props.destinationRoute === 'premade-list' ? usePremadeListsStore() : useCustomListsStore()
 const customListsStore = useCustomListsStore()
 
 const { t } = useI18n()
@@ -374,7 +374,9 @@ body.dark {
   .widescreen-popover {
     background: rgb(42, 42, 42);
     color: white;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+    box-shadow:
+      rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+      rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
       rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
 
     &:hover {

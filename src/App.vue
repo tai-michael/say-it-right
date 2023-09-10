@@ -21,13 +21,13 @@ import { useFirestore } from '@vueuse/firebase/useFirestore'
 import { collection, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore'
 import {
   useCustomListsStore,
-  useProvidedListsStore,
+  usePremadeListsStore,
   useReviewStore,
   useIpaDictionaryStore
 } from '@/stores/index.ts'
 
 const customListsStore = useCustomListsStore()
-const providedListsStore = useProvidedListsStore()
+const premadeListsStore = usePremadeListsStore()
 const reviewStore = useReviewStore()
 const ipaDictionaryStore = useIpaDictionaryStore()
 
@@ -56,7 +56,7 @@ onMounted(async () => {
 const isDarkModeEnabled = useLocalStorage('dark-mode', false)
 provide('isDarkModeEnabled', isDarkModeEnabled)
 
-const globalListsQuery = computed(() => collection(db, 'global_provided_lists'))
+const globalListsQuery = computed(() => collection(db, 'global_premade_lists'))
 const globalLists = useFirestore(globalListsQuery)
 
 const signedIn = ref(false)
@@ -67,19 +67,19 @@ const fetchBackendData = async () => {
 
   const usersDocRef = doc(db, 'users', user.value.uid)
   let userDocSnap = await getDoc(usersDocRef)
-  const userProvidedList = ref(userDocSnap.data()?.providedLists)
+  const userPremadeList = ref(userDocSnap.data()?.premadeLists)
   console.log('Fetched user data from firestore')
   // console.log(userDocSnap.data())
 
-  // NOTE if it's user's first time logging in, send provided lists from backend
-  if (!userProvidedList.value) {
-    console.log('hydrating provided lists')
-    userProvidedList.value = await providedListsStore.downloadAndExtractGlobalProvidedLists()
+  // NOTE if it's user's first time logging in, send premade lists from backend
+  if (!userPremadeList.value) {
+    console.log('hydrating premade lists')
+    userPremadeList.value = await premadeListsStore.downloadAndExtractGlobalPremadeLists()
 
     await setDoc(usersDocRef, {
       userName: user.value.displayName,
       customLists: [],
-      providedLists: userProvidedList.value,
+      premadeLists: userPremadeList.value,
       review: []
     })
 
@@ -87,49 +87,49 @@ const fetchBackendData = async () => {
   }
 
   // NOTE adds any new lists to backend user lists when App starts
-  if (globalLists.value && globalLists.value.length > userProvidedList.value.length) {
-    const newLists = extractNewLists(globalLists.value, userProvidedList.value)
+  if (globalLists.value && globalLists.value.length > userPremadeList.value.length) {
+    const newLists = extractNewLists(globalLists.value, userPremadeList.value)
 
-    const newProvidedLists = [...userProvidedList.value, ...newLists]
-    console.log(newProvidedLists)
+    const newPremadeLists = [...userPremadeList.value, ...newLists]
+    console.log(newPremadeLists)
 
     await updateDoc(usersDocRef, {
-      providedLists: newProvidedLists
+      premadeLists: newPremadeLists
     })
 
     userDocSnap = await getDoc(usersDocRef)
   }
 
   customListsStore.setLists(userDocSnap.data()?.customLists)
-  providedListsStore.setLists(userDocSnap.data()?.providedLists)
+  premadeListsStore.setLists(userDocSnap.data()?.premadeLists)
   reviewStore.setWords(userDocSnap.data()?.review)
 
   // NOTE triggers watcher after allLists has been hydrated
   // Adds a new list whenever a new global list is added
   watchEffect(() => {
-    addWatcherForGlobalProvidedLists()
+    addWatcherForGlobalPremadeLists()
   })
 }
 
-const addWatcherForGlobalProvidedLists = () => {
+const addWatcherForGlobalPremadeLists = () => {
   // NOTE 'return' returns the cleanup function for the watcher
   return watch(globalLists, (newVal) => {
     console.log('watcher triggered')
 
-    if (newVal && newVal.length <= providedListsStore.allLists.length) return
+    if (newVal && newVal.length <= premadeListsStore.allLists.length) return
 
     // NOTE adds new list(s) to store
-    const newLists = extractNewLists(newVal, providedListsStore.allLists)
+    const newLists = extractNewLists(newVal, premadeListsStore.allLists)
 
     // TODO add delete new list(s) ability
     // Can be something like (if oldVal.length > newVal.length) map the listNumbers to array, compare the
     // arrays, and find the list that was deleted
-    // then delete that list from user's provided list
+    // then delete that list from user's premade list
     // in firestore.
 
-    providedListsStore.allLists.push(...newLists)
-    providedListsStore.updateListsInFirestore()
-    // console.log(providedListsStore.allLists)
+    premadeListsStore.allLists.push(...newLists)
+    premadeListsStore.updateListsInFirestore()
+    // console.log(premadeListsStore.allLists)
   })
 }
 
