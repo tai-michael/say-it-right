@@ -121,7 +121,6 @@
     </ion-list>
 
     <!-- NOTE Narrowscreen popover -->
-    <!-- :dismiss-on-select="true" -->
     <ion-popover :is-open="isPopoverOpen" :event="event" @didDismiss="isPopoverOpen = false">
       <ion-list class="pb-2 pt-2">
         <ion-item :detail="false" lines="full" @click.stop class="cursor-default">

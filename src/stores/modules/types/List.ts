@@ -1,5 +1,6 @@
 export interface List {
   listNumber: number
+  listTitle: string
   status: ListStatus
   paragraph: string
   words: Words<PremadeWord> | Words<CustomWord>

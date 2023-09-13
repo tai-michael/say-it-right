@@ -7,7 +7,30 @@
       >
         <ion-card-content class="p-0">
           <ion-toolbar>
-            <ion-title class="font-normal"
+            <!-- <ion-title class="font-normal"
+              >{{ $t('list_card.title') }} {{ list.listNumber }}</ion-title
+            > -->
+            <!-- <ion-title class="font-normal" v-if="editingTitle" v-model="newTitle">{{ newTitle }}</ion-title> -->
+            <div
+              v-if="editingTitle && customListsStore.selectedPopoverList === list"
+              class="input-container"
+            >
+              <div class="input-field">
+                <input
+                  class="font-normal"
+                  placeholder="Enter a new title"
+                  v-model="newTitle"
+                  @click.prevent
+                />
+                <ion-button type="submit" :disabled="!newTitle" @click.prevent="submitNewTitle"
+                  >></ion-button
+                >
+              </div>
+            </div>
+            <ion-title class="font-normal" v-else-if="list.listTitle">{{
+              list.listTitle
+            }}</ion-title>
+            <ion-title class="font-normal" v-else
               >{{ $t('list_card.title') }} {{ list.listNumber }}</ion-title
             >
             <button
@@ -38,47 +61,66 @@
               <span>{{ index }}</span>
             </li>
           </ul>
-
-          <!-- NOTE Widescreen popover -->
-          <div
-            v-if="customListsStore.selectedPopoverList === list"
-            class="widescreen-popover flex items-center text-center justify-center cursor-pointer pb-4 pt-4 text-black"
+        </ion-card-content>
+        <!-- NOTE Widescreen popover -->
+        <ion-list
+          v-if="customListsStore.selectedPopoverList === list && editingTitle === false"
+          class="widescreen-popover flex flex-col pt-0 pb-0"
+        >
+          <ion-item
+            :button="true"
+            :detail="false"
+            lines="none"
+            class="cursor-pointer ml-[1px]"
+            @click.prevent="editListTitle"
+          >
+            <ion-icon :icon="createOutline" class="text-xl mr-2"></ion-icon
+            ><span class="text-[14px]">{{ $t('list_card.edit_title') }}</span></ion-item
+          >
+          <ion-item
+            :button="true"
+            :detail="false"
+            lines="none"
+            class="cursor-pointer ml-[1px]"
             @click.prevent="deleteList"
           >
             <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
-            ><span class="mr-2 mt-0.5 text-sm flex">{{ $t('list_card.delete_list') }}</span>
-          </div>
-        </ion-card-content>
+            ><span class="text-[14px]">{{ $t('list_card.delete_list') }}</span></ion-item
+          >
+        </ion-list>
       </RouterLink>
     </ion-card>
 
+    <!-- TODO Use/copy submit words form from CustomListsView for edit title. Afterwards, adjust titles for paragraph/word challenges and look for others. Then look into using unique ID for importing -->
     <!-- NOTE Narrowscreen popover -->
     <ion-popover
-      @click="setAlertOpen(true)"
       :is-open="isPopoverOpen"
       :event="event"
       @didDismiss="isPopoverOpen = false"
       :dismiss-on-select="true"
     >
-      <div class="flex items-center text-center justify-center cursor-pointer pb-4 pt-4">
-        <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
-        ><span class="mr-2 font-sans">{{ $t('list_card.delete_list') }}</span>
-        <!-- <ion-list>
-        <ion-item :button="true" :detail="false">
-          <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon>Delete list</ion-item
+      <ion-list class="pb-2 pt-2">
+        <ion-item
+          :button="true"
+          :detail="false"
+          lines="full"
+          class="cursor-pointer flex flex-col justify-center"
+          @click.prevent="editListTitle"
         >
-        <ion-item :button="true" :detail="false">Option 2</ion-item>
-                  <ion-item :button="true" id="nested-trigger">More options...</ion-item>
-
-                  <ion-popover :dismiss-on-select="true" side="end">
-                    <ion-content>
-                      <ion-list>
-                        <ion-item :button="true" :detail="false">Nested option</ion-item>
-                      </ion-list>
-                    </ion-content>
-                  </ion-popover>
-        </ion-list> -->
-      </div>
+          <ion-icon :icon="createOutline" class="text-xl mr-2"></ion-icon
+          ><span class="mr-2 font-sans">{{ $t('list_card.edit_title') }}</span></ion-item
+        >
+        <ion-item
+          :button="true"
+          :detail="false"
+          lines="full"
+          class="cursor-pointer flex flex-col justify-center"
+          @click="setAlertOpen(true)"
+        >
+          <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
+          ><span class="mr-2 font-sans">{{ $t('list_card.delete_list') }}</span></ion-item
+        >
+      </ion-list>
     </ion-popover>
     <ion-alert
       :is-open="isAlertOpen"
@@ -95,7 +137,7 @@ import { ref, inject, watch } from 'vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import { useI18n } from 'vue-i18n'
-import { ellipsisHorizontal, trashOutline } from 'ionicons/icons'
+import { ellipsisHorizontal, trashOutline, createOutline } from 'ionicons/icons'
 import {
   IonCard,
   IonToolbar,
@@ -103,6 +145,9 @@ import {
   IonTitle,
   IonIcon,
   IonPopover,
+  IonList,
+  IonItem,
+  IonButton,
   IonAlert
   // IonList,
   // IonItem,
@@ -131,11 +176,14 @@ const isPopoverOpen = ref(false)
 const event = ref(null)
 const openNarrowscreenPopover = (e, list: List) => {
   event.value = e
+  if (editingTitle.value) editingTitle.value = false
   customListsStore.setSelectedPopoverList(list)
   isPopoverOpen.value = true
 }
 
 const toggleWidescreenPopover = (list: List) => {
+  if (editingTitle.value) editingTitle.value = false
+
   if (customListsStore.selectedPopoverList === list) {
     customListsStore.setSelectedPopoverList(null)
   } else {
@@ -183,6 +231,21 @@ const deleteList = async () => {
   } catch (err) {
     console.log(`Failed to delete list ${err}`)
   }
+}
+
+const editingTitle = ref(false)
+const newTitle = ref('')
+const editListTitle = () => {
+  editingTitle.value = true
+  newTitle.value = customListsStore.selectedPopoverList.listTitle
+}
+const submitNewTitle = () => {
+  customListsStore.selectedPopoverList.listTitle =
+    newTitle.value.slice(0, 1).toUpperCase() + newTitle.value.slice(1)
+  newTitle.value = ''
+  editingTitle.value = false
+  customListsStore.setSelectedPopoverList(null)
+  customListsStore.updateListsInFirestore()
 }
 </script>
 
@@ -283,6 +346,7 @@ ion-toolbar {
 
 .list {
   width: 280px;
+  min-height: 50px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 4px 12px;
@@ -317,17 +381,23 @@ ion-popover {
   --width: 160px;
 }
 
+ion-item {
+  height: 45px;
+}
+
 .widescreen-popover {
   position: absolute;
   z-index: 20; // z-index of ion-toolbar is 10
-  top: 3.1rem;
+  top: 2.9rem;
   bottom: 0;
   right: 0;
-  width: 150px;
-  height: 50px;
+  display: flex;
+  min-width: 150px;
+  // height: 50px;
+  height: 90px;
   margin-right: 0.25rem;
   border-radius: 0.25rem;
-  background-color: white;
+  // background-color: white;
   box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.35);
 }
 
@@ -373,6 +443,7 @@ body.dark {
 
   .widescreen-popover {
     background: rgb(42, 42, 42);
+    border: 1px rgb(49, 49, 49) solid;
     color: white;
     box-shadow:
       rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
@@ -381,6 +452,14 @@ body.dark {
 
     &:hover {
       background: rgb(44, 44, 44);
+    }
+
+    ion-item {
+      --background: rgb(42, 42, 42);
+    }
+
+    ion-item:not(:last-child) {
+      border-bottom: 1px rgb(49, 49, 49) solid;
     }
   }
 
@@ -398,6 +477,33 @@ body.dark {
   .list-link:hover {
     // background-color: transparent;
     color: rgb(240, 240, 240);
+  }
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 96%;
+}
+.input-field {
+  display: flex;
+  position: relative;
+  margin-left: 0.5rem;
+
+  input {
+    width: 100%;
+    height: 2.75rem;
+    border-radius: 4px;
+    border-width: 1px;
+    padding-left: 5px;
+    font-size: 16px;
+  }
+
+  ion-button {
+    position: absolute;
+    bottom: 0;
+    right: 0.1rem;
+    height: 2.25rem;
   }
 }
 </style>

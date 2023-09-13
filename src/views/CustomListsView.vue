@@ -131,7 +131,11 @@ const newlyCreatedParagraph = ref('')
 
 const createListWithParagraph = (words: string[], allLists: List[], paragraph: string) => {
   const newListObject: List = {
+    // change all instances of listNum / listNumber to listId; and keep the rest the same
+    // TODO try just adding listTitle and the changes in ListCards first to see if it'd work. If so, then rename listNumber to listId, and consider using uniqueId or a similar package to replace the listNumber for custom lists. Advantages of using a unique id include allowing users to share lists. If, for example, they click ellipsis menu and click share, then click ok at link, app could upload the list to a new collection I make called shared_lists or something. When users import the list, they'd paste the id only (and not url) probably. Could also make two collections, one for the option of single file import, or one for importing collection. User would just input one of the codes. They probably shouldn't have to specify importing single doc or collection. Exporting a collection should an option (maybe; b/c in which case I'd probably need to build a separate interface for exporting instead of just having it be in ellipsis menu)
+    // Potential bug: what do i do in cases of naming conflicts? Probably add '(2)' or '#2' and so on or something next to new list with same title, like Windows does with Word and Notepad?
     listNumber: allLists.length === 0 ? 1 : allLists[allLists.length - 1].listNumber + 1,
+    listTitle: '',
     status: 'LIST_NOT_STARTED',
     paragraph: paragraph,
     words: {}
@@ -151,6 +155,7 @@ const createListWithParagraph = (words: string[], allLists: List[], paragraph: s
 const createListWithSentences = (wordObjects: WordObject[], allLists: List[]) => {
   const newListObject: List = {
     listNumber: allLists.length === 0 ? 1 : allLists[allLists.length - 1].listNumber + 1,
+    listTitle: '',
     status: 'LIST_NOT_STARTED',
     paragraph: '',
     words: {}
