@@ -17,20 +17,21 @@
             >
               <div class="input-field">
                 <input
-                  class="font-normal"
-                  placeholder="Enter a new title"
                   v-model="newTitle"
+                  :ref="setRef"
+                  placeholder="Enter a new title"
                   @click.prevent
+                  class="font-normal"
                 />
                 <ion-button type="submit" :disabled="!newTitle" @click.prevent="submitNewTitle"
                   >></ion-button
                 >
               </div>
             </div>
-            <ion-title class="font-normal" v-else-if="list.listTitle">{{
+            <ion-title v-else-if="list.listTitle" class="font-normal">{{
               list.listTitle
             }}</ion-title>
-            <ion-title class="font-normal" v-else
+            <ion-title v-else class="font-normal"
               >{{ $t('list_card.title') }} {{ list.listNumber }}</ion-title
             >
             <button
@@ -133,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, watch } from 'vue'
+import { ref, inject, watch, nextTick } from 'vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import { useI18n } from 'vue-i18n'
@@ -247,6 +248,16 @@ const submitNewTitle = () => {
   customListsStore.setSelectedPopoverList(null)
   customListsStore.updateListsInFirestore()
 }
+
+const titleInput = ref(null)
+const setRef = (el) => {
+  titleInput.value = el
+}
+watch(editingTitle, (newValue) => {
+  if (newValue === true) {
+    nextTick(() => titleInput.value.focus())
+  }
+})
 </script>
 
 <style lang="scss" scoped>
