@@ -1,110 +1,111 @@
 {
-	"alert_for_delete": {
-		"cancel_button": "キャンセル",
-		"delete_button": "削除",
-		"message": "本当に削除しますか？"
-	},
-	"custom_lists": {
-		"create_list_instructions": "最大7つの単語を入力（スペースまたはコンマで区切ってください）:",
-		"example": "例：",
-		"heading": "手作りリスト",
-		"introduction1": "言葉の言い方がわからないですか？",
-		"introduction2": "リストを作成してみましょう！"
-	},
-	"hard_words": {
-		"heading": "最難の言葉",
-		"introduction": "ユーザーデータに基づく難しい単語トップ10："
-	},
-	"header": {
-		"dark_mode_off": "ダークモード：オフ",
-		"dark_mode_on": "ダークモード：オン",
-		"language": "言語：",
-		"return_to_lists": "リストに戻る",
-		"sign_in": "サインインする",
-		"sign_out": "サインアウトする"
-	},
-	"home_button": "ホームページへ",
-	"list_accordion_labels": {
-		"completed": "終了",
-		"in_progress": "進行中",
-		"not_started": "未着手"
-	},
-	"list_card": {
-		"delete_list": "このリスト削除",
-		"title": "リスト"
-	},
-	"list_content": {
-		"message1": "このリストは完了しました！",
-		"message2": "次は：",
-		"message3": "学習した単語を",
-		"message4": "復習する",
-		"message5": "別のリストを",
-		"message6": "試してみる",
-		"message7": "",
-		"message8": "",
-		"message9": "このリストを",
-		"message10": "再挑戦する"
-	},
-	"not_found": {
-		"introduction": "URLが正しく入力されていないか、このページが削除された可能性があります。",
-		"title": "404エラー"
-	},
-	"paragraph_challenge": {
-		"general_instructions": "この段落を声に出して読んでください",
-		"message": {
-			"all_correct1": "素晴らしい！すべての単語を正しく発音しました。",
-			"all_correct2": "次に、別のリストを作成するか、または試してみて。",
-			"most_correct1": "けっこういいです！ただし、これらの単語は発音が間違っていました。",
-			"most_correct2": "練習しましょう。",
-			"most_incorrect1": "これらの単語は発音が間違っていました。",
-			"most_incorrect2": "練習しましょう。",
-			"one_incorrect1": "よくできました！たった1つの単語を間違えました。",
-			"one_incorrect2": "それを練習しましょう。",
-			"too_few_words1": "話す量が足りませんでした。",
-			"too_few_words2": "もう一度試してみて、録音ボタンを押し続けてください。"
-		},
-		"next_button": "次へ",
-		"recording_complete": "録音完了",
-		"recording_label": "録音中..."
-	},
-	"premade_lists": {
-		"heading": "既製リスト"
-	},
-	"recorder_button": "押して話す",
-	"review": {
-		"heading": "レビュー",
-		"introduction1": "間違った単語を復習しましょう。",
-		"introduction2": "単語を選んで練習を始めよう！",
-		"modal_button_instructions": "クリックして単語を選択"
-	},
-	"word_practice": {
-		"general_instructions_sentence": "この文を声に出して読んでください",
-		"general_instructions_word": "この単語を声に出して読んでください",
-		"message": {
-			"complete1": "似たような単語で練習してみて！",
-			"complete2": "それか、",
-			"complete3": "もう一度この単語を試してみてください",
-			"complete4": "。",
-			"correct_once1": "よくできました！👍",
-			"correct_once2": "さて、",
-			"correct_once3_sentence": "2番目の文を読んでみてください",
-			"correct_once3_word": "もう一度読んでみてください",
-			"correct_twice1": "すごいです！👍",
-			"correct_twice2": "さて、文を練習しましょう",
-			"incorrect": "再度お試しください",
-			"skip": "この単語を飛ばしましょう"
-		},
-		"spoken_words_label": "録音："
-	},
-	"word_select_modal": {
-		"cancel": "キャンセル",
-		"no_results": "（結果なし）",
-		"option_A_to_Z": "A から Z へ",
-		"option_bookmarked": "ブックマーク済み",
-		"option_newest": "新しい順",
-		"option_oldest": "古い順",
-		"option_source": "出典: ",
-		"option_Z_to_A": "Z から A へ",
-		"search": "検索"
-	}
+  "alert_for_delete": {
+    "cancel_button": "キャンセル",
+    "delete_button": "削除",
+    "message": "本当に削除しますか？"
+  },
+  "custom_lists": {
+    "create_list_instructions": "最大7つの単語を入力（スペースまたはコンマで区切ってください）:",
+    "example": "例：",
+    "heading": "手作りリスト",
+    "introduction1": "言葉の言い方がわからないですか？",
+    "introduction2": "リストを作成してみましょう！"
+  },
+  "hard_words": {
+    "heading": "最難の言葉",
+    "introduction": "ユーザーデータに基づく難しい単語トップ10："
+  },
+  "header": {
+    "dark_mode_off": "ダークモード：オフ",
+    "dark_mode_on": "ダークモード：オン",
+    "language": "言語：",
+    "return_to_lists": "リストに戻る",
+    "sign_in": "サインインする",
+    "sign_out": "サインアウトする"
+  },
+  "home_button": "ホームページへ",
+  "list_accordion_labels": {
+    "completed": "終了",
+    "in_progress": "進行中",
+    "not_started": "未着手"
+  },
+  "list_card": {
+    "edit_title": "題名を編集",
+    "delete_list": "リスト削除",
+    "title": "リスト"
+  },
+  "list_content": {
+    "message1": "このリストは完了しました！",
+    "message2": "次は：",
+    "message3": "学習した単語を",
+    "message4": "復習する",
+    "message5": "別のリストを",
+    "message6": "試してみる",
+    "message7": "",
+    "message8": "",
+    "message9": "このリストを",
+    "message10": "再挑戦する"
+  },
+  "not_found": {
+    "introduction": "URLが正しく入力されていないか、このページが削除された可能性があります。",
+    "title": "404エラー"
+  },
+  "paragraph_challenge": {
+    "general_instructions": "この段落を声に出して読んでください",
+    "message": {
+      "all_correct1": "素晴らしい！すべての単語を正しく発音しました。",
+      "all_correct2": "次に、別のリストを作成するか、または試してみて。",
+      "most_correct1": "けっこういいです！ただし、これらの単語は発音が間違っていました。",
+      "most_correct2": "練習しましょう。",
+      "most_incorrect1": "これらの単語は発音が間違っていました。",
+      "most_incorrect2": "練習しましょう。",
+      "one_incorrect1": "よくできました！たった1つの単語を間違えました。",
+      "one_incorrect2": "それを練習しましょう。",
+      "too_few_words1": "話す量が足りませんでした。",
+      "too_few_words2": "もう一度試してみて、録音ボタンを押し続けてください。"
+    },
+    "next_button": "次へ",
+    "recording_complete": "録音完了",
+    "recording_label": "録音中..."
+  },
+  "premade_lists": {
+    "heading": "既製リスト"
+  },
+  "recorder_button": "押して話す",
+  "review": {
+    "heading": "レビュー",
+    "introduction1": "間違った単語を復習しましょう。",
+    "introduction2": "単語を選んで練習を始めよう！",
+    "modal_button_instructions": "クリックして単語を選択"
+  },
+  "word_practice": {
+    "general_instructions_sentence": "この文を声に出して読んでください",
+    "general_instructions_word": "この単語を声に出して読んでください",
+    "message": {
+      "complete1": "似たような単語で練習してみて！",
+      "complete2": "それか、",
+      "complete3": "もう一度この単語を試してみてください",
+      "complete4": "。",
+      "correct_once1": "よくできました！👍",
+      "correct_once2": "さて、",
+      "correct_once3_sentence": "2番目の文を読んでみてください",
+      "correct_once3_word": "もう一度読んでみてください",
+      "correct_twice1": "すごいです！👍",
+      "correct_twice2": "さて、文を練習しましょう",
+      "incorrect": "再度お試しください",
+      "skip": "この単語を飛ばしましょう"
+    },
+    "spoken_words_label": "録音："
+  },
+  "word_select_modal": {
+    "cancel": "キャンセル",
+    "no_results": "（結果なし）",
+    "option_A_to_Z": "A から Z へ",
+    "option_bookmarked": "ブックマーク済み",
+    "option_newest": "新しい順",
+    "option_oldest": "古い順",
+    "option_source": "出典: ",
+    "option_Z_to_A": "Z から A へ",
+    "search": "検索"
+  }
 }
