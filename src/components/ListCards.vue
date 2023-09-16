@@ -42,18 +42,18 @@
               >{{ $t('list_card.title') }} {{ list.listNumber }}</ion-title
             >
             <button
-              v-if="props.destinationRoute === 'custom-list'"
+              v-if="showEllipsisButton(list)"
               slot="end"
-              class="narrowscreen menu-button text-xl"
+              class="narrowscreen ellipsis-btn text-xl pl-3 pr-3"
               :class="{ 'dark-mode': isDarkModeEnabled }"
               @click.stop.prevent="openNarrowscreenPopover($event, list)"
             >
               <ion-icon :icon="ellipsisHorizontal"></ion-icon>
             </button>
             <button
-              v-if="props.destinationRoute === 'custom-list'"
+              v-if="showEllipsisButton(list)"
               slot="end"
-              class="widescreen menu-button text-xl"
+              class="widescreen ellipsis-btn text-xl pl-3 pr-3"
               :class="{
                 'dark-mode': isDarkModeEnabled,
                 'btn-active': customListsStore.selectedPopoverList === list
@@ -99,7 +99,7 @@
       </RouterLink>
     </ion-card>
 
-    <!-- TODO Use/copy submit words form from CustomListsView for edit title. Afterwards, adjust titles for paragraph/word challenges and look for others. Then look into using unique ID for importing -->
+    <!-- TODO Adjust titles for paragraph/word challenges and look for others. Then look into using unique ID for importing -->
     <!-- NOTE Narrowscreen popover -->
     <ion-popover
       :is-open="isPopoverOpen"
@@ -145,7 +145,13 @@ import { ref, inject, watch, nextTick } from 'vue'
 import type { PropType } from 'vue'
 import type { List } from '@/stores/modules/types/List'
 import { useI18n } from 'vue-i18n'
-import { ellipsisHorizontal, trashOutline, createOutline } from 'ionicons/icons'
+import {
+  ellipsisHorizontal,
+  trashOutline,
+  createOutline,
+  checkmarkSharp,
+  closeSharp
+} from 'ionicons/icons'
 import {
   IonCard,
   IonToolbar,
@@ -155,10 +161,7 @@ import {
   IonPopover,
   IonList,
   IonItem,
-  IonButton,
   IonAlert
-  // IonList,
-  // IonItem,
 } from '@ionic/vue'
 import { db, user } from '@/firebaseInit'
 import { doc, updateDoc, arrayRemove } from 'firebase/firestore'
@@ -340,7 +343,6 @@ ion-toolbar {
     align-items: center;
     height: 100%;
     // padding: 0.5rem 0.75rem;
-    padding: 0 0.75rem;
     background-color: transparent;
     transition: background-color 0.3s;
 
@@ -350,7 +352,7 @@ ion-toolbar {
     // }
   }
 
-  button:hover,
+  .ellipsis-btn:hover,
   .btn-active {
     background-color: rgb(199, 243, 239);
   }
@@ -358,11 +360,10 @@ ion-toolbar {
   button.dark-mode {
     color-scheme: dark;
   }
+}
 
-  button.dark-mode:hover,
-  button.dark-mode:active {
-    background-color: rgb(39, 39, 39);
-  }
+ion-title {
+  max-width: 236px;
 }
 
 .list-link {
@@ -457,12 +458,71 @@ ion-item {
   }
 }
 
+.input-field {
+  display: flex;
+  column-gap: 6px;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem;
+
+  input {
+    width: 182px;
+    height: 2.75rem;
+    border-radius: 4px;
+    border-width: 0px;
+    box-shadow: none;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 16px;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 2px rgb(112, 112, 112);
+    }
+  }
+}
+
+.submit-btn,
+.cancel-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  color: white;
+}
+
+.submit-btn {
+  background: #3bb8b1;
+  transition-duration: 0.2s;
+  transition-property: opacity;
+
+  &:not(:disabled):hover {
+    background: #3dc4bd;
+  }
+}
+
+.cancel-btn {
+  background: #cc4141;
+
+  &:hover {
+    background: #e74a4a;
+  }
+}
+
 body.dark {
   main {
     background: rgb(32, 32, 32);
   }
 
-  button:hover,
+  ion-toolbar {
+    // --background: rgb(34, 34, 34);
+    --background: rgb(38, 38, 38);
+    --color: rgb(196, 196, 196);
+  }
+
+  .ellipsis-btn:hover,
   .btn-active {
     background-color: rgb(43, 43, 43);
   }
@@ -475,9 +535,7 @@ body.dark {
     background: rgb(42, 42, 42);
     border: 1px rgb(49, 49, 49) solid;
     color: white;
-    box-shadow:
-      rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
-      rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
       rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
 
     &:hover {
@@ -493,10 +551,8 @@ body.dark {
     }
   }
 
-  ion-toolbar {
-    // --background: rgb(34, 34, 34);
-    --background: rgb(38, 38, 38);
-    --color: rgb(196, 196, 196);
+  input {
+    background-color: rgb(41, 41, 41);
   }
 
   ion-card {
@@ -507,33 +563,6 @@ body.dark {
   .list-link:hover {
     // background-color: transparent;
     color: rgb(240, 240, 240);
-  }
-}
-
-.input-container {
-  display: flex;
-  flex-direction: column;
-  width: 96%;
-}
-.input-field {
-  display: flex;
-  position: relative;
-  margin-left: 0.5rem;
-
-  input {
-    width: 100%;
-    height: 2.75rem;
-    border-radius: 4px;
-    border-width: 1px;
-    padding-left: 5px;
-    font-size: 16px;
-  }
-
-  ion-button {
-    position: absolute;
-    bottom: 0;
-    right: 0.1rem;
-    height: 2.25rem;
   }
 }
 </style>
