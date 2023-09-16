@@ -7,26 +7,33 @@
       >
         <ion-card-content class="p-0">
           <ion-toolbar>
-            <!-- <ion-title class="font-normal"
-              >{{ $t('list_card.title') }} {{ list.listNumber }}</ion-title
-            > -->
-            <!-- <ion-title class="font-normal" v-if="editingTitle" v-model="newTitle">{{ newTitle }}</ion-title> -->
             <div
               v-if="editingTitle && customListsStore.selectedPopoverList === list"
-              class="input-container"
+              class="input-field"
             >
-              <div class="input-field">
-                <input
-                  v-model="newTitle"
-                  :ref="setRef"
-                  placeholder="Enter a new title"
-                  @click.prevent
-                  class="font-normal"
-                />
-                <ion-button type="submit" :disabled="!newTitle" @click.prevent="submitNewTitle"
-                  >></ion-button
-                >
-              </div>
+              <input
+                v-model="newTitle"
+                ref="titleInput"
+                placeholder="Enter a new title"
+                @click.prevent
+                class="custom"
+              />
+              <button
+                @click.prevent="submitNewTitle"
+                :disabled="!newTitle"
+                title="Confirm edit"
+                class="submit-btn cursor-pointer disabled:opacity-40 disabled:cursor-default"
+              >
+                <ion-icon :icon="checkmarkSharp" class="text-xl"></ion-icon>
+              </button>
+
+              <button
+                @click.prevent="cancelEditingTitle"
+                title="Cancel edit"
+                class="cancel-btn cursor-pointer disabled:cursor-default"
+              >
+                <ion-icon :icon="closeSharp" class="text-xl"></ion-icon>
+              </button>
             </div>
             <ion-title v-else-if="list.listTitle" class="font-normal">{{
               list.listTitle
@@ -172,6 +179,13 @@ const customListsStore = useCustomListsStore()
 const { t } = useI18n()
 const isDarkModeEnabled = inject('isDarkModeEnabled')
 
+const showEllipsisButton = (list: List) => {
+  return (
+    props.destinationRoute === 'custom-list' &&
+    (!editingTitle.value || customListsStore.selectedPopoverList !== list)
+  )
+}
+
 // NOTE using store for selected popover list, so that it's shared across different List Groups (which each have their own set of List Cards); prevents having multiple popovers open across different List Groups
 const isPopoverOpen = ref(false)
 const event = ref(null)
@@ -236,28 +250,33 @@ const deleteList = async () => {
 
 const editingTitle = ref(false)
 const newTitle = ref('')
+const titleInput = ref(null)
 const editListTitle = () => {
   editingTitle.value = true
   newTitle.value = customListsStore.selectedPopoverList.listTitle
+
+  nextTick(() => titleInput.value[0].focus())
+  // TODO test if below works on iPhone
+
+  setTimeout(() => {
+    // if (document.activeElement !== titleInput.value) titleInput.value[0].$el.setFocus()
+    if (document.activeElement !== titleInput.value) titleInput.value[0].focus()
+  }, 300)
 }
 const submitNewTitle = () => {
-  customListsStore.selectedPopoverList.listTitle =
-    newTitle.value.slice(0, 1).toUpperCase() + newTitle.value.slice(1)
-  newTitle.value = ''
-  editingTitle.value = false
-  customListsStore.setSelectedPopoverList(null)
-  customListsStore.updateListsInFirestore()
+  if (newTitle.value !== customListsStore.selectedPopoverList.listTitle) {
+    customListsStore.selectedPopoverList.listTitle =
+      newTitle.value.slice(0, 1).toUpperCase() + newTitle.value.slice(1)
+    newTitle.value = ''
+    customListsStore.updateListsInFirestore()
+  }
+  cancelEditingTitle()
 }
 
-const titleInput = ref(null)
-const setRef = (el) => {
-  titleInput.value = el
+const cancelEditingTitle = () => {
+  editingTitle.value = false
+  customListsStore.setSelectedPopoverList(null)
 }
-watch(editingTitle, (newValue) => {
-  if (newValue === true) {
-    nextTick(() => titleInput.value.focus())
-  }
-})
 </script>
 
 <style lang="scss" scoped>

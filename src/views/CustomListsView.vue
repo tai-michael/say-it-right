@@ -22,15 +22,15 @@
                 class="custom-lists"
               ></ion-searchbar>
               <button
-                class="submit-btn cursor-pointer disabled:opacity-40 disabled:cursor-default"
                 @click.prevent="submitWords(wordsInput)"
                 :disabled="!wordsInput || isLoadingNewList"
+                class="submit-btn cursor-pointer disabled:opacity-40 disabled:cursor-default"
+                title="Submit words"
               >
                 <ion-icon
                   v-if="!isLoadingNewList"
                   :icon="arrowForwardOutline"
                   class="text-xl"
-                  title="Submit words"
                 ></ion-icon>
                 <ion-spinner name="lines-sharp" v-else></ion-spinner>
               </button>
