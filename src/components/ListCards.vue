@@ -21,7 +21,7 @@
               <button
                 @click.prevent="submitNewTitle"
                 :disabled="!newTitle"
-                title="Confirm edit"
+                :title="$t('list_card.confirm_edit')"
                 class="submit-btn cursor-pointer disabled:opacity-40 disabled:cursor-default"
               >
                 <ion-icon :icon="checkmarkSharp" class="text-xl"></ion-icon>
@@ -29,18 +29,21 @@
 
               <button
                 @click.prevent="cancelEditingTitle"
-                title="Cancel edit"
+                :title="$t('list_card.cancel_edit')"
                 class="cancel-btn cursor-pointer disabled:cursor-default"
               >
                 <ion-icon :icon="closeSharp" class="text-xl"></ion-icon>
               </button>
             </div>
+
             <ion-title v-else-if="list.listTitle" class="font-normal">{{
               list.listTitle
             }}</ion-title>
+
             <ion-title v-else class="font-normal"
               >{{ $t('list_card.title') }} {{ list.listNumber }}</ion-title
             >
+
             <button
               v-if="showEllipsisButton(list)"
               slot="end"

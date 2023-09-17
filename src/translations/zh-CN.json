@@ -6,6 +6,7 @@
   },
   "custom_lists": {
     "create_list_instructions": "请输入最多7个词汇, 用空格或逗号分隔：",
+    "create_list": "创建列表",
     "example": "例：",
     "heading": "自定列表",
     "introduction1": "不确定某些词语如何表达？",
@@ -16,8 +17,10 @@
     "introduction": "前十个最难的词汇（基于用户数据）："
   },
   "header": {
+    "user_profile": "用户资料",
     "dark_mode_off": "关闭暗黑模式",
     "dark_mode_on": "打开暗黑模式",
+    "toggle_dark_mode": "切换暗模式 ",
     "language": "语言：",
     "return_to_lists": "返回列表",
     "sign_in": "登录",
@@ -31,6 +34,8 @@
   },
   "list_card": {
     "edit_title": "编辑标题",
+    "confirm_edit": "确认修改",
+    "cancel_edit": "取消修改",
     "delete_list": "删除此列表",
     "title": "列表"
   },

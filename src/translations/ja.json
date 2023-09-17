@@ -6,6 +6,7 @@
   },
   "custom_lists": {
     "create_list_instructions": "最大7つの単語を入力（スペースまたはコンマで区切ってください）:",
+    "create_list": "りリストを作成する",
     "example": "例：",
     "heading": "手作りリスト",
     "introduction1": "言葉の言い方がわからないですか？",
@@ -16,8 +17,10 @@
     "introduction": "ユーザーデータに基づく難しい単語トップ10："
   },
   "header": {
+    "user_profile": "ユーザープロフィール",
     "dark_mode_off": "ダークモード：オフ",
     "dark_mode_on": "ダークモード：オン",
+    "toggle_dark_mode": "ダークモード切り替える",
     "language": "言語：",
     "return_to_lists": "リストに戻る",
     "sign_in": "サインインする",
@@ -31,6 +34,8 @@
   },
   "list_card": {
     "edit_title": "題名を編集",
+    "confirm_edit": "編集を確定する",
+    "cancel_edit": "編集をキャンセルする",
     "delete_list": "リスト削除",
     "title": "リスト"
   },

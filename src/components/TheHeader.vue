@@ -56,7 +56,7 @@
       <button
         @click="toggleDarkMode"
         aria-label="Toggle darkmode"
-        title="Toggle darkmode"
+        :title="$t('header.toggle_dark_mode')"
         slot="end"
         class="widescreen h-[80%]"
       >
@@ -65,7 +65,7 @@
       <button
         @click.prevent="toggleWidescreenPopover"
         aria-label="User profile"
-        title="User profile"
+        :title="$t('header.user_profile')"
         slot="end"
         class="widescreen relative mr-2"
         :class="{ 'btn-active': showPopover }"

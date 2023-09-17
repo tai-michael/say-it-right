@@ -6,8 +6,9 @@
   },
   "custom_lists": {
     "create_list_instructions": "Enter up to 7 words separated by spaces or commas:",
+    "create_list": "Create list",
     "example": "e.g.",
-    "heading": "Custom Lists",
+    "heading": "Custom List | Custom Lists",
     "introduction1": "Not sure how to say certain words?",
     "introduction2": "Start by creating a list!"
   },
@@ -16,8 +17,10 @@
     "introduction": "Top 10 hardest words based on data collected from users:"
   },
   "header": {
+    "user_profile": "User profile",
     "dark_mode_off": "Turn off darkmode",
     "dark_mode_on": "Turn on darkmode",
+    "toggle_dark_mode": "Toggle darkmode",
     "language": "Language:",
     "return_to_lists": "Return to lists",
     "sign_in": "Sign in",
@@ -31,6 +34,8 @@
   },
   "list_card": {
     "edit_title": "Edit title",
+    "confirm_edit": "Confirm edit",
+    "cancel_edit": "Cancel edit",
     "delete_list": "Delete list",
     "title": "List"
   },
@@ -69,7 +74,7 @@
     "recording_label": "Recording..."
   },
   "premade_lists": {
-    "heading": "Premade Lists"
+    "heading": "Premade List | Premade Lists"
   },
   "recorder_button": "Hold to speak",
   "review": {
