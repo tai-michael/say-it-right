@@ -124,12 +124,15 @@ const resetShortList = () => {
   store.updateListsInFirestore()
 }
 
-const title = computed(
-  () =>
-    `${
-      routeName.value === 'premade-lists' ? t('premade_lists.heading') : t('custom_lists.heading')
+const title = computed(() => {
+  if (list.value.listTitle) return list.value.listTitle
+  else
+    return `${
+      routeName.value === 'premade-lists'
+        ? t('premade_lists.heading', 1)
+        : t('custom_lists.heading', 1)
     } ${list.value.listNumber}`
-)
+})
 </script>
 
 <style lang="scss" scoped>

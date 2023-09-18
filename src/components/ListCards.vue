@@ -16,6 +16,8 @@
                 ref="titleInput"
                 placeholder="Enter a new title"
                 @click.prevent
+                @keydown.enter.prevent="submitNewTitle"
+                @keydown.esc.prevent="cancelEditingTitle"
                 class="custom"
               />
               <button
@@ -102,7 +104,6 @@
       </RouterLink>
     </ion-card>
 
-    <!-- TODO Adjust titles for paragraph/word challenges and look for others. Then look into using unique ID for importing -->
     <!-- NOTE Narrowscreen popover -->
     <ion-popover
       :is-open="isPopoverOpen"
@@ -170,9 +171,7 @@ import { db, user } from '@/firebaseInit'
 import { doc, updateDoc, arrayRemove } from 'firebase/firestore'
 import { useCustomListsStore, usePremadeListsStore } from '@/stores/index.ts'
 import { useRoute } from 'vue-router'
-// import { listOutline } from 'ionicons/icons'
-// import ListChecked from '@/assets/icons/list-checked.vue'
-// import ListRegular from '@/assets/icons/list-regular.vue'
+
 const route = useRoute()
 const props = defineProps({
   lists: { type: Array as PropType<List[]>, required: true },
@@ -265,7 +264,7 @@ const editListTitle = () => {
   // TODO test if below works on iPhone
 
   setTimeout(() => {
-    // if (document.activeElement !== titleInput.value) titleInput.value[0].$el.setFocus()
+    // if (document.activeElement !== titleInput.value) titleInput.value[0].$el.setFocus() // $el needed for ion-input
     if (document.activeElement !== titleInput.value) titleInput.value[0].focus()
   }, 300)
 }
@@ -286,17 +285,6 @@ const cancelEditingTitle = () => {
 </script>
 
 <style lang="scss" scoped>
-// main {
-//   display: grid;
-//   grid-template-columns: repeat(4, 1fr);
-//   gap: 1.5rem 2rem; // row-gap, column-gap
-//   // list-style: none;
-//   margin: 0 0.5rem;
-//   @media (min-width: 1024px) {
-//     grid-template-columns: repeat(6, 1fr);
-//   }
-// }
-
 main {
   display: flex;
   flex-wrap: wrap;
