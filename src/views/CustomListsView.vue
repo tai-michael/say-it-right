@@ -1,6 +1,6 @@
 <template>
   <ion-page v-if="tabMounted">
-    <TheHeader :is-loading="isLoadingNewList">{{ $t('custom_lists.heading') }}</TheHeader>
+    <TheHeader :is-loading="isLoadingNewList">{{ $t('custom_lists.heading', 2) }}</TheHeader>
 
     <ion-content class="ion-padding" ref="content">
       <PullRefresher />

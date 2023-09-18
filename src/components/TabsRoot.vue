@@ -20,12 +20,12 @@
       <ion-tab-bar>
         <ion-tab-button tab="custom-list" :href="customListsPath">
           <ion-icon :icon="createOutline" />
-          <ion-label> {{ $t('custom_lists.heading') }}</ion-label>
+          <ion-label> {{ $t('custom_lists.heading', 2) }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="premade-lists" :href="premadeListsPath">
           <ion-icon :icon="folderOutline" />
-          <ion-label>{{ $t('premade_lists.heading') }}</ion-label>
+          <ion-label>{{ $t('premade_lists.heading', 2) }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="review" href="/review" v-if="reviewStore.allWords.length > 0">

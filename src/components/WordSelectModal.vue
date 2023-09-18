@@ -24,10 +24,10 @@
           <option value="wordDesc">{{ $t('word_select_modal.option_Z_to_A') }}</option>
           <option value="bookmarked">{{ $t('word_select_modal.option_bookmarked') }}</option>
           <option value="sourceCustom">
-            {{ $t('word_select_modal.option_source') }} {{ $t('custom_lists.heading') }}
+            {{ $t('word_select_modal.option_source') }} {{ $t('custom_lists.heading', 2) }}
           </option>
           <option value="sourcePremade">
-            {{ $t('word_select_modal.option_source') }} {{ $t('premade_lists.heading') }}
+            {{ $t('word_select_modal.option_source') }} {{ $t('premade_lists.heading', 2) }}
           </option>
         </select>
       </div>
