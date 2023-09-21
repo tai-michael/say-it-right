@@ -15,6 +15,7 @@
                 v-model="newTitle"
                 ref="titleInput"
                 placeholder="Enter a new title"
+                enterkeyhint="done"
                 maxlength="24"
                 @click.prevent
                 @keydown.enter.prevent="submitNewTitle"

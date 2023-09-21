@@ -3,9 +3,10 @@
     <ion-header>
       <ion-toolbar>
         <ion-searchbar
-          type="text"
           v-model="search"
           :placeholder="$t('word_select_modal.search')"
+          inputmode="search"
+          enterkeyhint="search"
         ></ion-searchbar>
         <ion-buttons slot="end" class="narrowscreen">
           <ion-button @click="handleCancel">{{ $t('word_select_modal.cancel') }}</ion-button>

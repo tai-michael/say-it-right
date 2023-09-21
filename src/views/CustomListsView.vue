@@ -12,11 +12,11 @@
             <label>{{ $t('custom_lists.create_list_instructions') }}</label>
             <div class="relative">
               <ion-searchbar
-                :placeholder="`  ${$t('custom_lists.example')} urban thin kindly`"
                 v-model="wordsInput"
+                :placeholder="`  ${$t('custom_lists.example')} urban thin kindly`"
                 :disabled="isLoadingNewList"
-                animated="true"
                 inputmode="text"
+                enterkeyhint="done"
                 :show-clear-button="clearButtonMode"
                 @ion-input="submissionError = ''"
                 class="custom-lists"
