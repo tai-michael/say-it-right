@@ -341,6 +341,7 @@ ion-toolbar {
   }
 
   ion-title {
+    max-width: 260px;
     --color: white;
     // --color: rgb(231, 253, 243);
     // @media screen and (min-width: 768px) {

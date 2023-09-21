@@ -15,6 +15,7 @@
                 v-model="newTitle"
                 ref="titleInput"
                 placeholder="Enter a new title"
+                maxlength="24"
                 @click.prevent
                 @keydown.enter.prevent="submitNewTitle"
                 @keydown.esc.prevent="cancelEditingTitle"
@@ -269,7 +270,7 @@ const editListTitle = () => {
   }, 300)
 }
 const submitNewTitle = () => {
-  if (newTitle.value !== customListsStore.selectedPopoverList.listTitle) {
+  if (newTitle.value && newTitle.value !== customListsStore.selectedPopoverList.listTitle) {
     customListsStore.selectedPopoverList.listTitle =
       newTitle.value.slice(0, 1).toUpperCase() + newTitle.value.slice(1)
     newTitle.value = ''
@@ -355,6 +356,8 @@ ion-toolbar {
 
 ion-title {
   max-width: 236px;
+  padding-left: 20px;
+  padding-right: 4px;
 }
 
 .list-link {
@@ -458,7 +461,7 @@ ion-item {
 
   input {
     width: 182px;
-    height: 2.75rem;
+    height: 2.5rem;
     border-radius: 4px;
     border-width: 0px;
     box-shadow: none;
