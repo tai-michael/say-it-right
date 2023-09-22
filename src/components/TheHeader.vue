@@ -100,8 +100,8 @@
           class="text-lg mr-2 ml-[1px]"
           aria-label="Choose language"
         ></ion-icon>
-        <span class="mr-3"> {{ $t('header.language') }} </span>
-        <select v-model="locale" @change="saveLocale">
+        <span class="mr-3 text-[14px]"> {{ $t('header.language') }} </span>
+        <select v-model="locale" @change="saveLocale" class="text-[14px]">
           <option value="en">English</option>
           <option value="zh-CN">中文</option>
           <option value="ja">日本語</option>

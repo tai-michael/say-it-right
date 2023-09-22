@@ -57,24 +57,20 @@
             <div v-if="relatedWords.length" class="flex mt-4">
               <!-- TODO need to add a message here, like 'Loading word, please wait...' -->
 
-              <span v-if="isLoadingRelatedWord" class="mt-9 mb-4 w-36 ml-10 loading-text">{{
-                loadingText
-              }}</span>
-              <!-- <LoadingDots class="mt-2" /> -->
-
-              <div v-else>
-                <!-- <TransitionFade> -->
-                <ion-card class="mt-3 mb-4 card min-w-[270px] xs:min-w-[380px] related-words">
-                  <div class="flex pl-2 pr-2">
-                    <div v-for="(word, index) of relatedWords" :key="index" class="w-full">
-                      <span @click="handleRelatedWordClick(word)" class="related-word">{{
-                        word
-                      }}</span>
-                    </div>
+              <!-- <TransitionFade> -->
+              <ion-card class="mt-3 mb-4 card min-w-[270px] xs:min-w-[380px] related-words">
+                <div class="flex pl-2 pr-2">
+                  <div v-for="(word, index) of relatedWords" :key="index" class="w-full">
+                    <span @click="handleRelatedWordClick(word)" class="related-word">{{
+                      word
+                    }}</span>
                   </div>
-                </ion-card>
-                <!-- </TransitionFade> -->
-              </div>
+                </div>
+              </ion-card>
+              <!-- </TransitionFade> -->
+            </div>
+            <div v-else class="flex mt-4">
+              <span class="mt-8 mb-4 ml-2 loading-text">{{ loadingText }}</span>
             </div>
             <!-- </TransitionFade> -->
           </div>
@@ -162,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue'
+import { ref, computed, inject, onMounted, watch } from 'vue'
 // import type { Ref } from 'vue'
 // import { storeToRefs } from 'pinia'
 import type { PropType } from 'vue'
@@ -180,7 +176,6 @@ import usePhoneticConverter from '@/composables/usePhoneticConverter'
 import useDelay from '@/composables/useDelay'
 import { useReviewStore } from '@/stores/index.ts'
 import { IonPage, IonCard } from '@ionic/vue'
-// import LoadingDots from '@/components/LoadingDots.vue'
 // import { useRoute } from 'vue-router'
 
 // const route = useRoute()
@@ -364,19 +359,22 @@ const handleCorrectPronunciation = async () => {
 
 const animationIndex = ref(0)
 const loadingText = computed(() => {
-  return isLoadingRelatedWord.value ? `Loading word${'.'.repeat(animationIndex.value)}` : ''
+  return `Loading related words${'.'.repeat(animationIndex.value)}`
 })
+const animatedDots = setInterval(() => {
+  animationIndex.value = (animationIndex.value + 1) % 4
+}, 500)
 
-const isLoadingRelatedWord = ref(false)
+watch(
+  () => relatedWords.value,
+  (newValue) => {
+    if (newValue.length) clearInterval(animatedDots)
+  }
+)
+
 const handleRelatedWordClick = async (relatedWord: string) => {
-  isLoadingRelatedWord.value = true
   emits('loading-related-word', true)
-  const animatedDots = setInterval(() => {
-    animationIndex.value = (animationIndex.value + 1) % 4
-  }, 500)
   await useSentencesCreationAndStorage([relatedWord], 'review' as WordSource)
-  clearInterval(animatedDots)
-  isLoadingRelatedWord.value = false
   emits('loading-related-word', false)
   emits('related-word-clicked', relatedWord)
 }
