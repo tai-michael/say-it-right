@@ -70,7 +70,7 @@
               <!-- </TransitionFade> -->
             </div>
             <div v-else class="flex mt-4">
-              <span class="mt-8 mb-4 ml-2 loading-text">{{ loadingText }}</span>
+              <span class="w-44 mt-8 mb-4 ml-2 loading-text">{{ loadingText }}</span>
             </div>
             <!-- </TransitionFade> -->
           </div>
@@ -176,15 +176,16 @@ import usePhoneticConverter from '@/composables/usePhoneticConverter'
 import useDelay from '@/composables/useDelay'
 import { useReviewStore } from '@/stores/index.ts'
 import { IonPage, IonCard } from '@ionic/vue'
+import { useI18n } from 'vue-i18n'
+
 // import { useRoute } from 'vue-router'
 
 // const route = useRoute()
+const { t } = useI18n()
 const store = useReviewStore()
-
 const props = defineProps({
   word: { type: Object as PropType<WordObject>, required: true }
 })
-
 const relatedWords = ref<string[]>([...props.word.related_words])
 const emits = defineEmits(['related-word-clicked', 'loading-related-word'])
 const reviewEntered = inject('reviewEntered')
@@ -359,7 +360,7 @@ const handleCorrectPronunciation = async () => {
 
 const animationIndex = ref(0)
 const loadingText = computed(() => {
-  return `Loading related words${'.'.repeat(animationIndex.value)}`
+  return `${t('word_practice.loading_related_words')}${'.'.repeat(animationIndex.value)}`
 })
 const animatedDots = setInterval(() => {
   animationIndex.value = (animationIndex.value + 1) % 4

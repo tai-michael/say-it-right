@@ -86,6 +86,7 @@
   "word_practice": {
     "general_instructions_sentence": "请大声朗读以下句子",
     "general_instructions_word": "请大声朗读以下词语",
+    "loading_related_words": "正在加载发音相似的词语",
     "message": {
       "complete1": "练习类似的词语！",
       "complete2": "或",

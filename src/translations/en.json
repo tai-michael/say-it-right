@@ -86,6 +86,7 @@
   "word_practice": {
     "general_instructions_sentence": "Speak this sentence",
     "general_instructions_word": "Speak this word",
+    "loading_related_words": "Loading similar-sounding words",
     "message": {
       "complete1": "Practice with a similar word!",
       "complete2": "Or ",

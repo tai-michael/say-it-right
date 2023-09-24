@@ -86,6 +86,7 @@
   "word_practice": {
     "general_instructions_sentence": "この文を声に出して読んでください",
     "general_instructions_word": "この単語を声に出して読んでください",
+    "loading_related_words": "音が似ている単語をロード中",
     "message": {
       "complete1": "似たような単語で練習してみて！",
       "complete2": "それか、",
