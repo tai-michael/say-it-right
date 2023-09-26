@@ -2,7 +2,7 @@
   <ion-page>
     <div class="flex flex-col h-full justify-between content">
       <main
-        class="p-3 flex flex-col h-full min-h-[55%] md:min-h-[50%] items-center pt-12"
+        class="p-3 flex flex-col h-full min-h-[55%] md:min-h-[50%] items-center pt-8"
         :class="{ 'pt-8': testedSentence?.length > 80 }"
       >
         <div class="instructions">
@@ -69,8 +69,11 @@
               </ion-card>
               <!-- </TransitionFade> -->
             </div>
-            <div v-else class="flex mt-4">
-              <span class="w-44 mt-8 mb-4 ml-2 loading-text">{{ loadingText }}</span>
+            <div v-else class="flex mt-12 mb-4 ml-2">
+              <div class="loading-text-wrapper">
+                <span class="loading-text">{{ $t('word_practice.loading_related_words') }}</span>
+                <span class="dots" :class="isDarkModeEnabled ? 'dots-dark' : 'dots-light'">.</span>
+              </div>
             </div>
             <!-- </TransitionFade> -->
           </div>
@@ -189,6 +192,7 @@ const props = defineProps({
 const relatedWords = ref<string[]>([...props.word.related_words])
 const emits = defineEmits(['related-word-clicked', 'loading-related-word'])
 const reviewEntered = inject('reviewEntered')
+const isDarkModeEnabled = inject('isDarkModeEnabled')
 
 // const word: Ref<WordObject | null> = ref(null)
 // NOTE creates a reactive variable
@@ -358,21 +362,6 @@ const handleCorrectPronunciation = async () => {
   }
 }
 
-const animationIndex = ref(0)
-const loadingText = computed(() => {
-  return `${t('word_practice.loading_related_words')}${'.'.repeat(animationIndex.value)}`
-})
-const animatedDots = setInterval(() => {
-  animationIndex.value = (animationIndex.value + 1) % 4
-}, 500)
-
-watch(
-  () => relatedWords.value,
-  (newValue) => {
-    if (newValue.length) clearInterval(animatedDots)
-  }
-)
-
 const handleRelatedWordClick = async (relatedWord: string) => {
   emits('loading-related-word', true)
   await useSentencesCreationAndStorage([relatedWord], 'review' as WordSource)
@@ -438,6 +427,7 @@ main {
 
 .instructions {
   height: 19px;
+  margin-bottom: 1rem;
 }
 
 .instructions,
@@ -546,6 +536,62 @@ ion-card {
   }
 }
 
+.loading-text-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.dots {
+  animation: dots-light 2s infinite;
+  white-space: nowrap;
+}
+
+@keyframes dots-light {
+  0%,
+  20% {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+  }
+  40%,
+  60% {
+    color: black;
+    text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+  }
+  61%,
+  80% {
+    color: black;
+    text-shadow: 0.25em 0 0 black, 0.5em 0 0 rgba(0, 0, 0, 0);
+  }
+  81%,
+  100% {
+    color: black;
+    text-shadow: 0.25em 0 0 black, 0.5em 0 0 black;
+  }
+}
+
+@keyframes dots-dark {
+  0%,
+  20% {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+  }
+  40%,
+  60% {
+    color: white;
+    text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+  }
+  61%,
+  80% {
+    color: white;
+    text-shadow: 0.25em 0 0 white, 0.5em 0 0 rgba(0, 0, 0, 0);
+  }
+  81%,
+  100% {
+    color: white;
+    text-shadow: 0.25em 0 0 white, 0.5em 0 0 white;
+  }
+}
+
 body.dark {
   main {
     background-color: rgb(34, 34, 34);
@@ -567,6 +613,10 @@ body.dark {
   .message__text {
     // color: rgb(225, 225, 225);
     color: rgb(196, 196, 196);
+  }
+
+  .dots {
+    animation: dots-dark 2s infinite;
   }
 
   // ion-button {
