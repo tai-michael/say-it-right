@@ -47,7 +47,7 @@
         <ListGroups
           v-if="store.allLists.length"
           :route-name="'custom-lists'"
-          @list-deleted="setToastOpen('Deleted list')"
+          @list-deleted="setToastOpen('List deleted')"
         />
 
         <div
@@ -201,7 +201,7 @@ const submitWords = async (words: string) => {
 
     wordsInput.value = ''
     isLoadingNewList.value = false
-    setToastOpen('Uploaded list')
+    setToastOpen('List added')
     // REVIEW uncomment below if we want to automatically direct the user to a list right after generating it
     // router.push({ params: { id: store.allLists.length } })
 
