@@ -82,10 +82,14 @@ const startRecording = async (e, isNarrowScreen: boolean) => {
   recognitionActive.value = true
 
   handleMobileViewTransform(e, isNarrowScreen)
-
   speech.result.value = ''
-  speech.start()
-  emit('recordingStarted')
+  try {
+    speech.start()
+    emit('recordingStarted')
+  } catch (err) {
+    console.log(err)
+    speech.stop()
+  }
 }
 
 const stopRecording = async (e) => {
