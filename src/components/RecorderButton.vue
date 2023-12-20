@@ -73,14 +73,41 @@ watch(speech.result, () => {
 })
 // }
 
-const startRecording = async (e, isNarrowScreen: boolean) => {
-  // console.log('mousedown/touchstart triggered')
-  if (speech.isListening.value) return
 
-  // NOTE It's necessary to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
+const recognitionActive = ref(false)
+
+const startRecording = async (e, isNarrowScreen: boolean) => {
+  if (recognitionActive.value) return
+  console.warn('Voice recognition started.')
+  recognitionActive.value = true
+
+  handleMobileViewTransform(e, isNarrowScreen)
+
+  speech.result.value = ''
+  speech.start()
+  emit('recordingStarted')
+}
+
+const stopRecording = async (e) => {
+  if (recognitionActive.value) {
+    handleMobileViewTransformEnd(e)
+    speech.stop()
+    emit('recordingStopped', finalTranscript.value)
+    finalTranscript.value = ''
+    recognitionActive.value = false
+  }
+}
+
+const handleStopRecording = (e) => {
+  stopRecording(e)
+}
+
+function handleMobileViewTransform(e, isNarrowScreen) {
+  // Check if the event is for a narrow screen and is a touch event
   if (isNarrowScreen && e.pointerType === 'touch') {
     const target = e.target as HTMLElement | null
     if (target) {
+      // Find the closest recording button and add a transformation class
       const button = target.closest('.recording-btn.narrowscreen')
       if (button) {
         button.classList.add('recording-btn-transform')
@@ -88,38 +115,26 @@ const startRecording = async (e, isNarrowScreen: boolean) => {
     }
   }
 
-  // NOTE If mouseup happens outside an element (e.g. when user clicks, holds, then releases outside the button), the mouseup event is not captured. That's why I need to add a global event listener for it on the 'document' or 'window' object.
-  if (e.pointerType === 'mouse') document.addEventListener('pointerup', handleStopRecording)
-  if (speech.isListening.value) return
-
-  speech.result.value = '' // REVIEW is this necessary?
-  speech.start()
-  // console.log('client.start() finished')
-  // console.log(`client's isActive status: ${client.isActive()}`)
-  emit('recordingStarted')
+  // Add global event listener for mouseup event if it's a mouse event
+  if (e.pointerType === 'mouse') {
+    document.addEventListener('pointerup', handleStopRecording)
+  }
 }
 
-const stopRecording = async (e) => {
-  // console.log('mouseup/touchend triggered')
-  if (!speech.isListening.value) return // might not be necessary
-
+function handleMobileViewTransformEnd(e) {
+  // Check if the event is a touchend event
   if (e.type === 'touchend') {
     const button = e.target.closest('.recording-btn.narrowscreen')
     if (button) {
+      // Remove the transformation class from the recording button
       button.classList.remove('recording-btn-transform')
     }
   }
 
-  speech.stop()
-  // console.log('client stopped')
-  // console.log(`client's isActive status: ${client.isActive()}`)
-  emit('recordingStopped', finalTranscript.value)
-  finalTranscript.value = ''
-  if (e.pointerType === 'mouse') document.removeEventListener('pointerup', handleStopRecording)
-}
-
-const handleStopRecording = (e) => {
-  stopRecording(e)
+  // Remove global event listener for mouseup event if it's a mouse event
+  if (e.pointerType === 'mouse') {
+    document.removeEventListener('pointerup', handleStopRecording)
+  }
 }
 
 // NOTE prevents right-click from triggering on hold when using Chrome devtools.
