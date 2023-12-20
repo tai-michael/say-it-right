@@ -1,11 +1,7 @@
 <template>
   <div class="button-container" :class="{ 'review-active': route.name === 'review' }">
-    <!-- Pointerdown detects both mousedown and touchstart;
-      it's needed in case it's narrowscreen on PC. 
-      Touchend is needed to detect touch release,
-      which pointerup cannot detect if click & dragged -->
     <button
-      v-if="clientConnected"
+      v-if="speech.isSupported"
       class="recording-btn narrowscreen"
       @pointerdown="(e) => startRecording(e, true)"
       @touchend="stopRecording"
@@ -16,7 +12,7 @@
     </button>
 
     <button
-      v-if="clientConnected"
+      v-if="speech.isSupported"
       class="recording-btn widescreen"
       @pointerdown="(e) => startRecording(e, false)"
       @keydown="(e) => startRecording(e, false)"
@@ -29,53 +25,57 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { client } from '@/speechlyInit.ts'
-import { BrowserMicrophone } from '@speechly/browser-client'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useSpeechRecognition } from '@vueuse/core'
+import { ToWords } from 'to-words'
+// import { client } from '@/speechlyInit.ts'
+// import { BrowserMicrophone } from '@speechly/browser-client'
 import MicIcon from '@/assets/icons/mic.vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 
-// NOTE prevents right-click from triggering on hold when using Chrome devtools.
-// See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
-const recorderButtonNarrowscreen = ref(null)
-const disableContextMenu = (e) => {
-  e.preventDefault()
-}
+const speech = useSpeechRecognition({
+  lang: 'en-US',
+  interimResults: true,
+  continuous: true
+})
 
-const microphone = ref()
-const clientInitialized = ref(false)
-// @ts-ignore
-const clientConnected = computed(
-  () => client.decoderOptions.connect === true && clientInitialized.value
-)
-let isMounted = false
+function convertNumbersToWordsInSpeech(speechResult) {
+  const toWords = new ToWords()
+  const words = speechResult.toLowerCase().split(' ')
+  const convertedWords = words.map((word) => {
+    // Convert numbers to words
+    const number = parseInt(word)
+    if (!isNaN(number)) {
+      return toWords.convert(number)
+    }
 
-const attachMicrophone = async () => {
-  microphone.value = new BrowserMicrophone()
-  if (microphone.value.mediaStream?.active) return (clientInitialized.value = client.initialized)
+    // Convert standalone 'i' to 'I'
+    if (word === 'i') {
+      return 'I'
+    }
 
-  await microphone.value.initialize()
-  // NOTE stops microphone stream if user switches tab before mic's finished initializing
-  if (!isMounted) return stopMicrophoneStream(microphone.value.mediaStream)
-  await client.attach(microphone.value.mediaStream)
-  clientInitialized.value = client.initialized
-}
-
-const stopMicrophoneStream = (mediaStream: MediaStream) => {
-  if (!mediaStream) return
-  mediaStream.getTracks().forEach((track) => {
-    track.stop()
+    return word
   })
+  return convertedWords.join(' ')
 }
 
-const finalTranscript = ref('')
-const temporaryTranscript = ref('')
+// if (speech.isSupported.value) {
+watch(speech.result, () => {
+  speech.result.value = convertNumbersToWordsInSpeech(speech.result.value)
 
-const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])
+  temporaryTranscript.value = speech.result.value
+  emit('temporaryTranscriptRendered', temporaryTranscript.value)
+
+  if (speech.isFinal) {
+    finalTranscript.value = `${finalTranscript.value} ${temporaryTranscript.value}`.trim()
+  }
+})
+// }
 
 const startRecording = async (e, isNarrowScreen: boolean) => {
   // console.log('mousedown/touchstart triggered')
+  if (speech.isListening.value) return
 
   // NOTE It's necessary to manually add and remove transform for mobile view, as :active is sticky on mobile even after releasing the button
   if (isNarrowScreen && e.pointerType === 'touch') {
@@ -90,9 +90,10 @@ const startRecording = async (e, isNarrowScreen: boolean) => {
 
   // NOTE If mouseup happens outside an element (e.g. when user clicks, holds, then releases outside the button), the mouseup event is not captured. That's why I need to add a global event listener for it on the 'document' or 'window' object.
   if (e.pointerType === 'mouse') document.addEventListener('pointerup', handleStopRecording)
-  if (client.isActive()) return
+  if (speech.isListening.value) return
 
-  await client.start()
+  speech.result.value = '' // REVIEW is this necessary?
+  speech.start()
   // console.log('client.start() finished')
   // console.log(`client's isActive status: ${client.isActive()}`)
   emit('recordingStarted')
@@ -100,7 +101,7 @@ const startRecording = async (e, isNarrowScreen: boolean) => {
 
 const stopRecording = async (e) => {
   // console.log('mouseup/touchend triggered')
-  if (!client.isActive()) return
+  if (!speech.isListening.value) return // might not be necessary
 
   if (e.type === 'touchend') {
     const button = e.target.closest('.recording-btn.narrowscreen')
@@ -109,7 +110,7 @@ const stopRecording = async (e) => {
     }
   }
 
-  await client.stop()
+  speech.stop()
   // console.log('client stopped')
   // console.log(`client's isActive status: ${client.isActive()}`)
   emit('recordingStopped', finalTranscript.value)
@@ -121,64 +122,52 @@ const handleStopRecording = (e) => {
   stopRecording(e)
 }
 
-interface Segment {
-  words: {
-    value: string
-  }[]
+// NOTE prevents right-click from triggering on hold when using Chrome devtools.
+// See https://stackoverflow.com/questions/49092441/unwanted-right-click-with-in-browser-devtools
+const recorderButtonNarrowscreen = ref(null)
+const disableContextMenu = (e) => {
+  e.preventDefault()
 }
 
-const renderTranscript = (segment: unknown) => {
-  const s = segment as Segment
-  return s.words.map((w) => w.value).join(' ')
-}
+const finalTranscript = ref('')
+const temporaryTranscript = ref('')
 
-client.onSegmentChange((segment) => {
-  temporaryTranscript.value = renderTranscript(segment)
-  emit('temporaryTranscriptRendered', temporaryTranscript.value)
-
-  if (segment.isFinal) {
-    finalTranscript.value = `${finalTranscript.value} ${temporaryTranscript.value}`.trim()
-    //   debugOutText += renderOutput(segment)
-
-    // // REVIEW Sometimes, Speechly keeps recording even after the recording button has been released from hold. Below guard might prevent this bug. (tested, failed once)
-    // if (!isRecording.value) client.stop()
-  }
-})
+const emit = defineEmits(['recordingStarted', 'recordingStopped', 'temporaryTranscriptRendered'])
 
 onMounted(async () => {
-  isMounted = true
-  await attachMicrophone()
+  // isMounted = true
+  // await attachMicrophone()
 
   if (recorderButtonNarrowscreen.value) {
     recorderButtonNarrowscreen.value.addEventListener('contextmenu', disableContextMenu, true)
   }
-  document.addEventListener('visibilitychange', handleVisibilityChange)
+  // document.addEventListener('visibilitychange', handleVisibilityChange)
 })
 
 onUnmounted(() => {
-  isMounted = false
-  stopMicrophoneStream(microphone.value.mediaStream)
+  // isMounted = false
+  // stopMicrophoneStream(microphone.value.mediaStream)
 
   if (recorderButtonNarrowscreen.value)
     recorderButtonNarrowscreen.value.removeEventListener('contextmenu', disableContextMenu, true)
-  document.removeEventListener('visibilitychange', handleVisibilityChange)
+  // document.removeEventListener('visibilitychange', handleVisibilityChange)
 })
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
   navigator.userAgent
 )
 
-// NOTE The connection to Speechly is lost after about 1-3 minutes of mobile being put to sleep. In such cases, remounting the recorder button doesn't reestablish the connection, so need to reload the page
-const handleVisibilityChange = async () => {
-  // client.decoder.connectPromise changing from Promise to null is the only way to tell whether the Speechly connection has been lost
-  if (
-    isMobile &&
-    document.visibilityState === 'visible' &&
-    client.decoder.connectPromise === null
-  ) {
-    location.reload()
-  }
-}
+// // NOTE The connection to Speechly is lost after about 1-3 minutes of mobile being put to sleep. In such cases, remounting the recorder button doesn't reestablish the connection, so need to reload the page
+// const handleVisibilityChange = async () => {
+//   // client.decoder.connectPromise changing from Promise to null is the only way to tell whether the Speechly connection has been lost
+//   if (
+//     isMobile &&
+//     document.visibilityState === 'visible' &&
+//     client.decoder.connectPromise === null
+//   ) {
+//     location.reload()
+//   }
+// }
 </script>
 
 <style lang="scss" scoped>
