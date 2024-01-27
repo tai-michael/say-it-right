@@ -97,7 +97,7 @@
             :detail="false"
             lines="none"
             class="cursor-pointer ml-[1px]"
-            @click.prevent="deleteList"
+            @click.prevent="setWidescreenAlertOpen(list)"
           >
             <ion-icon :icon="trashOutline" class="text-xl mr-2"></ion-icon
             ><span class="text-[14px]">{{ $t('list_card.delete_list') }}</span></ion-item
@@ -225,6 +225,13 @@ const isAlertOpen = ref(false)
 const setAlertOpen = (state: boolean) => {
   isAlertOpen.value = state
 }
+const setWidescreenAlertOpen = (list: List) => {
+  setAlertOpen(true)
+  toggleWidescreenPopover(list)
+  widescreenListToDelete.value = list
+}
+const widescreenListToDelete = ref<List | null>(null)
+
 const alertButtons = [
   {
     text: t('alert_for_delete.cancel_button')
@@ -234,22 +241,23 @@ const alertButtons = [
     handler: () => deleteList()
   }
 ]
-
 const emit = defineEmits(['listDeleted'])
 const deleteList = async () => {
+  const list = customListsStore.selectedPopoverList || widescreenListToDelete.value
+
   try {
     if (!user.value) throw new Error('User not defined')
 
     // NOTE opting not to await updateDoc, as it essentially freezes the screen
     const usersDocRef = doc(db, 'users', user.value.uid)
     updateDoc(usersDocRef, {
-      customLists: arrayRemove(customListsStore.selectedPopoverList)
+      customLists: arrayRemove(list)
     })
 
-    store.deleteList(customListsStore.selectedPopoverList.listNumber)
-    console.log('list deleted')
+    store.deleteList(list.listNumber)
     emit('listDeleted')
-    // trigger the toast
+    if (widescreenListToDelete.value) widescreenListToDelete.value = null
+    console.log('list deleted')
   } catch (err) {
     console.log(`Failed to delete list ${err}`)
   }
