@@ -91,7 +91,7 @@
     <ion-list v-if="showPopover" class="widescreen-popover pb-2 pt-2">
       <ion-item :detail="false" lines="full" @click.stop class="cursor-default">
         <ion-icon :icon="personCircleOutline" class="text-2xl mr-2 ml-[-2px]"></ion-icon>
-        <span class="font-medium text-[14px]">{{ user?.displayName }}</span>
+        <span class="font-medium text-[14px]">{{ user?.displayName || 'Guest' }}</span>
       </ion-item>
 
       <ion-item :button="false" :detail="false" lines="full">
@@ -128,7 +128,7 @@
             :icon="personCircleOutline"
             class="cursor-pointer text-2xl mr-2 ml-[-2px]"
           ></ion-icon>
-          <span class="font-medium">{{ user?.displayName }}</span>
+          <span class="font-medium">{{ user?.displayName || 'Guest' }}</span>
         </ion-item>
 
         <ion-item
