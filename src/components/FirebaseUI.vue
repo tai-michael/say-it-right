@@ -19,16 +19,17 @@ onMounted(() => {
       // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
       // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
       // firebase.auth.GithubAuthProvider.PROVIDER_ID,
-      firebase.auth.EmailAuthProvider.PROVIDER_ID
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
       // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-      // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
     ],
-    // Setting this to false makes it so that page won't refresh after sign in
     callbacks: {
+      // Setting this to false makes it so that page won't refresh after sign in
       signInSuccessWithAuthResult: () => false
       // uiShown: function () {
       //   // The widget is rendered.
       //   // Hide the loader.
+      //   // console.log('uiShown') // set breakpoint to inspect loading bar
       //   document.getElementById('loader').style.display = 'none'
       // }
     }
