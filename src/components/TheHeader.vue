@@ -425,6 +425,7 @@ body.dark select {
 }
 
 .widescreen-popover {
+  display: none;
   position: absolute;
   z-index: 20; // z-index of ion-toolbar is 10
   top: 90%;
