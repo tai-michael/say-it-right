@@ -1,11 +1,12 @@
 <template>
   <PullRefresher />
-  <div class="text-center">
-    <div class="mt-20 mb-10 text-3xl flex justify-center gap-3 items-end logo">
-      <img :src="logo" class="w-11 h-11" /> Say It Right
+  <div class="h-full flex flex-col justify-center">
+    <div class="mb-3 text-3xl flex justify-center gap-3 items-end">
+      <img :src="logo" class="w-11 h-11" />
+      <header class="text-[#25c7b1]">Say It Right</header>
     </div>
+    <FirebaseUI />
   </div>
-  <FirebaseUI />
 </template>
 
 <script setup lang="ts">
@@ -24,9 +25,5 @@ body.dark {
   ion-content {
     --background: rgb(32, 32, 32);
   }
-}
-
-.logo {
-  color: #25c7b1;
 }
 </style>
