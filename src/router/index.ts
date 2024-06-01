@@ -105,10 +105,10 @@ const routes: Array<RouteRecordRaw> = [
           title: 'Sign In'
         },
         beforeEnter: (to, from, next) => {
-          if (user.value) {
-            next(from.path)
-          } else {
+          if (!user.value) {
             next()
+          } else {
+            next(from.path)
           }
         }
       },
